@@ -31,6 +31,9 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
 	}).when("/addSupplier", {
         templateUrl : "app/business_operation/controllers/supplier/newSupplier.html",
         controller : "addSupplierController"
+	}).when("/editSupplier/:supplierId", {
+        templateUrl : "app/business_operation/controllers/supplier/editSupplier.html",
+        controller : "editSupplierController"
 	}).when("/materielManage", {
         templateUrl : "app/business_operation/controllers/materiel/materielList.html",
         controller : "materielManageController"
@@ -222,7 +225,18 @@ businessOperationApp.factory("supplierService", function($http) {
         addSupplier : function(supplier, successCallback, errorCallback){
             $http({
                 method:"POST",
-                url:"/luda_glasses/rest/store/addStore",
+                url:"/luda_glasses/rest/supplier/addSupplier",
+                data:supplier
+            }).success(successCallback).error(errorCallback);
+        },
+        getSupplierById : function (supplierId, successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/supplier/getSupplierById/" + supplierId)
+				.success(successCallback).error(errorCallback);
+        },
+        updateSupplier : function (supplier, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/supplier/updateSupplier",
                 data:supplier
             }).success(successCallback).error(errorCallback);
         }

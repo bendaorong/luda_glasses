@@ -28,7 +28,7 @@
     <div class="seat-manage-operate-container">
         <h3 class="seat-manage-operate-title"></h3>
         <div class="seat-manage-operate-button form-inline">
-            <button class="btn btn-success btn-sm" ng-click="saveSupplier()" ng-disabled="!myform.$valid">保存</button>
+            <button class="btn btn-success btn-sm" ng-click="updateSupplier()" ng-disabled="!myform.$valid">保存</button>
             <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
         </div>
     </div>
@@ -40,43 +40,43 @@
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">名称</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.supplierName" required/>
+                        <input type="text" class="form-control" ng-model="selectSupplier.supplierName" required/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">银行</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.bank" />
+                        <input type="text" class="form-control" ng-model="selectSupplier.bank" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">银行</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.bankAccount" />
+                        <input type="text" class="form-control" ng-model="selectSupplier.bankAccount" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">工商税务登记证号</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.regTaxNo" />
+                        <input type="text" class="form-control" ng-model="selectSupplier.regTaxNo" required/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">负责人</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.contactPerson" required/>
+                        <input type="text" class="form-control" ng-model="selectSupplier.contactPerson" required/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">电话号码</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.contactPhone" required/>
+                        <input type="text" class="form-control" ng-model="selectSupplier.contactPhone" required/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">备注</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.remark"/>
+                        <input type="text" class="form-control" ng-model="selectSupplier.remark"/>
                     </div>
                 </div>
         </form>

@@ -58,4 +58,12 @@ public class SupplierServiceTest extends SpringSimpleJunit{
         ResultHandle<SupplierContactModel> handle = supplierService.saveSupplierContact(supplierContactModel);
         print(handle.getMsg());
     }
+
+    @Test
+    public void testUpdateSupplier(){
+        SupplierModel supplierModel = supplierService.getSupplierById(1);
+        supplierModel.setSupplierName("XXX公司");
+        ResultHandle<SupplierModel> resultHandle = supplierService.updateSupplier(supplierModel);
+        print(resultHandle.getMsg());
+    }
 }

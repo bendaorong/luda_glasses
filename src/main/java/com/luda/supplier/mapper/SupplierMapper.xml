@@ -7,6 +7,7 @@
         <result property="supplierName" column="supplier_name"/>
         <result property="bank" column="bank"/>
         <result property="bankAccount" column="bank_account"/>
+        <result property="regTaxNo" column="reg_tax_no"/>
         <result property="contactPerson" column="contact_person"/>
         <result property="contactPhone" column="contact_phone"/>
         <result property="useFlag" column="use_flag"/>
@@ -72,4 +73,26 @@
             #{headFlag}
         )
     </insert>
+
+    <select id="getMaxSupplierCode" resultType="java.lang.String">
+        select max(supplier_code) from supplier
+    </select>
+
+    <update id="updateSupplier" parameterType="com.luda.supplier.model.SupplierModel">
+        update supplier
+        set
+            supplier_name = #{supplierName},
+            bank = #{bank},
+            bank_account = #{bankAccount},
+            reg_tax_no = #{regTaxNo},
+            contact_person = #{contactPerson},
+            contact_phone = #{contactPhone},
+            use_flag = #{useFlag},
+            remark = #{remark}
+        where supplier_id = #{supplierId}
+    </update>
+
+    <select id="getSupplierById" resultMap="supplierMapper">
+        select * from supplier where supplier_id = #{supplierId} and use_flag = 1
+    </select>
 </mapper>

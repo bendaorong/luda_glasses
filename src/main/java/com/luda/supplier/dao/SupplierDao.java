@@ -15,4 +15,10 @@ public interface SupplierDao {
     int saveSupplier(SupplierModel supplierModel);
 
     int saveSupplierContact(SupplierContactModel supplierContactModel);
+
+    String getMaxSupplierCode();
+
+    int updateSupplier(SupplierModel supplierModel);
+
+    SupplierModel getSupplierById(int supplierId);
 }
