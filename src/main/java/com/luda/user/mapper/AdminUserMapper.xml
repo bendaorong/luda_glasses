@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.luda.user.dao.AdminUserDao" >
+    <resultMap id="adminUserModelMap" type="com.luda.user.model.AdminUserModel">
+        <id property="adminUserId" column="admin_user_id" />
+        <result property="mobileNumber" column="mobile_number" />
+        <result property="loginPassword" column="login_password" />
+        <result property="adminCode" column="admin_code"/>
+        <result property="adminName" column="admin_name"/>
+        <result property="roleId" column="role_id"/>
+        <result property="storeId" column="store_id"/>
+        <result property="activeFlag" column="active_flag"/>
+        <association property="adminRoleModel" column="role_id" select="getRoleById"/>
+    </resultMap>
+
+    <resultMap id="adminRoleModelMap" type="com.luda.user.model.AdminRoleModel">
+        <id property="roleId" column="role_id"/>
+        <result property="roleCode" column="role_code"/>
+        <result property="roleName" column="role_name"/>
+    </resultMap>
+
+    <resultMap id="adminUserDetailModelMap" type="com.luda.user.model.AdminUserDetailModel">
+        <id property="adminUserId" column="admin_user_id"/>
+        <result property="realname" column="real_name"/>
+        <result property="gender" column="gender"/>
+        <result property="email" column="email"/>
+        <result property="idNo" column="id_no"/>
+        <result property="nativePlace" column="native_place"/>
+        <result property="address" column="address"/>
+        <result property="createDatetime" column="create_datetime"/>
+        <result property="updateDatetime" column="update_datetime"/>
+        <result property="position" column="position"/>
+        <result property="onboardDate" column="onboard_date"/>
+        <result property="dimissionDate" column="dimission_date"/>
+        <result property="postcode" column="postcode"/>
+    </resultMap>
+
+    <resultMap id="adminUserModelWithDetailMap" type="com.luda.user.model.AdminUserModel" extends="adminUserModelMap">
+        <association property="adminUserDetailModel" column="admin_user_id" select="getAdminUserDetail"/>
+    </resultMap>
+
+    <select id="getByMobileNumber" resultMap="adminUserModelMap">
+        select * from admin_user where mobile_number = #{mobileNumber} and delete_flag = 0
+    </select>
+
+    <select id="getByAdminName" resultMap="adminUserModelMap">
+        select * from admin_user where admin_name = #{adminName} and delete_flag = 0
+    </select>
+
+    <select id="getRoleById" resultMap="adminRoleModelMap">
+        select * from admin_role where role_id = #{roleId}
+    </select>
+
+    <select id="fetchAdminUserListWithDetail" resultMap="adminUserModelWithDetailMap">
+        select * from admin_user where delete_flag = 0
+    </select>
+
+    <select id="getAdminUserDetail" resultMap="adminUserDetailModelMap">
+        select * from admin_user_detail where admin_user_id = #{adminUserId}
+    </select>
+
+    <select id="getWithDetailById" resultMap="adminUserModelWithDetailMap">
+        select * from admin_user where admin_user_id = #{adminUserId} and delete_flag = 0
+    </select>
+
+    <update id="updateAdminUser" parameterType="com.luda.user.model.AdminUserModel">
+        update
+            admin_user
+        set
+            mobile_number = #{mobileNumber},
+            store_id = #{storeId},
+            role_id = #{roleId},
+            active_flag = #{activeFlag}
+        where
+            admin_user_id = #{adminUserId}
+    </update>
+
+    <update id="updateAdminUserDetail" parameterType="com.luda.user.model.AdminUserDetailModel">
+        update
+            admin_user_detail
+        set
+            update_datetime = now(),
+            real_name = #{realname},
+            gender = #{gender},
+            email = #{email},
+            id_no = #{idNo},
+            native_place = #{nativePlace},
+            address = #{address},
+            postcode = #{postcode},
+            position = #{position},
+            onboard_date = #{onboardDate},
+            dimission_date = #{dimissionDate}
+        where
+            admin_user_id = #{adminUserId}
+    </update>
+
+    <select id="getMaxAdminCode" resultType="java.lang.String">
+        select max(admin_code) from admin_user
+    </select>
+
+    <insert id="saveAdminUser" useGeneratedKeys="true" keyProperty="adminUserId"
+            parameterType="com.luda.user.model.AdminUserModel">
+        insert into admin_user
+        (
+            admin_code,
+            admin_name,
+            mobile_number,
+            login_password,
+            store_id,
+            role_id,
+            active_flag
+        )
+        values
+        (
+            #{adminCode},
+            #{adminName},
+            #{mobileNumber},
+            #{loginPassword},
+            #{storeId},
+            #{roleId},
+            #{activeFlag}
+        )
+    </insert>
+
+    <insert id="saveAdminUserDetail" parameterType="com.luda.user.model.AdminUserDetailModel">
+        insert into admin_user_detail
+        (
+            admin_user_id,
+            real_name,
+            gender,
+            email,
+            id_no,
+            native_place,
+            address,
+            postcode,
+            create_datetime,
+            update_datetime,
+            position,
+            onboard_date
+        )
+        values
+        (
+            #{adminUserId},
+            #{realname},
+            #{gender},
+            #{email},
+            #{idNo},
+            #{nativePlace},
+            #{address},
+            #{postcode},
+            now(),
+            now(),
+            #{position},
+            #{onboardDate}
+        )
+    </insert>
+
+    <update id="removeAdminUser" parameterType="int">
+        update admin_user set delete_flag = 1 where admin_user_id = #{adminUserId}
+    </update>
+
+    <update id="updatePwd">
+        update admin_user set login_password = #{password} where admin_user_id = #{adminUserId}
+    </update>
+
+    <select id="getAdminRoleList" resultType="com.luda.user.model.AdminRoleModel">
+        select role_id as roleId, role_code as roleCode, role_name as roleName
+        from admin_role
+        where role_code != '00'
+    </select>
+</mapper>

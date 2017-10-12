@@ -1,0 +1,8 @@
+<li class="dropdown"><a href="javascript:void(0)"
+	class="dropdown-toggle" data-toggle="dropdown">{{getLanguageNameByValue(currentLanguage)}}<b
+		class="caret"></b></a>
+	<ul class="dropdown-menu" aria-labelledby="dLabel">
+		<li ng-repeat="language in languages"><a
+			href="javascript:void(0)"
+			ng-click="setCurrentLanguage(language.value)">{{language.name}}</a></li>
+	</ul></li>

@@ -1,0 +1,1 @@
+angular.module("globalApp", ['globalLanguageApp', 'globalConstantApp', 'globalNavApp', 'globalSubNavApp']);

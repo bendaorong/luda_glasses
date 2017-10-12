@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html ng-app="plunker">
+
+<head>
+<meta charset="utf-8" />
+<title>AngularJS Plunker</title>
+<script>
+	document.write('<base href="' + document.location + '" />');
+</script>
+<link rel="stylesheet" href="style.css" />
+<script data-require="angular.js@1.0.x"
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"
+	data-semver="1.0.8"></script>
+</head>
+
+<body>
+	<script type="text/javascript" charset="utf-8"
+		src="My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" charset="utf-8"
+		src="ueditor/ueditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8"
+		src="ueditor/ueditor.all.min.js"></script>
+	<script type="text/javascript" charset="utf-8"
+		src="ueditor/lang/zh-cn/zh-cn.js"></script>
+	<!-- 加载编辑器的容器 -->
+
+
+
+	<div>
+		<textarea name="content"id="myEditor">
+		
+		</textarea>
+	</div>
+
+	<script>
+		UE.delEditor("myEditor");
+		var ue = UE.getEditor('myEditor', {
+			toolbars : [ [ 'fullscreen', 'source', 'undo', 'redo', 'bold',
+					'italic', 'underline', 'strikethrough', 'forecolor',
+					'backcolor', 'fontfamily', 'fontsize', 'justifyleft',
+					'justifycenter', 'justifyright', 'justifyjustify', 'link',
+					'unlink', 'imagenone', 'imageleft', 'imageright',
+					'imagecenter', 'insertimage', 'simpleupload' ] ],
+			autoHeightEnabled : true,
+			autoFloatEnabled : true
+		});
+
+		// 自定义图片上传
+		UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+		UE.Editor.prototype.getActionUrl = function(action) {
+			if (action == 'uploadimage' || action == 'uploadscrawl'
+					|| action == 'uploadimage') {
+				return '/luda_glasses/rest/ueditorUploadImage';
+			}
+			else {
+				return this._bkGetActionUrl.call(this, action);
+			}
+		}
+		
+		ue.ready(function(){
+			ue.setContent('<p><img src="http://img.724.org.cn/activity/2016/07/201607201803325105028022406.jpg" title="201607201803325105028022406.jpg" alt="11_meitu_2.jpg" width="362" height="444" style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; width: 362px; height: 444px;"/></p><p><br/></p><p><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; color: rgb(192, 0, 0);"><strong><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;;">关注724公众号<span style="color: rgb(58, 188, 255);"></span></span></strong><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; color: rgb(192, 0, 0); font-size: 24px;"><strong><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; color: rgb(58, 188, 255);">↙</span></strong></span><strong><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; color: rgb(58, 188, 255); font-size: 20px;"></span><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; color: rgb(58, 188, 255);"></span></strong><strong><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;;">，7月24日当天，戳右边菜单“拾年直播”即可观看。</span></strong></span></p><p><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; color: rgb(192, 0, 0);"><strong><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;;"><img src="http://img.724.org.cn/activity/2016/07/201607211339352159561433886.jpg" title="201607211339352159561433886.jpg" alt="qrcode_for_gh_9d4cb93b0c5c_430.jpg" width="260" height="233" style="width: 260px; height: 233px;"/></span></strong></span></p><p><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; color: rgb(192, 0, 0);"><strong><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;;">进群一起围观<span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; color: rgb(58, 188, 255); font-size: 24px;">↘</span></span></strong></span></p><p><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; color: rgb(192, 0, 0);"><strong><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;;"><span style="font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; color: rgb(58, 188, 255); font-size: 24px;"><img src="http://img.724.org.cn/activity/2016/07/201607211340004128277994391.png" title="201607211340004128277994391.png" alt="1469077592.png" width="259" height="293" style="width: 259px; height: 293px;"/></span></span></strong></span></p>'); 
+	    });
+	</script>
+
+
+
+</body>
+
+</html>

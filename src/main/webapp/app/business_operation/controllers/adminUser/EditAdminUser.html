@@ -1,0 +1,138 @@
+<style>
+#myform input.ng-invalid.ng-dirty {
+	background-color: #FFC0CB;
+}
+
+/*#myform input.ng-valid.ng-dirty {
+          background-color: #78FA89;
+     }*/
+</style>
+<div id="top">
+	<div class="seat-manage-operate-container">
+		<h3 class="seat-manage-operate-title"></h3>
+		<div class="seat-manage-operate-button form-inline">
+			<button class="btn btn-success btn-sm" ng-click="updateAdminUser()"
+				ng-disabled="!myform.$valid">保存</button>
+			<button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
+		</div>
+	</div>
+	<hr>
+	<div class="col-sm-12">
+		<form id="myform" name="myform" class="form-horizontal" novalidate>
+			<fieldset id="basicInfo">
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">编号</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="text" class="form-control" required
+							   ng-model="selectAdminUser.adminCode" ng-readonly="true">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">用户</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="text" class="form-control" ng-model="selectAdminUser.adminName" ng-readonly="true">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">所属门店</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<select class="form-control" required ng-model="selectAdminUser.storeId">
+							<option ng-repeat="store in storeList" value="{{store.storeId}}">{{store.storeName}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">角色</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<select class="form-control" required ng-model="selectAdminUser.roleId">
+							<option ng-repeat="role in roleList" value="{{role.roleId}}">{{role.roleName}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">姓名</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="text" class="form-control" required ng-model="selectAdminUser.adminUserDetailModel.realname"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">性别</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<select ng-model="selectAdminUser.gender">
+							<option value="M" ng-selected="selectAdminUser.adminUserDetailModel.gender=='M'">男</option>
+							<option value="F" ng-selected="selectAdminUser.adminUserDetailModel.gender=='F'">女</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">手机号码</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="tel" class="form-control" required ng-model="selectAdminUser.mobileNumber" required/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">邮箱</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="email" name = "email" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.email" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">身份证</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.idNo" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">籍贯</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="text" class="form-control"  ng-model="selectAdminUser.adminUserDetailModel.nativePlace" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">地址</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.address" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">邮政编码</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.postcode" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">入职时间</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input class="form-control" type="text"
+							   onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+							   ng-model="selectAdminUser.adminUserDetailModel.onboardDate" name="onboardDate"
+							   id="onboardDate" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">离职时间</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input class="form-control" type="text"
+							   onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+							   ng-model="selectAdminUser.adminUserDetailModel.dimissionDate" name="dimissionDate"
+							   id="dimissionDate" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">职位</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.position" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">激活</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="checkbox" ng-model="selectAdminUser.activeFlag"
+							   ng-checked="selectAdminUser.activeFlag==1" id="activeFlag"/>
+					</div>
+				</div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript" charset="utf-8" src="My97DatePicker/WdatePicker.js"></script>

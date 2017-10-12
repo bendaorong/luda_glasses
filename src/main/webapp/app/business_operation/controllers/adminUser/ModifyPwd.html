@@ -1,0 +1,51 @@
+<style> 
+     #myform input.ng-invalid.ng-dirty {
+          background-color: #FFC0CB;
+     }
+     
+     /*#myform input.ng-valid.ng-dirty {
+          background-color: #78FA89;
+     }*/
+</style>
+<div id="top">
+  <div class="seat-manage-operate-container">
+    <h3 class="seat-manage-operate-title"></h3>
+    <div class="seat-manage-operate-button form-inline">
+      <button class="btn btn-success btn-sm" ng-click="modifyAdminUserPwd(selectAdminUser.cellPhoneNumber)" ng-disabled="!myform.$valid">保存</button>
+      <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+  <hr>
+  <div class="col-sm-12">
+    <form id="myform" name="myform" class="form-horizontal" novalidate>
+      <fieldset id="basicInfo">
+        <div class="form-group">
+          <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">手机号<SUP>*</SUP></label>
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+            <input type="text" class="form-control" required ng-model="selectAdminUser.cellPhoneNumber" disabled="disabled"> 
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="productName"
+            class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">旧密码<SUP>*</SUP></label>
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+            <input type="password" class="form-control"  required
+              lengthLimit  name="adminUserName"
+              maxLength=60 ng-model="selectAdminUser.oldPassword"   />
+          </div>
+        </div>
+        
+         <div class="form-group">
+          <label for="productName"
+            class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">新密码<SUP>*</SUP></label>
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+            <input type="password" class="form-control"  required
+              lengthLimit  name="adminUserName"
+              maxLength=60 ng-model="selectAdminUser.newPassword"   />
+          </div>
+        </div>
+        
+
+    </form>
+  </div>
+</div>

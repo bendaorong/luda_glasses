@@ -1,0 +1,6 @@
+
+<ul class="nav nav-tabs nav-menu nav-justified">
+	<li role="presentation" ng-repeat="navTab in navTabs" ng-class="{'active':isActive(navTab)}"><a
+		ng-href="{{getHref(navTab)|lowercase}}">{{navTab}}</a>
+	</li>
+</ul>

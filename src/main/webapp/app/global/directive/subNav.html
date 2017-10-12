@@ -1,0 +1,25 @@
+
+
+<div>
+	<ol class="breadcrumb">
+		<li><a href="/luda_glasses/index">后台管理</a></li>
+		<li ng-if="currentPageLength>1"><a href="javascript:void(0)">{{currentCategory}}</a></li>
+		<li ng-show="currentPage"><a href="javascript:void(0)">{{currentPage.name}}</a></li>
+	</ol>
+	<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+		<div class="panel panel-default" ng-repeat="page in pages">
+			<div class="panel-heading" ng-if="page.subpages.length>1">
+				<a type="button" class="btn btn-link" data-toggle="collapse" href="#/"
+					data-target="#{{page.name|lowercase}}" aria-expanded="false"
+					aria-controls="{{page.name|lowercase}}">{{page.name}}</a>
+			</div>
+			<div class="list-group" ng-class="{'collapse':page.subpages.length>1}" id="{{page.name|lowercase}}">
+				<a class="list-group-item sub-page-menu"
+					ng-class="{'active' : currentPage.page === subpage.page}"
+					ng-repeat="subpage in page.subpages" href="{{subpage.page}}">{{subpage.name}}</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-10 col-md-10 subPage" ng-view></div>
+</div>

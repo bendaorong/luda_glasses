@@ -1,0 +1,99 @@
+<style>
+    #myform input.ng-invalid.ng-dirty {
+        background-color: #FFC0CB;
+    }
+
+    /*#myform input.ng-valid.ng-dirty {
+         background-color: #78FA89;
+    }*/
+</style>
+<div class="alert alert-danger alert-dismissible fade in" role="alert"
+     ng-show="errorMsg!=null||errorMsg!=undefined">
+    <button type="button" class="close" ng-click="errorMsg=null"
+            aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p>{{errorMsg}}</p>
+</div>
+<div class="alert alert-success alert-dismissible fade in" role="alert"
+     ng-show="successMsg">
+    <button type="button" class="close" ng-click="successMsg=''"
+            aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p>{{successMsg}}</p>
+</div>
+
+<div id="top">
+    <div class="seat-manage-operate-container">
+        <h3 class="seat-manage-operate-title"></h3>
+        <div class="seat-manage-operate-button form-inline">
+            <button class="btn btn-success btn-sm" ng-click="saveStore()" ng-disabled="!myform.$valid">保存</button>
+            <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
+        </div>
+    </div>
+    <hr>
+
+    <div class="col-sm-12">
+        <form id="myform" name="myform" class="form-horizontal" novalidate>
+            <fieldset id="basicInfo">
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">名称</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newStore.storeName"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">联系人</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newStore.contactPerson" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">联系电话</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newStore.contactPhone" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">传真电话</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newStore.faxPhone" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">地址</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newStore.storeAddress" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">QQ</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newStore.qqNumber" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">总店</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="checkbox" ng-model="newStore.headOfficeFlag"
+                               ng-true-value="Y" ng-false-value="N" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">备注</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newStore.remark" />
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+

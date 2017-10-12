@@ -1,0 +1,53 @@
+<div class="tab-content">
+	<div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
+		<div class="seat-manage-operate-container">
+			<h5 class="seat-manage-operate-title">员工管理</h5>
+			<div class="seat-manage-operate-button form-inline">
+				<a type="button" class="btn btn-success btn-sm" href="#addAdminUser"> 新增</a>
+				<input class="form-control" ng-model="filterText" ng-change="filter()"
+					placeHolder="{{'BUSINESS_OPERATION_PRODUCT_SEARCH'|translate}}">
+				<button type="button" class="btn btn-sm btn-primary" ng-click="refresh()">
+					<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+				</button>
+			</div>
+		</div>
+		<hr>
+
+		<table ng-table="tableParams" class="table table-bordered">
+			<tr ng-repeat="adminUser in $data|filter:filterText">
+				<td data-title="'编号'" sortable="'adminCode'">{{adminUser.adminCode}}</td>
+				<td data-title="'用户'" sortable="'adminCode'">{{adminUser.adminName}}</td>
+				<td data-title="'姓名'" sortable="'adminUserName'">{{adminUser.adminUserDetailModel.realname}}</td>
+				<td data-title="'性别'" sortable="'adminUserName'">
+					<div ng-switch="adminUser.adminUserDetailModel.gender">
+						<div ng-switch-when="M">男</div>
+						<div ng-switch-when="F">女</div>
+					</div>
+				</td>
+				<td data-title="'手机号码'" sortable="'mobileNumber'">{{adminUser.mobileNumber}}</td>
+				<!--<td data-title="'地址'" sortable="'address'">{{adminUser.adminUserDetailModel.address}}</td>-->
+				<!--<td data-title="'籍贯'" sortable="'nativePlace'">{{adminUser.adminUserDetailModel.nativePlace}}</td>-->
+				<!--<td data-title="'邮箱'" sortable="'email'">{{adminUser.adminUserDetailModel.email}}</td>-->
+				<!--<td data-title="'入职时间'" sortable="'onboardDate'">{{adminUser.adminUserDetailModel.onboardDate}}</td>-->
+				<!--<td data-title="'离职时间'" sortable="'dimissionDate'">{{adminUser.adminUserDetailModel.dimissionDate}}</td>-->
+				<td data-title="'职位'" sortable="'position'">{{adminUser.adminUserDetailModel.position}}</td>
+				<td data-title="'激活'" sortable="'activeFlag'">
+					<div ng-switch="adminUser.activeFlag">
+						<div ng-switch-when="1">是</div>
+						<div ng-switch-when="0">否</div>
+					</div>
+				</td>
+
+				<td data-title="'操作'">
+					<button type="button" class="btn btn-sm btn-primary"
+							ng-click="gotoEdit(adminUser.adminUserId)">编辑</button>
+					<button type="button" class="btn btn-sm btn-primary"
+							ng-click="resetAdminUserPwd(adminUser.adminUserId)">重设密码</button>
+					<button type="button" class="btn btn-sm btn-primary"
+							ng-click="removeAdminUser(adminUser.adminUserId)">删除</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+</div>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.luda.store.dao.StoreDao" >
+    <resultMap id="storeMapper" type="com.luda.store.model.StoreModel">
+        <id property="storeId" column="store_id"/>
+        <result property="storeCode" column="store_code"/>
+        <result property="storeName" column="store_name"/>
+        <result property="contactPerson" column="contact_person"/>
+        <result property="contactPhone" column="contact_phone"/>
+        <result property="faxPhone" column="fax_phone"/>
+        <result property="storeAddress" column="store_address"/>
+        <result property="qqNumber" column="qq_number"/>
+        <result property="headOfficeFlag" column="head_office_flag"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <select id="fetchStoreList" resultMap="storeMapper">
+        select * from store where delete_flag = 0
+    </select>
+
+    <insert id="saveStore" parameterType="com.luda.store.model.StoreModel">
+        insert into store
+        (
+            store_code,
+            store_name,
+            contact_person,
+            contact_phone,
+            fax_phone,
+            store_address,
+            qq_number,
+            head_office_flag,
+            remark
+        )
+        values
+        (
+            #{storeCode},
+            #{storeName},
+            #{contactPerson},
+            #{contactPhone},
+            #{faxPhone},
+            #{storeAddress},
+            #{qqNumber},
+            #{headOfficeFlag},
+            #{remark}
+        )
+    </insert>
+
+    <select id="getMaxStoreCode" resultType="java.lang.String">
+        select max(store_code) from store
+    </select>
+
+    <select id="getHeadStore" resultMap="storeMapper">
+        select * from store where head_office_flag = 'Y' and delete_flag = 0 limit 1
+    </select>
+
+    <select id="getById" resultMap="storeMapper">
+        select * from store where store_id = #{storeId} and delete_flag = 0
+    </select>
+
+    <update id="updateStore" parameterType="com.luda.store.model.StoreModel">
+        update store
+        set
+            store_name = #{storeName},
+            contact_person = #{contactPerson},
+            contact_phone = #{contactPhone},
+            fax_phone = #{faxPhone},
+            store_address = #{storeAddress},
+            qq_number = #{qqNumber},
+            head_office_flag = #{headOfficeFlag},
+            remark = #{remark}
+        where store_id = #{storeId}
+    </update>
+
+    <update id="removeStore" parameterType="int">
+        update store set delete_flag = 1 where store_id = #{storeId}
+    </update>
+</mapper>

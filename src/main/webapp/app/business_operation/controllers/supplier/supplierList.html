@@ -1,0 +1,37 @@
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
+        <div class="seat-manage-operate-container">
+            <h5 class="seat-manage-operate-title">供应商管理</h5>
+            <div class="seat-manage-operate-button form-inline">
+                <a type="button" class="btn btn-success btn-sm" href="#addSupplier"> 新增</a>
+                <input class="form-control" ng-model="filterText" ng-change="filter()"
+                       placeHolder="{{'BUSINESS_OPERATION_PRODUCT_SEARCH'|translate}}">
+                <button type="button" class="btn btn-sm btn-primary" ng-click="refresh()">
+                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+        <hr>
+
+        <table ng-table="tableParams" class="table table-bordered">
+            <tr ng-repeat="supplier in $data|filter:filterText">
+                <td data-title="'编号'" sortable="'supplierCode'">{{supplier.supplierCode}}</td>
+                <td data-title="'名称'" sortable="'supplierName'">{{supplier.supplierName}}</td>
+                <td data-title="'银行'" sortable="'bank'">{{supplier.bank}}</td>
+                <td data-title="'银行账号'" sortable="'bankAccount'">{{supplier.bankAccount}}</td>
+                <td data-title="'工商税务登记证号'" sortable="'regTaxNo'">{{supplier.regTaxNo}}</td>
+                <td data-title="'负责人'" sortable="'contactPerson'">{{supplier.contactPerson}}</td>
+                <td data-title="'电话号码'" sortable="'contactPhone'">{{supplier.contactPhone}}</td>
+                <td data-title="'备注'" sortable="'remark'">{{supplier.remark}}</td>
+
+                <td data-title="'操作'">
+                    <button type="button" class="btn btn-sm btn-primary"
+                            ng-click="gotoEdit(supplier.supplierId)">编辑</button>
+                    <button type="button" class="btn btn-sm btn-primary"
+                            ng-click="removeSupplier(supplier.supplierId)">删除</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
