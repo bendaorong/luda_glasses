@@ -84,11 +84,11 @@
 	<!-- 用户管理 -->
 	<script src="app/business_operation/controllers/adminUser/AuthorizationManage.js"></script>
 	<!-- 门店管理 -->
-	<script src="app/business_operation/controllers/store/storeManage.js"/>
+	<script src="app/business_operation/controllers/store/storeManage.js"></script>
 	<!-- 供应商管理 -->
-	<script src="app/business_operation/controllers/supplier/supplierManage.js"/>
+	<script src="app/business_operation/controllers/supplier/supplierManage.js"></script>
 	<!-- 商品管理 -->
-	<script src="app/business_operation/controllers/materiel/materielManage.js"/>
+	<script src="app/business_operation/controllers/materiel/materielManage.js"></script>
 
 	<script src="angular-1.2.28/angular-route.min.js"></script>
 	<script src="js/angularjs-dropdown-multiselect.js"></script>
