@@ -34,7 +34,16 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
 	}).when("/editSupplier/:supplierId", {
         templateUrl : "app/business_operation/controllers/supplier/editSupplier.html",
         controller : "editSupplierController"
-	}).when("/materielManage", {
+	}).when("/supplierDetail/:supplierId", {
+        templateUrl : "app/business_operation/controllers/supplier/supplierDetail.html",
+        controller : "supplierDetailController"
+	}).when("/editSupplierContact/:contactId", {
+        templateUrl : "app/business_operation/controllers/supplier/editContact.html",
+        controller : "editContactController"
+    }).when("/addSupplierContact/:supplierId", {
+        templateUrl : "app/business_operation/controllers/supplier/newContact.html",
+        controller : "addContactController"
+    }).when("/materielManage", {
         templateUrl : "app/business_operation/controllers/materiel/materielList.html",
         controller : "materielManageController"
 	}).otherwise({
@@ -238,6 +247,50 @@ businessOperationApp.factory("supplierService", function($http) {
                 method:"POST",
                 url:"/luda_glasses/rest/supplier/updateSupplier",
                 data:supplier
+            }).success(successCallback).error(errorCallback);
+        },
+        disableSupplier : function (supplierId, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/supplier/disableSupplier/" + supplierId
+            }).success(successCallback).error(errorCallback);
+        },
+        enableSupplier : function (supplierId, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/supplier/enableSupplier/" + supplierId
+            }).success(successCallback).error(errorCallback);
+        },
+        removeSupplier : function (supplierId, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/supplier/removeSupplier/" + supplierId
+            }).success(successCallback).error(errorCallback);
+        },
+        fetchSupplierContactList : function (supplierId, successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/supplier/contactList/" + supplierId).success(successCallback).error(errorCallback);
+        },
+        getSupplierContactById : function (contactId, successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/supplier/getContactById/" + contactId).success(successCallback).error(errorCallback);
+        },
+        updateSupplierContact : function (supplierContact, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/supplier/updateContact",
+                data:supplierContact
+            }).success(successCallback).error(errorCallback);
+        },
+        addSupplierContact : function (supplierContact, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/supplier/saveContact",
+                data:supplierContact
+            }).success(successCallback).error(errorCallback);
+        },
+        removeSupplierContact : function (contactId, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/supplier/removeContact/" + contactId
             }).success(successCallback).error(errorCallback);
         }
     }

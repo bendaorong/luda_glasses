@@ -1,5 +1,6 @@
 package com.luda.supplier.service.impl;
 
+import com.luda.comm.po.Constants;
 import com.luda.comm.po.ResultHandle;
 import com.luda.supplier.dao.SupplierDao;
 import com.luda.supplier.model.SupplierContactModel;
@@ -101,6 +102,16 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public ResultHandle<SupplierContactModel> saveSupplierContact(SupplierContactModel supplierContactModel) {
         ResultHandle<SupplierContactModel> resultHandle = new ResultHandle<>();
+
+        String errorMsg = checkContact(supplierContactModel);
+        if(StringUtils.isNotEmpty(errorMsg)){
+            resultHandle.setMsg(errorMsg);
+            return resultHandle;
+        }
+
+        // 初始化数据
+        initForAddContact(supplierContactModel);
+
         int result = supplierDao.saveSupplierContact(supplierContactModel);
         if(result >= 1){
             resultHandle.setReturnContent(supplierContactModel);
@@ -110,6 +121,21 @@ public class SupplierServiceImpl implements SupplierService {
         return resultHandle;
     }
 
+    /**
+     * 初始化联系人
+     * @param supplierContactModel
+     */
+    private void initForAddContact(SupplierContactModel supplierContactModel) {
+        // 初始化主要联系人(默认不是主要联系人)
+        if(StringUtils.isEmpty(supplierContactModel.getHeadFlag())){
+            supplierContactModel.setHeadFlag("N");
+        }
+        // 初始化性别
+        if(StringUtils.isEmpty(supplierContactModel.getGender())){
+            supplierContactModel.setGender(Constants.GENDER_MALE);
+        }
+    }
+
     @Override
     public SupplierModel getSupplierById(int supplierId) {
         return supplierDao.getSupplierById(supplierId);
@@ -117,12 +143,12 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public List<SupplierContactModel> getSupplierContactBySupplierId(int supplierId) {
-        return null;
+        return supplierDao.getSupplierContactBySupplierId(supplierId);
     }
 
     @Override
     public SupplierContactModel getSupplierContactById(int contactId) {
-        return null;
+        return supplierDao.getSupplierContactById(contactId);
     }
 
     @Override
@@ -149,6 +175,116 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public ResultHandle<SupplierContactModel> updateSupplierContact(SupplierContactModel supplierContactModel) {
+        ResultHandle<SupplierContactModel> resultHandle = new ResultHandle<>();
+
+        String errorMsg = checkContact(supplierContactModel);
+        if(StringUtils.isNotEmpty(errorMsg)){
+            resultHandle.setMsg(errorMsg);
+            return resultHandle;
+        }
+
+        int result = supplierDao.updateSupplierContact(supplierContactModel);
+        return resultHandle;
+    }
+
+    /**
+     * 验证供应商联系人
+     * @param supplierContactModel
+     * @return
+     */
+    private String checkContact(SupplierContactModel supplierContactModel) {
+        // 名称
+        if(StringUtils.isEmpty(supplierContactModel.getContactName())){
+            return "请填写联系人名称";
+        }
+        //手机号码
+        if(StringUtils.isEmpty(supplierContactModel.getMobileNumber())
+                && StringUtils.isEmpty(supplierContactModel.getTelNumber())){
+            return "请填写联系人手机号码或电话号码";
+        }
+        // 是否主要联系人,一个供应商只能有一个主要联系人
+        if("Y".equals(supplierContactModel.getHeadFlag())){
+            SupplierContactModel headContact = getHeadContact(supplierContactModel.getSupplierId());
+            if(headContact != null){
+                return "每个供应商只能设置一个主要联系人";
+            }
+        }
+
         return null;
+    }
+
+    /**
+     * 查询供应商主要联系人
+     * @param supplierId 供应商id
+     * @return
+     */
+    private SupplierContactModel getHeadContact(int supplierId) {
+        return supplierDao.getHeadContact(supplierId);
+    }
+
+    @Override
+    public ResultHandle<SupplierModel> enableSupplier(int supplierId) {
+        ResultHandle<SupplierModel> resultHandle = new ResultHandle<>();
+
+        SupplierModel supplierModel = supplierDao.getSupplierById(supplierId);
+        if(supplierModel == null){
+            resultHandle.setMsg("供应商不存在");
+            return resultHandle;
+        }
+        if(supplierModel.getUseFlag() == 1){
+            resultHandle.setMsg("供应商不可启用");
+        }
+
+        int result = supplierDao.updateSupplierUseFlag(supplierId, 1);
+        if(result > 0){
+            supplierModel.setUseFlag(1);
+            resultHandle.setReturnContent(supplierModel);
+        }else {
+            resultHandle.setMsg("供应商启用失败");
+        }
+        return resultHandle;
+    }
+
+    @Override
+    public ResultHandle<SupplierModel> disableSupplier(int supplierId) {
+        ResultHandle<SupplierModel> resultHandle = new ResultHandle<>();
+
+        SupplierModel supplierModel = supplierDao.getSupplierById(supplierId);
+        if(supplierModel == null){
+            resultHandle.setMsg("供应商不存在");
+            return resultHandle;
+        }
+        if(supplierModel.getUseFlag() == 0){
+            resultHandle.setMsg("供应商不可停用");
+        }
+
+        int result = supplierDao.updateSupplierUseFlag(supplierId, 0);
+        if(result > 0){
+            supplierModel.setUseFlag(0);
+            resultHandle.setReturnContent(supplierModel);
+        }else {
+            resultHandle.setMsg("供应商停用失败");
+        }
+        return resultHandle;
+    }
+
+    @Override
+    public ResultHandle<SupplierModel> removeSupplier(int supplierId) {
+        ResultHandle<SupplierModel> resultHandle = new ResultHandle<>();
+        int result = supplierDao.removeSupplier(supplierId);
+        if(result < 0){
+            resultHandle.setMsg("供应商删除失败");
+        }
+        return resultHandle;
+    }
+
+    @Override
+    public ResultHandle<SupplierModel> removeContact(int contactId) {
+        ResultHandle<SupplierModel> resultHandle = new ResultHandle<>();
+        int result = supplierDao.removeContact(contactId);
+        if(result < 0){
+            resultHandle.setMsg("供应商联系人删除失败");
+        }
+        return resultHandle;
     }
 }

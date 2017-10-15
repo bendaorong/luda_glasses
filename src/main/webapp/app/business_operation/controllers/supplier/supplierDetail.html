@@ -2,10 +2,9 @@
     #myform input.ng-invalid.ng-dirty {
         background-color: #FFC0CB;
     }
-
-    /*#myform input.ng-valid.ng-dirty {
-         background-color: #78FA89;
-    }*/
+    .headContact {
+        background-color:yellow;
+    }
 </style>
 <div class="alert alert-danger alert-dismissible fade in" role="alert"
      ng-show="errorMsg!=null||errorMsg!=undefined">
@@ -26,10 +25,9 @@
 
 <div id="top">
     <div class="seat-manage-operate-container">
-        <h5 class="seat-manage-operate-title">编辑供应商</h5>
+        <h5 class="seat-manage-operate-title"><b>供应商详情</b></h5>
         <div class="seat-manage-operate-button form-inline">
-            <button class="btn btn-success btn-sm" ng-click="updateSupplier()" ng-disabled="!myform.$valid">保存</button>
-            <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
+            <!--<button class="btn btn-danger btn-sm" ng-click="cancel()">返回</button>-->
         </div>
     </div>
     <hr>
@@ -46,45 +44,82 @@
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">名称</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="selectSupplier.supplierName" required/>
+                        <input type="text" class="form-control" ng-model="selectSupplier.supplierName" ng-readonly="true"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">银行</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="selectSupplier.bank" />
+                        <input type="text" class="form-control" ng-model="selectSupplier.bank" ng-readonly="true"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">银行</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="selectSupplier.bankAccount" />
+                        <input type="text" class="form-control" ng-model="selectSupplier.bankAccount" ng-readonly="true"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">工商税务登记证号</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="selectSupplier.regTaxNo" required/>
+                        <input type="text" class="form-control" ng-model="selectSupplier.regTaxNo" ng-readonly="true"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">负责人</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="selectSupplier.contactPerson" required/>
+                        <input type="text" class="form-control" ng-model="selectSupplier.contactPerson" ng-readonly="true"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">电话号码</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="selectSupplier.contactPhone" required/>
+                        <input type="text" class="form-control" ng-model="selectSupplier.contactPhone" ng-readonly="true"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">备注</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="selectSupplier.remark"/>
+                        <input type="text" class="form-control" ng-model="selectSupplier.remark" ng-readonly="true"/>
                     </div>
                 </div>
+            </fieldset>
         </form>
     </div>
+
+    <div class="seat-manage-operate-container">
+        <h5 class="seat-manage-operate-title"><b>供应商联系人</b></h5>
+        <div class="seat-manage-operate-button form-inline">
+            <a type="button" class="btn btn-success btn-sm" href="#addSupplierContact/{{selectSupplier.supplierId}}"> 新增联系人</a>
+            <input class="form-control" ng-model="filterText" ng-change="filter()"
+                   placeHolder="{{'BUSINESS_OPERATION_PRODUCT_SEARCH'|translate}}">
+            <button type="button" class="btn btn-sm btn-primary" ng-click="refresh()">
+                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+    <hr>
+    <table ng-table="tableParams" class="table table-bordered">
+        <tr ng-repeat="supplierContact in $data|filter:filterText"
+            ng-class="{'headContact':(supplierContact.headFlag=='Y')}">
+            <td data-title="'名称'" sortable="'contactName'">
+                <a ng-href="#/editSupplierContact/{{supplierContact.contactId}}">{{supplierContact.contactName}}</a>
+            </td>
+            <td data-title="'性别'" sortable="'gender'">
+                <div ng-switch="supplierContact.gender">
+                    <div ng-switch-when="M">男</div>
+                    <div ng-switch-when="F">女</div>
+                </div>
+            </td>
+            <td data-title="'手机号码'" sortable="'mobileNumber'">{{supplierContact.mobileNumber}}</td>
+            <td data-title="'电话号码'" sortable="'telNumber'">{{supplierContact.telNumber}}</td>
+            <td data-title="'地址'" sortable="'address'">{{supplierContact.address}}</td>
+            <td data-title="'邮政编码'" sortable="'postcode'">{{supplierContact.postcode}}</td>
+            <td data-title="'电子邮箱'" sortable="'email'">{{supplierContact.email}}</td>
+            <td data-title="'操作'">
+                <button type="button" class="btn btn-sm btn-primary"
+                        ng-click="removeContact(supplierContact.contactId)">删除</button>
+            </td>
+        </tr>
+    </table>
 </div>

@@ -116,6 +116,7 @@ create table supplier
    contact_phone        varchar(32)                    null,
    use_flag             tinyint(1)                    not null default 1,
    remark               varchar(256)                   null,
+   delete_flag          tinyint(1)                      default 0,
    PRIMARY KEY (supplier_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -137,5 +138,6 @@ create table supplier_contact
    email                varchar(64)                    null,
    post_code            varchar(16)                    null,
    head_flag            char(1)                        not null default 'N',
+   delete_flag          tinyint(1)                      default 0,
    PRIMARY KEY (contact_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

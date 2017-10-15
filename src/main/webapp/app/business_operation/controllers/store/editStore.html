@@ -26,7 +26,7 @@
 
 <div id="top">
     <div class="seat-manage-operate-container">
-        <h3 class="seat-manage-operate-title"></h3>
+        <h5 class="seat-manage-operate-title">编辑门店</h5>
         <div class="seat-manage-operate-button form-inline">
             <button class="btn btn-success btn-sm" ng-click="updateStore()" ng-disabled="!myform.$valid">保存</button>
             <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
@@ -38,45 +38,45 @@
         <form id="myform" name="myform" class="form-horizontal" novalidate>
             <fieldset id="basicInfo">
                 <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">编号</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" ng-model="selectStore.storeCode" ng-readonly="true"/>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">名称</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="selectStore.storeName"/>
+                        <input type="text" class="form-control" required ng-model="selectStore.storeName"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">联系人</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="selectStore.contactPerson" />
+                        <input type="text" class="form-control" required ng-model="selectStore.contactPerson" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">联系电话</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="selectStore.contactPhone" />
+                        <input type="text" class="form-control" required ng-model="selectStore.contactPhone" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">传真电话</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="selectStore.faxPhone" />
+                        <input type="text" class="form-control" required ng-model="selectStore.faxPhone" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">地址</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="selectStore.storeAddress" />
+                        <input type="text" class="form-control" required ng-model="selectStore.storeAddress" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">QQ</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="selectStore.qqNumber" />
+                        <input type="text" class="form-control" required ng-model="selectStore.qqNumber" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -89,8 +89,7 @@
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">备注</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="selectStore.remark" />
+                        <input type="text" class="form-control" ng-model="selectStore.remark" />
                     </div>
                 </div>
         </form>

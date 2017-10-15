@@ -7,6 +7,7 @@ import com.luda.supplier.model.SupplierModel;
 import com.luda.supplier.service.SupplierService;
 import com.luda.test.SpringSimpleJunit;
 import com.luda.util.CommonUtils;
+import net.sf.json.JSONArray;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -65,5 +66,33 @@ public class SupplierServiceTest extends SpringSimpleJunit{
         supplierModel.setSupplierName("XXX公司");
         ResultHandle<SupplierModel> resultHandle = supplierService.updateSupplier(supplierModel);
         print(resultHandle.getMsg());
+    }
+
+    @Test
+    public void testGetSupplierContactBySupplierId(){
+        List<SupplierContactModel> list = supplierService.getSupplierContactBySupplierId(1);
+        JSONArray arr = CommonUtils.convertBeanCollectionToJsonArray(list, "yyyy-MM-dd");
+        print(arr.toString());
+    }
+
+    @Test
+    public void testGetSupplierContactById(){
+        SupplierContactModel supplierContactModel = supplierService.getSupplierContactById(2);
+        print(CommonUtils.convertBeanToJson(supplierContactModel,null).toString());
+    }
+
+    @Test
+    public void testUpdateContact(){
+        SupplierContactModel supplierContactModel = supplierService.getSupplierContactById(2);
+        supplierContactModel.setContactName("王化_");
+        supplierContactModel.setHeadFlag("Y");
+        ResultHandle resultHandle = supplierService.updateSupplierContact(supplierContactModel);
+        print(resultHandle.getMsg());
+    }
+
+    @Test
+    public void testRemoveContact(){
+       ResultHandle<SupplierModel> resultHandle = supplierService.removeContact(2);
+       print(""+resultHandle.isSuccess());
     }
 }

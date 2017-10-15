@@ -15,7 +15,9 @@
 
         <table ng-table="tableParams" class="table table-bordered">
             <tr ng-repeat="supplier in $data|filter:filterText">
-                <td data-title="'编号'" sortable="'supplierCode'">{{supplier.supplierCode}}</td>
+                <td data-title="'编号'" sortable="'supplierCode'">
+                    <a ng-href="#/supplierDetail/{{supplier.supplierId}}">{{supplier.supplierCode}}</a>
+                </td>
                 <td data-title="'名称'" sortable="'supplierName'">{{supplier.supplierName}}</td>
                 <!--<td data-title="'银行'" sortable="'bank'">{{supplier.bank}}</td>-->
                 <!--<td data-title="'银行账号'" sortable="'bankAccount'">{{supplier.bankAccount}}</td>-->
@@ -23,10 +25,23 @@
                 <td data-title="'负责人'" sortable="'contactPerson'">{{supplier.contactPerson}}</td>
                 <td data-title="'电话号码'" sortable="'contactPhone'">{{supplier.contactPhone}}</td>
                 <!--<td data-title="'备注'" sortable="'remark'">{{supplier.remark}}</td>-->
+                <td data-title="'状态'" sortable="'contactPhone'">
+                    <div ng-switch="supplier.useFlag">
+                        <div ng-switch-when="1">启用</div>
+                        <div ng-switch-when="0" style="color:red">停用</div>
+                    </div>
+                </td>
 
                 <td data-title="'操作'">
                     <button type="button" class="btn btn-sm btn-primary"
                             ng-click="gotoEdit(supplier.supplierId)">编辑</button>
+
+                    <button type="button" class="btn btn-sm btn-primary" ng-show="supplier.useFlag==1"
+                            ng-click="disableSupplier(supplier.supplierId)">停用</button>
+
+                    <button type="button" class="btn btn-sm btn-primary" ng-show="supplier.useFlag==0"
+                            ng-click="enableSupplier(supplier.supplierId)">启用</button>
+
                     <button type="button" class="btn btn-sm btn-primary"
                             ng-click="removeSupplier(supplier.supplierId)">删除</button>
                 </td>

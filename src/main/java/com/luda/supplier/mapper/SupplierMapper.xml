@@ -14,8 +14,21 @@
         <result property="remark" column="remark"/>
     </resultMap>
 
+    <resultMap id="supplierContactMapper" type="com.luda.supplier.model.SupplierContactModel">
+        <id property="contactId" column="contact_id"/>
+        <result property="supplierId" column="supplier_id"/>
+        <result property="contactName" column="contact_name"/>
+        <result property="gender" column="gender"/>
+        <result property="mobileNumber" column="mobile_number"/>
+        <result property="telNumber" column="tel_number"/>
+        <result property="address" column="address"/>
+        <result property="email" column="email"/>
+        <result property="postcode" column="post_code"/>
+        <result property="headFlag" column="head_flag"/>
+    </resultMap>
+
     <select id="fetchSupplierList" resultMap="supplierMapper">
-        select * from supplier where use_flag = 1
+        select * from supplier where delete_flag = 0
     </select>
 
     <insert id="saveSupplier" parameterType="com.luda.supplier.model.SupplierModel"
@@ -93,6 +106,44 @@
     </update>
 
     <select id="getSupplierById" resultMap="supplierMapper">
-        select * from supplier where supplier_id = #{supplierId} and use_flag = 1
+        select * from supplier where supplier_id = #{supplierId} and delete_flag = 0
     </select>
+
+    <update id="updateSupplierUseFlag">
+        update supplier set use_flag = #{useFlag} where supplier_id = #{supplierId}
+    </update>
+
+    <update id="removeSupplier" parameterType="int">
+        update supplier set delete_flag = 1 where supplier_id = #{supplierId}
+    </update>
+
+    <select id="getSupplierContactBySupplierId" resultMap="supplierContactMapper">
+        select * from supplier_contact where supplier_id = #{supplierId} and delete_flag = 0
+    </select>
+
+    <select id="getSupplierContactById" resultMap="supplierContactMapper">
+        select * from supplier_contact where contact_id = #{contactId}
+    </select>
+
+    <select id="getHeadContact" resultMap="supplierContactMapper">
+        select * from supplier_contact where supplier_id = #{supplierId} and head_flag = 'Y' and delete_flag = 0
+    </select>
+
+    <update id="updateSupplierContact" parameterType="com.luda.supplier.model.SupplierContactModel">
+        update supplier_contact
+        set
+            contact_name = #{contactName},
+            gender = #{gender},
+            mobile_number = #{mobileNumber},
+            tel_number = #{telNumber},
+            address = #{address},
+            email = #{email},
+            post_code = #{postcode},
+            head_flag = #{headFlag}
+        where contact_id = #{contactId}
+    </update>
+
+    <update id="removeContact" parameterType="int">
+        update supplier_contact set delete_flag = 1, head_flag = 'N' where contact_id = #{contactId}
+    </update>
 </mapper>

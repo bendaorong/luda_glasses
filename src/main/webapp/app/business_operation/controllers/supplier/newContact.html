@@ -26,9 +26,9 @@
 
 <div id="top">
     <div class="seat-manage-operate-container">
-        <h5 class="seat-manage-operate-title">新增供应商</h5>
+        <h5 class="seat-manage-operate-title"><b>新增供应商联系人</b></h5>
         <div class="seat-manage-operate-button form-inline">
-            <button class="btn btn-success btn-sm" ng-click="saveSupplier()" ng-disabled="!myform.$valid">保存</button>
+            <button class="btn btn-success btn-sm" ng-click="saveSupplierContact()" ng-disabled="!myform.$valid">保存</button>
             <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
         </div>
     </div>
@@ -40,43 +40,53 @@
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">名称</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.supplierName" required/>
+                        <input type="text" class="form-control" ng-model="newContact.contactName" required/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">银行</label>
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">性别</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.bank" />
+                        <select ng-model="newContact.gender">
+                            <option value="M">男</option>
+                            <option value="F">女</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">银行</label>
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">手机号码</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.bankAccount" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">工商税务登记证号</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.regTaxNo" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">负责人</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.contactPerson" required/>
+                        <input type="text" class="form-control" ng-model="newContact.mobileNumber" required/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">电话号码</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.contactPhone" required/>
+                        <input type="text" class="form-control" ng-model="newContact.telNumber" required/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">备注</label>
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">地址</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.remark"/>
+                        <input type="text" class="form-control" ng-model="newContact.address" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">邮政编码</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" ng-model="newContact.postcode" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">电子邮箱</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" ng-model="newContact.email" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">主要联系人</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="checkbox" ng-model="newContact.headFlag"
+                               ng-checked="selectContact.headFlag=='Y'" id="headFlag"/>
                     </div>
                 </div>
         </form>

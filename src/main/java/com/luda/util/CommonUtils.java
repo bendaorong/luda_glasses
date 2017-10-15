@@ -109,7 +109,7 @@ public class CommonUtils {
 			        });  
 			return JSONObject.fromObject(obj, config);
 		}
-		return null;
+		return new JSONObject();
 	}
 	
 	public static JSONArray convertBeanCollectionToJsonArray(Collection collection, String datePattern){

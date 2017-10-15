@@ -57,4 +57,32 @@ public interface SupplierService {
      * @param supplierContactModel
      */
     ResultHandle<SupplierContactModel> updateSupplierContact(SupplierContactModel supplierContactModel);
+
+    /**
+     * 启用供应商
+     * @param supplierId 供应商id
+     * @return
+     */
+    ResultHandle<SupplierModel> enableSupplier(int supplierId);
+
+    /**
+     * 停用供应商
+     * @param supplierId 供应商id
+     * @return
+     */
+    ResultHandle<SupplierModel> disableSupplier(int supplierId);
+
+    /**
+     * 删除供应商
+     * @param supplierId 供应商id
+     * @return
+     */
+    ResultHandle<SupplierModel> removeSupplier(int supplierId);
+
+    /**
+     * 删除联系人
+     * @param contactId
+     * @return
+     */
+    ResultHandle<SupplierModel> removeContact(int contactId);
 }
