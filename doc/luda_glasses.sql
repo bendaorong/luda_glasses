@@ -141,3 +141,119 @@ create table supplier_contact
    delete_flag          tinyint(1)                      default 0,
    PRIMARY KEY (contact_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*==============================================================*/
+/* Table: materiel                                              */
+/*==============================================================*/
+DROP TABLE IF EXISTS materiel;
+create table materiel
+(
+   id                   int(11)                        not null auto_increment,
+   type_id              int(4)                         not null,
+   code                 varchar(16)                    not null,
+   bar_code             varchar(16)                    null,
+   name                 varchar(128)                   null,
+   sell_price           double(10,2)                   null,
+   trade_price          double(10,2)                   null,
+   cost_price           double(10,2)                   null,
+   unit                 varchar(32)                    null,
+   brand                varchar(32)                    null,
+   specification        varchar(64)                    null,
+   color                varchar(32)                   null,
+   texture              varchar(32)                    null,
+   manufacturer         varchar(128)                   null,
+   min_inventory        int(11)                        null,
+   max_inventory        int(11)                        null,
+   use_flag             tinyint(1)                    null,
+   remark               varchar(256)                   null,
+   creator_user_id      int(11)                        null,
+   create_time          datetime                       null,
+   update_user_id       int(11)                        null,
+   update_time          datetime                       null,
+   delete_flag          tinyint(1)                      default 0,
+   PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE UNIQUE INDEX idx_code on materiel(code);
+
+
+/*==============================================================*/
+/* Table: goods_type                                              */
+/*==============================================================*/
+DROP TABLE IF EXISTS goods_type;
+create table goods_type
+(
+   type_id              int(4)                         not null auto_increment,
+   type_name            varchar(32)                   not null,
+   kind_id              int(4)                         not null,
+   delete_flag          tinyint(1)                      default 0,
+  PRIMARY KEY (type_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*==============================================================*/
+/* Table: dictionary                                              */
+/*==============================================================*/
+DROP TABLE IF EXISTS dictionary;
+create table dictionary
+(
+   dict_id              int(4)                         not null auto_increment,
+   dict_type            varchar(32)                   not null,
+   dict_name            varchar(32)                   not null,
+   delete_flag          tinyint(1)                      default 0,
+  PRIMARY KEY (dict_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*==============================================================*/
+/* Table: goods_kind                                            */
+/*==============================================================*/
+DROP TABLE IF EXISTS goods_kind;
+create table goods_kind
+(
+   kind_id              int(4)                         not null auto_increment,
+   kind_name            varchar(32)                   not null,
+   delete_flag          tinyint(1)                      default 0,
+   PRIMARY KEY (kind_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+insert into goods_kind (kind_name) values ('普通镜片'),('隐形眼镜'),('眼镜框架'),('护理液');
+
+/*==============================================================*/
+/* Table: goods_color                                           */
+/*==============================================================*/
+DROP TABLE IF EXISTS goods_color;
+create table goods_color
+(
+   color_id              int(4)                         not null auto_increment,
+   color_name            varchar(32)                   not null,
+   delete_flag          tinyint(1)                      default 0,
+   PRIMARY KEY (color_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*==============================================================*/
+/* Table: goods_unit                                           */
+/*==============================================================*/
+DROP TABLE IF EXISTS goods_unit;
+create table goods_unit
+(
+   unit_id              int(4)                         not null auto_increment,
+   unit_name            varchar(32)                   not null,
+   delete_flag          tinyint(1)                      default 0,
+   PRIMARY KEY (unit_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*==============================================================*/
+/* Table: goods_unit                                           */
+/*==============================================================*/
+DROP TABLE IF EXISTS goods_brand;
+create table goods_brand
+(
+   brand_id              int(4)                         not null auto_increment,
+   brand_name            varchar(32)                   not null,
+   delete_flag          tinyint(1)                      default 0,
+   PRIMARY KEY (brand_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
