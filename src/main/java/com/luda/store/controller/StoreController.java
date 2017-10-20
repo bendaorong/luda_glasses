@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
+ * 门店管理
  * Created by Administrator on 2017/10/5.
  */
 @Controller

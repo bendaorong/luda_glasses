@@ -54,4 +54,9 @@ public class ResultHandle<T extends Serializable> implements Serializable{
     public void setReturnContent(T returnContent) {
         this.returnContent = returnContent;
     }
+
+    @Override
+    public String toString(){
+        return "success:" + this.success + " msg:" + this.msg;
+    }
 }

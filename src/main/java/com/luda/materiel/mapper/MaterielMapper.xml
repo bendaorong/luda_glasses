@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.luda.materiel.dao.MaterielDao">
+    <resultMap id="materielMap" type="com.luda.materiel.model.MaterielModel">
+        <id property="id" column="id"/>
+        <result property="typeId" column="type_id"/>
+        <result property="typeName" column="type_name"/>
+        <result property="code" column="code"/>
+        <result property="barcode" column="bar_code"/>
+        <result property="name" column="name"/>
+        <result property="sellPrice" column="sell_price"/>
+        <result property="tradePrice" column="trade_price"/>
+        <result property="costPrice" column="cost_price"/>
+        <result property="unit" column="unit"/>
+        <result property="brand" column="brand"/>
+        <result property="specification" column="specification"/>
+        <result property="color" column="color"/>
+        <result property="texture" column="texture"/>
+        <result property="manufacturer" column="manufacturer"/>
+        <result property="minInventory" column="min_inventory"/>
+        <result property="maxInventory" column="max_inventory"/>
+        <result property="useFlag" column="use_flag"/>
+        <result property="remark" column="remark"/>
+        <result property="creatorUserId" column="creator_user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUserId" column="update_user_id"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="fetchMaterielList" resultMap="materielMap">
+        select m.*, t.type_name
+        from materiel m
+        left join goods_type t
+        on m.type_id = t.type_id
+        where m.delete_flag = 0
+    </select>
+
+    <insert id="saveMateriel" parameterType="com.luda.materiel.model.MaterielModel"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into materiel
+        (
+            type_id,
+            code,
+            bar_code,
+            name,
+            sell_price,
+            trade_price,
+            cost_price,
+            unit,
+            brand,
+            specification,
+            color,
+            texture,
+            manufacturer,
+            min_inventory,
+            max_inventory,
+            use_flag,
+            remark,
+            creator_user_id,
+            create_time,
+            update_user_id,
+            update_time
+        )
+        VALUES
+        (
+            #{typeId},
+            #{code},
+            #{barcode},
+            #{name},
+            #{sellPrice},
+            #{tradePrice},
+            #{costPrice},
+            #{unit},
+            #{brand},
+            #{specification},
+            #{color},
+            #{texture},
+            #{manufacturer},
+            #{minInventory},
+            #{maxInventory},
+            #{useFlag},
+            #{remark},
+            #{creatorUserId},
+            now(),
+            update_user_id,
+            now()
+        )
+    </insert>
+
+    <select id="getById" resultMap="materielMap">
+        select * from materiel where id = #{id} and delete_flag = 0
+    </select>
+
+    <update id="updateMateriel" parameterType="com.luda.materiel.model.MaterielModel">
+        update materiel
+        set
+            name = #{name},
+            type_id = #{typeId},
+            code = #{code},
+            bar_code = #{barcode},
+            sell_price = #{sellPrice},
+            trade_price = #{tradePrice},
+            cost_price = #{costPrice},
+            unit = #{unit},
+            brand = #{brand},
+            specification = #{specification},
+            color = #{color},
+            texture = #{texture},
+            manufacturer = #{manufacturer},
+            min_inventory = #{minInventory},
+            max_inventory = #{maxInventory},
+            use_flag = #{useFlag},
+            remark = #{remark},
+            update_user_id = #{updateUserId},
+            update_time = now()
+        where id = #{id}
+    </update>
+
+    <update id="removeMateriel" parameterType="int">
+        update materiel set delete_flag = 1 where id = #{id}
+    </update>
+
+    <select id="getMaxCode" resultType="java.lang.String">
+        select max(code) from materiel
+    </select>
+</mapper>

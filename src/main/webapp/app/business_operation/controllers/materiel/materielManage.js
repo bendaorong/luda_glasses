@@ -1,5 +1,5 @@
 (function() {
-    angular.module("businessOperationApp").controller("materielManageController", function($scope, NgTableParams, $filter, $location, storeService) {
+    angular.module("businessOperationApp").controller("materielManageController", function($scope, NgTableParams, $filter, $location, materielService) {
         setActiveSubPage($scope);
         $scope.roleCode = sessionStorage.getItem("roleCode");
         $scope.currentTab = 0;
@@ -9,27 +9,30 @@
             $scope.currentTab = currentTab;
         }
 
-        $scope.gotoEdit = function(storeId) {
-            $location.path("/editStore/" + storeId);
-        }
-
-        // 显示门店列表
+        // 显示商品列表
         function initMaterielList() {
-            storeService.fetchMaterielList(function(data){
-                $scope.storeList  =  data;
-                $scope.tableParams = new NgTableParams({}, {
-                    dataset : $scope.storeList
-                });
-                console.log("size:"+$scope.storeList.length);
+            materielService.fetchMaterielList(function(data){
+                if(data.success){
+                    $scope.materielList = data.data;
+                    $scope.tableParams = new NgTableParams({}, {
+                        dataset : $scope.materielList
+                    });
+                    console.log("size:"+$scope.materielList.length);
+                }else {
+                    BootstrapDialog.show({
+                        type : BootstrapDialog.TYPE_DANGER,
+                        title : '错误',
+                        message : '获取商品失败' + data.errorMsg
+                    });
+                }
             },function(data){
                 BootstrapDialog.show({
                     type : BootstrapDialog.TYPE_DANGER,
                     title : '警告',
-                    message : '获取门店错误' + data.errorMsg
+                    message : '获取商品错误' + data.errorMsg
                 });
             });
         }
-
         initMaterielList();
 
         $scope.refresh = function() {
@@ -38,16 +41,28 @@
             $scope.$emit("loadingEnd");
         }
 
-        //删除门店
-        $scope.removeStore = function(storeId){
-            if(confirm("确认删除门店吗？")){
-                storeService.removeStore(storeId, function(data){
-                    BootstrapDialog.show({
-                        type : BootstrapDialog.TYPE_SUCCESS,
-                        title : '消息',
-                        message : '门店删除成功'
-                    });
-                    $scope.refresh();
+        $scope.gotoEdit = function(id) {
+            $location.path("/editMateriel/" + id);
+        }
+
+        //删除商品
+        $scope.removeMateriel = function(id){
+            if(confirm("确认删除该商品吗？")){
+                materielService.removeMateriel(id, function(data){
+                    if(data.success){
+                        BootstrapDialog.show({
+                            type : BootstrapDialog.TYPE_SUCCESS,
+                            title : '消息',
+                            message : '商品删除成功'
+                        });
+                        $scope.refresh();
+                    }else {
+                        BootstrapDialog.show({
+                            type : BootstrapDialog.TYPE_DANGER,
+                            title : '失败',
+                            message : data.errorMsg
+                        });
+                    }
                 },function(data){
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,
@@ -57,24 +72,76 @@
                 });
             }
         }
-    }).controller("addStoreController",function($location, $scope, storeService){
-        $scope.newStore = {};
+    }).controller("addMaterielController",function($location, $scope, materielService, dictionaryService){
+        $scope.newMateriel = {};
+        // 商品类型
+        $scope.goodsTypeList = [];
+        // 商品品牌
+        $scope.goodsBrandList = [];
+        // 商品颜色
+        $scope.goodsColorList = [];
+        // 商品单位
+        $scope.goodsUnitList = [];
 
-        //保存门店信息
-        $scope.saveStore = function(){
-            storeService.addStore($scope.newStore, function(data){
+        // 查询商品类型
+        dictionaryService.fetchGoodsTypeList(function(data){
+            $scope.goodsTypeList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品类型失败:' + data.errorMsg
+            });
+        });
+
+        // 查询商品品牌
+        dictionaryService.fetchDictionaryByType("GOODS_BRAND", function(data){
+            $scope.goodsBrandList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品品牌失败:' + data.errorMsg
+            });
+        });
+
+        // 查询商品颜色
+        dictionaryService.fetchDictionaryByType("GOODS_COLOR", function(data){
+            $scope.goodsColorList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品颜色失败:' + data.errorMsg
+            });
+        });
+
+        // 查询商品单位
+        dictionaryService.fetchDictionaryByType("GOODS_UNIT", function(data){
+            $scope.goodsUnitList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品单位失败:' + data.errorMsg
+            });
+        });
+
+        //保存商品信息
+        $scope.saveMateriel = function(){
+            materielService.saveMateriel($scope.newMateriel, function(data){
                 if(data.success){
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_SUCCESS,
                         title : '成功',
-                        message : '门店创建成功'
+                        message : '商品创建成功'
                     });
-                    $location.path("/storeManage");
+                    $location.path("/materielManage");
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,
                         title : '失败',
-                        message : '门店创建失败:'+data.errorMsg
+                        message : '商品创建失败:'+data.errorMsg
                     });
                 }
             },function(data){
@@ -89,11 +156,63 @@
         $scope.cancel = function(){
             history.back();
         }
-    }).controller("editStoreController",function($location,$scope,$filter,storeService,$routeParams){
-        $scope.selectStore={};
+    }).controller("editMaterielController",function($location,$scope,$filter,materielService,dictionaryService,$routeParams){
+        $scope.selectMateriel={};
+        // 商品类型
+        $scope.goodsTypeList = [];
+        // 商品品牌
+        $scope.goodsBrandList = [];
+        // 商品颜色
+        $scope.goodsColorList = [];
+        // 商品单位
+        $scope.goodsUnitList = [];
 
-        storeService.getById($routeParams.storeId, function(data){
-            $scope.selectStore = data;
+        // 查询商品类型
+        dictionaryService.fetchGoodsTypeList(function(data){
+            $scope.goodsTypeList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品类型失败:' + data.errorMsg
+            });
+        });
+
+        // 查询商品品牌
+        dictionaryService.fetchDictionaryByType("GOODS_BRAND", function(data){
+            $scope.goodsBrandList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品品牌失败:' + data.errorMsg
+            });
+        });
+
+        // 查询商品颜色
+        dictionaryService.fetchDictionaryByType("GOODS_COLOR", function(data){
+            $scope.goodsColorList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品颜色失败:' + data.errorMsg
+            });
+        });
+
+        // 查询商品单位
+        dictionaryService.fetchDictionaryByType("GOODS_UNIT", function(data){
+            $scope.goodsUnitList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品单位失败:' + data.errorMsg
+            });
+        });
+
+        materielService.getById($routeParams.id, function(data){
+            $scope.selectMateriel = data.data;
         },function(data){
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
@@ -102,15 +221,34 @@
             });
         });
 
-        $scope.updateStore = function(){
-            storeService.updateStore($scope.selectStore, function(data){
+        $scope.updateMateriel = function(){
+            // 是否停用
+            if($("#useFlag").is(":checked")){
+                $scope.selectMateriel.useFlag = 0;
+            }else {
+                $scope.selectMateriel.useFlag = 1;
+            }
+            $scope.selectMateriel.createTime = null;
+            $scope.selectMateriel.updateTime = null;
+
+            // 库存上下限校验
+            if($scope.selectMateriel.minInventory > $scope.selectMateriel.maxInventory){
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '警告',
+                    message : '库存上限不能大于库存下限'
+                });
+                return;
+            }
+
+            materielService.updateMateriel($scope.selectMateriel, function(data){
                 if(data.success){
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_SUCCESS,
                         title : '消息',
                         message : '修改成功'
                     });
-                    $location.path("/storeManage");
+                    $location.path("/materielManage");
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,

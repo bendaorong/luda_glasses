@@ -46,7 +46,40 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/materielManage", {
         templateUrl : "app/business_operation/controllers/materiel/materielList.html",
         controller : "materielManageController"
-	}).otherwise({
+	}).when("/addMateriel", {
+        templateUrl : "app/business_operation/controllers/materiel/newMateriel.html",
+        controller : "addMaterielController"
+    }).when("/editMateriel/:id", {
+        templateUrl : "app/business_operation/controllers/materiel/editMateriel.html",
+        controller : "editMaterielController"
+    }).when("/goodsTypeManage", {
+        templateUrl : "app/business_operation/controllers/dictionary/goodsType/goodsTypeList.html",
+        controller : "goodsTypeManageController"
+    }).when("/addGoodsType", {
+        templateUrl : "app/business_operation/controllers/dictionary/goodsType/newGoodsType.html",
+        controller : "addGoodsTypeController"
+    }).when("/editGoodsType/:typeId", {
+        templateUrl : "app/business_operation/controllers/dictionary/goodsType/editGoodsType.html",
+        controller : "editGoodsTypeController"
+    }).when("/goodsColorManage", {
+        templateUrl : "app/business_operation/controllers/dictionary/goodsColor/goodsColorList.html",
+        controller : "goodsColorManageController"
+    }).when("/addGoodsColor", {
+        templateUrl : "app/business_operation/controllers/dictionary/goodsColor/newGoodsColor.html",
+        controller : "addGoodsColorController"
+    }).when("/editGoodsColor/:colorId", {
+        templateUrl : "app/business_operation/controllers/dictionary/goodsColor/editGoodsColor.html",
+        controller : "editGoodsColorController"
+    }).when("/dictionaryManage/:dictType", {
+        templateUrl : "app/business_operation/controllers/dictionary/dictList.html",
+        controller : "dictManageController"
+    }).when("/addDictionary/:dictType", {
+        templateUrl : "app/business_operation/controllers/dictionary/newDict.html",
+        controller : "addDictController"
+    }).when("/editDictionary/:dictId", {
+        templateUrl : "app/business_operation/controllers/dictionary/editDict.html",
+        controller : "editDictController"
+    }).otherwise({
 		redirectTo : "/"
 	})
 } ]);
@@ -292,6 +325,109 @@ businessOperationApp.factory("supplierService", function($http) {
                 method:"POST",
                 url:"/luda_glasses/rest/supplier/removeContact/" + contactId
             }).success(successCallback).error(errorCallback);
+        }
+    }
+});
+
+/**
+ * 商品服务
+ */
+businessOperationApp.factory("materielService", function($http) {
+    return {
+        fetchMaterielList : function(successCallback, errorCallback){
+            $http.get("/luda_glasses/rest/materiel/list").success(successCallback).error(errorCallback);
+        },
+        saveMateriel : function(materiel, successCallback, errorCallback){
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/materiel/saveMateriel",
+                data:materiel
+            }).success(successCallback).error(errorCallback);
+        },
+        getById : function (id, successCallback, errorCallback) {
+            $http({
+                method:"GET",
+                url:"/luda_glasses/rest/materiel/getById/" + id,
+            }).success(successCallback).error(errorCallback);
+        },
+        updateMateriel : function (materiel, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/materiel/updateMateriel",
+                data:materiel
+            }).success(successCallback).error(errorCallback);
+        },
+        removeMateriel : function (id, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/materiel/removeMateriel/" + id
+            }).success(successCallback).error(errorCallback);
+        }
+    }
+});
+
+/**
+ * 字典服务
+ */
+businessOperationApp.factory("dictionaryService", function($http) {
+    return {
+        fetchGoodsKindList : function(successCallback, errorCallback){
+            $http.get("/luda_glasses/rest/dictionary/goodsKind/list").success(successCallback).error(errorCallback);
+        },
+        fetchGoodsTypeList : function(successCallback, errorCallback){
+            $http.get("/luda_glasses/rest/dictionary/goodsType/list").success(successCallback).error(errorCallback);
+        },
+        saveGoodsType : function (goodsType, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/dictionary/goodsType/saveGoodsType",
+                data:goodsType
+            }).success(successCallback).error(errorCallback);
+        },
+        getGoodsTypeById : function (typeId, successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/dictionary/goodsType/getById/" + typeId).success(successCallback).error(errorCallback);
+        },
+        updateGoodsType : function (goodsType, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/dictionary/goodsType/updateGoodsType",
+                data:goodsType
+            }).success(successCallback).error(errorCallback);
+        },
+        removeGoodsType : function (typeId, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/dictionary/goodsType/removeGoodsType/" + typeId
+            }).success(successCallback).error(errorCallback);
+        },
+        fetchGoodsColorList : function(successCallback, errorCallback){
+            $http.get("/luda_glasses/rest/dictionary/goodsColor/list").success(successCallback).error(errorCallback);
+        },
+        saveGoodsColor : function (goodsColor, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/dictionary/goodsColor/saveGoodsColor",
+                data:goodsColor
+            }).success(successCallback).error(errorCallback);
+        },
+        getGoodsColorById : function (colorId, successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/dictionary/goodsColor/getById/" + colorId).success(successCallback).error(errorCallback);
+        },
+        updateGoodsColor : function (goodsColor, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/dictionary/goodsColor/updateGoodsColor",
+                data:goodsColor
+            }).success(successCallback).error(errorCallback);
+        },
+        removeGoodsColor : function (colorId, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/dictionary/goodsColor/removeGoodsColor/" + colorId
+            }).success(successCallback).error(errorCallback);
+        },
+        fetchDictionaryByType : function (dictType, successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/dictionary/fetchByType/" + dictType).success(successCallback).error(errorCallback);
         }
     }
 });

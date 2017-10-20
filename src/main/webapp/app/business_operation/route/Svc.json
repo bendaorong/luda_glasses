@@ -17,6 +17,14 @@
 		"id" : "100400",
 		"name" : "供应商",
 		"page" : "#supplierManage"
+	}, {
+		"id" : "100500",
+		"name" : "商品类型",
+		"page" : "#goodsTypeManage"
+	}, {
+		"id" : "100600",
+		"name" : "颜色",
+		"page" : "#dictionaryManage/GOODS_COLOR"
 	}]
 } ,{
 	"id" : "200",

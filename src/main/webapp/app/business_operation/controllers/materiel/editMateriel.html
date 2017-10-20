@@ -1,0 +1,159 @@
+<style>
+    #myform input.ng-invalid.ng-dirty {
+        background-color: #FFC0CB;
+    }
+
+    /*#myform input.ng-valid.ng-dirty {
+         background-color: #78FA89;
+    }*/
+</style>
+<div class="alert alert-danger alert-dismissible fade in" role="alert"
+     ng-show="errorMsg!=null||errorMsg!=undefined">
+    <button type="button" class="close" ng-click="errorMsg=null"
+            aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p>{{errorMsg}}</p>
+</div>
+<div class="alert alert-success alert-dismissible fade in" role="alert"
+     ng-show="successMsg">
+    <button type="button" class="close" ng-click="successMsg=''"
+            aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p>{{successMsg}}</p>
+</div>
+
+<div id="top">
+    <div class="seat-manage-operate-container">
+        <h5 class="seat-manage-operate-title">编辑商品</h5>
+        <div class="seat-manage-operate-button form-inline">
+            <button class="btn btn-success btn-sm" ng-click="updateMateriel()" ng-disabled="!myform.$valid">保存</button>
+            <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
+        </div>
+    </div>
+    <hr>
+
+    <div class="col-sm-12">
+        <form id="myform" name="myform" class="form-horizontal" novalidate>
+            <fieldset id="basicInfo">
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">编号</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" ng-readonly="true" ng-model="selectMateriel.code"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">条码</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="selectMateriel.barcode"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">名称</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="selectMateriel.name"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">商品类型</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <select class="form-control" required ng-model="selectMateriel.typeId">
+                            <option ng-repeat="goodsType in goodsTypeList" value="{{goodsType.typeId}}">{{goodsType.typeName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">售价</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="number" class="form-control" ng-model="selectMateriel.sellPrice"
+                               ng-init="newMateriel.sellPrice=0" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">批发价</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="number" class="form-control" ng-model="selectMateriel.tradePrice"
+                               ng-init="newMateriel.tradePrice=0"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">成本价</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="number" class="form-control" ng-model="selectMateriel.costPrice"
+                               ng-init="newMateriel.costPrice=0"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">品牌</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <select class="form-control" required ng-model="selectMateriel.brand">
+                            <option ng-repeat="goodsBrand in goodsBrandList" value="{{goodsBrand.dictName}}">{{goodsBrand.dictName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">单位</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <select class="form-control" required ng-model="selectMateriel.unit">
+                            <option ng-repeat="goodsUnit in goodsUnitList" value="{{goodsUnit.dictName}}">{{goodsUnit.dictName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">颜色</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <select class="form-control" required ng-model="selectMateriel.color">
+                            <option ng-repeat="goodsColor in goodsColorList" value="{{goodsColor.dictName}}">{{goodsColor.dictName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">规格型号</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" ng-model="selectMateriel.specification" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">材质</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" ng-model="selectMateriel.texture" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">生产企业</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" ng-model="selectMateriel.manufacturer" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">库存下限</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="number" class="form-control" ng-model="selectMateriel.minInventory" min="0" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">库存上限</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="number" class="form-control" ng-model="selectMateriel.maxInventory" min="0" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">备注</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" ng-model="selectMateriel.remark" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">停用</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="checkbox" ng-model="selectMateriel.useFlag"
+                               ng-checked="selectMateriel.useFlag==0" id="useFlag"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

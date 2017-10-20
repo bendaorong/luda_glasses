@@ -1,0 +1,50 @@
+<style>
+    #myform input.ng-invalid.ng-dirty {
+        background-color: #FFC0CB;
+    }
+
+    /*#myform input.ng-valid.ng-dirty {
+         background-color: #78FA89;
+    }*/
+</style>
+<div class="alert alert-danger alert-dismissible fade in" role="alert"
+     ng-show="errorMsg!=null||errorMsg!=undefined">
+    <button type="button" class="close" ng-click="errorMsg=null"
+            aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p>{{errorMsg}}</p>
+</div>
+<div class="alert alert-success alert-dismissible fade in" role="alert"
+     ng-show="successMsg">
+    <button type="button" class="close" ng-click="successMsg=''"
+            aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p>{{successMsg}}</p>
+</div>
+
+<div id="top">
+    <div class="seat-manage-operate-container">
+        <h5 class="seat-manage-operate-title">新增颜色</h5>
+        <div class="seat-manage-operate-button form-inline">
+            <button class="btn btn-success btn-sm" ng-click="saveGoodsColor()" ng-disabled="!myform.$valid">保存</button>
+            <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
+        </div>
+    </div>
+    <hr>
+
+    <div class="col-sm-12">
+        <form id="myform" name="myform" class="form-horizontal" novalidate>
+            <fieldset id="basicInfo">
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">名称</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newGoodsColor.colorName"/>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+

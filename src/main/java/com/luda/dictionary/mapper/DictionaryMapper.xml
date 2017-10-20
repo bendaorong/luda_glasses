@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.luda.dictionary.dao.DictionaryDao" >
+    <resultMap id="goodsTypeMap" type="com.luda.dictionary.model.GoodsType">
+        <id property="typeId" column="type_id"/>
+        <result property="typeName" column="type_name"/>
+        <result property="kindId" column="kind_id"/>
+        <result property="kindName" column="kind_name"/>
+    </resultMap>
+
+    <resultMap id="goodsKindMap" type="com.luda.dictionary.model.GoodsKind">
+        <id property="kindId" column="kind_id"/>
+        <result property="kindName" column="kind_name"/>
+    </resultMap>
+
+    <resultMap id="goodsColorMap" type="com.luda.dictionary.model.GoodsColor">
+        <id property="colorId" column="color_id"/>
+        <result property="colorName" column="color_name"/>
+    </resultMap>
+
+    <resultMap id="dictionaryMap" type="com.luda.dictionary.model.DictionaryModel">
+        <id property="dictId" column="dict_id"/>
+        <result property="dictType" column="dict_type"/>
+        <result property="dictName" column="dict_name"/>
+    </resultMap>
+
+    <select id="fetchGoodsTypeList" resultMap="goodsTypeMap">
+        select t.*, k.kind_name from goods_type t
+        left join goods_kind k
+        on t.kind_id = k.kind_id
+        where t.delete_flag = 0
+    </select>
+
+    <insert id="saveGoodsType" parameterType="com.luda.dictionary.model.GoodsType"
+            useGeneratedKeys="true" keyProperty="typeId">
+        insert into goods_type
+        (
+            type_id, type_name, kind_id
+        )
+        values
+        (
+            #{typeId}, #{typeName}, #{kindId}
+        )
+    </insert>
+
+    <select id="getGoodsTypeById" resultMap="goodsTypeMap">
+        select t.*, k.kind_name from goods_type t
+        left join goods_kind k
+        on t.kind_id = k.kind_id
+        where t.type_id = #{typeId} and t.delete_flag = 0
+    </select>
+
+    <select id="fetchGoodsKindList" resultMap="goodsKindMap">
+        select * from goods_kind where delete_flag = 0
+    </select>
+
+    <update id="updateGoodsType" parameterType="com.luda.dictionary.model.GoodsType">
+        update goods_type
+        set type_name = #{typeName}, kind_id = #{kindId}
+        where type_id = #{typeId}
+    </update>
+
+    <update id="removeGoodsType" parameterType="int">
+        update goods_type set delete_flag = 1 where type_id = #{typeId}
+    </update>
+
+
+    <!-- goods_color -->
+    <select id="fetchGoodsColorList" resultMap="goodsColorMap">
+        select * from goods_color where delete_flag = 0
+    </select>
+
+    <insert id="saveGoodsColor" parameterType="com.luda.dictionary.model.GoodsColor"
+            useGeneratedKeys="true" keyProperty="colorId">
+        insert into goods_color (color_name) values (#{colorName})
+    </insert>
+
+    <select id="getGoodsColorById" resultMap="goodsColorMap">
+        select * from goods_color where color_id = #{colorId} and delete_flag = 0
+    </select>
+
+    <update id="updateGoodsColor" parameterType="com.luda.dictionary.model.GoodsColor">
+        update goods_color set color_name = #{colorName} where color_id = #{colorId}
+    </update>
+
+    <update id="removeGoodsColor" parameterType="int">
+        update goods_color set delete_flag = 1 where color_id = #{colorId}
+    </update>
+
+    <!-- common dictionary -->
+    <select id="fetchDictionaryList" resultMap="dictionaryMap">
+        select * from dictionary where delete_flag = 0
+    </select>
+
+    <insert id="saveDictionary" parameterType="com.luda.dictionary.model.DictionaryModel"
+            useGeneratedKeys="true" keyProperty="dictId">
+        insert into dictionary (dict_type, dict_name) values (#{dictType}, #{dictName})
+    </insert>
+
+    <select id="getDictionaryById" resultMap="dictionaryMap">
+        select * from dictionary where dict_id = #{dictId} and delete_flag = 0
+    </select>
+
+    <update id="updateDictionary" parameterType="com.luda.dictionary.model.DictionaryModel">
+        update dictionary set dict_name = #{dictName} where dict_id = #{dictId}
+    </update>
+
+    <update id="removeDictionary" parameterType="int">
+        update dictionary set delete_flag = 1 where dict_id = #{dictId}
+    </update>
+
+</mapper>
