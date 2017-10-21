@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.luda.inventory.dao.InventoryDao">
+    <resultMap id="mardMap" type="com.luda.inventory.model.Mard">
+        <id property="id" column="id"/>
+        <result property="materielId" column="materiel_id"/>
+        <result property="storeId" column="store_id"/>
+        <result property="currentInventory" column="cur_inventory"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <resultMap id="mardVoMap" type="com.luda.inventory.model.MardVo" extends="mardMap">
+        <association property="materiel" column="materiel_id" select="com.luda.materiel.dao.MaterielDao.getById"/>
+    </resultMap>
+
+    <resultMap id="purchaseOrderVoMap" type="com.luda.inventory.model.PurchaseOrderVo">
+        <id property="purchaseOrderId" column="purchase_order_id"/>
+        <result property="code" column="code"/>
+        <result property="purchaseDate" column="purchase_date"/>
+        <result property="storeId" column="store_id"/>
+        <result property="supplierId" column="supplier_id"/>
+        <result property="businessmanId" column="businessman_id"/>
+        <result property="totalQuantity" column="total_quantity"/>
+        <result property="totalAmount" column="total_amount"/>
+        <result property="remark" column="remark"/>
+        <result property="storeName" column="store_name"/>
+        <result property="supplierName" column="supplier_name"/>
+        <result property="businessmanName" column="real_name"/>
+    </resultMap>
+
+    <select id="getPurchaseOrderMaxCode" resultType="java.lang.String">
+        select max(code) from purchase_order
+    </select>
+
+    <insert id="savePurchaseOrder" parameterType="com.luda.inventory.model.PurchaseOrder"
+            useGeneratedKeys="true" keyProperty="purchaseOrderId">
+        insert into purchase_order
+        (
+            code,
+            purchase_date,
+            store_id,
+            supplier_id,
+            businessman_id,
+            total_quantity,
+            total_amount,
+            remark,
+            create_User_id,
+            create_time,
+            update_user_id,
+            update_time
+        )
+        values
+        (
+            #{code},
+            #{purchaseDate},
+            #{storeId},
+            #{supplierId},
+            #{businessmanId},
+            #{totalQuantity},
+            #{totalAmount},
+            #{remark},
+            #{createUserId},
+            now(),
+            #{updateUserId},
+            now()
+        )
+    </insert>
+
+    <insert id="insertPurchaseOrderItemBatch" parameterType="com.luda.inventory.model.PurchaseOrderItem">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            INSERT INTO purchase_order_item
+            (
+                purchase_order_id,
+                materiel_id,
+                purchase_price,
+                purchase_quantity,
+                remark
+            )
+            VALUES (
+                #{item.purchaseOrderId},
+                #{item.materielId},
+                #{item.purchasePrice},
+                #{item.purchaseQuantity},
+                #{item.remark}
+            )
+        </foreach>
+    </insert>
+
+    <select id="lockMard" resultMap="mardMap">
+        select * from mard where materiel_id = #{materielId} and store_id = #{storeId} for update
+    </select>
+
+    <update id="updateMard">
+        update mard
+        set cur_inventory = cur_inventory + #{currentInventory}, update_time = now()
+        where id = #{id}
+    </update>
+
+    <insert id="saveMard" parameterType="com.luda.inventory.model.Mard">
+        insert into mard
+        (
+            materiel_id,
+            store_id,
+            cur_inventory,
+            create_time,
+            update_time
+        )
+        values
+        (
+            #{materielId},
+            #{storeId},
+            #{currentInventory},
+            now(),
+            now()
+        )
+    </insert>
+
+    <select id="fetchMardVoList" resultMap="mardVoMap">
+        select * from mard
+    </select>
+
+    <select id="fetchPurchaseOrderVoList" resultMap="purchaseOrderVoMap">
+        select po.*, s.store_name, sp.supplier_name, u.real_name
+        from purchase_order po
+        left join store s
+        on po.store_id = s.store_id
+        left join supplier sp
+        on po.supplier_id = sp.supplier_id
+        left join admin_user_detail u
+        on po.businessman_id = u.admin_user_id
+    </select>
+</mapper>

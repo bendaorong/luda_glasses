@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
+.<%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html ng-app="businessOperationApp">
@@ -93,6 +93,10 @@
 	<script src="app/business_operation/controllers/dictionary/goodsType/goodsTypeManage.js"></script>
 	<script src="app/business_operation/controllers/dictionary/goodsColor/goodsColorManage.js"></script>
 	<script src="app/business_operation/controllers/dictionary/dictManage.js"></script>
+	<!-- 库存管理 -->
+	<script src="app/business_operation/controllers/inventory/mard/mardManage.js"></script>
+	<script src="app/business_operation/controllers/inventory/purchaseOrder/purchaseOrderManage.js"></script>
+
 
 	<script src="angular-1.2.28/angular-route.min.js"></script>
 	<script src="js/angularjs-dropdown-multiselect.js"></script>

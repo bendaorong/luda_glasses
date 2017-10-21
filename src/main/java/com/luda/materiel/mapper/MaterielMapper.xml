@@ -88,7 +88,11 @@
     </insert>
 
     <select id="getById" resultMap="materielMap">
-        select * from materiel where id = #{id} and delete_flag = 0
+        select m.*, t.type_name
+        from materiel m
+        left join goods_type t
+        on m.type_id = t.type_id
+        where m.id = #{id} and m.delete_flag = 0
     </select>
 
     <update id="updateMateriel" parameterType="com.luda.materiel.model.MaterielModel">

@@ -21,10 +21,6 @@
 		"id" : "100500",
 		"name" : "商品类型",
 		"page" : "#goodsTypeManage"
-	}, {
-		"id" : "100600",
-		"name" : "颜色",
-		"page" : "#dictionaryManage/GOODS_COLOR"
 	}]
 } ,{
 	"id" : "200",
@@ -32,11 +28,11 @@
 	"subpages" : [ {
 		"id" : "200100",
 		"name" : "商品库存",
-		"page" : "#inventoryManage"
+		"page" : "#mardManage"
 	}, {
 		"id" : "200200",
 		"name" : "采购入库单",
-		"page" : "#0"
+		"page" : "#purchaseOrderManage"
 	}, {
 		"id" : "200300",
 		"name" : "其它入库单",

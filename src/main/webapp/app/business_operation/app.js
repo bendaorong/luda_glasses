@@ -79,6 +79,12 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/editDictionary/:dictId", {
         templateUrl : "app/business_operation/controllers/dictionary/editDict.html",
         controller : "editDictController"
+    }).when("/mardManage", {
+        templateUrl : "app/business_operation/controllers/inventory/mard/mardList.html",
+        controller : "mardManageController"
+    }).when("/purchaseOrderManage", {
+        templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/purchaseOrderList.html",
+        controller : "purchaseOrderManageController"
     }).otherwise({
 		redirectTo : "/"
 	})
@@ -428,6 +434,20 @@ businessOperationApp.factory("dictionaryService", function($http) {
         },
         fetchDictionaryByType : function (dictType, successCallback, errorCallback) {
             $http.get("/luda_glasses/rest/dictionary/fetchByType/" + dictType).success(successCallback).error(errorCallback);
+        }
+    }
+});
+
+/**
+ * 库存服务
+ */
+businessOperationApp.factory("inventoryService", function($http) {
+    return {
+        fetchMardVoList : function(successCallback, errorCallback){
+            $http.get("/luda_glasses/rest/inventory/mard/list").success(successCallback).error(errorCallback);
+        },
+        fetchPurchaseOrderList : function (successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/inventory/purchaseOrder/list").success(successCallback).error(errorCallback);
         }
     }
 });

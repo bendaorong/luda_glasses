@@ -257,3 +257,127 @@ create table goods_brand
    delete_flag          tinyint(1)                      default 0,
    PRIMARY KEY (brand_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*==============================================================*/
+/* Table: MARD 商品库存表，与商品表一一对应                     */
+/*==============================================================*/
+DROP TABLE IF EXISTS mard;
+create table mard
+(
+   id                   int(11)                        not null auto_increment,
+   materiel_id          int(11)                        not null comment '商品id',
+   store_id             int(11)                        not null comment '门店id',
+   cur_inventory        int(11)                        not null comment '当前库存量',
+   create_time          datetime                       null,
+   update_time          datetime                       null,
+   PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+alter table mard add unique index(materiel_id, store_id);
+
+/*==============================================================*/
+/* Table: purchase_order 采购入库单                             */
+/*==============================================================*/
+DROP TABLE IF EXISTS purchase_order;
+create table purchase_order
+(
+   purchase_order_id    int(11)                        not null auto_increment,
+   code                 varchar(16)                    not null comment '采购单编号',
+   purchase_date        date                           not null comment '采购日期',
+   store_id             int(11)                        not null comment '门店id',
+   supplier_id          int(11)                        not null comment '供应商id',
+   businessman_id       int(11)                        not null comment '业务员',
+   total_quantity       int(11)                         not null comment '总数量 明细中的数量总计',
+   total_amount          decimal(23,2)                  not null comment '总金额 明细中的金额总计',
+   remark               varchar(256)                   null,
+   create_user_id       int(11)                        null,
+   create_time          datetime                       null,
+   update_user_id       int(11)                        null,
+   update_time          datetime                       null,
+   PRIMARY KEY (purchase_order_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*==============================================================*/
+/* Table: purchase_order_item 采购单明细                        */
+/*==============================================================*/
+DROP TABLE IF EXISTS purchase_order_item;
+create table purchase_order_item
+(
+   item_id              int(11)                        not null auto_increment,
+   purchase_order_id    int(11)                        not null comment '采购单id',
+   materiel_id          int(11)                        not null comment '商品id',
+   purchase_price       double(10,2)                   not null comment '采购价',
+   purchase_quantity    int(11)                        not null comment '采购数量',
+   remark               varchar(256)                   null,
+   PRIMARY KEY (item_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*==============================================================*/
+/* Table: inventory_verification 库存盘点信息表                 */
+/*==============================================================*/
+DROP TABLE IF EXISTS inventory_verification;
+create table inventory_verification
+(
+   id                   int(11)           not null auto_increment,
+   code                 varchar(16)                    null,
+   store_id             int(11)                        null,
+   businessman_id       int(11)                        null,
+   remark               varchar(256)                   null,
+   create_user_id       int(11)                        null,
+   create_time          datetime                       null,
+   update_user_id       int(11)                        null,
+   update_time          datetime                       null,
+   PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: inventory_verification_item  库存盘点明细表           */
+/*==============================================================*/
+DROP TABLE IF EXISTS inventory_verification_item;
+create table inventory_verification_item
+(
+   id                   int(11)                        not null auto_increment,
+   inventory_verification_id int(11)                   not null,
+   materiel_id          int(11)                        not null,
+   quantity             int(11)                        not null,
+   invnt_type           char(2)                        not null,
+   remark               varchar(256)                   null,
+   PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: inventory_transfer 库存调拨信息表                     */
+/*==============================================================*/
+DROP TABLE IF EXISTS inventory_transfer;
+create table inventory_transfer
+(
+   id                   int(11)                        not null auto_increment,
+   code                 varchar(16)                    null,
+   transfer_date        date                           null,
+   out_store_id         int(11)                        null,
+   in_store_id          int(11)                        null,
+   businessman_id       int(11)                        null,
+   remark               varchar(256)                   null,
+   create_user_id       int(11)                        null,
+   create_time          datetime                       null,
+   update_user_id       int(11)                        null,
+   update_time          datetime                       null,
+   PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: inventory_transfer_item   调拨单明细表                */
+/*==============================================================*/
+DROP TABLE IF EXISTS inventory_transfer_item;
+create table inventory_transfer_item
+(
+   id                   int(11)                        not null auto_increment,
+   inventory_transfer_id int(11)                       not null,
+   materiel_id          int(11)                        not null,
+   quantity             int(11)                        not null,
+   remark               varchar(256)                   null,
+   PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

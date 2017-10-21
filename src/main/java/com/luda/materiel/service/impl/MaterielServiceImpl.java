@@ -4,6 +4,7 @@ import com.luda.comm.po.ResultHandle;
 import com.luda.materiel.dao.MaterielDao;
 import com.luda.materiel.model.MaterielModel;
 import com.luda.materiel.service.MaterielService;
+import com.luda.util.CodeBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,24 +65,12 @@ public class MaterielServiceImpl implements MaterielService{
      * 若不是当天的，生成当天日期前缀，并从1开始计数，不足4位补0
      **/
     private synchronized String getMaterielCode() {
-        String nextCode = "";
-
         // 取商品最大编号初始化缓存数据
         if(StringUtils.isEmpty(CURRENT_CODE)){
             CURRENT_CODE = materielDao.getMaxCode();
         }
 
-        String currentCode = CURRENT_CODE;
-        String dateSuffix = currentCode.substring(0, 6);
-        String count = currentCode.substring(6);
-
-        String today = DateFormatUtils.format(new Date(), "yyMMdd");
-
-        if(dateSuffix.equals(today)){
-            nextCode = dateSuffix + String.format("%04d", Integer.parseInt(count) + 1);
-        }else {
-            nextCode = today + String.format("%04d", 1);
-        }
+        String nextCode = CodeBuilder.buildMaterielCode(CURRENT_CODE);
 
         // 刷新缓存
         CURRENT_CODE = nextCode;

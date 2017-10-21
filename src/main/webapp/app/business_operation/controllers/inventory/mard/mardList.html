@@ -1,0 +1,35 @@
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
+        <div class="seat-manage-operate-container">
+            <h5 class="seat-manage-operate-title">商品库存</h5>
+            <div class="seat-manage-operate-button form-inline">
+                <input class="form-control" ng-model="filterText" ng-change="filter()"
+                       placeHolder="{{'BUSINESS_OPERATION_PRODUCT_SEARCH'|translate}}">
+                <button type="button" class="btn btn-sm btn-primary" ng-click="refresh()">
+                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+        <hr>
+
+        <table ng-table="tableParams" class="table table-bordered">
+            <tr ng-repeat="mard in $data|filter:filterText">
+                <td data-title="'商品名称'" sortable="'name'">{{mard.materiel.name}}</td>
+                <td data-title="'商品编号'" sortable="'code'">{{mard.materiel.code}}</td>
+                <td data-title="'条码'" sortable="'barcode'">{{mard.materiel.barcode}}</td>
+                <td data-title="'类型'" sortable="'typeName'">{{mard.materiel.typeName}}</td>
+                <td data-title="'规格型号'" sortable="'typeName'">{{mard.materiel.specification}}</td>
+                <td data-title="'品牌'" sortable="'brand'">{{mard.materiel.brand}}</td>
+                <td data-title="'售价'" sortable="'sellPrice'">{{mard.materiel.sellPrice}}</td>
+                <td data-title="'批发价'" sortable="'tradePrice'">{{mard.materiel.tradePrice}}</td>
+                <td data-title="'成本价'" sortable="'costPrice'">{{mard.materiel.costPrice}}</td>
+                <td data-title="'单位'" sortable="'brand'">{{mard.materiel.unit}}</td>
+                <td data-title="'库存数量'" sortable="'costPrice'">{{mard.currentInventory}}</td>
+                <td data-title="'颜色'" sortable="'brand'">{{mard.materiel.color}}</td>
+                <td data-title="'下限'" sortable="'costPrice'">{{mard.materiel.minInventory}}</td>
+                <td data-title="'上限'" sortable="'costPrice'">{{mard.materiel.maxInventory}}</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
