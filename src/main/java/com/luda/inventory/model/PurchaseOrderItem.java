@@ -1,5 +1,7 @@
 package com.luda.inventory.model;
 
+import com.luda.materiel.model.MaterielModel;
+
 import java.math.BigDecimal;
 
 /**
@@ -16,6 +18,10 @@ public class PurchaseOrderItem {
      * 商品id
      */
     private int materielId;
+    /**
+     * 商品
+     */
+    private MaterielModel materiel;
     /**
      * 采购价
      */
@@ -75,6 +81,14 @@ public class PurchaseOrderItem {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public MaterielModel getMateriel() {
+        return materiel;
+    }
+
+    public void setMateriel(MaterielModel materiel) {
+        this.materiel = materiel;
     }
 
     /**

@@ -22,5 +22,16 @@ public interface InventoryService {
      */
     public List<MardVo> fetchMardVoList();
 
+    /**
+     * 查询采购单
+     * @return
+     */
     List<PurchaseOrderVo> fetchPurchaseOrderVoList();
+
+    /**
+     * 根据id查询采购单
+     * @param id
+     * @return
+     */
+    PurchaseOrder getPurchaseOrderById(int id);
 }

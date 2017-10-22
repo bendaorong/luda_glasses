@@ -38,4 +38,8 @@ public interface InventoryDao {
     List<MardVo> fetchMardVoList();
 
     List<PurchaseOrderVo> fetchPurchaseOrderVoList();
+
+    PurchaseOrder getPurchaseOrderById(int id);
+
+    List<PurchaseOrderItem> fetchPurchaseOrderItemList(int purchaseOrderId);
 }

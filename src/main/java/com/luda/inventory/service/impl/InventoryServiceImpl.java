@@ -72,6 +72,14 @@ public class InventoryServiceImpl implements InventoryService{
         return inventoryDao.fetchPurchaseOrderVoList();
     }
 
+    @Override
+    public PurchaseOrder getPurchaseOrderById(int id) {
+        PurchaseOrder purchaseOrder = inventoryDao.getPurchaseOrderById(id);
+        List<PurchaseOrderItem> items = inventoryDao.fetchPurchaseOrderItemList(purchaseOrder.getPurchaseOrderId());
+        purchaseOrder.setPurchaseOrderItemList(items);
+        return purchaseOrder;
+    }
+
     /**
      * 更新商品库存
      * 采购单明细中的商品允许重复，所以先汇总商品库存，再更新到库里

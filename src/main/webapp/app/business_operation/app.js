@@ -85,6 +85,12 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/purchaseOrderManage", {
         templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/purchaseOrderList.html",
         controller : "purchaseOrderManageController"
+    }).when("/editPurchaseOrder/:id", {
+        templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/editPurchaseOrder.html",
+        controller : "editPurchaseOrderController"
+    }).when("/addPurchaseOrder",{
+        templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/newPurchaseOrder.html",
+        controller : "addPurchaseOrderController"
     }).otherwise({
 		redirectTo : "/"
 	})
@@ -448,6 +454,16 @@ businessOperationApp.factory("inventoryService", function($http) {
         },
         fetchPurchaseOrderList : function (successCallback, errorCallback) {
             $http.get("/luda_glasses/rest/inventory/purchaseOrder/list").success(successCallback).error(errorCallback);
+        },
+        getPurchaseOrderById : function (id, successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/inventory/purchaseOrder/getById/" + id).success(successCallback).error(errorCallback);
+        },
+        savePurchaseOrder : function (purchaseOrder, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/purchaseOrder/savePurchaseOrder",
+                data:purchaseOrder
+            }).success(successCallback).error(errorCallback);
         }
     }
 });

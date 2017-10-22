@@ -14,7 +14,13 @@
         <association property="materiel" column="materiel_id" select="com.luda.materiel.dao.MaterielDao.getById"/>
     </resultMap>
 
-    <resultMap id="purchaseOrderVoMap" type="com.luda.inventory.model.PurchaseOrderVo">
+    <resultMap id="purchaseOrderVoMap" type="com.luda.inventory.model.PurchaseOrderVo" extends="purchaseOrderMap">
+        <result property="storeName" column="store_name"/>
+        <result property="supplierName" column="supplier_name"/>
+        <result property="businessmanName" column="real_name"/>
+    </resultMap>
+
+    <resultMap id="purchaseOrderMap" type="com.luda.inventory.model.PurchaseOrder">
         <id property="purchaseOrderId" column="purchase_order_id"/>
         <result property="code" column="code"/>
         <result property="purchaseDate" column="purchase_date"/>
@@ -24,9 +30,20 @@
         <result property="totalQuantity" column="total_quantity"/>
         <result property="totalAmount" column="total_amount"/>
         <result property="remark" column="remark"/>
-        <result property="storeName" column="store_name"/>
-        <result property="supplierName" column="supplier_name"/>
-        <result property="businessmanName" column="real_name"/>
+        <result property="createUserId" column="create_user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUserId" column="update_user_id"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <resultMap id="purchaseOrderItemMap" type="com.luda.inventory.model.PurchaseOrderItem">
+        <id property="itemId" column="item_id"/>
+        <result property="purchaseOrderId" column="purchase_order_id"/>
+        <result property="materielId" column="materiel_id"/>
+        <result property="purchasePrice" column="purchase_price"/>
+        <result property="purchaseQuantity" column="purchase_quantity"/>
+        <result property="remark" column="remark"/>
+        <association property="materiel" column="materiel_id" select="com.luda.materiel.dao.MaterielDao.getById"/>
     </resultMap>
 
     <select id="getPurchaseOrderMaxCode" resultType="java.lang.String">
@@ -129,5 +146,13 @@
         on po.supplier_id = sp.supplier_id
         left join admin_user_detail u
         on po.businessman_id = u.admin_user_id
+    </select>
+
+    <select id="getPurchaseOrderById" resultMap="purchaseOrderMap">
+        select * from purchase_order where purchase_order_id = #{id}
+    </select>
+
+    <select id="fetchPurchaseOrderItemList" resultMap="purchaseOrderItemMap">
+        select * from purchase_order_item where purchase_order_id = #{purchaseOrderId}
     </select>
 </mapper>

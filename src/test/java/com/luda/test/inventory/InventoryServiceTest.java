@@ -63,4 +63,10 @@ public class InventoryServiceTest extends SpringSimpleJunit{
         List<PurchaseOrderVo> list = inventoryService.fetchPurchaseOrderVoList();
         print(CommonUtils.convertBeanCollectionToJsonArray(list,null).toString());
     }
+
+    @Test
+    public void testGetPurchaseOrderById(){
+        PurchaseOrder purchaseOrder = inventoryService.getPurchaseOrderById(5);
+        print(purchaseOrder.toString());
+    }
 }
