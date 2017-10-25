@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.xml.transform.Result;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -116,6 +117,123 @@ public class InventoryServiceImpl implements InventoryService{
         // 更新商品库存
         syncUpdateMard(inventoryMap, purchaseOrder.getStoreId());
 
+        return resultHandle;
+    }
+
+    @Override
+    public ResultHandle<PurchaseOrderItem> savePurchaseOrderItem(PurchaseOrderItem purchaseOrderItem) {
+        ResultHandle<PurchaseOrderItem> resultHandle = new ResultHandle<>();
+        String errorMsg = checkPurchaseOrderItem(purchaseOrderItem);
+        if(StringUtils.isNotEmpty(errorMsg)){
+            resultHandle.setMsg(errorMsg);
+            return resultHandle;
+        }
+        // 保存明细
+        int result = inventoryDao.savePurchaseOrderItem(purchaseOrderItem);
+        if(result > 0){
+            // 更新采购单总数量和总金额
+            PurchaseOrder purchaseOrder = getPurchaseOrderById(purchaseOrderItem.getPurchaseOrderId());
+            updatePurchaseOrderTotalQuantityAndTotalAmount(purchaseOrder);
+            // 更新库存
+            updateMard(purchaseOrderItem.getMaterielId(), purchaseOrder.getStoreId(), purchaseOrderItem.getPurchaseQuantity());
+        }
+        return resultHandle;
+    }
+
+    // 验证采购明细
+    private String checkPurchaseOrderItem(PurchaseOrderItem purchaseOrderItem) {
+        if(purchaseOrderItem.getMaterielId() <= 0){
+            return "请选择商品";
+        }
+        if(purchaseOrderItem.getPurchaseQuantity() <= 0){
+            return "采购数量必须大于0";
+        }
+        if(purchaseOrderItem.getPurchasePrice() == null){
+            return "请填写采购价格";
+        }
+        if(purchaseOrderItem.getPurchasePrice().compareTo(BigDecimal.ZERO) <= 0){
+            return "采购价必须大于0";
+        }
+        return null;
+    }
+
+    @Override
+    public ResultHandle<PurchaseOrderItem> removePurchaseOrderItem(int itemId) {
+        ResultHandle<PurchaseOrderItem> resultHandle = new ResultHandle<>();
+        PurchaseOrderItem purchaseOrderItem = inventoryDao.getPurchaseOrderItemById(itemId);
+        if(purchaseOrderItem == null){
+            resultHandle.setMsg("采购明细不存在");
+            return resultHandle;
+        }
+        int result = inventoryDao.removePurchaseOrderItem(itemId);
+        if(result > 0){
+            // 更新采购单总数量和总金额
+            PurchaseOrder purchaseOrder = getPurchaseOrderById(purchaseOrderItem.getPurchaseOrderId());
+            updatePurchaseOrderTotalQuantityAndTotalAmount(purchaseOrder);
+            // 更新库存
+            updateMard(purchaseOrderItem.getMaterielId(), purchaseOrder.getStoreId(), -purchaseOrderItem.getPurchaseQuantity());
+        }
+        return resultHandle;
+    }
+
+    /**
+     * 更新采购单总数量和总金额
+     * @param purchaseOrder 采购单
+     */
+    private void updatePurchaseOrderTotalQuantityAndTotalAmount(PurchaseOrder purchaseOrder){
+        purchaseOrder.setTotalQuantity(purchaseOrder.getTotalItemQuantity());
+        purchaseOrder.setTotalAmount(purchaseOrder.getTotalItemAmount());
+        inventoryDao.updatePurchaseOrder(purchaseOrder);
+    }
+
+    /**
+     * 更新库存数量
+     * @param materielId 商品
+     * @param storeId 门店
+     * @param increment 库存增量(>0:新增库存 <0:扣减库存)
+     **/
+    private void updateMard(int materielId, int storeId, int increment){
+        Mard mard = inventoryDao.lockMard(materielId, storeId);
+        if(mard == null){
+            mard = new Mard(materielId, storeId, increment);
+            inventoryDao.saveMard(mard);
+        }else {
+            inventoryDao.updateMard(mard.getId(), increment);
+        }
+    }
+
+    @Override
+    public ResultHandle<PurchaseOrderItem> updatePurchaseOrderItem(PurchaseOrderItem purchaseOrderItem) {
+        ResultHandle<PurchaseOrderItem> resultHandle = new ResultHandle<>();
+        String errorMsg = checkPurchaseOrderItem(purchaseOrderItem);
+        if(StringUtils.isNotEmpty(errorMsg)){
+            resultHandle.setMsg(errorMsg);
+            return resultHandle;
+        }
+        // 当前库里的明细
+        PurchaseOrderItem sourceItem = inventoryDao.getPurchaseOrderItemById(purchaseOrderItem.getItemId());
+        if(sourceItem == null){
+            resultHandle.setMsg("采购明细不存在");
+            return resultHandle;
+        }
+        //更新明细
+        int result = inventoryDao.updatePurchaseOrderItem(purchaseOrderItem);
+        if(result > 0){
+            // 更新采购单总金额和总数量
+            PurchaseOrder purchaseOrder = getPurchaseOrderById(purchaseOrderItem.getPurchaseOrderId());
+            updatePurchaseOrderTotalQuantityAndTotalAmount(purchaseOrder);
+            // 更新库存
+            // 判断商品是否变换
+            //若商品变换了，则先扣减原明细商品的库存，再增加新明细商品的库存
+            //若商品未变换，则增量更新商品库存
+            if(purchaseOrderItem.getMaterielId() != sourceItem.getMaterielId()){
+                updateMard(sourceItem.getMaterielId(), purchaseOrder.getStoreId(), -sourceItem.getPurchaseQuantity());
+                updateMard(purchaseOrderItem.getMaterielId(), purchaseOrder.getStoreId(), purchaseOrderItem.getPurchaseQuantity());
+            }else {
+                updateMard(purchaseOrderItem.getMaterielId(), purchaseOrder.getStoreId(),
+                        purchaseOrderItem.getPurchaseQuantity() - sourceItem.getPurchaseQuantity());
+            }
+        }
         return resultHandle;
     }
 

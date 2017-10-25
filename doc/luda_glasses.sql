@@ -384,3 +384,26 @@ create table inventory_transfer_item
    remark               varchar(256)                   null,
    PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*==============================================================*/
+/* Table: customer   客户表                                     */
+/*==============================================================*/
+DROP TABLE IF EXISTS customer;
+create table customer
+(
+   id                   int                            not null auto_increment,
+   code                 varchar(16)                    not null,
+   name                 varchar(32)                    not null,
+   gender               char(1)                        null default 'M',
+   birthday             date                           null,
+   mobile_num           varchar(16)                    null,
+   QQ                   varchar(16)                    null,
+   wechat_num           varchar(32)                    null,
+   email                varchar(64)                    null,
+   region               varchar(32)                    null,
+   region_fullname      varchar(64)                    null,
+   address              varchar(128)                   null,
+   delete_flag          tinyint(1)                      default 0,
+   PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

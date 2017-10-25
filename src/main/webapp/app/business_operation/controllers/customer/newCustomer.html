@@ -1,0 +1,101 @@
+<style>
+    #myform input.ng-invalid.ng-dirty {
+        background-color: #FFC0CB;
+    }
+
+    /*#myform input.ng-valid.ng-dirty {
+         background-color: #78FA89;
+    }*/
+</style>
+<div class="alert alert-danger alert-dismissible fade in" role="alert"
+     ng-show="errorMsg!=null||errorMsg!=undefined">
+    <button type="button" class="close" ng-click="errorMsg=null"
+            aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p>{{errorMsg}}</p>
+</div>
+<div class="alert alert-success alert-dismissible fade in" role="alert"
+     ng-show="successMsg">
+    <button type="button" class="close" ng-click="successMsg=''"
+            aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p>{{successMsg}}</p>
+</div>
+
+<div id="top">
+    <div class="seat-manage-operate-container">
+        <h3 class="seat-manage-operate-title"></h3>
+        <div class="seat-manage-operate-button form-inline">
+            <button class="btn btn-success btn-sm" ng-click="saveCustomer()" ng-disabled="!myform.$valid">保存</button>
+            <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
+        </div>
+    </div>
+    <hr>
+
+    <div class="col-sm-12">
+        <form id="myform" name="myform" class="form-horizontal" novalidate>
+            <fieldset id="basicInfo">
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">编号</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newCustomer.code"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">姓名</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newCustomer.name"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">性别</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newCustomer.gender" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">生日</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newCustomer.birthday" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">手机号码</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newCustomer.mobieNumber" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">微信</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newCustomer.wechatno" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">地区</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newCustomer.region" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">地址</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" required
+                               ng-model="newCustomer.address" />
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+

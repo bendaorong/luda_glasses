@@ -97,6 +97,15 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/addInvntVerification", {
         templateUrl : "app/business_operation/controllers/inventory/inventoryVerification/newInventoryVerification.html",
         controller : "addInventoryVerificationController"
+    }).when("/customerManage", {
+        templateUrl : "app/business_operation/controllers/customer/customerList.html",
+        controller : "customerManageController"
+    }).when("/addCustomer",{
+        templateUrl : "app/business_operation/controllers/customer/newCustomer.html",
+        controller : "addCustomerController"
+    }).when("/editCustomer/:customerId",{
+        templateUrl : "app/business_operation/controllers/customer/editCustomer.html",
+        controller : "editCustomerController"
     }).otherwise({
 		redirectTo : "/"
 	})

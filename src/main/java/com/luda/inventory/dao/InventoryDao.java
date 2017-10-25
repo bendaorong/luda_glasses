@@ -66,4 +66,12 @@ public interface InventoryDao {
     int insertInvtVerifItemBatch(List<InventoryVerificationItem> invtVerifItemList);
 
     List<InventoryVerificationVo> fetchInvntVerifVoList();
+
+    int savePurchaseOrderItem(PurchaseOrderItem purchaseOrderItem);
+
+    PurchaseOrderItem getPurchaseOrderItemById(int itemId);
+
+    int removePurchaseOrderItem(int itemId);
+
+    int updatePurchaseOrderItem(PurchaseOrderItem purchaseOrderItem);
 }

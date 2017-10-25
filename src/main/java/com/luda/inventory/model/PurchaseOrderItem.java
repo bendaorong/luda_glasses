@@ -2,13 +2,14 @@ package com.luda.inventory.model;
 
 import com.luda.materiel.model.MaterielModel;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * 采购单明细
  * Created by Administrator on 2017/10/21.
  */
-public class PurchaseOrderItem {
+public class PurchaseOrderItem implements Serializable {
     private int itemId;
     /**
      * 采购单id

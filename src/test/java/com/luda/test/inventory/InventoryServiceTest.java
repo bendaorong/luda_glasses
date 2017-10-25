@@ -99,4 +99,35 @@ public class InventoryServiceTest extends SpringSimpleJunit{
 
         inventoryService.saveInventoryVerification(invntVerif);
     }
+
+    @Test
+    public void testSavePurchaseOrderItem(){
+        PurchaseOrderItem item = new PurchaseOrderItem();
+        item.setMaterielId(3);
+        item.setPurchaseOrderId(12);
+        item.setPurchaseQuantity(10);
+        item.setPurchasePrice(new BigDecimal(100));
+        ResultHandle<PurchaseOrderItem> resultHandle = inventoryService.savePurchaseOrderItem(item);
+        print(resultHandle.toString());
+    }
+
+    @Test
+    public void testRemovePurchaseOrderItem(){
+        int itemId = 39;
+        ResultHandle<PurchaseOrderItem> resultHandle = inventoryService.removePurchaseOrderItem(itemId);
+        print(resultHandle.toString());
+    }
+
+    @Test
+    public void testUpdatePurchaseOrderItem(){
+        PurchaseOrderItem purchaseOrderItem = new PurchaseOrderItem();
+        purchaseOrderItem.setItemId(38);
+        purchaseOrderItem.setMaterielId(4);
+        purchaseOrderItem.setPurchaseOrderId(12);
+        purchaseOrderItem.setPurchaseQuantity(5);
+        purchaseOrderItem.setPurchasePrice(new BigDecimal(100));
+        purchaseOrderItem.setRemark("hhhhhh");
+        ResultHandle<PurchaseOrderItem> resultHandle = inventoryService.updatePurchaseOrderItem(purchaseOrderItem);
+        print(resultHandle.toString());
+    }
 }

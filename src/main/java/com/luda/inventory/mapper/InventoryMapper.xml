@@ -188,6 +188,25 @@
         select * from purchase_order_item where purchase_order_id = #{purchaseOrderId}
     </select>
 
+    <select id="getPurchaseOrderItemById" resultMap="purchaseOrderItemMap">
+        select * from purchase_order_item where item_id = #{itemId}
+    </select>
+
+    <delete id="removePurchaseOrderItem">
+        delete from purchase_order_item where item_id = #{itemId}
+    </delete>
+
+    <update id="updatePurchaseOrderItem" parameterType="com.luda.inventory.model.PurchaseOrderItem">
+        update purchase_order_item
+        set
+            purchase_order_id = #{purchaseOrderId},
+            materiel_id = #{materielId},
+            purchase_price = #{purchasePrice},
+            purchase_quantity = #{purchaseQuantity},
+            remark = #{remark}
+        where item_id = #{itemId}
+    </update>
+
     <update id="removePurchaseOrder">
         update purchase_order set delete_flag = 1 where purchase_order_id = #{purchaseOrderId}
     </update>
@@ -268,4 +287,23 @@
         on po.businessman_id = u.admin_user_id
         where po.delete_flag = 0
     </select>
+
+    <insert id="savePurchaseOrderItem" parameterType="com.luda.inventory.model.PurchaseOrderItem"
+            useGeneratedKeys="true" keyProperty="itemId">
+        INSERT INTO purchase_order_item
+        (
+            purchase_order_id,
+            materiel_id,
+            purchase_price,
+            purchase_quantity,
+            remark
+        )
+        VALUES (
+            #{purchaseOrderId},
+            #{materielId},
+            #{purchasePrice},
+            #{purchaseQuantity},
+            #{remark}
+        )
+    </insert>
 </mapper>

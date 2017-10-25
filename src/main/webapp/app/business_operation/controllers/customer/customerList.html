@@ -1,0 +1,53 @@
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
+        <div class="seat-manage-operate-container">
+            <h5 class="seat-manage-operate-title">客户管理</h5>
+            <div class="seat-manage-operate-button form-inline">
+                <a type="button" class="btn btn-success btn-sm" href="#addCustomer"> 新增</a>
+                <input class="form-control" ng-model="filterText" ng-change="filter()"
+                       placeHolder="搜索">
+                <button type="button" class="btn btn-sm btn-primary" ng-click="refresh()">
+                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+        <hr>
+        <table ng-table="tableParams" class="table table-bordered">
+            <tr ng-repeat="customerItem in $data|filter:filterText">
+                <td data-title="'编号'" sortable="'code'">{{customerItem.code}}</td>
+                <td data-title="'姓名'" sortable="'customerName'">{{customerItem.name}}</td>
+                <td data-title="'性别'" sortable="'gender'">
+                    <div ng-switch="customerItem.gender">
+                        <div ng-switch-when="M">男</div>
+                        <div ng-switch-when="F">女</div>
+                    </div>
+                </td>
+                <td data-title="'生日'" sortable="'birthday'">{{customerItem.birthday}}</td>
+                <td data-title="'手机号'" sortable="'mobileNumber'">{{customerItem.mobileNumber}}</td>
+                <td data-title="'微信号'" sortable="'wechatno'">{{customerItem.wechatno}}</td>
+                <td data-title="'地区'" sortable="'mobileNumber'">
+                    <div ng-switch="customerItem.region">
+                        <div ng-switch-when="01">瑞昌市</div>
+                        <div ng-switch-when="02">九江市</div>
+                        <div ng-switch-when="03">修水市</div>
+                        <div ng-switch-when="04">武宁市</div>
+                        <div ng-switch-when="05">彭泽</div>
+                        <div ng-switch-when="06">鄱阳</div>
+                        <div ng-switch-when="07">都昌</div>
+                        <div ng-switch-when="08">星子</div>
+                    </div>
+                </td>
+
+                <td data-title="'地址'" sortable="'address'">{{customerItem.address}}</td>
+                <td data-title="'操作'">
+                    <button type="button" class="btn btn-sm btn-primary"
+                            ng-click="gotoEdit(customerItem.customerId)">编辑</button>
+
+                    <button type="button" class="btn btn-sm btn-primary"
+                            ng-click="removeCustomer(customerItem.customerId)">删除</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>

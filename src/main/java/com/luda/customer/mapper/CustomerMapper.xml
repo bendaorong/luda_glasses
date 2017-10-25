@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.luda.customer.dao.CustomerDao" >
+    <resultMap id="customerMapper" type="com.luda.customer.model.CustomerModel">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="gender" column="gender"/>
+        <result property="birthday" column="birthday"/>
+        <result property="mobileNumber" column="mobile_num"/>
+        <result property="wechatno" column="webchat_num"/>
+        <result property="region" column="region"/>
+        <result property="regionName" column="region_name"/>
+        <result property="address" column="address"/>
+    </resultMap>
+
+    <select id="fetchCustomerList" resultMap="customerMapper">
+        select * from customer where delete_flag = 0
+
+    </select>
+
+    <insert id="saveCustomer" parameterType="com.luda.customer.model.CustomerModel">
+        insert into customer
+        (
+           code,
+           name,
+           gender,
+           birthday,
+           mobile_num,
+           webchat_num,
+           region,
+           region_name,
+           address,
+           delete_flag
+        )
+        values
+        (
+            #{code},
+            #{name},
+            #{gender},
+            #{birthday},
+            #{mobileNumber},
+            #{wechatno},
+            #{region},
+            #{region_name},
+            #{address},
+            1
+        )
+    </insert>
+
+
+
+
+
+    <select id="getById" resultMap="customerMapper">
+        select * from customer where id = #{customerId} and delete_flag = 0
+    </select>
+
+    <update id="updateCustomer" parameterType="com.luda.customer.model.CustomerModel">
+        update customer
+        set
+            name = #{name},
+            gender = #{gender},
+            birthday = #{birthday},
+            mobile_num = #{mobileNumber},
+            wechat_num = #{wechatno},
+            region = #{region},
+            address = #{address}
+        where id = #{id}
+    </update>
+
+    <update id="removeCustomer" parameterType="int">
+        update customer set delete_flag = 1 where id = #{id}
+    </update>
+</mapper>

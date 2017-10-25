@@ -47,6 +47,21 @@ public interface InventoryService {
     ResultHandle updatePurchaseOrder(PurchaseOrder purchaseOrder);
 
     /**
+     * 添加采购明细
+     */
+    ResultHandle<PurchaseOrderItem> savePurchaseOrderItem(PurchaseOrderItem purchaseOrderItem);
+
+    /**
+     * 删除采购明细
+     */
+    ResultHandle<PurchaseOrderItem> removePurchaseOrderItem(int itemId);
+
+    /**
+     * 更新采购明细
+     */
+    ResultHandle<PurchaseOrderItem> updatePurchaseOrderItem(PurchaseOrderItem purchaseOrderItem);
+
+    /**
      * 保存库存盘点
      */
     ResultHandle<InventoryVerification> saveInventoryVerification(InventoryVerification inventoryVerification);
