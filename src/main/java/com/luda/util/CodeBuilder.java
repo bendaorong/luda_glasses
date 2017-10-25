@@ -60,4 +60,27 @@ public class CodeBuilder {
     public static void main(String[] args) {
         System.out.println(buildPurchaseOrderCode("CR171020003"));
     }
+
+    /**
+     * 生成库存盘点单编号
+     * @param currentCode
+     * @return
+     */
+    public static String buildInvtVerifCode(String currentCode) {
+        String today = DateFormatUtils.format(new Date(), "yyMMdd");
+
+        // 当前编号为空，则取今天第一个
+        if(StringUtils.isEmpty(currentCode)){
+            return "PD" + today + String.format("%04d", 1);
+        }
+
+        String dateSuffix = currentCode.substring(0, 8);
+        String count = currentCode.substring(8);
+
+        if(dateSuffix.equals("PD" + today)){
+            return dateSuffix + String.format("%04d", Integer.parseInt(count) + 1);
+        }else {
+            return "PD" + today + String.format("%04d", 1);
+        }
+    }
 }

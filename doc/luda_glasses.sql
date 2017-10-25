@@ -295,6 +295,7 @@ create table purchase_order
    create_time          datetime                       null,
    update_user_id       int(11)                        null,
    update_time          datetime                       null,
+   delete_flag          tinyint(1)                    default 0 comment '删除标示 1:删除 0:不删除'
    PRIMARY KEY (purchase_order_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -322,14 +323,16 @@ DROP TABLE IF EXISTS inventory_verification;
 create table inventory_verification
 (
    id                   int(11)           not null auto_increment,
-   code                 varchar(16)                    null,
-   store_id             int(11)                        null,
-   businessman_id       int(11)                        null,
+   code                 varchar(16)       not null comment '盘点编号',
+   verif_date           DATE              not null comment '盘点日期',
+   store_id             int(11)                     not   null,
+   businessman_id       int(11)                     not   null,
    remark               varchar(256)                   null,
    create_user_id       int(11)                        null,
    create_time          datetime                       null,
    update_user_id       int(11)                        null,
    update_time          datetime                       null,
+   delete_flag          tinyint(1)                     default 0,
    PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

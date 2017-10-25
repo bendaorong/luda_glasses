@@ -16,4 +16,10 @@ public class Constants {
      */
     public static final String GENDER_MALE = "M"; //男
     public static final String GENDER_FEMALE = "F"; //女
+
+    /**
+     * 盘点类型
+     */
+    public static final String INVNT_VERIF_TYPE_WIN = "01"; //盘盈
+    public static final String INVNT_VERIF_TYPE_LOSE = "02"; //盘亏
 }

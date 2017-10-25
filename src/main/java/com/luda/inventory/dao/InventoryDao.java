@@ -31,7 +31,13 @@ public interface InventoryDao {
 
     Mard lockMard(@Param("materielId") int materielId, @Param("storeId")  int storeId);
 
-    void updateMard(@Param("id") int id, @Param("currentInventory") int currentInventory);
+    /**
+     * 更新商品库存
+     * @param id
+     * @param increment 库存增量值
+     * @return
+     */
+    int updateMard(@Param("id") int id, @Param("increment") int increment);
 
     int saveMard(Mard mard);
 
@@ -42,4 +48,22 @@ public interface InventoryDao {
     PurchaseOrder getPurchaseOrderById(int id);
 
     List<PurchaseOrderItem> fetchPurchaseOrderItemList(int purchaseOrderId);
+
+    int removePurchaseOrder(int purchaseOrderId);
+
+    int updatePurchaseOrder(PurchaseOrder purchaseOrder);
+
+    int updatePurchaseOrderItemBatch(List<PurchaseOrderItem> updateItems);
+
+    /**
+     * 获取盘点单最大编号
+     * @return
+     */
+    String getInvtVerifMaxCode();
+
+    int saveInvtVerif(InventoryVerification inventoryVerification);
+
+    int insertInvtVerifItemBatch(List<InventoryVerificationItem> invtVerifItemList);
+
+    List<InventoryVerificationVo> fetchInvntVerifVoList();
 }

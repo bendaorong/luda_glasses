@@ -35,14 +35,10 @@
 		"page" : "#purchaseOrderManage"
 	}, {
 		"id" : "200300",
-		"name" : "其它入库单",
-		"page" : "#0"
+		"name" : "库存盘点",
+		"page" : "#inventoryVerificationManage"
 	}, {
 		"id" : "200400",
-		"name" : "其它出库单",
-		"page" : "#0"
-	}, {
-		"id" : "200500",
 		"name" : "调拨单",
 		"page" : "#0"
 	}]

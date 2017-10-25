@@ -1,10 +1,7 @@
 package com.luda.inventory.service;
 
 import com.luda.comm.po.ResultHandle;
-import com.luda.inventory.model.Mard;
-import com.luda.inventory.model.MardVo;
-import com.luda.inventory.model.PurchaseOrder;
-import com.luda.inventory.model.PurchaseOrderVo;
+import com.luda.inventory.model.*;
 
 import java.util.List;
 
@@ -34,4 +31,28 @@ public interface InventoryService {
      * @return
      */
     PurchaseOrder getPurchaseOrderById(int id);
+
+    /**
+     * 删除采购单
+     * @param id
+     * @return
+     */
+    ResultHandle removePurchaseOrder(int id);
+
+    /**
+     * 更新采购单
+     * @param purchaseOrder
+     * @return
+     */
+    ResultHandle updatePurchaseOrder(PurchaseOrder purchaseOrder);
+
+    /**
+     * 保存库存盘点
+     */
+    ResultHandle<InventoryVerification> saveInventoryVerification(InventoryVerification inventoryVerification);
+
+    /**
+     * 查询盘点单列表
+     */
+    List<InventoryVerificationVo> fetchInvntVerifVoList();
 }

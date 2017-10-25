@@ -54,19 +54,19 @@
 <ul class="nav nav-tabs" role="tablist" ng-init="currentTab=0">
     <li role="presentation" ng-class="{'active': currentTab===0}"><a
             href="javascript(0)" ng-click="currentTab=0" role="tab"
-            data-toggle="tab">采购入库单</a></li>
+            data-toggle="tab">库存盘点单</a></li>
     <li role="presentation" ng-class="{'active': currentTab===1}"><a
             href="javascript(0)" role="tab" ng-click="currentTab=1"
-            data-toggle="tab">采购入库明细</a></li>
+            data-toggle="tab">库存盘点明细</a></li>
 </ul>
 
 <div class="tab-content">
     <!-- 采购入库单 -->
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
         <div class="seat-manage-operate-container">
-            <!--<h3 class="seat-manage-operate-title">编辑采购单</h3>-->
+            <!--<h3 class="seat-manage-operate-title">新增采购单</h3>-->
             <div class="seat-manage-operate-button form-inline">
-                <button class="btn btn-success btn-sm" ng-click="updatePurchaseOrder()" ng-disabled="!myform.$valid">保存</button>
+                <button class="btn btn-success btn-sm" ng-click="saveInvntVerification()" ng-disabled="!myform.$valid">保存</button>
                 <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
             </div>
         </div>
@@ -74,69 +74,48 @@
         <div class="col-sm-12" style="margin-top: 10px;">
             <form class="form-horizontal" novalidate id="myform" name="myform">
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">编号</label>
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">盘点日期</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-readonly="true" ng-model="selectPurchaseOrder.code"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">采购日期</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input class="form-control" type="text" required
+                        <input class="form-control" type="text"
                                onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
-                               ng-model="selectPurchaseOrder.purchaseDate" name="purchaseDate"
-                               id="purchaseDate" />
+                               ng-model="newInvntVerification.verifDate" name="verifDate"
+                               id="verifDate" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">门店</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <select class="form-control" required ng-model="selectPurchaseOrder.storeId" disabled="true">
+                        <select class="form-control"  ng-model="newInvntVerification.storeId">
                             <option ng-repeat="store in storeList" value="{{store.storeId}}">{{store.storeName}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">供应商</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <select class="form-control" required ng-model="selectPurchaseOrder.supplierId">
-                            <option ng-repeat="supplier in supplierList" value="{{supplier.supplierId}}">{{supplier.supplierName}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">业务员</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <select class="form-control" required ng-model="selectPurchaseOrder.businessmanId">
+                        <select class="form-control" ng-model="newInvntVerification.businessmanId">
                             <option ng-repeat="adminUser in adminUserList" value="{{adminUser.adminUserId}}">{{adminUser.adminUserDetailModel.realname}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">数量</label>
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">备注</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required ng-readonly="true"
-                               ng-model="selectPurchaseOrder.totalQuantity"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">应付金额</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required ng-readonly="true"
-                               ng-model="selectPurchaseOrder.totalAmount"/>
+                        <input type="text" class="form-control" ng-readonly="true"
+                               ng-model="newInvntVerification.remark" />
                     </div>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- 采购单明细 -->
+    <!-- 库存盘点明细 -->
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===1">
         <div class="seat-manage-operate-container">
             <!--<h3 class="seat-manage-operate-title">采购入库明细</h3>-->
             <div class="seat-manage-operate-button form-inline">
                 <div style="text-align: center;">
-                    <button class="btn btn-success btn-sm" ng-click="newPurchaseOrderItem()">添加采购单明细</button>
+                    <button class="btn btn-success btn-sm" ng-click="newInvntVerificationItem()">添加盘点明细</button>
                 </div>
             </div>
         </div>
@@ -149,26 +128,11 @@
                         <td>名称</td>
                         <td>颜色</td>
                         <td>条码</td>
-                        <td>采购价格</td>
-                        <td>采购数量</td>
+                        <td>数量</td>
+                        <td>盘点类型</td>
                         <td>商品类型</td>
                         <td>规格型号</td>
-                        <td>小计</td>
                         <td>备注</td>
-                        <td>操作</td>
-                    </tr>
-                    <tr ng-repeat="item in selectPurchaseOrder.purchaseOrderItemList">
-                        <td>{{item.materiel.code}}<input type="hidden" value="{{item.materielId}}" /></td>
-                        <td>{{item.materiel.name}}<input type="hidden" value="{{item.itemId}}" /></td>
-                        <td>{{item.materiel.color}}</td>
-                        <td>{{item.materiel.barcode}}</td>
-                        <td>{{item.purchasePrice}}</td>
-                        <td>{{item.purchaseQuantity}}</td>
-                        <td>{{item.materiel.typeName}}</td>
-                        <td>{{item.materiel.specification}}</td>
-                        <td>{{item.purchasePrice * item.purchaseQuantity}}</td>
-                        <td>{{item.remark}}</td>
-                        <td><button name="edit">编辑</button><button ng-click="delItem(item.itemId)">删除</button></td>
                     </tr>
                 </table>
             </div>
@@ -182,24 +146,28 @@
         <tr>
             <td>商品</td>
             <td>
-                <select class="form-control" id="abc" ng-model="purchaseOrderItem.materielId">
+                <select class="form-control" id="abc" ng-model="invntVerificationItem.materielId">
                     <option>请选择商品</option>
                     <option ng-repeat="m in materielList" value="{{m.id}}">{{m.code}}</option>
                 </select>
             </td>
         </tr>
         <tr><td>名称</td><td><input type="text" ng-model="selectedMateriel.name" ng-readonly="true"/></td></tr>
+        <tr><td>颜色</td><td><input type="text" ng-model="selectedMateriel.color" ng-readonly="true"/></td></tr>
         <tr><td>条码</td><td><input type="text" ng-model="selectedMateriel.barcode" ng-readonly="true"/></td></tr>
-        <tr><td>采购价格</td><td><input type="text" ng-model="purchaseOrderItem.purchasePrice" /></td></tr>
+        <tr><td>数量</td><td><input type="text" ng-model="invntVerificationItem.quantity" /></td></tr>
         <tr>
-            <td>采购数量</td>
-            <td><input type="text" ng-model="purchaseOrderItem.purchaseQuantity"
-                       min="1" ng-init="purchaseOrderItem.purchaseQuantity=1"/>
+            <td>盘点类型</td>
+            <td>
+                <select class="form-control" ng-model="invntVerificationItem.type">
+                    <option>请选择</option>
+                    <option value="01">盘盈</option>
+                    <option value="02">盘亏</option>
+                </select>
             </td>
         </tr>
-        <tr><td>小计</td><td>{{purchaseOrderItem.purchasePrice * purchaseOrderItem.purchaseQuantity}}</td></tr>
         <tr>
-            <td>备注</td><td><input type="text" ng-model="purchaseOrderItem.remark"/></td>
+            <td>备注</td><td><input type="text" ng-model="invntVerificationItem.remark"/></td>
         </tr>
     </table>
     <p>
@@ -209,9 +177,3 @@
 </div>
 
 <script type="text/javascript" charset="utf-8" src="My97DatePicker/WdatePicker.js"></script>
-
-<script>
-    function delItem(id){
-        alert(id);
-    }
-</script>

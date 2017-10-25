@@ -1,0 +1,32 @@
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
+        <div class="seat-manage-operate-container">
+            <h5 class="seat-manage-operate-title">库存盘点单</h5>
+            <div class="seat-manage-operate-button form-inline">
+                <a type="button" class="btn btn-success btn-sm" href="#addInvntVerification"> 新增</a>
+                <input class="form-control" ng-model="filterText" ng-change="filter()"
+                       placeHolder="{{'BUSINESS_OPERATION_PRODUCT_SEARCH'|translate}}">
+                <button type="button" class="btn btn-sm btn-primary" ng-click="refresh()">
+                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+        <hr>
+
+        <table ng-table="tableParams" class="table table-bordered">
+            <tr ng-repeat="order in $data|filter:filterText">
+                <td data-title="'编号'" sortable="'code'">{{order.code}}</td>
+                <td data-title="'盘点日期'" sortable="'verifDate'">{{order.verifDate}}</td>
+                <td data-title="'门店'" sortable="'code'">{{order.storeName}}</td>
+                <td data-title="'业务员'" sortable="'code'">{{order.businessmanName}}</td>
+                <td data-title="'操作'">
+                    <!--<button type="button" class="btn btn-sm btn-primary"-->
+                            <!--ng-click="gotoEdit(order.purchaseOrderId)">编辑</button>-->
+                    <!--<button type="button" class="btn btn-sm btn-primary"-->
+                            <!--ng-click="removePurchaseOrder(order.purchaseOrderId)">删除</button>-->
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>

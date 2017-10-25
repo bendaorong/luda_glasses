@@ -52,7 +52,7 @@ public class MaterielController extends BaseController{
     public String saveMateriel(@RequestBody MaterielModel materielModel, HttpSession session){
         String result = "";
         try {
-            AdminUserModel adminUserModel = (AdminUserModel) session.getAttribute("sessionInfo");
+            AdminUserModel adminUserModel = getLoginUser(session);
             materielModel.setCreatorUserId(adminUserModel.getAdminUserId());
             materielModel.setUpdateUserId(adminUserModel.getAdminUserId());
 

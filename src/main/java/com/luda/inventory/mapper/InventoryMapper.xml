@@ -46,6 +46,24 @@
         <association property="materiel" column="materiel_id" select="com.luda.materiel.dao.MaterielDao.getById"/>
     </resultMap>
 
+    <resultMap id="invntVerifMap" type="com.luda.inventory.model.InventoryVerification">
+        <id property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="verifDate" column="verif_date"/>
+        <result property="storeId" column="store_id"/>
+        <result property="businessmanId" column="businessman_id"/>
+        <result property="remark" column="remark"/>
+        <result property="createUserId" column="create_user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUserId" column="update_user_id"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <resultMap id="invntVerifVoMap" type="com.luda.inventory.model.InventoryVerificationVo" extends="invntVerifMap">
+        <result property="storeName" column="store_name"/>
+        <result property="businessmanName" column="real_name"/>
+    </resultMap>
+
     <select id="getPurchaseOrderMaxCode" resultType="java.lang.String">
         select max(code) from purchase_order
     </select>
@@ -104,13 +122,26 @@
         </foreach>
     </insert>
 
+    <update id="updatePurchaseOrderItemBatch" parameterType="com.luda.inventory.model.PurchaseOrderItem">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update purchase_order_item
+            set
+                purchase_order_id = #{item.purchaseOrderId},
+                materiel_id = #{item.materielId},
+                purchase_price = #{item.purchasePrice},
+                purchase_quantity = #{item.purchaseQuantity},
+                remark = #{item.remark}
+            where item_id = #{item.itemId}
+        </foreach>
+    </update>
+
     <select id="lockMard" resultMap="mardMap">
         select * from mard where materiel_id = #{materielId} and store_id = #{storeId} for update
     </select>
 
     <update id="updateMard">
         update mard
-        set cur_inventory = cur_inventory + #{currentInventory}, update_time = now()
+        set cur_inventory = cur_inventory + #{increment}, update_time = now()
         where id = #{id}
     </update>
 
@@ -146,13 +177,95 @@
         on po.supplier_id = sp.supplier_id
         left join admin_user_detail u
         on po.businessman_id = u.admin_user_id
+        where po.delete_flag = 0
     </select>
 
     <select id="getPurchaseOrderById" resultMap="purchaseOrderMap">
-        select * from purchase_order where purchase_order_id = #{id}
+        select * from purchase_order where purchase_order_id = #{id} and delete_flag = 0
     </select>
 
     <select id="fetchPurchaseOrderItemList" resultMap="purchaseOrderItemMap">
         select * from purchase_order_item where purchase_order_id = #{purchaseOrderId}
+    </select>
+
+    <update id="removePurchaseOrder">
+        update purchase_order set delete_flag = 1 where purchase_order_id = #{purchaseOrderId}
+    </update>
+
+    <update id="updatePurchaseOrder" parameterType="com.luda.inventory.model.PurchaseOrder">
+        update purchase_order
+        SET
+            purchase_date = #{purchaseDate},
+            store_id = #{storeId},
+            supplier_id = #{supplierId},
+            businessman_id = #{businessmanId},
+            total_quantity = #{totalQuantity},
+            total_amount = #{totalAmount},
+            remark = #{remark},
+            update_user_id = #{updateUserId},
+            update_time = now()
+        where purchase_order_id = #{purchaseOrderId}
+    </update>
+
+
+    <select id="getInvtVerifMaxCode" resultType="java.lang.String">
+        select max(code) from inventory_verification
+    </select>
+    <insert id="saveInvtVerif" parameterType="com.luda.inventory.model.InventoryVerification"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into inventory_verification
+        (
+            code,
+            verif_date,
+            store_id,
+            businessman_id,
+            remark,
+            create_user_id,
+            create_time,
+            update_user_id,
+            update_time
+        )
+        VALUES
+        (
+            #{code},
+            #{verifDate},
+            #{storeId},
+            #{businessmanId},
+            #{remark},
+            #{createUserId},
+            now(),
+            #{updateUserId},
+            now()
+        )
+    </insert>
+
+    <insert id="insertInvtVerifItemBatch" parameterType="com.luda.inventory.model.InventoryVerificationItem">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            INSERT INTO inventory_verification_item
+            (
+                inventory_verification_id,
+                materiel_id,
+                quantity,
+                invnt_type,
+                remark
+            )
+            VALUES (
+                #{item.inventoryVerificationId},
+                #{item.materielId},
+                #{item.quantity},
+                #{item.type},
+                #{item.remark}
+            )
+        </foreach>
+    </insert>
+
+    <select id="fetchInvntVerifVoList" resultMap="invntVerifVoMap">
+        select po.*, s.store_name, u.real_name
+        from inventory_verification po
+        left join store s
+        on po.store_id = s.store_id
+        left join admin_user_detail u
+        on po.businessman_id = u.admin_user_id
+        where po.delete_flag = 0
     </select>
 </mapper>

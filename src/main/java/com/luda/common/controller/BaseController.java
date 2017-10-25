@@ -1,9 +1,11 @@
 package com.luda.common.controller;
 
+import com.luda.user.model.AdminUserModel;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,5 +57,13 @@ public class BaseController {
         jsonobj.put("success", true);
         jsonobj.put("data", data);
         return jsonobj.toString();
+    }
+
+    /**
+     * 获取当前登录用户信息
+     */
+    public AdminUserModel getLoginUser(HttpSession session){
+        AdminUserModel adminUserModel = (AdminUserModel) session.getAttribute("sessionInfo");
+        return adminUserModel;
     }
 }

@@ -91,6 +91,12 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/addPurchaseOrder",{
         templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/newPurchaseOrder.html",
         controller : "addPurchaseOrderController"
+    }).when("/inventoryVerificationManage", {
+        templateUrl : "app/business_operation/controllers/inventory/inventoryVerification/inventoryVerificationList.html",
+        controller : "invntVerifManageController"
+    }).when("/addInvntVerification", {
+        templateUrl : "app/business_operation/controllers/inventory/inventoryVerification/newInventoryVerification.html",
+        controller : "addInventoryVerificationController"
     }).otherwise({
 		redirectTo : "/"
 	})
@@ -463,6 +469,29 @@ businessOperationApp.factory("inventoryService", function($http) {
                 method:"POST",
                 url:"/luda_glasses/rest/inventory/purchaseOrder/savePurchaseOrder",
                 data:purchaseOrder
+            }).success(successCallback).error(errorCallback);
+        },
+        updatePurchaseOrder : function (purchaseOrder, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/purchaseOrder/updatePurchaseOrder",
+                data:purchaseOrder
+            }).success(successCallback).error(errorCallback);
+        },
+        removePurchaseOrder : function (id, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/purchaseOrder/removePurchaseOrder/" + id
+            }).success(successCallback).error(errorCallback);
+        },
+        fetchInvntVerifList : function (successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/inventory/inventoryVerification/list").success(successCallback).error(errorCallback);
+        },
+        saveInventoryVerification : function (inventoryVerification,successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/inventoryVerification/saveInventoryVerification",
+                data:inventoryVerification
             }).success(successCallback).error(errorCallback);
         }
     }

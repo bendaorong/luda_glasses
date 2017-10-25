@@ -1,28 +1,28 @@
 (function() {
-    angular.module("businessOperationApp").controller("purchaseOrderManageController", function($scope, $location, NgTableParams, inventoryService) {
+    angular.module("businessOperationApp").controller("invntVerifManageController", function($scope, $location, NgTableParams, inventoryService) {
         setActiveSubPage($scope);
         $scope.roleCode = sessionStorage.getItem("roleCode");
         $scope.currentTab = 0;
-        $scope.purchaseOrderList = [];
+        $scope.invntVerifList = [];
 
         $scope.setCurrentTab = function(currentTab) {
             $scope.currentTab = currentTab;
         }
 
-        // 显示采购单列表
-        function initPurchaseOrderList() {
-            inventoryService.fetchPurchaseOrderList(function(data){
+        // 显示盘点单列表
+        function initInvntVerifList() {
+            inventoryService.fetchInvntVerifList(function(data){
                 if(data.success){
-                    $scope.purchaseOrderList = data.data;
+                    $scope.invntVerifList = data.data;
                     $scope.tableParams = new NgTableParams({}, {
-                        dataset : $scope.purchaseOrderList
+                        dataset : $scope.invntVerifList
                     });
-                    console.log("size:"+$scope.purchaseOrderList.length);
+                    console.log("size:"+$scope.invntVerifList.length);
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,
                         title : '失败',
-                        message : '获取采购单失败:' + data.errorMsg
+                        message : '获取盘点单失败:' + data.errorMsg
                     });
                 }
             },function(data){
@@ -33,11 +33,11 @@
                 });
             });
         }
-        initPurchaseOrderList();
+        initInvntVerifList();
 
         $scope.refresh = function() {
             $scope.$emit("loadingStart");
-            initPurchaseOrderList();
+            initInvntVerifList();
             $scope.$emit("loadingEnd");
         }
 
@@ -73,13 +73,10 @@
                 });
             }
         }
-    }).controller("addPurchaseOrderController", function ($location,$scope,$filter,materielService,inventoryService,storeService,supplierService,adminUserService,$routeParams) {
-        $scope.newPurchaseOrder = {};
-        $scope.newPurchaseOrder.totalQuantity = 0;
-        $scope.newPurchaseOrder.totalAmount = 0;
+    }).controller("addInventoryVerificationController", function ($location,$scope,$filter,materielService,inventoryService,storeService,supplierService,adminUserService,$routeParams) {
+        $scope.newInvntVerification = {};
 
         $scope.storeList = [];
-        $scope.supplierList = [];
         $scope.adminUserList = [];
         $scope.materielList = [];
 
@@ -105,17 +102,6 @@
             });
         });
 
-        // 查询供应商
-        supplierService.fetchSupplierList(function (data) {
-            $scope.supplierList = data.data;
-        },function (data) {
-            BootstrapDialog.show({
-                type : BootstrapDialog.TYPE_DANGER,
-                title : '警告',
-                message : '获取供应商失败:' + data.errorMsg
-            });
-        });
-
         // 查询业务员
         adminUserService.fetchUserList(function(data){
             $scope.adminUserList  =  data;
@@ -127,19 +113,10 @@
             });
         });
 
-        $scope.selectedMateriel = {}; //选择的商品
-        $scope.purchaseOrderItem = {}; //采购单明细
-        $scope.purchaseOrderItem.purchasePrice = 0;
-        $scope.purchaseOrderItem.purchaseQuantity = 0;
-
-        $scope.newPurchaseOrderItem = function (){
+        // 添加一条盘点明细
+        $scope.newInvntVerificationItem = function (){
             $('.bg').css({'display':'block'});
             $('.content').css({'display':'block'});
-
-            $scope.selectedMateriel = {}; //选择的商品
-            $scope.purchaseOrderItem = {}; //采购单明细
-            $scope.purchaseOrderItem.purchasePrice = 0;
-            $scope.purchaseOrderItem.purchaseQuantity = 0;
 
             // $("#closeBtn").click(function(){
             //     $('.bg').css({'display':'none'});
@@ -152,12 +129,13 @@
             $('.content').css({'display':'none'});
         }
 
+        $scope.selectedMateriel = {}; //选择的商品
+        $scope.invntVerificationItem = {}; //采购单明细
         // 选择商品时加载数据
         $('#abc').change(function(){
             var materielId = $(this).children('option:selected').val();
             materielService.getById(materielId, function(data){
                 $scope.selectedMateriel = data.data;
-                $scope.purchaseOrderItem.purchasePrice = $scope.selectedMateriel.tradePrice;
             },function(data){
                 BootstrapDialog.show({
                     type : BootstrapDialog.TYPE_DANGER,
@@ -169,87 +147,18 @@
 
         // 添加新明细
         $scope.addItem = function () {
-            if($scope.selectedMateriel.id == null){
-                alert("请选择商品");
-                return false;
-            }
-            if($scope.purchaseOrderItem.purchasePrice == null || $scope.purchaseOrderItem.purchasePrice == 0){
-                alert("请填写采购价格");
-                return false;
-            }
-            if($scope.purchaseOrderItem.purchaseQuantity == null || $scope.purchaseOrderItem.purchaseQuantity == 0){
-                alert("请填写采购数量");
-                return false;
-            }
-
             var newItem = "<tr>" +
-                "<td>" + $scope.selectedMateriel.code + "<input name='materielId' type='hidden' value='"+$scope.selectedMateriel.id+"' /></td>" +
-                "<td>" + $scope.selectedMateriel.name + "<input name='itemId' type='hidden' value='0' /></td>" +
+                "<td>" + $scope.selectedMateriel.code + "<input type='hidden' value='"+$scope.selectedMateriel.id+"' /></td>" +
+                "<td>" + $scope.selectedMateriel.name + "<input type='hidden' value='0' /></td>" +
                 "<td>" + $scope.selectedMateriel.color + "</td>" +
                 "<td>" + $scope.selectedMateriel.barcode + "</td>" +
-                "<td>" + $scope.purchaseOrderItem.purchasePrice + "</td>" +
-                "<td>" + $scope.purchaseOrderItem.purchaseQuantity + "</td>" +
+                "<td>" + $scope.invntVerificationItem.quantity + "</td>" +
+                "<td>" + $scope.invntVerificationItem.type + "</td>" +
                 "<td>" + $scope.selectedMateriel.typeName + "</td>" +
                 "<td>" + $scope.selectedMateriel.specification + "</td>" +
-                "<td>" + $scope.purchaseOrderItem.purchasePrice * $scope.purchaseOrderItem.purchaseQuantity + "</td>" +
-                "<td>" + $scope.purchaseOrderItem.remark + "</td>" +
-                "<td><button name='edit'>编辑</button><button name='del'>删除</button></td>" +
+                "<td>" + $scope.invntVerificationItem.remark + "</td>" +
                 "</tr>";
             $('#itemContainer').append(newItem);
-            $scope.selectedMateriel = {}; //选择的商品
-            $scope.purchaseOrderItem = {}; //采购单明细
-            $scope.purchaseOrderItem.purchasePrice = 0;
-            $scope.purchaseOrderItem.purchaseQuantity = 0;
-
-            // 编辑明细
-            $("#itemContainer").find("button[name='edit']").each(function(){
-                $(this).unbind("click");
-                $(this).bind("click", function () {
-                    var tdArr = $(this).parent().parent().children();
-                    // 商品id
-                    $scope.purchaseOrderItem.materielId = tdArr.eq(0).find("input").val();
-                    // 编号
-                    $scope.selectedMateriel.code = tdArr.eq(0).text();
-                    // 名称
-                    $scope.selectedMateriel.name = tdArr.eq(1).text();
-                    // 条码
-                    $scope.selectedMateriel.barcode = tdArr.eq(3).text();
-                    // 采购价格
-                    $scope.purchaseOrderItem.purchasePrice = tdArr.eq(4).text();
-                    // 采购数量
-                    $scope.purchaseOrderItem.purchaseQuantity = tdArr.eq(5).text();
-                    // 备注
-                    $scope.purchaseOrderItem.remark = tdArr.eq(9).text();
-                    $scope.purchaseOrderItem.remark = tdArr.eq(9).text();
-                    console.log($scope.purchaseOrderItem);
-                    console.log($scope.selectedMateriel);
-                    $('.bg').css({'display':'block'});
-                    $('.content').css({'display':'block'});
-                });
-            });
-
-            // 删除明细
-            $("#itemContainer").find("button[name='del']").each(function(){
-                $(this).unbind("click");
-                $(this).bind("click", function () {
-                    var tdArr = $(this).parent().parent().children();
-                    // 采购价格
-                    var purchasePrice = tdArr.eq(4).text();
-                    // 采购数量
-                    var purchaseQuantity = tdArr.eq(5).text();
-                    //计算采购数量和采购金额
-                    $scope.newPurchaseOrder.totalQuantity -= Number(purchaseQuantity);
-                    $scope.newPurchaseOrder.totalAmount -= purchasePrice * purchaseQuantity;
-                    //删除该明细
-                    $(this).parent().parent().remove();
-                });
-            });
-
-            // 采购数量累计
-            $scope.newPurchaseOrder.totalQuantity += Number($scope.purchaseOrderItem.purchaseQuantity);
-            // 采购金额累计
-            $scope.newPurchaseOrder.totalAmount += $scope.purchaseOrderItem.purchasePrice * $scope.purchaseOrderItem.purchaseQuantity;
-            console.log("newPurchaseOrder:" + JSON.stringify($scope.newPurchaseOrder));
 
             // 关闭明细弹框
             $('.bg').css({'display':'none'});
@@ -257,36 +166,36 @@
         }
 
         // 保存采购单
-        $scope.savePurchaseOrder = function () {
+        $scope.saveInvntVerification = function () {
             // 收集采购单明细
-            var purchaseOrderItems = buildPurchaseOrderItems();
-            if(purchaseOrderItems.length == 0){
+            var invtVerifItems = buildInvtVerifItemsItems();
+            if(invtVerifItems.length == 0){
                 BootstrapDialog.show({
                     type : BootstrapDialog.TYPE_DANGER,
                     title : '警告',
-                    message : '采购单明细不能为空'
+                    message : '库存盘点明细不能为空'
                 });
                 return false;
             }
 
-            $scope.newPurchaseOrder.purchaseOrderItemList = purchaseOrderItems;
-            // 采购日期
-            $scope.newPurchaseOrder.purchaseDate = $("#purchaseDate").val();
-            console.log("newPurchaseOrder:" + JSON.stringify($scope.newPurchaseOrder));
+            $scope.newInvntVerification.invtVerifItemList = invtVerifItems;
+            // 盘点日期
+            $scope.newInvntVerification.verifDate = $("#verifDate").val();
+            console.log("newInvntVerification:" + JSON.stringify($scope.newInvntVerification));
 
-            inventoryService.savePurchaseOrder($scope.newPurchaseOrder, function (data) {
+            inventoryService.saveInventoryVerification($scope.newInvntVerification, function (data) {
                 if(data.success){
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_SUCCESS,
                         title : '成功',
-                        message : '采购单创建成功'
+                        message : '盘点单创建成功'
                     });
-                    $location.path("/purchaseOrderManage");
+                    $location.path("/inventoryVerificationManage");
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,
                         title : '失败',
-                        message : '采购单创建失败:'+data.errorMsg
+                        message : '盘点单创建失败:'+data.errorMsg
                     });
                 }
             }, function (data) {
@@ -299,27 +208,27 @@
         }
 
         // 构造采购单明细
-        function buildPurchaseOrderItems(){
-            var purchaseOrderItems = [];
+        function buildInvtVerifItemsItems(){
+            var items = [];
             $("#itemContainer").find("tr:not(':first')").each(function(){
                 var tdArr = $(this).children();
                 // 商品id
                 var materielId = tdArr.eq(0).find("input").val();
-                // 采购价格
-                var purchasePrice = tdArr.eq(4).text();
-                // 采购数量
-                var purchaseQuantity = tdArr.eq(5).text();
+                // 数量
+                var quantity = tdArr.eq(4).text();
+                // 盘点类型
+                var type = tdArr.eq(5).text();
                 // 备注
-                var remark = tdArr.eq(9).text();
+                var remark = tdArr.eq(8).text();
 
                 var item = {};
                 item.materielId = Number(materielId);
-                item.purchasePrice = Number(purchasePrice);
-                item.purchaseQuantity = Number(purchaseQuantity);
+                item.quantity = Number(quantity);
+                item.type = type;
                 item.remark = remark;
-                purchaseOrderItems.push(item);
+                items.push(item);
             });
-            return purchaseOrderItems;
+            return items;
         }
 
         $scope.cancel = function(){
@@ -435,33 +344,8 @@
                 "<td>" + $scope.selectedMateriel.specification + "</td>" +
                 "<td>" + $scope.purchaseOrderItem.purchasePrice * $scope.purchaseOrderItem.purchaseQuantity + "</td>" +
                 "<td>" + $scope.purchaseOrderItem.remark + "</td>" +
-                "<td><button name='edit'>编辑</button><button name='del'>删除</button></td>" +
                 "</tr>";
             $('#itemContainer').append(newItem);
-
-            // 删除明细
-            $("#itemContainer").find("button[name='del']").each(function(){
-                $(this).unbind("click");
-                $(this).bind("click", function () {
-                    var tdArr = $(this).parent().parent().children();
-                    if(tdArr.eq(1).find("input").val() == 0){
-                        //删除该明细
-                        $(this).parent().parent().remove();
-                    }else {
-                        if(confirm("确定删除该条明细吗？")){
-                            // 采购价格
-                            var purchasePrice = tdArr.eq(4).text();
-                            // 采购数量
-                            var purchaseQuantity = tdArr.eq(5).text();
-                            //计算采购数量和采购金额
-                            $scope.newPurchaseOrder.totalQuantity -= Number(purchaseQuantity);
-                            $scope.newPurchaseOrder.totalAmount -= purchasePrice * purchaseQuantity;
-                            //删除该明细
-                            $(this).parent().parent().remove();
-                        }
-                    }
-                });
-            });
 
             // 采购数量累计
             $scope.selectPurchaseOrder.totalQuantity += Number($scope.purchaseOrderItem.purchaseQuantity);
@@ -550,6 +434,6 @@
     });
 
     function setActiveSubPage($scope) {
-        $scope.$emit("setActive", "purchaseOrderManage");
+        $scope.$emit("setActive", "inventoryVerificationManage");
     }
 })();
