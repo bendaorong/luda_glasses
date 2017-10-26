@@ -1,5 +1,6 @@
 package com.luda.inventory.dao;
 
+import com.luda.comm.po.ResultHandle;
 import com.luda.inventory.model.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -74,4 +75,18 @@ public interface InventoryDao {
     int removePurchaseOrderItem(int itemId);
 
     int updatePurchaseOrderItem(PurchaseOrderItem purchaseOrderItem);
+
+    int removeInvntVerification(int id);
+
+    InventoryVerification getInvntVerificationById(int id);
+
+    List<InventoryVerificationItem> fetchInvntVerificationItemList(int inventoryVerificationId);
+
+    int updateInvntVerification(InventoryVerification inventoryVerification);
+
+    int saveInvntVerificationItem(InventoryVerificationItem item);
+
+    int removeInvntVerificationItem(int id);
+
+    InventoryVerificationItem getInvntVerificationItemById(int id);
 }

@@ -130,4 +130,16 @@ public class InventoryServiceTest extends SpringSimpleJunit{
         ResultHandle<PurchaseOrderItem> resultHandle = inventoryService.updatePurchaseOrderItem(purchaseOrderItem);
         print(resultHandle.toString());
     }
+
+    @Test
+    public void testGetInvntVerificationById(){
+        InventoryVerification inventoryVerification = inventoryService.getInvntVerificationById(6);
+        print(inventoryVerification.toString());
+    }
+
+    @Test
+    public void testRemoveInvntVerification(){
+        ResultHandle<InventoryVerification> resultHandle = inventoryService.removeInvntVerification(6);
+        print(resultHandle.toString());
+    }
 }

@@ -70,4 +70,24 @@ public interface InventoryService {
      * 查询盘点单列表
      */
     List<InventoryVerificationVo> fetchInvntVerifVoList();
+
+    /**
+     * 根据id查询盘点单
+     * @param id
+     * @return
+     */
+    public InventoryVerification getInvntVerificationById(int id);
+
+    /**
+     * 删除盘点单
+     * @param id
+     * @return
+     */
+    ResultHandle<InventoryVerification> removeInvntVerification(int id);
+
+    ResultHandle<InventoryVerification> updateInvntVerification(InventoryVerification inventoryVerification);
+
+    ResultHandle<InventoryVerificationItem> saveInvntVerificationItem(InventoryVerificationItem item);
+
+    ResultHandle<InventoryVerificationItem> removeInvntVerificationItem(int id);
 }

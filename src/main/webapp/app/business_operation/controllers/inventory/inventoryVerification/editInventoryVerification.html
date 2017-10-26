@@ -51,6 +51,7 @@
     <p>{{successMsg}}</p>
 </div>
 
+<h3 class="seat-manage-operate-title">编辑盘点单</h3>
 <ul class="nav nav-tabs" role="tablist" ng-init="currentTab=0">
     <li role="presentation" ng-class="{'active': currentTab===0}"><a
             href="javascript(0)" ng-click="currentTab=0" role="tab"
@@ -66,7 +67,7 @@
         <div class="seat-manage-operate-container">
             <!--<h3 class="seat-manage-operate-title">新增采购单</h3>-->
             <div class="seat-manage-operate-button form-inline">
-                <button class="btn btn-success btn-sm" ng-click="saveInvntVerification()" ng-disabled="!myform.$valid">保存</button>
+                <button class="btn btn-success btn-sm" ng-click="updateInvntVerification()" ng-disabled="!myform.$valid">保存</button>
                 <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
             </div>
         </div>
@@ -78,14 +79,14 @@
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <input class="form-control" type="text"
                                onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
-                               ng-model="newInvntVerification.verifDate" name="verifDate"
+                               ng-model="selectInvntVerification.verifDate" name="verifDate"
                                id="verifDate" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">门店</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <select class="form-control"  ng-model="newInvntVerification.storeId">
+                        <select class="form-control" ng-model="selectInvntVerification.storeId" disabled="true">
                             <option ng-repeat="store in storeList" value="{{store.storeId}}">{{store.storeName}}</option>
                         </select>
                     </div>
@@ -93,8 +94,10 @@
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">业务员</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <select class="form-control" ng-model="newInvntVerification.businessmanId">
-                            <option ng-repeat="adminUser in adminUserList" value="{{adminUser.adminUserId}}">{{adminUser.adminUserDetailModel.realname}}</option>
+                        <select class="form-control" ng-model="selectInvntVerification.businessmanId">
+                            <option ng-repeat="adminUser in adminUserList" value="{{adminUser.adminUserId}}" ng-selected="selectInvntVerification.businessmanId == adminUser.adminUserId">
+                                {{adminUser.adminUserDetailModel.realname}}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -102,7 +105,7 @@
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">备注</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <input type="text" class="form-control"
-                               ng-model="newInvntVerification.remark" />
+                               ng-model="selectInvntVerification.remark" />
                     </div>
                 </div>
             </form>
@@ -112,7 +115,7 @@
     <!-- 库存盘点明细 -->
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===1">
         <div class="seat-manage-operate-container">
-            <!--<h3 class="seat-manage-operate-title">采购入库明细</h3>-->
+            <!--<h3 class="seat-manage-operate-title">盘点明细</h3>-->
             <div class="seat-manage-operate-button form-inline">
                 <div style="text-align: center;">
                     <button class="btn btn-success btn-sm" ng-click="newInvntVerificationItem()">添加盘点明细</button>
@@ -133,6 +136,24 @@
                         <td>商品类型</td>
                         <td>规格型号</td>
                         <td>备注</td>
+                        <td>操作</td>
+                    </tr>
+                    <tr ng-repeat="item in selectInvntVerification.invtVerifItemList">
+                        <td>{{item.materiel.code}}</td>
+                        <td>{{item.materiel.name}}</td>
+                        <td>{{item.materiel.color}}</td>
+                        <td>{{item.materiel.barcode}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td>
+                            <div ng-switch="item.type">
+                                <div ng-switch-when="01">盘盈</div>
+                                <div ng-switch-when="02">盘亏</div>
+                            </div>
+                        </td>
+                        <td>{{item.materiel.typeName}}</td>
+                        <td>{{item.materiel.specification}}</td>
+                        <td>{{item.remark}}</td>
+                        <td><button ng-click="delItem_($index)">删除</button></td>
                     </tr>
                 </table>
             </div>

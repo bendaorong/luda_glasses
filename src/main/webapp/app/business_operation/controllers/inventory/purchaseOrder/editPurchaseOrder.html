@@ -51,6 +51,7 @@
     <p>{{successMsg}}</p>
 </div>
 
+<h3 class="seat-manage-operate-title" style="margin-bottom: 10px">编辑采购单</h3>
 <ul class="nav nav-tabs" role="tablist" ng-init="currentTab=0">
     <li role="presentation" ng-class="{'active': currentTab===0}"><a
             href="javascript(0)" ng-click="currentTab=0" role="tab"
@@ -136,7 +137,7 @@
             <!--<h3 class="seat-manage-operate-title">采购入库明细</h3>-->
             <div class="seat-manage-operate-button form-inline">
                 <div style="text-align: center;">
-                    <button class="btn btn-success btn-sm" ng-click="newPurchaseOrderItem()">添加采购单明细</button>
+                    <button class="btn btn-success btn-sm" ng-click="newPurchaseOrderItem_()">添加采购单明细</button>
                 </div>
             </div>
         </div>
@@ -158,8 +159,8 @@
                         <td>操作</td>
                     </tr>
                     <tr ng-repeat="item in selectPurchaseOrder.purchaseOrderItemList">
-                        <td>{{item.materiel.code}}<input type="hidden" value="{{item.materielId}}" /></td>
-                        <td>{{item.materiel.name}}<input type="hidden" value="{{item.itemId}}" /></td>
+                        <td>{{item.materiel.code}}</td>
+                        <td>{{item.materiel.name}}</td>
                         <td>{{item.materiel.color}}</td>
                         <td>{{item.materiel.barcode}}</td>
                         <td>{{item.purchasePrice}}</td>
@@ -168,7 +169,7 @@
                         <td>{{item.materiel.specification}}</td>
                         <td>{{item.purchasePrice * item.purchaseQuantity}}</td>
                         <td>{{item.remark}}</td>
-                        <td><button name="edit">编辑</button><button ng-click="delItem(item.itemId)">删除</button></td>
+                        <td><button ng-click="delItem_($index)">删除</button></td>
                     </tr>
                 </table>
             </div>
@@ -203,8 +204,8 @@
         </tr>
     </table>
     <p>
-        <button ng-click="addItem()">添加</button>
-        <button ng-click="closeBtn()">关闭</button>
+        <button ng-click="addItem_()">添加</button>
+        <button ng-click="closeBtn_()">关闭</button>
     </p>
 </div>
 

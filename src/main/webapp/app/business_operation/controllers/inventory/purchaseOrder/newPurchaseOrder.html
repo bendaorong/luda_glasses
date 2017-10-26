@@ -51,6 +51,7 @@
     <p>{{successMsg}}</p>
 </div>
 
+<h3 class="seat-manage-operate-title" style="margin-bottom: 10px">新增采购单</h3>
 <ul class="nav nav-tabs" role="tablist" ng-init="currentTab=0">
     <li role="presentation" ng-class="{'active': currentTab===0}"><a
             href="javascript(0)" ng-click="currentTab=0" role="tab"
@@ -150,6 +151,19 @@
                         <td>小计</td>
                         <td>备注</td>
                         <td>操作</td>
+                    </tr>
+                    <tr ng-repeat="item in purchaseOrderItemList">
+                        <td>{{item.materiel.code}}<input type="hidden" value="{{item.materielId}}" /></td>
+                        <td>{{item.materiel.name}}<input type="hidden" value="{{item.itemId}}" /></td>
+                        <td>{{item.materiel.color}}</td>
+                        <td>{{item.materiel.barcode}}</td>
+                        <td>{{item.purchasePrice}}</td>
+                        <td>{{item.purchaseQuantity}}</td>
+                        <td>{{item.materiel.typeName}}</td>
+                        <td>{{item.materiel.specification}}</td>
+                        <td>{{item.purchasePrice * item.purchaseQuantity}}</td>
+                        <td>{{item.remark}}</td>
+                        <td><button ng-click="delItem($index)">删除</button></td>
                     </tr>
                 </table>
             </div>

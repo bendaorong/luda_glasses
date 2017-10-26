@@ -140,18 +140,18 @@ public class InventoryController extends BaseController{
             // 采购单
             JSONObject purchaseOrderJson = JSONObject.fromObject(data);
             // 采购单明细
-            JSONArray itemArr = purchaseOrderJson.getJSONArray("purchaseOrderItemList");
+            //JSONArray itemArr = purchaseOrderJson.getJSONArray("purchaseOrderItemList");
 
             purchaseOrderJson.remove("purchaseOrderItemList");
             PurchaseOrder purchaseOrder = CommonUtils.convertJsonToBean(purchaseOrderJson, PurchaseOrder.class);
 
-            List<PurchaseOrderItem> itemList = new ArrayList<>();
-            for(int i=0; i<itemArr.size(); i++){
-                JSONObject itemJson = itemArr.getJSONObject(i);
-                PurchaseOrderItem item = CommonUtils.convertJsonToBean(itemJson, PurchaseOrderItem.class);
-                itemList.add(item);
-            }
-            purchaseOrder.setPurchaseOrderItemList(itemList);
+//            List<PurchaseOrderItem> itemList = new ArrayList<>();
+//            for(int i=0; i<itemArr.size(); i++){
+//                JSONObject itemJson = itemArr.getJSONObject(i);
+//                PurchaseOrderItem item = CommonUtils.convertJsonToBean(itemJson, PurchaseOrderItem.class);
+//                itemList.add(item);
+//            }
+//            purchaseOrder.setPurchaseOrderItemList(itemList);
 
             // 更新人
             AdminUserModel adminUserModel = getLoginUser(session);
@@ -195,6 +195,72 @@ public class InventoryController extends BaseController{
     }
 
     /**
+     * 新增采购明细
+     * @return
+     */
+    @RequestMapping("/purchaseOrder/savePurchaseOrderItem")
+    @ResponseBody
+    public String savePurchaseOrderItem(@RequestBody PurchaseOrderItem purchaseOrderItem){
+        String result = "";
+        try {
+            ResultHandle<PurchaseOrderItem> resultHandle = inventoryService.savePurchaseOrderItem(purchaseOrderItem);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult(CommonUtils.convertBeanToJson(resultHandle.getReturnContent(), null));
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("savePurchaseOrderItem error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 更新采购明细
+     * @return
+     */
+    @RequestMapping("/purchaseOrder/updatePurchaseOrderItem")
+    @ResponseBody
+    public String updatePurchaseOrderItem(@RequestBody PurchaseOrderItem purchaseOrderItem){
+        String result = "";
+        try {
+            ResultHandle<PurchaseOrderItem> resultHandle = inventoryService.updatePurchaseOrderItem(purchaseOrderItem);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("updatePurchaseOrderItem error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 删除采购明细
+     * @return
+     */
+    @RequestMapping("/purchaseOrder/removePurchaseOrderItem/{itemId}")
+    @ResponseBody
+    public String removePurchaseOrderItem(@PathVariable int itemId){
+        String result = "";
+        try {
+            ResultHandle<PurchaseOrderItem> resultHandle = inventoryService.removePurchaseOrderItem(itemId);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("removePurchaseOrderItem error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
      * 查询盘点单列表
      */
     @RequestMapping("/inventoryVerification/list")
@@ -220,9 +286,9 @@ public class InventoryController extends BaseController{
     public String saveInventoryVerification(@RequestBody String data, HttpSession session){
         String result = "";
         try {
-            // 采购单
+            // 盘点单
             JSONObject inventoryVerificationJson = JSONObject.fromObject(data);
-            // 采购单明细
+            // 盘点明细
             JSONArray itemArr = inventoryVerificationJson.getJSONArray("invtVerifItemList");
 
             inventoryVerificationJson.remove("invtVerifItemList");
@@ -250,6 +316,117 @@ public class InventoryController extends BaseController{
             }
         }catch (Exception e){
             log.error("saveInventoryVerification error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 删除库存盘点单
+     */
+    @RequestMapping("/inventoryVerification/removeInvntVerification/{id}")
+    @ResponseBody
+    public String removeInvntVerification(@PathVariable int id){
+        String result = "";
+        try {
+            ResultHandle<InventoryVerification> resultHandle = inventoryService.removeInvntVerification(id);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("removeInvntVerification error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 根据id查询库存盘点单
+     * @return
+     */
+    @RequestMapping("/inventoryVerification/getInvntVerificationById/{id}")
+    @ResponseBody
+    public String getInvntVerificationById(@PathVariable int id){
+        String result = "";
+        try {
+            InventoryVerification inventoryVerification = inventoryService.getInvntVerificationById(id);
+            String data = CommonUtils.convertBeanToJson(inventoryVerification, null).toString();
+            result = getSuccessResult(data);
+        }catch (Exception e){
+            log.error("getInvntVerificationById error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    @RequestMapping("/inventoryVerification/updateInvntVerification")
+    @ResponseBody
+    public String updateInvntVerification(@RequestBody String data, HttpSession session){
+        String result = "";
+        try {
+            // 盘点单
+            JSONObject inventoryVerificationJson = JSONObject.fromObject(data);
+            inventoryVerificationJson.remove("invtVerifItemList");
+            InventoryVerification inventoryVerification = CommonUtils.convertJsonToBean(inventoryVerificationJson, InventoryVerification.class);
+
+            // 更新用户
+            AdminUserModel adminUserModel = getLoginUser(session);
+            inventoryVerification.setUpdateUserId(adminUserModel.getAdminUserId());
+
+            ResultHandle<InventoryVerification> resultHandle = inventoryService.updateInvntVerification(inventoryVerification);
+
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("updateInvntVerification error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 添加盘点明细
+     */
+    @RequestMapping("/inventoryVerification/saveInvntVerificationItem")
+    @ResponseBody
+    public String saveInvntVerificationItem(@RequestBody InventoryVerificationItem item){
+        String result = "";
+        try {
+            ResultHandle<InventoryVerificationItem> resultHandle = inventoryService.saveInvntVerificationItem(item);
+            if(resultHandle.isSuccess()){
+                String data = CommonUtils.convertBeanToJson(resultHandle.getReturnContent(), null).toString();
+                result = getSuccessResult(data);
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        } catch (Exception e){
+            log.error("saveInvntVerificationItem error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 删除盘点明细
+     */
+    @RequestMapping("/inventoryVerification/removeInvntVerificationItem/{id}")
+    @ResponseBody
+    public String removeInvntVerificationItem(@PathVariable int id){
+        String result = "";
+        try {
+            ResultHandle<InventoryVerificationItem> resultHandle = inventoryService.removeInvntVerificationItem(id);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("removeInvntVerificationItem error", e);
             result = getFailResult("系统异常");
         }
         return result;

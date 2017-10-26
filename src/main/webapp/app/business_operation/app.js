@@ -97,6 +97,9 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/addInvntVerification", {
         templateUrl : "app/business_operation/controllers/inventory/inventoryVerification/newInventoryVerification.html",
         controller : "addInventoryVerificationController"
+    }).when("/editInvntVerification/:id", {
+        templateUrl : "app/business_operation/controllers/inventory/inventoryVerification/editInventoryVerification.html",
+        controller : "editInventoryVerificationController"
     }).when("/customerManage", {
         templateUrl : "app/business_operation/controllers/customer/customerList.html",
         controller : "customerManageController"
@@ -493,6 +496,19 @@ businessOperationApp.factory("inventoryService", function($http) {
                 url:"/luda_glasses/rest/inventory/purchaseOrder/removePurchaseOrder/" + id
             }).success(successCallback).error(errorCallback);
         },
+        savePurchaseOrderItem : function (purchaseOrderItem, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/purchaseOrder/savePurchaseOrderItem",
+                data:purchaseOrderItem
+            }).success(successCallback).error(errorCallback);
+        },
+        removePurchaseOrderItem : function (itemId, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/purchaseOrder/removePurchaseOrderItem/" + itemId
+            }).success(successCallback).error(errorCallback);
+        },
         fetchInvntVerifList : function (successCallback, errorCallback) {
             $http.get("/luda_glasses/rest/inventory/inventoryVerification/list").success(successCallback).error(errorCallback);
         },
@@ -501,6 +517,36 @@ businessOperationApp.factory("inventoryService", function($http) {
                 method:"POST",
                 url:"/luda_glasses/rest/inventory/inventoryVerification/saveInventoryVerification",
                 data:inventoryVerification
+            }).success(successCallback).error(errorCallback);
+        },
+        removeInvntVerification : function (id, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/inventoryVerification/removeInvntVerification/" + id
+            }).success(successCallback).error(errorCallback);
+        },
+        getInvntVerificationById : function (id, successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/inventory/inventoryVerification/getInvntVerificationById/" + id).success(successCallback).error(errorCallback);
+        },
+        updateInvntVerification : function (inventoryVerification, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/inventoryVerification/updateInvntVerification",
+                data:inventoryVerification
+            }).success(successCallback).error(errorCallback);
+        },
+        saveInvntVerificationItem : function (item, successCallback, errorCallback) {
+            console.log("111"+JSON.stringify(item));
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/inventoryVerification/saveInvntVerificationItem",
+                data:item
+            }).success(successCallback).error(errorCallback);
+        },
+        removeInvntVerificationItem : function (id,successCallback, errorCallback ) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/inventoryVerification/removeInvntVerificationItem/" + id
             }).success(successCallback).error(errorCallback);
         }
     }

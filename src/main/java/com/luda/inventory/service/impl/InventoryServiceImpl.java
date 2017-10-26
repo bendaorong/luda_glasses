@@ -38,7 +38,7 @@ public class InventoryServiceImpl implements InventoryService{
     public ResultHandle<PurchaseOrder> savePurchaseOrder(PurchaseOrder purchaseOrder) {
         ResultHandle<PurchaseOrder> resultHandle = new ResultHandle<>();
         // 验证采购单
-        String errorMsg = checkPurchaseOrder(purchaseOrder);
+        String errorMsg = checkPurchaseOrder(purchaseOrder, true);
         if(StringUtils.isNotEmpty(errorMsg)){
             resultHandle.setMsg(errorMsg);
             return resultHandle;
@@ -70,52 +70,49 @@ public class InventoryServiceImpl implements InventoryService{
     public ResultHandle updatePurchaseOrder(PurchaseOrder purchaseOrder) {
         ResultHandle<PurchaseOrder> resultHandle = new ResultHandle<>();
         // 验证采购单
-        String errorMsg = checkPurchaseOrder(purchaseOrder);
+        String errorMsg = checkPurchaseOrder(purchaseOrder, false);
         if(StringUtils.isNotEmpty(errorMsg)){
             resultHandle.setMsg(errorMsg);
             return resultHandle;
         }
 
         // 更新采购单
-        int result = inventoryDao.updatePurchaseOrder(purchaseOrder);
-        if(result <= 0){
-            throw new InventoryException("采购单保存失败");
-        }
+        inventoryDao.updatePurchaseOrder(purchaseOrder);
 
         // 初始化采购单明细
-        initPurchaseOrderItem(purchaseOrder);
+        //initPurchaseOrderItem(purchaseOrder);
 
-        // 分离待新增明细和待更新明细
-        List<PurchaseOrderItem> newItems = new ArrayList<>();
-        List<PurchaseOrderItem> updateItems = new ArrayList<>();
-        for(PurchaseOrderItem item : purchaseOrder.getPurchaseOrderItemList()){
-            if(item.getItemId() == 0){
-                newItems.add(item);
-            }else{
-                updateItems.add(item);
-            }
-        }
-
-        // 更新之前的采购单明细
-        List<PurchaseOrderItem> sourceItems = inventoryDao.fetchPurchaseOrderItemList(purchaseOrder.getPurchaseOrderId());
-        // 处理库存变更
-        Map<Integer, Integer> inventoryMap = dealWithInventory(sourceItems, newItems, updateItems);
-
-        // 保存新增明细
-        if(!CollectionUtils.isEmpty(newItems)){
-            result = inventoryDao.insertPurchaseOrderItemBatch(newItems);
-            if(result <= 0){
-                throw new InventoryException("采购单明细保存失败");
-            }
-        }
-        // 更新明细
-        result = inventoryDao.updatePurchaseOrderItemBatch(updateItems);
-        if(result <= 0){
-            throw new InventoryException("采购单明细更新失败");
-        }
-
-        // 更新商品库存
-        syncUpdateMard(inventoryMap, purchaseOrder.getStoreId());
+//        // 分离待新增明细和待更新明细
+//        List<PurchaseOrderItem> newItems = new ArrayList<>();
+//        List<PurchaseOrderItem> updateItems = new ArrayList<>();
+//        for(PurchaseOrderItem item : purchaseOrder.getPurchaseOrderItemList()){
+//            if(item.getItemId() == 0){
+//                newItems.add(item);
+//            }else{
+//                updateItems.add(item);
+//            }
+//        }
+//
+//        // 更新之前的采购单明细
+//        List<PurchaseOrderItem> sourceItems = inventoryDao.fetchPurchaseOrderItemList(purchaseOrder.getPurchaseOrderId());
+//        // 处理库存变更
+//        Map<Integer, Integer> inventoryMap = dealWithInventory(sourceItems, newItems, updateItems);
+//
+//        // 保存新增明细
+//        if(!CollectionUtils.isEmpty(newItems)){
+//            result = inventoryDao.insertPurchaseOrderItemBatch(newItems);
+//            if(result <= 0){
+//                throw new InventoryException("采购单明细保存失败");
+//            }
+//        }
+//        // 更新明细
+//        result = inventoryDao.updatePurchaseOrderItemBatch(updateItems);
+//        if(result <= 0){
+//            throw new InventoryException("采购单明细更新失败");
+//        }
+//
+//        // 更新商品库存
+//        syncUpdateMard(inventoryMap, purchaseOrder.getStoreId());
 
         return resultHandle;
     }
@@ -131,6 +128,7 @@ public class InventoryServiceImpl implements InventoryService{
         // 保存明细
         int result = inventoryDao.savePurchaseOrderItem(purchaseOrderItem);
         if(result > 0){
+            resultHandle.setReturnContent(purchaseOrderItem);
             // 更新采购单总数量和总金额
             PurchaseOrder purchaseOrder = getPurchaseOrderById(purchaseOrderItem.getPurchaseOrderId());
             updatePurchaseOrderTotalQuantityAndTotalAmount(purchaseOrder);
@@ -196,8 +194,10 @@ public class InventoryServiceImpl implements InventoryService{
         Mard mard = inventoryDao.lockMard(materielId, storeId);
         if(mard == null){
             mard = new Mard(materielId, storeId, increment);
+            log.info("new mard>> materielId:" + materielId + " storeId:" + storeId + " increment:" + increment);
             inventoryDao.saveMard(mard);
         }else {
+            log.info("update mard>> materielId:" + materielId + " storeId:" + storeId + " increment:" + increment + " current:" + mard.getCurrentInventory());
             inventoryDao.updateMard(mard.getId(), increment);
         }
     }
@@ -409,8 +409,12 @@ public class InventoryServiceImpl implements InventoryService{
         return nextCode;
     }
 
-    // 验证采购单
-    private String checkPurchaseOrder(PurchaseOrder purchaseOrder) {
+    /**
+     * 验证采购单
+     * @param isNew 新增采购单
+     **/
+
+    private String checkPurchaseOrder(PurchaseOrder purchaseOrder, boolean isNew) {
         if(purchaseOrder.getStoreId() <= 0){
             return "请选择门店";
         }
@@ -423,16 +427,18 @@ public class InventoryServiceImpl implements InventoryService{
         if(purchaseOrder.getTotalAmount().compareTo(BigDecimal.ZERO) <= 0){
             return "总金额必须大于0";
         }
-        if(CollectionUtils.isEmpty(purchaseOrder.getPurchaseOrderItemList())){
-            return "请录入采购单明细";
-        }
-        // 总数量=明细数量总计
-        if(purchaseOrder.getTotalQuantity() != purchaseOrder.getTotalItemQuantity()){
-            return "采购单总数量与明细总数量不一致";
-        }
-        // 总金额=明细金额总计
-        if(purchaseOrder.getTotalAmount().compareTo(purchaseOrder.getTotalItemAmount()) != 0){
-            return "采购单总金额与明细总金额不一致";
+        if(isNew){
+            if(CollectionUtils.isEmpty(purchaseOrder.getPurchaseOrderItemList())){
+                return "请录入采购单明细";
+            }
+            // 总数量=明细数量总计
+            if(purchaseOrder.getTotalQuantity() != purchaseOrder.getTotalItemQuantity()){
+                return "采购单总数量与明细总数量不一致";
+            }
+            // 总金额=明细金额总计
+            if(purchaseOrder.getTotalAmount().compareTo(purchaseOrder.getTotalItemAmount()) != 0){
+                return "采购单总金额与明细总金额不一致";
+            }
         }
         return null;
     }
@@ -440,7 +446,7 @@ public class InventoryServiceImpl implements InventoryService{
     @Override
     public ResultHandle<InventoryVerification> saveInventoryVerification(InventoryVerification inventoryVerification) {
         ResultHandle<InventoryVerification> resultHandle = new ResultHandle<>();
-        String errorMsg = checkInventoryVerifation(inventoryVerification);
+        String errorMsg = checkInventoryVerifation(inventoryVerification, true);
         if(StringUtils.isNotEmpty(errorMsg)){
             resultHandle.setMsg(errorMsg);
             return resultHandle;
@@ -449,13 +455,13 @@ public class InventoryServiceImpl implements InventoryService{
         // 初始化盘点单信息
         initInvtVerifInfo(inventoryVerification);
 
-        // 保存采购单
+        // 保存盘点单
         int result = inventoryDao.saveInvtVerif(inventoryVerification);
         if(result <= 0){
             throw new InventoryException("盘点单保存失败");
         }
 
-        // 保存采购单明细
+        // 保存盘点单明细
         initInvtVerifItem(inventoryVerification);
         result = inventoryDao.insertInvtVerifItemBatch(inventoryVerification.getInvtVerifItemList());
         if(result <= 0){
@@ -520,12 +526,17 @@ public class InventoryServiceImpl implements InventoryService{
      * @param inventoryVerification
      * @return
      */
-    private String checkInventoryVerifation(InventoryVerification inventoryVerification) {
+    private String checkInventoryVerifation(InventoryVerification inventoryVerification, boolean isNew) {
         if(inventoryVerification.getStoreId() == 0){
             return "请选择门店";
         }
         if(inventoryVerification.getBusinessmanId() == 0){
             return "请选择业务员";
+        }
+        if(isNew){
+            if(CollectionUtils.isEmpty(inventoryVerification.getInvtVerifItemList())){
+                return "请添加盘点明细";
+            }
         }
         return null;
     }
@@ -534,5 +545,93 @@ public class InventoryServiceImpl implements InventoryService{
     @Override
     public List<InventoryVerificationVo> fetchInvntVerifVoList() {
         return inventoryDao.fetchInvntVerifVoList();
+    }
+
+    @Override
+    public ResultHandle<InventoryVerification> removeInvntVerification(int id) {
+        ResultHandle<InventoryVerification> resultHandle = new ResultHandle<>();
+        InventoryVerification inventoryVerification = getInvntVerificationById(id);
+        if(inventoryVerification == null){
+            resultHandle.setMsg("盘点单不存在");
+            return resultHandle;
+        }
+
+        int result = inventoryDao.removeInvntVerification(id);
+        if(result > 0){
+            List<InventoryVerificationItem> items = inventoryVerification.getInvtVerifItemList();
+            for(InventoryVerificationItem item : items){
+                // 若是盘盈，则扣减库存，若是盘亏，则增加库存(与保存盘点单是相反)
+                updateMard(item.getMaterielId(), inventoryVerification.getStoreId(),
+                        item.isWin() ? (-item.getQuantity()) : item.getQuantity());
+            }
+        }
+        return resultHandle;
+    }
+
+    @Override
+    public ResultHandle<InventoryVerification> updateInvntVerification(InventoryVerification inventoryVerification) {
+        ResultHandle<InventoryVerification> resultHandle = new ResultHandle<>();
+        String errorMsg = checkInventoryVerifation(inventoryVerification, false);
+        if(StringUtils.isNotEmpty(errorMsg)){
+            resultHandle.setMsg(errorMsg);
+            return resultHandle;
+        }
+
+        if(inventoryVerification.getVerifDate() == null){
+            inventoryVerification.setVerifDate(new Date());
+        }
+
+        inventoryDao.updateInvntVerification(inventoryVerification);
+
+        return resultHandle;
+    }
+
+    @Override
+    public ResultHandle<InventoryVerificationItem> saveInvntVerificationItem(InventoryVerificationItem item) {
+        ResultHandle<InventoryVerificationItem> resultHandle = new ResultHandle<>();
+
+        InventoryVerification inventoryVerification = getInvntVerificationById(item.getInventoryVerificationId());
+        if(inventoryVerification == null){
+            resultHandle.setMsg("盘点单不存在");
+            return resultHandle;
+        }
+
+        int result = inventoryDao.saveInvntVerificationItem(item);
+
+        if(result > 0){
+            // 更新库存
+            // 盘盈了增加库存，盘亏了扣减库存
+            updateMard(item.getMaterielId(), inventoryVerification.getStoreId(),
+                    item.isWin() ? item.getQuantity() : (-item.getQuantity()));
+        }
+
+        resultHandle.setReturnContent(item);
+        return resultHandle;
+    }
+
+    @Override
+    public ResultHandle<InventoryVerificationItem> removeInvntVerificationItem(int id) {
+        ResultHandle<InventoryVerificationItem> resultHandle = new ResultHandle<>();
+        InventoryVerificationItem item = inventoryDao.getInvntVerificationItemById(id);
+        if(item == null){
+            resultHandle.setMsg("盘点明细不存在");
+            return resultHandle;
+        }
+        int result = inventoryDao.removeInvntVerificationItem(id);
+        if(result > 0){
+            InventoryVerification inventoryVerification = getInvntVerificationById(item.getInventoryVerificationId());
+            // 更新库存
+            updateMard(item.getMaterielId(), inventoryVerification.getStoreId(),
+                    item.isWin() ? (-item.getQuantity()) : item.getQuantity());
+        }
+        return resultHandle;
+    }
+
+    @Override
+    public InventoryVerification getInvntVerificationById(int id) {
+        InventoryVerification inventoryVerification = inventoryDao.getInvntVerificationById(id);
+        List<InventoryVerificationItem> itemList = inventoryDao.fetchInvntVerificationItemList(inventoryVerification.getId());
+        inventoryVerification.setInvtVerifItemList(itemList);
+        return inventoryVerification;
     }
 }

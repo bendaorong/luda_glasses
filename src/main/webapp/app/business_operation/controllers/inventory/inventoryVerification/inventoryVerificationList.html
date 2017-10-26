@@ -20,10 +20,10 @@
                 <td data-title="'门店'" sortable="'code'">{{order.storeName}}</td>
                 <td data-title="'业务员'" sortable="'code'">{{order.businessmanName}}</td>
                 <td data-title="'操作'">
-                    <!--<button type="button" class="btn btn-sm btn-primary"-->
-                            <!--ng-click="gotoEdit(order.purchaseOrderId)">编辑</button>-->
-                    <!--<button type="button" class="btn btn-sm btn-primary"-->
-                            <!--ng-click="removePurchaseOrder(order.purchaseOrderId)">删除</button>-->
+                    <button type="button" class="btn btn-sm btn-primary"
+                            ng-click="gotoEdit(order.id)">编辑</button>
+                    <button type="button" class="btn btn-sm btn-primary"
+                            ng-click="removeInvntVerification(order.id)">删除</button>
                 </td>
             </tr>
         </table>

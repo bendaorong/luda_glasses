@@ -1,19 +1,27 @@
 package com.luda.inventory.model;
 
+import com.luda.materiel.model.MaterielModel;
+
+import java.io.Serializable;
+
 /**
  * 库存盘点明细
  * Created by Administrator on 2017/10/24.
  */
-public class InventoryVerificationItem {
+public class InventoryVerificationItem implements Serializable {
     private int id;
     /**
-     * 盘点Id
+     * 盘点单Id
      */
     private int inventoryVerificationId;
     /**
      * 商品
      */
     private int materielId;
+    /**
+     * 商品
+     */
+    private MaterielModel materiel;
     /**
      * (盘盈盘亏)数量
      */
@@ -26,6 +34,30 @@ public class InventoryVerificationItem {
      * 备注
      */
     private String remark;
+
+    /**
+     * 盘盈
+     * @return
+     */
+    public boolean isWin(){
+        return "01".equals(type);
+    }
+
+    /**
+     * 盘亏
+     * @return
+     */
+    public boolean isLose(){
+        return "02".equals(type);
+    }
+
+    public MaterielModel getMateriel() {
+        return materiel;
+    }
+
+    public void setMateriel(MaterielModel materiel) {
+        this.materiel = materiel;
+    }
 
     public int getId() {
         return id;
@@ -81,6 +113,7 @@ public class InventoryVerificationItem {
                 "id=" + id +
                 ", inventoryVerificationId=" + inventoryVerificationId +
                 ", materielId=" + materielId +
+                ", materiel=" + materiel +
                 ", quantity=" + quantity +
                 ", type='" + type + '\'' +
                 ", remark='" + remark + '\'' +

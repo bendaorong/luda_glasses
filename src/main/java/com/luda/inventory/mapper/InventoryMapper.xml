@@ -64,6 +64,16 @@
         <result property="businessmanName" column="real_name"/>
     </resultMap>
 
+    <resultMap id="invntVerifItemMap" type="com.luda.inventory.model.InventoryVerificationItem">
+        <id property="id" column="id"/>
+        <result property="inventoryVerificationId" column="inventory_verification_id"/>
+        <result property="materielId" column="materiel_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="type" column="invnt_type"/>
+        <result property="remark" column="remark"/>
+        <association property="materiel" column="materiel_id" select="com.luda.materiel.dao.MaterielDao.getById"/>
+    </resultMap>
+
     <select id="getPurchaseOrderMaxCode" resultType="java.lang.String">
         select max(code) from purchase_order
     </select>
@@ -178,6 +188,7 @@
         left join admin_user_detail u
         on po.businessman_id = u.admin_user_id
         where po.delete_flag = 0
+        order by po.purchase_order_id desc
     </select>
 
     <select id="getPurchaseOrderById" resultMap="purchaseOrderMap">
@@ -215,11 +226,8 @@
         update purchase_order
         SET
             purchase_date = #{purchaseDate},
-            store_id = #{storeId},
             supplier_id = #{supplierId},
             businessman_id = #{businessmanId},
-            total_quantity = #{totalQuantity},
-            total_amount = #{totalAmount},
             remark = #{remark},
             update_user_id = #{updateUserId},
             update_time = now()
@@ -306,4 +314,54 @@
             #{remark}
         )
     </insert>
+
+    <update id="removeInvntVerification">
+        update inventory_verification set delete_flag = 1 where id = #{id}
+    </update>
+
+    <select id="getInvntVerificationById" resultMap="invntVerifMap">
+        select * from inventory_verification where id = #{id} and delete_flag = 0
+    </select>
+
+    <select id="fetchInvntVerificationItemList" resultMap="invntVerifItemMap">
+        select * from inventory_verification_item where inventory_verification_id = #{inventoryVerificationId}
+    </select>
+
+    <update id="updateInvntVerification" parameterType="com.luda.inventory.model.InventoryVerification">
+        update inventory_verification
+        set
+            verif_date = #{verifDate},
+            businessman_id = #{businessmanId},
+            remark = #{remark},
+            update_user_id = #{updateUserId},
+            update_time = now()
+        where id = #{id}
+    </update>
+
+    <insert id="saveInvntVerificationItem" parameterType="com.luda.inventory.model.InventoryVerificationItem"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO inventory_verification_item
+            (
+                inventory_verification_id,
+                materiel_id,
+                quantity,
+                invnt_type,
+                remark
+            )
+            VALUES (
+                #{inventoryVerificationId},
+                #{materielId},
+                #{quantity},
+                #{type},
+                #{remark}
+            )
+    </insert>
+
+    <delete id="removeInvntVerificationItem">
+        delete from inventory_verification_item where id = #{id}
+    </delete>
+
+    <select id="getInvntVerificationItemById" resultMap="invntVerifItemMap">
+        select * from inventory_verification_item where id = #{id}
+    </select>
 </mapper>
