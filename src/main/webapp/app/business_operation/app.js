@@ -109,6 +109,15 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/editCustomer/:customerId",{
         templateUrl : "app/business_operation/controllers/customer/editCustomer.html",
         controller : "editCustomerController"
+    }).when("/transferOrderManage", {
+        templateUrl : "app/business_operation/controllers/inventory/transfer/transferList.html",
+        controller : "transferOrderManageController"
+    }).when("/addTransferOrder", {
+        templateUrl : "app/business_operation/controllers/inventory/transfer/newTransfer.html",
+        controller : "addTransferOrderController"
+    }).when("/editTransferOrder/:id", {
+        templateUrl : "app/business_operation/controllers/inventory/transfer/editTransfer.html",
+        controller : "editTransferOrderController"
     }).otherwise({
 		redirectTo : "/"
 	})
@@ -536,7 +545,6 @@ businessOperationApp.factory("inventoryService", function($http) {
             }).success(successCallback).error(errorCallback);
         },
         saveInvntVerificationItem : function (item, successCallback, errorCallback) {
-            console.log("111"+JSON.stringify(item));
             $http({
                 method:"POST",
                 url:"/luda_glasses/rest/inventory/inventoryVerification/saveInvntVerificationItem",
@@ -548,6 +556,49 @@ businessOperationApp.factory("inventoryService", function($http) {
                 method:"POST",
                 url:"/luda_glasses/rest/inventory/inventoryVerification/removeInvntVerificationItem/" + id
             }).success(successCallback).error(errorCallback);
+        },
+        fetchTransferOrders : function (successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/inventory/transfer/fetchTransferOrders").success(successCallback).error(errorCallback);
+        },
+        getTransferOrderById : function (id, successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/inventory/transfer/getTransferOrderById/" + id).success(successCallback).error(errorCallback);
+        },
+        saveTransferOrder : function (transferOrder, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/transfer/saveTransferOrder",
+                data:transferOrder
+            }).success(successCallback).error(errorCallback);
+        },
+        updateTransferOrder : function (transferOrder, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/transfer/updateTransferOrder",
+                data:transferOrder
+            }).success(successCallback).error(errorCallback);
+        },
+        removeTransferOrder : function (id, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/transfer/removeTransferOrder/" + id
+            }).success(successCallback).error(errorCallback);
+        },
+        removeTransferOrderItem : function (itemId, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/transfer/removeTransferOrderItem/" + itemId
+            }).success(successCallback).error(errorCallback);
+        },
+        saveTransferOrderItem : function (transferOrderItem, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/transfer/saveTransferOrderItem",
+                data:transferOrderItem
+            }).success(successCallback).error(errorCallback);
+        },
+        getMard : function (materielId, storeId, successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/inventory/mard/getMard/" + materielId + "/" + storeId)
+                .success(successCallback).error(errorCallback);
         }
     }
 });

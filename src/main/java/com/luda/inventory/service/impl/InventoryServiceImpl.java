@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-
-import javax.xml.transform.Result;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -29,6 +27,8 @@ public class InventoryServiceImpl implements InventoryService{
     private static String PURCHASE_ORDER_CURRENT_CODE = null;
     // 库存盘点单编号缓存
     private static String INVENTORY_VERIFICATION_CURRENT_CODE = null;
+    // 调拨单编号缓存
+    private static String TRANSFER_ORDER_CURRENT_CODE = null;
 
     @Autowired
     private InventoryDao inventoryDao;
@@ -270,6 +270,11 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
+    public Mard getMard(int materielId, int storeId){
+        return inventoryDao.getMard(materielId, storeId);
+    }
+
+    @Override
     public List<PurchaseOrderVo> fetchPurchaseOrderVoList() {
         return inventoryDao.fetchPurchaseOrderVoList();
     }
@@ -405,6 +410,26 @@ public class InventoryServiceImpl implements InventoryService{
 
         // 刷新缓存
         INVENTORY_VERIFICATION_CURRENT_CODE = nextCode;
+
+        return nextCode;
+    }
+
+    /**
+     * 获取调拨单编号
+     * 商品编号格式：1710200001，171020为当前日期，0001为当前计数
+     * 从缓存计数器中获取商品编号最新值，若为当天的，则计数部分+1，
+     * 若不是当天的，生成当天日期前缀，并从1开始计数，不足4位补0
+     **/
+    private synchronized String getTransferOrderCode() {
+        // 取商品最大编号初始化缓存数据
+        if(StringUtils.isEmpty(TRANSFER_ORDER_CURRENT_CODE)){
+            TRANSFER_ORDER_CURRENT_CODE = inventoryDao.getTransferOrderMaxCode();
+        }
+
+        String nextCode = CodeBuilder.buildTransferOrderCode(TRANSFER_ORDER_CURRENT_CODE);
+
+        // 刷新缓存
+        TRANSFER_ORDER_CURRENT_CODE = nextCode;
 
         return nextCode;
     }
@@ -633,5 +658,210 @@ public class InventoryServiceImpl implements InventoryService{
         List<InventoryVerificationItem> itemList = inventoryDao.fetchInvntVerificationItemList(inventoryVerification.getId());
         inventoryVerification.setInvtVerifItemList(itemList);
         return inventoryVerification;
+    }
+
+    @Override
+    public ResultHandle<TransferOrder> saveTransferOrder(TransferOrder transferOrder) {
+        ResultHandle<TransferOrder> resultHandle = new ResultHandle<>();
+        // 验证数据
+        String errorMsg = checkTransferOrder(transferOrder, true);
+        if(StringUtils.isNotEmpty(errorMsg)){
+            resultHandle.setMsg(errorMsg);
+            return resultHandle;
+        }
+        // 初始化数据
+        initTransferOrder(transferOrder, true);
+        // 保存调拨单
+        inventoryDao.saveTransferOrder(transferOrder);
+        // 保存调拨明细
+        for(TransferOrderItem item : transferOrder.getTransferOrderItems()){
+            item.setTransferOrderId(transferOrder.getId());
+            inventoryDao.saveTransferOrderItem(item);
+        }
+        // 更新库存
+        for(TransferOrderItem item : transferOrder.getTransferOrderItems()){
+            // 调出门店扣减商品库存
+            updateMard(item.getMaterielId(), transferOrder.getOutStoreId(), -item.getQuantity());
+            // 调入门店增加商品库存
+            updateMard(item.getMaterielId(), transferOrder.getInStoreId(), item.getQuantity());
+        }
+        return resultHandle;
+    }
+
+    /**
+     * 初始化调拨单数据
+     * @param transferOrder
+     * @param isNew
+     */
+    private void initTransferOrder(TransferOrder transferOrder, boolean isNew) {
+        if(transferOrder.getTransferDate() == null){
+            transferOrder.setTransferDate(new Date());
+        }
+        // 新增调拨单设置编号
+        if(isNew){
+            transferOrder.setCode(getTransferOrderCode());
+        }
+    }
+
+    /**
+     * 验证调拨单信息
+     * @param transferOrder
+     * @param isNew 是否为新增
+     * @return
+     */
+    private String checkTransferOrder(TransferOrder transferOrder, boolean isNew) {
+        // 调出门店
+        if(transferOrder.getOutStoreId() <= 0){
+            return "请选择调出门店";
+        }
+        // 调入门店
+        if(transferOrder.getInStoreId() <= 0){
+            return "请选择调入门店";
+        }
+        // 调出门店与调入门店不同
+        if(transferOrder.getOutStoreId() == transferOrder.getInStoreId()){
+            return "调出门店与调入门店不可相同";
+        }
+        // 新增时明细验证
+        if(isNew){
+            if(CollectionUtils.isEmpty(transferOrder.getTransferOrderItems())){
+                return "请添加调拨明细";
+            }
+            // 验证库存数量
+            for(TransferOrderItem item : transferOrder.getTransferOrderItems()){
+                Mard outMard = inventoryDao.lockMard(item.getMaterielId(), transferOrder.getOutStoreId());
+                if(outMard == null){
+                    return "调拨商品库存不存在";
+                }
+                if(outMard.getCurrentInventory() < item.getQuantity()){
+                    return "调拨商品库存不足";
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<TransferOrderVo> fetchTransferOrders() {
+        return inventoryDao.fetchTransferOrders();
+    }
+
+    @Override
+    public TransferOrder getTransferOrderWithItemsById(int id) {
+        TransferOrder transferOrder = inventoryDao.getTransferOrderById(id);
+        transferOrder.setTransferOrderItems(inventoryDao.getTransferOrderItems(transferOrder.getId()));
+        return transferOrder;
+    }
+
+    @Override
+    public ResultHandle<TransferOrderItem> removeTransferOrderItem(int itemId) {
+        ResultHandle<TransferOrderItem> resultHandle = new ResultHandle<>();
+        TransferOrderItem item = inventoryDao.getTransferOrderItemById(itemId);
+        if(item == null){
+            resultHandle.setMsg("调拨明细不存在");
+            return resultHandle;
+        }
+        int result = inventoryDao.removeTransferOrderItem(itemId);
+        if(result > 0){
+            TransferOrder transferOrder = inventoryDao.getTransferOrderById(item.getTransferOrderId());
+            // 更新库存,将调拨的库存原路返换
+            // 调入门店扣减库存
+            updateMard(item.getMaterielId(), transferOrder.getInStoreId(), -item.getQuantity());
+            // 调出门店增加库存
+            updateMard(item.getMaterielId(), transferOrder.getOutStoreId(), item.getQuantity());
+        }
+        return resultHandle;
+    }
+
+    @Override
+    public ResultHandle<TransferOrderItem> saveTransferOrderItem(TransferOrderItem transferOrderItem) {
+        ResultHandle<TransferOrderItem> resultHandle = new ResultHandle<>();
+
+        TransferOrder transferOrder = inventoryDao.getTransferOrderById(transferOrderItem.getTransferOrderId());
+        String errorMsg = checkTransferOrderItem(transferOrderItem, transferOrder);
+        if(StringUtils.isNotEmpty(errorMsg)){
+            resultHandle.setMsg(errorMsg);
+            return resultHandle;
+        }
+
+        // 保存明细
+        int result = inventoryDao.saveTransferOrderItem(transferOrderItem);
+        if(result > 0){
+            resultHandle.setReturnContent(transferOrderItem);
+            // 更新库存
+            // 调出门店扣减库存
+            updateMard(transferOrderItem.getMaterielId(), transferOrder.getOutStoreId(), -transferOrderItem.getQuantity());
+            // 调入门店增加库存
+            updateMard(transferOrderItem.getMaterielId(), transferOrder.getInStoreId(), transferOrderItem.getQuantity());
+        }else {
+            resultHandle.setMsg("明细添加失败");
+        }
+        return resultHandle;
+    }
+
+    /**
+     * 验证调拨明细
+     * @param transferOrderItem
+     * @return
+     */
+    private String checkTransferOrderItem(TransferOrderItem transferOrderItem, TransferOrder transferOrder) {
+        if(transferOrderItem.getTransferOrderId() <= 0){
+            return "调拨单号为空";
+        }
+        if(transferOrderItem.getMaterielId() <= 0){
+            return "请选择商品";
+        }
+        if(transferOrderItem.getQuantity() <= 0){
+            return "请输入调拨数量";
+        }
+        if(transferOrder == null){
+            return "调拨单不存在";
+        }
+        // 验证库存数量
+        Mard outMard = inventoryDao.lockMard(transferOrderItem.getMaterielId(), transferOrder.getOutStoreId());
+        if(outMard == null){
+            return "调拨商品库存不存在";
+        }
+        if(outMard.getCurrentInventory() < transferOrderItem.getQuantity()){
+            return "调拨商品库存不足";
+        }
+        return null;
+    }
+
+    @Override
+    public ResultHandle updateTransferOrder(TransferOrder transferOrder) {
+        ResultHandle<TransferOrder> resultHandle = new ResultHandle<>();
+        initTransferOrder(transferOrder, false);
+        int result = inventoryDao.updateTransferOrder(transferOrder);
+        if(result <= 0){
+            resultHandle.setMsg("调拨单更新失败");
+        }
+        return resultHandle;
+    }
+
+    @Override
+    public ResultHandle<TransferOrder> removeTransferOrder(int id) {
+        ResultHandle<TransferOrder> resultHandle = new ResultHandle<>();
+        TransferOrder transferOrder = getTransferOrderWithItemsById(id);
+        if(transferOrder == null){
+            resultHandle.setMsg("调拨单不存在");
+            return resultHandle;
+        }
+
+        // 删除调拨单
+        int result = inventoryDao.removeTransferOrder(id);
+        if(result > 0){
+            // 返还商品库存
+            for(TransferOrderItem item : transferOrder.getTransferOrderItems()){
+                // 调入门店扣减库存
+                updateMard(item.getMaterielId(), transferOrder.getInStoreId(), -item.getQuantity());
+                // 调出门店增加库存
+                updateMard(item.getMaterielId(), transferOrder.getOutStoreId(), item.getQuantity());
+            }
+        }else {
+            resultHandle.setMsg("调拨单删除失败");
+        }
+
+        return resultHandle;
     }
 }

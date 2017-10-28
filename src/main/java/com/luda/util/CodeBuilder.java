@@ -57,10 +57,6 @@ public class CodeBuilder {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(buildPurchaseOrderCode("CR171020003"));
-    }
-
     /**
      * 生成库存盘点单编号
      * @param currentCode
@@ -82,5 +78,32 @@ public class CodeBuilder {
         }else {
             return "PD" + today + String.format("%04d", 1);
         }
+    }
+
+    /**
+     * 生成调拨单编号
+     * @param currentCode
+     * @return
+     */
+    public static String buildTransferOrderCode(String currentCode) {
+        String today = DateFormatUtils.format(new Date(), "yyMMdd");
+
+        // 当前编号为空，则取今天第一个
+        if(StringUtils.isEmpty(currentCode)){
+            return "DB" + today + String.format("%04d", 1);
+        }
+
+        String dateSuffix = currentCode.substring(0, 8);
+        String count = currentCode.substring(8);
+
+        if(dateSuffix.equals("DB" + today)){
+            return dateSuffix + String.format("%04d", Integer.parseInt(count) + 1);
+        }else {
+            return "DB" + today + String.format("%04d", 1);
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(buildPurchaseOrderCode("CR171020003"));
     }
 }

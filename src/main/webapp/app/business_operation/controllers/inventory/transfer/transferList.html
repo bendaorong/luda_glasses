@@ -1,0 +1,33 @@
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
+        <div class="seat-manage-operate-container">
+            <h5 class="seat-manage-operate-title">调拨单管理</h5>
+            <div class="seat-manage-operate-button form-inline">
+                <a type="button" class="btn btn-success btn-sm" href="#addTransferOrder"> 新增</a>
+                <input class="form-control" ng-model="filterText" ng-change="filter()"
+                       placeHolder="{{'BUSINESS_OPERATION_PRODUCT_SEARCH'|translate}}">
+                <button type="button" class="btn btn-sm btn-primary" ng-click="refresh()">
+                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+        <hr>
+
+        <table ng-table="tableParams" class="table table-bordered">
+            <tr ng-repeat="transfer in $data|filter:filterText">
+                <td data-title="'编号'" sortable="'code'">{{transfer.code}}</td>
+                <td data-title="'调拨日期'" sortable="'code'">{{transfer.transferDate}}</td>
+                <td data-title="'调出门店'" sortable="'code'">{{transfer.outStoreName}}</td>
+                <td data-title="'调入门店'" sortable="'code'">{{transfer.inStoreName}}</td>
+                <td data-title="'业务员'" sortable="'code'">{{transfer.businessmanName}}</td>
+                <td data-title="'操作'">
+                    <button type="button" class="btn btn-sm btn-primary"
+                            ng-click="gotoEdit(transfer.id)">编辑</button>
+                    <button type="button" class="btn btn-sm btn-primary"
+                            ng-click="removeTransferOrder(transfer.id)">删除</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>

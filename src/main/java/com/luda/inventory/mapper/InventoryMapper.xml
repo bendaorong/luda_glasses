@@ -74,6 +74,35 @@
         <association property="materiel" column="materiel_id" select="com.luda.materiel.dao.MaterielDao.getById"/>
     </resultMap>
 
+    <resultMap id="transferOrderMap" type="com.luda.inventory.model.TransferOrder">
+        <id property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="transferDate" column="transfer_date"/>
+        <result property="outStoreId" column="out_store_id"/>
+        <result property="inStoreId" column="in_store_id"/>
+        <result property="businessmanId" column="businessman_id"/>
+        <result property="remark" column="remark"/>
+        <result property="createUserId" column="create_user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUserId" column="update_user_id"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <resultMap id="transferOrderVoMap" type="com.luda.inventory.model.TransferOrderVo" extends="transferOrderMap">
+        <result property="outStoreName" column="out_store_name"/>
+        <result property="inStoreName" column="in_store_name"/>
+        <result property="businessmanName" column="real_name"/>
+    </resultMap>
+
+    <resultMap id="transferOrderItemMap" type="com.luda.inventory.model.TransferOrderItem">
+        <id property="itemId" column="id"/>
+        <result property="transferOrderId" column="inventory_transfer_id"/>
+        <result property="materielId" column="materiel_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="remark" column="remark"/>
+        <association property="materiel" column="materiel_id" select="com.luda.materiel.dao.MaterielDao.getById"/>
+    </resultMap>
+
     <select id="getPurchaseOrderMaxCode" resultType="java.lang.String">
         select max(code) from purchase_order
     </select>
@@ -173,6 +202,10 @@
             now()
         )
     </insert>
+
+    <select id="getMard" resultMap="mardMap">
+        select * from mard where materiel_id = #{materielId} and store_id = #{storeId}
+    </select>
 
     <select id="fetchMardVoList" resultMap="mardVoMap">
         select * from mard
@@ -364,4 +397,100 @@
     <select id="getInvntVerificationItemById" resultMap="invntVerifItemMap">
         select * from inventory_verification_item where id = #{id}
     </select>
+
+    <insert id="saveTransferOrder" parameterType="com.luda.inventory.model.TransferOrder"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into inventory_transfer
+        (
+            code,
+            transfer_date,
+            out_store_id,
+            in_store_id,
+            businessman_id,
+            remark,
+            create_user_id,
+            create_time,
+            update_user_id,
+            update_time
+        )
+        values
+        (
+            #{code},
+            #{transferDate},
+            #{outStoreId},
+            #{inStoreId},
+            #{businessmanId},
+            #{remark},
+            #{createUserId},
+            now(),
+            #{updateUserId},
+            now()
+        )
+    </insert>
+
+    <insert id="saveTransferOrderItem" parameterType="com.luda.inventory.model.TransferOrderItem"
+            useGeneratedKeys="true" keyProperty="itemId">
+        insert into inventory_transfer_item
+        (
+            inventory_transfer_id,
+            materiel_id,
+            quantity,
+            remark
+        )
+        values
+        (
+            #{transferOrderId},
+            #{materielId},
+            #{quantity},
+            #{remark}
+        )
+    </insert>
+
+    <select id="getTransferOrderMaxCode" resultType="java.lang.String">
+        select max(code) from inventory_transfer
+    </select>
+
+    <select id="fetchTransferOrders" resultMap="transferOrderVoMap">
+        select
+            t.*, u.real_name, s1.store_name as out_store_name, s2.store_name as in_store_name
+        from inventory_transfer t
+        left join admin_user_detail u
+        on t.businessman_id = u.admin_user_id
+        left join store s1
+        on t.out_store_id = s1.store_id
+        left join store s2
+        on t.in_store_id = s2.store_id
+        where t.delete_flag = 0 order by t.id desc
+    </select>
+
+    <select id="getTransferOrderById" resultMap="transferOrderMap">
+        select * from inventory_transfer where id = #{id} and delete_flag = 0
+    </select>
+
+    <select id="getTransferOrderItems" resultMap="transferOrderItemMap">
+        select * from inventory_transfer_item where inventory_transfer_id = #{transferOrderId}
+    </select>
+
+    <select id="getTransferOrderItemById" resultMap="transferOrderItemMap">
+        select * from inventory_transfer_item where id = #{itemId}
+    </select>
+
+    <delete id="removeTransferOrderItem">
+        delete from inventory_transfer_item where id = #{itemId}
+    </delete>
+
+    <update id="updateTransferOrder" parameterType="com.luda.inventory.model.TransferOrder">
+        update inventory_transfer
+        set
+            transfer_date = #{transferDate},
+            businessman_id = #{businessmanId},
+            remark = #{remark},
+            update_user_id = #{updateUserId},
+            update_time = now()
+        where id = #{id}
+    </update>
+
+    <update id="removeTransferOrder">
+        update inventory_transfer set delete_flag = 1 where id = #{id}
+    </update>
 </mapper>

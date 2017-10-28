@@ -89,4 +89,26 @@ public interface InventoryDao {
     int removeInvntVerificationItem(int id);
 
     InventoryVerificationItem getInvntVerificationItemById(int id);
+
+    int saveTransferOrder(TransferOrder transferOrder);
+
+    int saveTransferOrderItem(TransferOrderItem item);
+
+    String getTransferOrderMaxCode();
+
+    List<TransferOrderVo> fetchTransferOrders();
+
+    TransferOrder getTransferOrderById(int id);
+
+    List<TransferOrderItem> getTransferOrderItems(int transferOrderId);
+
+    Mard getMard(@Param("materielId") int materielId, @Param("storeId") int storeId);
+
+    TransferOrderItem getTransferOrderItemById(int itemId);
+
+    int removeTransferOrderItem(int itemId);
+
+    int updateTransferOrder(TransferOrder transferOrder);
+
+    int removeTransferOrder(int id);
 }

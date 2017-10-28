@@ -52,6 +52,27 @@ public class InventoryController extends BaseController{
     }
 
     /**
+     * 查询商品库存
+     */
+    @RequestMapping("/mard/getMard/{materielId}/{storeId}")
+    @ResponseBody
+    public String getMard(@PathVariable int materielId, @PathVariable int storeId){
+        String result = "";
+        try {
+            Mard mard = inventoryService.getMard(materielId, storeId);
+            if(mard == null){
+                result = getSuccessResult(0);
+            }else{
+                result = getSuccessResult(mard.getCurrentInventory());
+            }
+        }catch (Exception e){
+            log.error("fetch mard list error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
      * 查询采购单
      */
     @RequestMapping("/purchaseOrder/list")
@@ -427,6 +448,176 @@ public class InventoryController extends BaseController{
             }
         }catch (Exception e){
             log.error("removeInvntVerificationItem error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 查询调拨单列表
+     */
+    @RequestMapping("/transfer/fetchTransferOrders")
+    @ResponseBody
+    public String fetchTransferOrders(){
+        String result = "";
+        try {
+            List<TransferOrderVo> orderList = inventoryService.fetchTransferOrders();
+            String data = CommonUtils.convertBeanCollectionToJsonArray(orderList, null).toString();
+            result = getSuccessResult(data);
+        }catch (Exception e){
+            log.error("fetchTransferOrders error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 查询调拨单
+     */
+    @RequestMapping("/transfer/getTransferOrderById/{id}")
+    @ResponseBody
+    public String getTransferOrderById(@PathVariable int id){
+        String result = "";
+        try {
+            TransferOrder transferOrder = inventoryService.getTransferOrderWithItemsById(id);
+            String data = CommonUtils.convertBeanToJson(transferOrder, null).toString();
+            result = getSuccessResult(data);
+        }catch (Exception e){
+            log.error("getTransferOrderById error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 保存调拨单
+     * @param data
+     * @return
+     */
+    @RequestMapping("/transfer/saveTransferOrder")
+    @ResponseBody
+    public String saveTransferOrder(@RequestBody String data, HttpSession session){
+        String result = "";
+        try {
+            JSONObject transferOrderJson = JSONObject.fromObject(data);
+            JSONArray itemArr = transferOrderJson.getJSONArray("transferOrderItems");
+            transferOrderJson.remove("transferOrderItems");
+            TransferOrder transferOrder = CommonUtils.convertJsonToBean(transferOrderJson, TransferOrder.class);
+
+            List<TransferOrderItem> itemList = new ArrayList<>();
+            for(int i=0; i<itemArr.size(); i++){
+                JSONObject itemJson = itemArr.getJSONObject(i);
+                TransferOrderItem item = CommonUtils.convertJsonToBean(itemJson, TransferOrderItem.class);
+                itemList.add(item);
+            }
+            transferOrder.setTransferOrderItems(itemList);
+
+            // 创建人&更新人
+            AdminUserModel adminUserModel = getLoginUser(session);
+            transferOrder.setCreateUserId(adminUserModel.getAdminUserId());
+            transferOrder.setUpdateUserId(adminUserModel.getAdminUserId());
+
+            // 保存采购单和采购明细
+            ResultHandle resultHandle = inventoryService.saveTransferOrder(transferOrder);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("save transfer order error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    @RequestMapping("/transfer/removeTransferOrderItem/{itemId}")
+    @ResponseBody
+    public String removeTransferOrderItem(@PathVariable int itemId){
+        String result = "";
+        try {
+            ResultHandle<TransferOrderItem> resultHandle = inventoryService.removeTransferOrderItem(itemId);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("removeTransferOrderItem error, itemId:" + itemId, e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    @RequestMapping("/transfer/saveTransferOrderItem")
+    @ResponseBody
+    public String saveTransferOrderItem(@RequestBody TransferOrderItem transferOrderItem){
+        String result = "";
+        try {
+            ResultHandle<TransferOrderItem> resultHandle = inventoryService.saveTransferOrderItem(transferOrderItem);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult(resultHandle.getReturnContent());
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("saveTransferOrderItem error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 更新调拨单
+     * @param data
+     * @param session
+     * @return
+     */
+    @RequestMapping("/transfer/updateTransferOrder")
+    @ResponseBody
+    public String updateTransferOrder(@RequestBody String data, HttpSession session){
+        String result = "";
+        try {
+            // 调拨单
+            JSONObject transferOrderJson = JSONObject.fromObject(data);
+            transferOrderJson.remove("transferOrderItems");
+            TransferOrder transferOrder = CommonUtils.convertJsonToBean(transferOrderJson, TransferOrder.class);
+
+            // 更新人
+            AdminUserModel adminUserModel = getLoginUser(session);
+            transferOrder.setUpdateUserId(adminUserModel.getAdminUserId());
+
+            // 更新调拨单
+            ResultHandle resultHandle = inventoryService.updateTransferOrder(transferOrder);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("update transfer order error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 删除调拨单
+     * @return
+     */
+    @RequestMapping("/transfer/removeTransferOrder/{id}")
+    @ResponseBody
+    public String removeTransferOrder(@PathVariable int id){
+        String result = "";
+        try {
+            ResultHandle<TransferOrder> resultHandle = inventoryService.removeTransferOrder(id);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("remove transfer order error, id:" + id, e);
             result = getFailResult("系统异常");
         }
         return result;

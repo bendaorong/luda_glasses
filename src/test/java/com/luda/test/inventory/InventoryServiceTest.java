@@ -142,4 +142,48 @@ public class InventoryServiceTest extends SpringSimpleJunit{
         ResultHandle<InventoryVerification> resultHandle = inventoryService.removeInvntVerification(6);
         print(resultHandle.toString());
     }
+
+    @Test
+    public void testSaveTransferOrder(){
+        TransferOrder transferOrder = new TransferOrder();
+        transferOrder.setOutStoreId(1);
+        transferOrder.setInStoreId(2);
+        transferOrder.setBusinessmanId(1);
+
+        List<TransferOrderItem> itemList = new ArrayList<>();
+        transferOrder.setTransferOrderItems(itemList);
+
+        TransferOrderItem item1 = new TransferOrderItem();
+        item1.setMaterielId(60);
+        item1.setQuantity(100);
+        item1.setRemark("借你10个");
+        itemList.add(item1);
+
+        TransferOrderItem item2 = new TransferOrderItem();
+        item2.setMaterielId(4);
+        item2.setQuantity(100);
+        item2.setRemark("借你10个");
+        itemList.add(item2);
+
+        ResultHandle<TransferOrder> resultHandle = inventoryService.saveTransferOrder(transferOrder);
+        print(resultHandle.toString());
+    }
+
+    @Test
+    public void testFetchTransferOrder(){
+        List<TransferOrderVo> list = inventoryService.fetchTransferOrders();
+        print(list.toString());
+    }
+
+    @Test
+    public void testGetTransferOrderWithItemsById(){
+        TransferOrder transferOrder = inventoryService.getTransferOrderWithItemsById(1);
+        print(transferOrder.toString());
+    }
+
+    @Test
+    public void testGetMard(){
+        Mard mard = inventoryService.getMard(1,1);
+        print(mard.toString());
+    }
 }

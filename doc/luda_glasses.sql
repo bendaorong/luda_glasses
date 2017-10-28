@@ -368,6 +368,7 @@ create table inventory_transfer
    create_time          datetime                       null,
    update_user_id       int(11)                        null,
    update_time          datetime                       null,
+   delete_flag          tinyint(1)                     default 0,
    PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

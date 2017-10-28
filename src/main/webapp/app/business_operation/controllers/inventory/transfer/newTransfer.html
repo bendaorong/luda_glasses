@@ -1,0 +1,194 @@
+<style type="text/css">
+    #myform input.ng-invalid.ng-dirty {
+        background-color: #FFC0CB;
+    }
+    .bg{display:none;position:fixed;width:100%;height:100%;background:lightgray;z-index:2;top:0;left:0;opacity:0.6;}
+    .content{
+        display:none;
+        width:400px;
+        height:500px;
+        position:fixed;
+        top:10%;
+        background:#fff;
+        z-index:3;
+        left:50%;
+        margin-left:-250px;
+        TEXT-ALIGN: center;
+        padding-left:15px;
+    }
+    table {
+        border: 1px solid lightgray;
+        width:95%;
+        border-collapse:collapse;
+        border-spacing:0;
+        empty-cells:hide;
+        word-break:break-all;
+        word-wrap:break-word;
+    }
+    table tr td {
+        height:30px;
+    }
+
+    p{
+        padding-top:10px;
+    }
+</style>
+
+<div class="alert alert-danger alert-dismissible fade in" role="alert"
+     ng-show="errorMsg!=null||errorMsg!=undefined">
+    <button type="button" class="close" ng-click="errorMsg=null"
+            aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p>{{errorMsg}}</p>
+</div>
+<div class="alert alert-success alert-dismissible fade in" role="alert"
+     ng-show="successMsg">
+    <button type="button" class="close" ng-click="successMsg=''"
+            aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p>{{successMsg}}</p>
+</div>
+
+<h3 class="seat-manage-operate-title" style="margin-bottom: 10px">新增调拨单</h3>
+<ul class="nav nav-tabs" role="tablist" ng-init="currentTab=0">
+    <li role="presentation" ng-class="{'active': currentTab===0}"><a
+            href="javascript(0)" ng-click="currentTab=0" role="tab"
+            data-toggle="tab">调拨单</a></li>
+    <li role="presentation" ng-class="{'active': currentTab===1}"><a
+            href="javascript(0)" role="tab" ng-click="currentTab=1"
+            data-toggle="tab">调拨单明细</a></li>
+</ul>
+
+<div class="tab-content">
+    <!-- 调拨单 -->
+    <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
+        <div class="seat-manage-operate-container">
+            <div class="seat-manage-operate-button form-inline">
+                <button class="btn btn-success btn-sm" ng-click="saveTransferOrder()" ng-disabled="!myform.$valid">保存</button>
+                <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
+            </div>
+        </div>
+
+        <div class="col-sm-12" style="margin-top: 10px;">
+            <form class="form-horizontal" novalidate id="myform" name="myform">
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">调拨日期</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input class="form-control" type="text"
+                               onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                               ng-model="newTransferOrder.transferDate" name="transferDate"
+                               id="transferDate" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">调出门店</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <select class="form-control"  ng-model="newTransferOrder.outStoreId">
+                            <option ng-repeat="store in storeList" value="{{store.storeId}}">{{store.storeName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">调入门店</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <select class="form-control"  ng-model="newTransferOrder.inStoreId">
+                            <option ng-repeat="store in storeList" value="{{store.storeId}}">{{store.storeName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">业务员</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <select class="form-control" ng-model="newTransferOrder.businessmanId">
+                            <option ng-repeat="adminUser in adminUserList" value="{{adminUser.adminUserId}}">{{adminUser.adminUserDetailModel.realname}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">备注</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <textarea rows="10" ng-model="newTransferOrder.remark" style="width:100%"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 调拨单明细 -->
+    <div role="tabpanel" class="tab-pane active" ng-show="currentTab===1">
+        <div class="seat-manage-operate-container">
+            <div class="seat-manage-operate-button form-inline">
+                <div style="text-align: center;">
+                    <button class="btn btn-success btn-sm" ng-click="newItem()">添加明细</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="oz-form-fields"  style="width:100%;padding-top: 5px">
+                <!-- 调拨单明细数据录入 -->
+                <table class="table table-bordered" style="margin-top: 10px;" id="itemContainer">
+                    <tr>
+                        <td>商品</td>
+                        <td>名称</td>
+                        <td>颜色</td>
+                        <td>条码</td>
+                        <td>商品类型</td>
+                        <td>规格型号</td>
+                        <td>调拨数量</td>
+                        <td>备注</td>
+                        <td>操作</td>
+                    </tr>
+                    <tr ng-repeat="item in transferOrderItems">
+                        <td>{{item.materiel.code}}</td>
+                        <td>{{item.materiel.name}}</td>
+                        <td>{{item.materiel.color}}</td>
+                        <td>{{item.materiel.barcode}}</td>
+                        <td>{{item.materiel.typeName}}</td>
+                        <td>{{item.materiel.specification}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td>{{item.remark}}</td>
+                        <td><button ng-click="delItem($index)">删除</button></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg"></div>
+<div class="content">
+    <table class="table table-bordered" style="margin-top: 10px;">
+        <tr>
+            <td>商品</td>
+            <td>
+                <select class="form-control" id="abc" ng-model="transferOrderItem.materielId">
+                    <option>请选择商品</option>
+                    <option ng-repeat="m in materielList" value="{{m.id}}">{{m.code}}</option>
+                </select>
+            </td>
+        </tr>
+        <tr><td>名称</td><td><input type="text" ng-model="selectedMateriel.name" ng-readonly="true"/></td></tr>
+        <tr><td>条码</td><td><input type="text" ng-model="selectedMateriel.barcode" ng-readonly="true"/></td></tr>
+        <tr>
+            <td>当前库存</td>
+            <td><input type="text" readonly="true" ng-model="selectedMateriel.currentInventory"/>
+            </td>
+        </tr>
+        <tr>
+            <td>调拨数量</td>
+            <td><input type="text" ng-model="transferOrderItem.quantity" min="1"/>
+            </td>
+        </tr>
+        <tr>
+            <td>备注</td><td><input type="text" ng-model="transferOrderItem.remark"/></td>
+        </tr>
+    </table>
+    <p>
+        <button ng-click="addItem()">添加</button>
+        <button ng-click="closeBtn()">关闭</button>
+    </p>
+</div>
+
+<script type="text/javascript" charset="utf-8" src="My97DatePicker/WdatePicker.js"></script>

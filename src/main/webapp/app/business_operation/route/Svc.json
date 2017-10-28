@@ -40,7 +40,7 @@
 	}, {
 		"id" : "200400",
 		"name" : "调拨单",
-		"page" : "#0"
+		"page" : "#transferOrderManage"
 	}]
 },{
 	"id" : "300",

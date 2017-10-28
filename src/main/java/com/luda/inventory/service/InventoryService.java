@@ -85,9 +85,76 @@ public interface InventoryService {
      */
     ResultHandle<InventoryVerification> removeInvntVerification(int id);
 
+    /**
+     * 更新库存盘点单
+     * @param inventoryVerification
+     * @return
+     */
     ResultHandle<InventoryVerification> updateInvntVerification(InventoryVerification inventoryVerification);
 
+    /**
+     * 保存库存盘点明细
+     * @param item
+     * @return
+     */
     ResultHandle<InventoryVerificationItem> saveInvntVerificationItem(InventoryVerificationItem item);
 
+    /**
+     * 删除库存盘点明细
+     * @param id
+     * @return
+     */
     ResultHandle<InventoryVerificationItem> removeInvntVerificationItem(int id);
+
+    /**
+     * 创建调拨单
+     * @param transferOrder 调拨单
+     */
+    ResultHandle<TransferOrder> saveTransferOrder(TransferOrder transferOrder);
+
+    /**
+     * 查询调拨单
+     */
+    List<TransferOrderVo> fetchTransferOrders();
+
+    /**
+     * 根据id查询调拨单(包含调拨单明细)
+     */
+    TransferOrder getTransferOrderWithItemsById(int id);
+
+    /**
+     * 获取门店商品库存
+     * @param materielId 商品id
+     * @param storeId 门店id
+     * @return
+     */
+    Mard getMard(int materielId, int storeId);
+
+    /**
+     * 删除调拨单明细
+     * @param itemId
+     * @return
+     */
+    ResultHandle<TransferOrderItem> removeTransferOrderItem(int itemId);
+
+    /**
+     * 保存调拨单明细
+     * @param transferOrderItem
+     * @return
+     */
+    ResultHandle<TransferOrderItem> saveTransferOrderItem(TransferOrderItem transferOrderItem);
+
+    /**
+     * 更新调拨单
+     * @param transferOrder
+     * @return
+     */
+    ResultHandle updateTransferOrder(TransferOrder transferOrder);
+
+    /**
+     * 删除调拨单
+     * @param id
+     * @return
+     */
+    ResultHandle<TransferOrder> removeTransferOrder(int id);
 }
