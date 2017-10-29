@@ -56,7 +56,7 @@
                             title : '成功',
                             message : '采购单删除成功'
                         });
-                        refresh();
+                        $scope.refresh();
                     }else {
                         BootstrapDialog.show({
                             type : BootstrapDialog.TYPE_DANGER,

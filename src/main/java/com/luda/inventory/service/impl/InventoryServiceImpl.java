@@ -60,8 +60,11 @@ public class InventoryServiceImpl implements InventoryService{
             throw new InventoryException("采购单明细保存失败");
         }
 
-        // 更新商品库存
-        syncUpdateMard(purchaseOrder);
+        // 更新商品库存,增加库存
+        //syncUpdateMard(purchaseOrder);
+        for(PurchaseOrderItem item : purchaseOrder.getPurchaseOrderItemList()){
+            updateMard(item.getMaterielId(), purchaseOrder.getStoreId(), item.getPurchaseQuantity());
+        }
 
         return resultHandle;
     }
@@ -295,23 +298,15 @@ public class InventoryServiceImpl implements InventoryService{
     @Override
     public ResultHandle removePurchaseOrder(int id) {
         ResultHandle resultHandle = new ResultHandle();
+        PurchaseOrder purchaseOrder = getPurchaseOrderById(id);
         // 删除采购单
         int result = inventoryDao.removePurchaseOrder(id);
         // 扣减商品库存
         if(result > 0){
-            // 收集商品库存
-            PurchaseOrder purchaseOrder = getPurchaseOrderById(id);
-            Map<Integer, Integer> invtMap = gatherInventoryFromItems(purchaseOrder.getPurchaseOrderItemList());
-
             // 扣减库存
-            Set<Map.Entry<Integer, Integer>> invtSet = invtMap.entrySet();
-            Iterator<Map.Entry<Integer, Integer>> iterator = invtSet.iterator();
-            while (iterator.hasNext()){
-                Map.Entry<Integer, Integer> entry = iterator.next();
-                // 锁库存
-                Mard mard = inventoryDao.lockMard(entry.getKey(), purchaseOrder.getStoreId());
-                if(mard != null){
-                    inventoryDao.updateMard(mard.getId(), -entry.getValue());
+            if(org.apache.commons.collections.CollectionUtils.isNotEmpty(purchaseOrder.getPurchaseOrderItemList())){
+                for(PurchaseOrderItem item : purchaseOrder.getPurchaseOrderItemList()){
+                    updateMard(item.getMaterielId(), purchaseOrder.getStoreId(), -item.getPurchaseQuantity());
                 }
             }
         }

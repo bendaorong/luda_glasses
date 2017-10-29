@@ -1,6 +1,5 @@
 package com.luda.sales.model;
 
-
 import org.apache.commons.collections.CollectionUtils;
 
 import java.io.Serializable;
@@ -9,22 +8,26 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 销售单&退货单
- * Created by Administrator on 2017/10/28.
+ * 退货单
+ * Created by Administrator on 2017/10/29.
  */
-public class SalesOrder implements Serializable {
+public class RefundOrder implements Serializable {
     /**
      * id
      */
     private int id;
     /**
-     * 销售单编号
+     * 编号
      */
     private String code;
     /**
-     * 销售日期
+     * 销售单id
      */
-    private Date saleDate;
+    private int salesOrderId;
+    /**
+     * 退货日期
+     */
+    private Date refundDate;
     /**
      * 门店
      */
@@ -38,15 +41,11 @@ public class SalesOrder implements Serializable {
      */
     private int customerId;
     /**
-     * 取货日期
-     */
-    private Date pickUpDate;
-    /**
-     * 总数量
+     * 退货数量
      */
     private int totalQuantity;
     /**
-     * 总金额
+     * 退货金额
      */
     private BigDecimal totalAmount;
     /**
@@ -70,14 +69,17 @@ public class SalesOrder implements Serializable {
      */
     private Date updateTime;
 
-    private List<SalesOrderItem> salesOrderItems;
+    /**
+     * 退款单明细
+     */
+    private List<RefundOrderItem> refundOrderItems;
 
-    public List<SalesOrderItem> getSalesOrderItems() {
-        return salesOrderItems;
+    public List<RefundOrderItem> getRefundOrderItems() {
+        return refundOrderItems;
     }
 
-    public void setSalesOrderItems(List<SalesOrderItem> salesOrderItems) {
-        this.salesOrderItems = salesOrderItems;
+    public void setRefundOrderItems(List<RefundOrderItem> refundOrderItems) {
+        this.refundOrderItems = refundOrderItems;
     }
 
     public int getId() {
@@ -96,12 +98,12 @@ public class SalesOrder implements Serializable {
         this.code = code;
     }
 
-    public Date getSaleDate() {
-        return saleDate;
+    public Date getRefundDate() {
+        return refundDate;
     }
 
-    public void setSaleDate(Date saleDate) {
-        this.saleDate = saleDate;
+    public void setRefundDate(Date refundDate) {
+        this.refundDate = refundDate;
     }
 
     public int getStoreId() {
@@ -126,14 +128,6 @@ public class SalesOrder implements Serializable {
 
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
-    }
-
-    public Date getPickUpDate() {
-        return pickUpDate;
-    }
-
-    public void setPickUpDate(Date pickUpDate) {
-        this.pickUpDate = pickUpDate;
     }
 
     public int getTotalQuantity() {
@@ -192,14 +186,22 @@ public class SalesOrder implements Serializable {
         this.updateTime = updateTime;
     }
 
+    public int getSalesOrderId() {
+        return salesOrderId;
+    }
+
+    public void setSalesOrderId(int salesOrderId) {
+        this.salesOrderId = salesOrderId;
+    }
+
     /**
-     * 获取销售明细总数量
+     * 获取退货商品总数量
      * @return
      */
-    public int getItemTotalQuantity(){
+    public int getItemTotalQuantity() {
         int quantity = 0;
-        if(CollectionUtils.isNotEmpty(salesOrderItems)){
-            for(SalesOrderItem item : salesOrderItems){
+        if(CollectionUtils.isNotEmpty(refundOrderItems)){
+            for(RefundOrderItem item : refundOrderItems){
                 quantity += item.getQuantity();
             }
         }
@@ -207,37 +209,16 @@ public class SalesOrder implements Serializable {
     }
 
     /**
-     * 获取销售明细总金额
+     * 获取退货商品总金额
      * @return
      */
-    public BigDecimal getItemTotalAmount(){
-        BigDecimal amount = new BigDecimal(0);
-        if(CollectionUtils.isNotEmpty(salesOrderItems)){
-            for(SalesOrderItem item : salesOrderItems){
+    public BigDecimal getItemTotalAmount() {
+        BigDecimal amount = BigDecimal.ZERO;
+        if(CollectionUtils.isNotEmpty(refundOrderItems)){
+            for(RefundOrderItem item : refundOrderItems){
                 amount = amount.add(item.getSellPrice().multiply(new BigDecimal(item.getQuantity())));
             }
         }
         return amount;
-    }
-
-    @Override
-    public String toString() {
-        return "SalesOrder{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", saleDate=" + saleDate +
-                ", storeId=" + storeId +
-                ", businessManId=" + businessManId +
-                ", customerId=" + customerId +
-                ", pickUpDate=" + pickUpDate +
-                ", totalQuantity=" + totalQuantity +
-                ", totalAmount=" + totalAmount +
-                ", remark='" + remark + '\'' +
-                ", createUserId=" + createUserId +
-                ", createTime=" + createTime +
-                ", updateUserId=" + updateUserId +
-                ", updateTime=" + updateTime +
-                ", salesOrderItems=" + salesOrderItems +
-                '}';
     }
 }

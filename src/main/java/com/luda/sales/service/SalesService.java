@@ -1,6 +1,7 @@
 package com.luda.sales.service;
 
 import com.luda.comm.po.ResultHandle;
+import com.luda.sales.model.RefundOrder;
 import com.luda.sales.model.SalesOrder;
 import com.luda.sales.model.SalesOrderItem;
 import com.luda.sales.model.SalesOrderVo;
@@ -47,5 +48,17 @@ public interface SalesService {
      */
     ResultHandle<SalesOrderItem> removeSalesOrderItem(int itemId);
 
+    /**
+     * 保存销售单明细
+     * @param salesOrderItem
+     * @return
+     */
     ResultHandle<SalesOrderItem> saveSalesOrderItem(SalesOrderItem salesOrderItem);
+
+    /**
+     * 保存退货单
+     * @param refundOrder
+     * @return
+     */
+    ResultHandle<RefundOrder> saveRefundOrder(RefundOrder refundOrder);
 }

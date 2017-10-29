@@ -127,6 +127,9 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/editSalesOrder/:id", {
         templateUrl : "app/business_operation/controllers/sales/editSalesOrder.html",
         controller : "editSalesOrderController"
+    }).when("/addRefundOrder/:id", {
+        templateUrl : "app/business_operation/controllers/sales/newRefundOrder.html",
+        controller : "addRefundOrderController"
     }).otherwise({
 		redirectTo : "/"
 	})
@@ -656,6 +659,13 @@ businessOperationApp.factory("salesService", function($http) {
             $http({
                 method:"POST",
                 url:"/luda_glasses/rest/sales/removeSalesOrder/" + id
+            }).success(successCallback).error(errorCallback);
+        },
+        saveRefundOrder : function (refundOrder, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/sales/saveRefundOrder",
+                data:refundOrder
             }).success(successCallback).error(errorCallback);
         }
     }

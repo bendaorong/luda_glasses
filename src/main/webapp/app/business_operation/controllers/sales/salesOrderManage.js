@@ -73,6 +73,11 @@
                 });
             }
         }
+
+        // 创建退货单
+        $scope.addRefundOrder = function (id) {
+            $location.path("/addRefundOrder/" + id);
+        }
     }).controller("addSalesOrderController", function($location,$scope,$filter,materielService,salesService,storeService,adminUserService,customerService) {
         setActiveSubPage($scope);
         $scope.roleCode = sessionStorage.getItem("roleCode");
@@ -518,6 +523,146 @@
 
         $scope.setCurrentTab = function(currentTab) {
             $scope.currentTab = currentTab;
+        }
+    }).controller("addRefundOrderController", function($scope, NgTableParams, $filter, $location, $routeParams, salesService,customerService, storeService, adminUserService) {
+        setActiveSubPage($scope);
+        $scope.roleCode = sessionStorage.getItem("roleCode");
+        $scope.currentTab = 0;
+
+        $scope.selectedSalesOrder = {}; //销售单
+        $scope.newRefundOrder = {}; //退货单
+
+        // 退货日期默认为当前时间
+        $scope.newRefundOrder.refundDate = $filter("date")(new Date(), "yyyy-MM-dd");
+        $scope.newRefundOrder.totalQuantity = 0;
+        $scope.newRefundOrder.totalAmount = 0;
+
+        $scope.storeList = []; //门店
+        $scope.adminUserList = []; //业务员
+        $scope.materielList = []; //商品
+        $scope.customerList = []; //客户
+
+        // 查询销售单
+        salesService.getSalesOrderWithItemsById($routeParams.id, function (data) {
+            $scope.selectedSalesOrder = data.data;
+            // 退货单信息
+            $scope.newRefundOrder.salesOrderId = $scope.selectedSalesOrder.id;
+            $scope.newRefundOrder.customerId = $scope.selectedSalesOrder.customerId;
+            $scope.newRefundOrder.storeId = $scope.selectedSalesOrder.storeId;
+        }, function (data) {
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取销售单失败：' + data.errorMsg
+            });
+        });
+
+        // 查询客户
+        customerService.fetchCustomerList(function (data) {
+            $scope.customerList = data;
+        }, function (data) {
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取客户列表错误' + data.errorMsg
+            });
+        });
+
+        // 查询门店
+        storeService.fetchStoreList(function(data){
+            $scope.storeList = data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取门店失败:' + data.errorMsg
+            });
+        });
+
+        // 查询业务员
+        adminUserService.fetchUserList(function(data){
+            $scope.adminUserList  =  data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取业务员失败:' + data.errorMsg
+            });
+        });
+
+        // 选择需要退货的商品明细
+        $scope.chooseItem = function (index) {
+            var item = $scope.selectedSalesOrder.salesOrderItems[index];
+            // 计算退货单的总数量和总金额
+            if($("#item_" + item.itemId).is(":checked")){
+                $scope.newRefundOrder.totalQuantity += item.quantity;
+                $scope.newRefundOrder.totalAmount += item.quantity * item.sellPrice;
+            }else {
+                $scope.newRefundOrder.totalQuantity -= item.quantity;
+                $scope.newRefundOrder.totalAmount -= item.quantity * item.sellPrice;
+            }
+        }
+
+        // 保存退货单
+        $scope.saveRefundOrder = function () {
+            var refundOrderItems = [];
+            //获取勾选的退货明细
+            $("input[name='refundItem']:checkbox:checked").each(function () {
+                for(var i=0; i<$scope.selectedSalesOrder.salesOrderItems.length; i++){
+                    var item_ = $scope.selectedSalesOrder.salesOrderItems[i];
+                    if(item_.itemId == $(this).val()){
+                        var refundOrderItem = {};
+                        refundOrderItem.salesOrderItemId = item_.itemId;
+                        refundOrderItem.materielId = item_.materielId;
+                        refundOrderItem.quantity = item_.quantity;
+                        refundOrderItem.sellPrice = item_.sellPrice;
+                        refundOrderItem.remark = item_.remark;
+                        refundOrderItems.push(refundOrderItem);
+                    }
+                }
+            });
+            console.log(JSON.stringify(refundOrderItems));
+            $scope.newRefundOrder.refundOrderItems = refundOrderItems;
+
+            if(refundOrderItems.length == 0){
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '警告',
+                    message : '请选择退货商品'
+                });
+                return false;
+            }
+
+            salesService.saveRefundOrder($scope.newRefundOrder, function (data) {
+                if(data.success){
+                    BootstrapDialog.show({
+                        type : BootstrapDialog.TYPE_SUCCESS,
+                        title : '成功',
+                        message : '退货单创建成功'
+                    });
+                    $location.path("/salesOrderManage");
+                }else {
+                    BootstrapDialog.show({
+                        type : BootstrapDialog.TYPE_DANGER,
+                        title : '失败',
+                        message : '退货单创建失败:' + data.errorMsg
+                    });
+                }
+            }, function (data) {
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '失败',
+                    message : '退货单创建失败:' + data.errorMsg
+                });
+            });
+        }
+
+        $scope.setCurrentTab = function(currentTab) {
+            $scope.currentTab = currentTab;
+        }
+
+        $scope.cancel = function(){
+            history.back();
         }
     });
 

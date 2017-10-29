@@ -2,9 +2,7 @@ package com.luda.sales.controller;
 
 import com.luda.comm.po.ResultHandle;
 import com.luda.common.controller.BaseController;
-import com.luda.sales.model.SalesOrder;
-import com.luda.sales.model.SalesOrderItem;
-import com.luda.sales.model.SalesOrderVo;
+import com.luda.sales.model.*;
 import com.luda.sales.service.SalesService;
 import com.luda.user.model.AdminUserModel;
 import com.luda.util.CommonUtils;
@@ -194,6 +192,32 @@ public class SalesController extends BaseController{
             }
         }catch (Exception e){
             log.error("removeSalesOrder error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 保存退款单
+     */
+    @RequestMapping("/saveRefundOrder")
+    @ResponseBody
+    public String saveRefundOrder(@RequestBody String data){
+        String result = "";
+        try {
+            JSONObject jsonData = JSONObject.fromObject(data);
+            Map classMap = new HashMap();
+            classMap.put("refundOrderItems", RefundOrderItem.class);
+            RefundOrder refundOrder = CommonUtils.convertJsonToBean_(jsonData, RefundOrder.class, classMap);
+
+            ResultHandle<RefundOrder> resultHandle = salesService.saveRefundOrder(refundOrder);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        } catch (Exception e){
+            log.error("saveRefundOrder error", e);
             result = getFailResult("系统异常");
         }
         return result;

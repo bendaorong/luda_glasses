@@ -3,6 +3,8 @@
 <mapper namespace="com.luda.sales.dao.SalesDao">
     <resultMap id="salesOrderMap" type="com.luda.sales.model.SalesOrder">
         <id property="id" column="id"/>
+        <result property="referenceId" column="reference_id"/>
+        <result property="orderType" column="order_type"/>
         <result property="code" column="code"/>
         <result property="saleDate" column="sale_date"/>
         <result property="storeId" column="store_id"/>
@@ -147,4 +149,65 @@
     <update id="removeSalesOrder">
         update sales_order set delete_flag = 1 where id = #{id}
     </update>
+
+    <select id="getMaxRefundOrderCode" resultType="java.lang.String">
+        select max(code) from refund_order
+    </select>
+
+    <insert id="saveRefundOrder" parameterType="com.luda.sales.model.RefundOrder"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into refund_order
+        (
+            sales_order_id,
+            code,
+            refund_date,
+            store_id,
+            businessman_id,
+            customer_id,
+            total_quantity,
+            total_amount,
+            remark,
+            create_user_id,
+            create_time,
+            update_user_id,
+            update_time
+        )
+        values
+        (
+            #{salesOrderId},
+            #{code},
+            #{refundDate},
+            #{storeId},
+            #{businessManId},
+            #{customerId},
+            #{totalQuantity},
+            #{totalAmount},
+            #{remark},
+            #{createUserId},
+            now(),
+            #{updateUserId},
+            now()
+        )
+    </insert>
+
+    <insert id="saveRefundOrderItem" parameterType="com.luda.sales.model.RefundOrderItem">
+        insert into refund_order_item
+        (
+            refund_order_id,
+            sales_order_item_id,
+            materiel_id,
+            quantity,
+            sell_price,
+            remark
+        )
+        values
+        (
+            #{refundOrderId},
+            #{salesOrderItemId},
+            #{materielId},
+            #{quantity},
+            #{sellPrice},
+            #{remark}
+        )
+    </insert>
 </mapper>

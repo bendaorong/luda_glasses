@@ -1,8 +1,6 @@
 package com.luda.sales.dao;
 
-import com.luda.sales.model.SalesOrder;
-import com.luda.sales.model.SalesOrderItem;
-import com.luda.sales.model.SalesOrderVo;
+import com.luda.sales.model.*;
 
 import java.util.List;
 
@@ -31,4 +29,10 @@ public interface SalesDao {
     void updateSalesOrderTotalQuantityAndTotalAmount(SalesOrder salesOrder);
 
     int removeSalesOrder(int id);
+
+    String getMaxRefundOrderCode();
+
+    int saveRefundOrder(RefundOrder refundOrder);
+
+    int saveRefundOrderItem(RefundOrderItem item);
 }

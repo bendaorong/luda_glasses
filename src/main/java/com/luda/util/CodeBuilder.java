@@ -127,6 +127,30 @@ public class CodeBuilder {
         }
     }
 
+    /**
+     * 生成退货单编号
+     * @param currentCode 当前编号
+     * @return
+     */
+    public static String buildRefundOrderCode(String currentCode) {
+        String prefix = "XT";
+        String today = DateFormatUtils.format(new Date(), "yyMMdd");
+
+        // 当前编号为空，则取今天第一个
+        if(StringUtils.isEmpty(currentCode)){
+            return prefix + today + String.format("%04d", 1);
+        }
+
+        String dateSuffix = currentCode.substring(0, 8);
+        String count = currentCode.substring(8);
+
+        if(dateSuffix.equals(prefix + today)){
+            return dateSuffix + String.format("%04d", Integer.parseInt(count) + 1);
+        }else {
+            return prefix + today + String.format("%04d", 1);
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println(buildSalesOrderCode("XS171020003"));
     }

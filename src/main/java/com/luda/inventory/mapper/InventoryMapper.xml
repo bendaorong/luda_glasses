@@ -147,7 +147,7 @@
         set
             total_quantity = #{totalQuantity},
             total_amount = #{totalAmount},
-            update_time = now
+            update_time = now()
         where purchase_order_id = #{purchaseOrderId}
     </update>
 

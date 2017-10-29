@@ -22,4 +22,10 @@ public class Constants {
      */
     public static final String INVNT_VERIF_TYPE_WIN = "01"; //盘盈
     public static final String INVNT_VERIF_TYPE_LOSE = "02"; //盘亏
+
+    /**
+     * 订单类型
+     */
+    public static final String ORDER_TYPE_SALE = "01"; //销售单
+    public static final String ORDER_TYPE_REFUND = "02"; //退货单
 }
