@@ -16,5 +16,9 @@ public enum DictionaryType {
     /**
      * 商品颜色
      */
-    GOODS_COLOR
+    GOODS_COLOR,
+    /**
+     * 地区(客户所在地区)
+     */
+    REGION
 }

@@ -6,11 +6,9 @@ import com.luda.materiel.model.MaterielModel;
 import com.luda.materiel.service.MaterielService;
 import com.luda.util.CodeBuilder;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**

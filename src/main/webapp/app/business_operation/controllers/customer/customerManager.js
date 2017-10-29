@@ -10,7 +10,7 @@
         }
 
         $scope.gotoEdit = function(customerId) {
-            $location.path("/editCustomer/" + storeId);
+            $location.path("/editCustomer/" + customerId);
         }
 
         // 显示门店列表
@@ -38,14 +38,14 @@
             $scope.$emit("loadingEnd");
         }
 
-        //删除门店
+        //删除客户
         $scope.removeCustomer = function(customerId){
-            if(confirm("确认删除门店吗？")){
+            if(confirm("确认删除客户吗？")){
                 customerService.removeCustomer(customerId, function(data){
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_SUCCESS,
                         title : '消息',
-                        message : '门店删除成功'
+                        message : '删除成功'
                     });
                     $scope.refresh();
                 },function(data){
@@ -57,8 +57,20 @@
                 });
             }
         }
-    }).controller("addCustomerController",function($location, $scope, customerService){
+    }).controller("addCustomerController",function($location, $scope, customerService, dictionaryService){
         $scope.newCustomer = {};
+        $scope.regionList = []; //地区
+
+        // 查询客户地区
+        dictionaryService.fetchDictionaryByType("REGION", function(data){
+            $scope.regionList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取地区失败:' + data.errorMsg
+            });
+        });
 
         //保存门店信息
         $scope.saveCustomer = function(){
@@ -67,14 +79,14 @@
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_SUCCESS,
                         title : '成功',
-                        message : '门店创建成功'
+                        message : '客户创建成功'
                     });
                     $location.path("/customerManage");
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,
                         title : '失败',
-                        message : '门店创建失败:'+data.errorMsg
+                        message : '客户创建失败:'+data.errorMsg
                     });
                 }
             },function(data){
@@ -89,8 +101,20 @@
         $scope.cancel = function(){
             history.back();
         }
-    }).controller("editCustomerController",function($location,$scope,$filter,customerService,$routeParams){
+    }).controller("editCustomerController",function($location,$scope,$filter,customerService,dictionaryService,$routeParams){
         $scope.selectCustomer={};
+        $scope.regionList = []; //地区
+
+        // 查询客户地区
+        dictionaryService.fetchDictionaryByType("REGION", function(data){
+            $scope.regionList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取地区失败:' + data.errorMsg
+            });
+        });
 
         customerService.getById($routeParams.customerId, function(data){
             $scope.selectCustomer = data;

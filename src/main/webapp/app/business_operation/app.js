@@ -118,6 +118,15 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/editTransferOrder/:id", {
         templateUrl : "app/business_operation/controllers/inventory/transfer/editTransfer.html",
         controller : "editTransferOrderController"
+    }).when("/salesOrderManage", {
+        templateUrl : "app/business_operation/controllers/sales/salesOrderList.html",
+        controller : "salesOrderManageController"
+    }).when("/addSalesOrder",{
+        templateUrl : "app/business_operation/controllers/sales/newSalesOrder.html",
+        controller : "addSalesOrderController"
+    }).when("/editSalesOrder/:id", {
+        templateUrl : "app/business_operation/controllers/sales/editSalesOrder.html",
+        controller : "editSalesOrderController"
     }).otherwise({
 		redirectTo : "/"
 	})
@@ -599,6 +608,93 @@ businessOperationApp.factory("inventoryService", function($http) {
         getMard : function (materielId, storeId, successCallback, errorCallback) {
             $http.get("/luda_glasses/rest/inventory/mard/getMard/" + materielId + "/" + storeId)
                 .success(successCallback).error(errorCallback);
+        }
+    }
+});
+
+/**
+ * 销售服务
+ */
+businessOperationApp.factory("salesService", function($http) {
+    return {
+        fetchSalesOrderVoList : function (successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/sales/fetchSalesOrderVoList")
+                .success(successCallback).error(errorCallback);
+        },
+        saveSalesOrder : function (salesOrder, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/sales/saveSalesOrder",
+                data:salesOrder
+            }).success(successCallback).error(errorCallback);
+        },
+        getSalesOrderWithItemsById : function (id, successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/sales/getSalesOrderWithItemsById/" + id)
+                .success(successCallback).error(errorCallback);
+        },
+        updateSalesOrder : function (salesOrder, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/sales/updateSalesOrder",
+                data:salesOrder
+            }).success(successCallback).error(errorCallback);
+        },
+        saveSalesOrderItem : function (salesOrderItem, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/sales/saveSalesOrderItem",
+                data:salesOrderItem
+            }).success(successCallback).error(errorCallback);
+        },
+        removeSalesOrderItem : function (itemId, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/sales/removeSalesOrderItem/" + itemId
+            }).success(successCallback).error(errorCallback);
+        },
+        removeSalesOrder : function (id, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/sales/removeSalesOrder/" + id
+            }).success(successCallback).error(errorCallback);
+        }
+    }
+});
+
+/**
+ * 客户管理
+ */
+businessOperationApp.factory("customerService", function($http) {
+    return {
+        fetchCustomerList : function(successCallback, errorCallback){
+            $http.get("/luda_glasses/rest/customer/list").success(successCallback).error(errorCallback);
+        },
+        removeCustomer:function(customerId,successCallback, errorCallback){
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/customer/removeCustomer/" + customerId
+            }).success(successCallback).error(errorCallback);
+        },
+        updateCustomer:function(selectedCustomer,successCallback, errorCallback){
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/customer/updateCustomer",
+                data:selectedCustomer
+            }).success(successCallback).error(errorCallback);
+        },
+        getById:function(customerId,successCallback, errorCallback){
+            $http({
+                method:"GET",
+                url:"/luda_glasses/rest/customer/getById/" + customerId,
+            }).success(successCallback).error(errorCallback);
+        },
+        addCustomer : function(newCustomer, successCallback, errorCallback){
+            console.log("newCustomer:" + JSON.stringify(newCustomer));
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/customer/addCustomer",
+                data:newCustomer
+            }).success(successCallback).error(errorCallback);
         }
     }
 });

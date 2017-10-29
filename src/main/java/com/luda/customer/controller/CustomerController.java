@@ -8,6 +8,7 @@ import com.luda.store.model.StoreModel;
 import com.luda.customer.service.CustomerService;
 import com.luda.util.CommonUtils;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,9 +54,10 @@ public class CustomerController extends BaseController {
      */
     @RequestMapping(value = "/addCustomer", method = RequestMethod.POST)
     @ResponseBody
-    public String addCustomer(@RequestBody CustomerModel customerModel, HttpServletResponse httpServletResponse){
+    public String addCustomer(@RequestBody String  data, HttpServletResponse httpServletResponse){
         String result = "";
         try {
+            CustomerModel customerModel = CommonUtils.convertJsonToBean(JSONObject.fromObject(data), CustomerModel.class);
             ResultHandle<CustomerModel> resultHandle = customerService.saveCustomer(customerModel);
             if(resultHandle.isSuccess()){
                 result = getSuccessResult();
@@ -117,8 +119,10 @@ public class CustomerController extends BaseController {
         String result = "";
         try {
             ResultHandle<CustomerModel> resultHandle = customerService.removeCustomer(customerId);
-            if(!resultHandle.isSuccess()){
-                result = returnErrorResult(httpServletResponse, resultHandle.getMsg());
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
             }
         }catch (Exception e){
             result = returnErrorResult(httpServletResponse, "系统异常");

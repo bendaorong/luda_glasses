@@ -27,29 +27,19 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public List<CustomerModel> fetchCustomerList() {
-
-
-
-
         return customerDao.fetchCustomerList();
     }
 
     @Override
     public ResultHandle<CustomerModel> saveCustomer(CustomerModel customerModel) {
-
         ResultHandle<CustomerModel> resultHandle = new ResultHandle<CustomerModel>();
-
         try {
             this.customerDao.saveCustomer(customerModel);
-            resultHandle.setMsg("创建客户成功");
-
+            resultHandle.setReturnContent(customerModel);
         }catch (Exception e){
             resultHandle.setMsg("创建客户失败");
             log.error("save customer error", e);
         }
-
-
-
         return resultHandle;
     }
 
@@ -60,40 +50,15 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public ResultHandle<CustomerModel> updateCustomer(CustomerModel customerModel) {
-
-
         ResultHandle<CustomerModel> resultHandle = new ResultHandle<CustomerModel>();
-
-        try {
-            this.customerDao.updateCustomer(customerModel);
-
-            resultHandle.setMsg("更新客户成功");
-
-        }catch (Exception e){
-            resultHandle.setMsg("更新客户失败");
-            log.error("update customer error", e);
-        }
-
-
+        this.customerDao.updateCustomer(customerModel);
         return resultHandle;
     }
 
     @Override
     public ResultHandle<CustomerModel> removeCustomer(int customerId) {
         ResultHandle<CustomerModel> resultHandle = new ResultHandle<CustomerModel>();
-
-        try {
-            this.customerDao.removeCustomer(customerId);
-
-            resultHandle.setMsg("更新客户成功");
-
-        }catch (Exception e){
-            resultHandle.setMsg("更新客户失败");
-            log.error("update customer error", e);
-        }
-
-
-
+        this.customerDao.removeCustomer(customerId);
         return resultHandle;
     }
 }

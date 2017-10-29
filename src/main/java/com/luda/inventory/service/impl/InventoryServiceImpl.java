@@ -181,7 +181,7 @@ public class InventoryServiceImpl implements InventoryService{
     private void updatePurchaseOrderTotalQuantityAndTotalAmount(PurchaseOrder purchaseOrder){
         purchaseOrder.setTotalQuantity(purchaseOrder.getTotalItemQuantity());
         purchaseOrder.setTotalAmount(purchaseOrder.getTotalItemAmount());
-        inventoryDao.updatePurchaseOrder(purchaseOrder);
+        inventoryDao.updatePurchaseOrderTotalQuantityAndTotalAmount(purchaseOrder);
     }
 
     /**
@@ -190,7 +190,7 @@ public class InventoryServiceImpl implements InventoryService{
      * @param storeId 门店
      * @param increment 库存增量(>0:新增库存 <0:扣减库存)
      **/
-    private void updateMard(int materielId, int storeId, int increment){
+    public void updateMard(int materielId, int storeId, int increment){
         Mard mard = inventoryDao.lockMard(materielId, storeId);
         if(mard == null){
             mard = new Mard(materielId, storeId, increment);
@@ -267,6 +267,11 @@ public class InventoryServiceImpl implements InventoryService{
     @Override
     public List<MardVo> fetchMardVoList() {
         return inventoryDao.fetchMardVoList();
+    }
+
+    @Override
+    public Mard lockMard(int materielId, int storeId) {
+        return inventoryDao.lockMard(materielId, storeId);
     }
 
     @Override

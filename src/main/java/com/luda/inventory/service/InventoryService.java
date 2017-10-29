@@ -20,6 +20,21 @@ public interface InventoryService {
     public List<MardVo> fetchMardVoList();
 
     /**
+     * 查询库存并加锁
+     * @param materielId 商品
+     * @param storeId 门店
+     */
+    public Mard lockMard(int materielId, int storeId);
+
+    /**
+     * 更新商品库存
+     * @param materielId 商品
+     * @param storeId 门店
+     * @param increment 库存增量(小于0为扣减库存)
+     */
+    public void updateMard(int materielId, int storeId, int increment);
+
+    /**
      * 查询采购单
      * @return
      */

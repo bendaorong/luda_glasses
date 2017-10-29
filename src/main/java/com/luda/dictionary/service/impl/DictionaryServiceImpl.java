@@ -166,6 +166,9 @@ public class DictionaryServiceImpl implements DictionaryService{
         if(DictionaryType.GOODS_UNIT.name().equals(dictType)){
             return DictFactory.getInstance().getUnitList();
         }
+        if(DictionaryType.REGION.name().equals(dictType)){
+            return DictFactory.getInstance().getRegionList();
+        }
         return Collections.emptyList();
     }
 }

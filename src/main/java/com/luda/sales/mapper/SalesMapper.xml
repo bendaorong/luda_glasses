@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.luda.sales.dao.SalesDao">
+    <resultMap id="salesOrderMap" type="com.luda.sales.model.SalesOrder">
+        <id property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="saleDate" column="sale_date"/>
+        <result property="storeId" column="store_id"/>
+        <result property="businessManId" column="businessman_id"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="pickUpDate" column="pick_up_date"/>
+        <result property="totalQuantity" column="total_quantity"/>
+        <result property="totalAmount" column="total_amount"/>
+        <result property="remark" column="remark"/>
+        <result property="createUserId" column="create_user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUserId" column="update_user_id"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <resultMap id="salesOrderVoMap" type="com.luda.sales.model.SalesOrderVo" extends="salesOrderMap">
+        <result property="storeName" column="store_name"/>
+        <result property="customerName" column="name"/>
+        <result property="businessManName" column="real_name"/>
+    </resultMap>
+
+    <resultMap id="salesOrderItemMap" type="com.luda.sales.model.SalesOrderItem">
+        <id property="itemId" column="id"/>
+        <result property="salesOrderId" column="sales_order_id"/>
+        <result property="materielId" column="materiel_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="sellPrice" column="sell_price"/>
+        <result property="remark" column="remark"/>
+        <association property="materiel" column="materiel_id" select="com.luda.materiel.dao.MaterielDao.getById"/>
+    </resultMap>
+
+    <select id="getMaxSalesOrderCode" resultType="java.lang.String">
+        select max(code) from sales_order
+    </select>
+
+    <insert id="saveSalesOrder" parameterType="com.luda.sales.model.SalesOrder"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into sales_order
+        (
+            code,
+            sale_date,
+            store_id,
+            businessman_id,
+            customer_id,
+            pick_up_date,
+            total_quantity,
+            total_amount,
+            remark,
+            create_user_id,
+            create_time,
+            update_user_id,
+            update_time
+        )
+        values
+        (
+            #{code},
+            #{saleDate},
+            #{storeId},
+            #{businessManId},
+            #{customerId},
+            #{pickUpDate},
+            #{totalQuantity},
+            #{totalAmount},
+            #{remark},
+            #{createUserId},
+            now(),
+            #{updateUserId},
+            now()
+        )
+    </insert>
+
+    <insert id="saveSalesOrderItem" parameterType="com.luda.sales.model.SalesOrderItem"
+            useGeneratedKeys="true" keyProperty="itemId">
+        insert into sales_order_item
+        (
+            sales_order_id,
+            materiel_id,
+            quantity,
+            sell_price,
+            remark
+        )
+        values
+        (
+            #{salesOrderId},
+            #{materielId},
+            #{quantity},
+            #{sellPrice},
+            #{remark}
+        )
+    </insert>
+
+    <select id="fetchSalesOrderVoList" resultMap="salesOrderVoMap">
+        select o.*, s.store_name, d.real_name, c.name
+        from sales_order o
+        left join store s
+        on o.store_id = s.store_id
+        left join admin_user_detail d
+        on o.businessman_id = d.admin_user_id
+        left join customer c
+        on o.customer_id = c.id
+        where o.delete_flag = 0
+        order by o.id desc
+    </select>
+
+    <select id="getSalesOrderById" resultMap="salesOrderMap">
+        select * from sales_order where id = #{id} and delete_flag = 0
+    </select>
+
+    <select id="fetchSalesOrderItems" resultMap="salesOrderItemMap">
+        select * from sales_order_item where sales_order_id = #{salesOrderId}
+    </select>
+
+    <update id="updateSalesOrder" parameterType="com.luda.sales.model.SalesOrder">
+        update sales_order
+        set
+            sale_date = #{saleDate},
+            businessman_id = #{businessManId},
+            pick_up_date = #{pickUpDate},
+            remark = #{remark},
+            update_user_id = #{updateUserId},
+            update_time = now()
+        where id = #{id}
+    </update>
+
+    <select id="getSalesOrderItemById" resultMap="salesOrderItemMap">
+        select * from sales_order_item where id = #{itemId}
+    </select>
+
+    <delete id="removeSalesOrderItem">
+        delete from sales_order_item where id = #{itemId}
+    </delete>
+
+    <update id="updateSalesOrderTotalQuantityAndTotalAmount" parameterType="com.luda.sales.model.SalesOrder">
+        update sales_order
+        set
+            total_quantity = #{totalQuantity},
+            total_amount = #{totalAmount},
+            update_time = now()
+        where id = #{id}
+    </update>
+
+    <update id="removeSalesOrder">
+        update sales_order set delete_flag = 1 where id = #{id}
+    </update>
+</mapper>

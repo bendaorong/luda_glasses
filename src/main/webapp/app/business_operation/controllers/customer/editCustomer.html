@@ -28,7 +28,7 @@
     <div class="seat-manage-operate-container">
         <h3 class="seat-manage-operate-title"></h3>
         <div class="seat-manage-operate-button form-inline">
-            <button class="btn btn-success btn-sm" ng-click="saveCustomer()" ng-disabled="!myform.$valid">保存</button>
+            <button class="btn btn-success btn-sm" ng-click="updateCustomer()" ng-disabled="!myform.$valid">保存</button>
             <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
         </div>
     </div>
@@ -40,37 +40,39 @@
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">编号</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="selectCustomer.code"/>
+                        <input type="text" class="form-control" readonly="true" ng-model="selectCustomer.code"/>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">姓名</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="selectCustomer.name"/>
+                        <input type="text" class="form-control" required ng-model="selectCustomer.name"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">性别</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="selectCustomer.gender" />
+                        <select ng-model="selectCustomer.gender" class="form-control">
+                            <option value="M">男</option>
+                            <option value="F">女</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">生日</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="selectCustomer.birthday" />
+                        <input class="form-control" type="text"
+                               onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                               ng-model="selectCustomer.birthday" name="birthday"
+                               id="birthday" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">手机号码</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <input type="text" class="form-control" required
-                               ng-model="selectCustomer.mobieNumber" />
+                               ng-model="selectCustomer.mobileNumber" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -83,8 +85,12 @@
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">地区</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="selectCustomer.region" />
+                        <select class="form-control" required ng-model="selectCustomer.region">
+                            <option ng-repeat="region in regionList" value="{{region.dictName}}"
+                                    ng-selected="region.dictName==selectCustomer.region">
+                                {{region.dictName}}
+                            </option>
+                        </select>
                     </div>
                 </div>
 
@@ -98,4 +104,4 @@
         </form>
     </div>
 </div>
-
+<script type="text/javascript" charset="utf-8" src="My97DatePicker/WdatePicker.js"></script>

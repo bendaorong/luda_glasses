@@ -111,4 +111,6 @@ public interface InventoryDao {
     int updateTransferOrder(TransferOrder transferOrder);
 
     int removeTransferOrder(int id);
+
+    int updatePurchaseOrderTotalQuantityAndTotalAmount(PurchaseOrder purchaseOrder);
 }

@@ -55,15 +55,19 @@
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">性别</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="newCustomer.gender" />
+                        <select ng-model="newCustomer.gender" class="form-control">
+                            <option value="M" ng-selected="true">男</option>
+                            <option value="F">女</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">生日</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="newCustomer.birthday" />
+                        <input class="form-control" type="text"
+                               onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                               ng-model="newCustomer.birthday" name="birthday"
+                               id="birthday" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -83,8 +87,12 @@
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">地区</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="newCustomer.region" />
+                        <select class="form-control" required ng-model="newCustomer.region">
+                            <option ng-repeat="region in regionList" value="{{region.dictName}}"
+                                    ng-selected="region.dictName=='瑞昌市'">
+                                {{region.dictName}}
+                            </option>
+                        </select>
                     </div>
                 </div>
 
@@ -99,3 +107,4 @@
     </div>
 </div>
 
+<script type="text/javascript" charset="utf-8" src="My97DatePicker/WdatePicker.js"></script>

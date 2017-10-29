@@ -403,8 +403,48 @@ create table customer
    wechat_num           varchar(32)                    null,
    email                varchar(64)                    null,
    region               varchar(32)                    null,
-   region_fullname      varchar(64)                    null,
+   region_name          varchar(64)                    null,
    address              varchar(128)                   null,
    delete_flag          tinyint(1)                      default 0,
    PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE UNIQUE INDEX idx_mobile_number on customer(mobile_num);
+CREATE UNIQUE INDEX idx_code on customer(code);
+
+/*==============================================================*/
+/* Table: sales_list 销售单                                     */
+/*==============================================================*/
+DROP TABLE IF EXISTS sales_order;
+create table sales_order (
+  id                    int(11)               not null auto_increment,
+  code                  varchar(16)           not null,
+  sale_date             date                  not null,
+  store_id              int(11)               not null,
+  businessman_id        int(11),
+  customer_id           int(11)                not null,
+  pick_up_date          DATE                  null,
+  total_quantity        int(11) comment '总数量',
+  total_amount          double(10,2) comment '总价',
+  remark                varchar(512)          null,
+  create_user_id       int(11)                        null,
+  create_time          datetime                       null,
+  update_user_id       int(11)                        null,
+  update_time          datetime                       null,
+  delete_flag          tinyint(1)                     default 0,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*==============================================================*/
+/* Table: sales_list 销售明细                                   */
+/*==============================================================*/
+DROP TABLE IF EXISTS sales_order_item;
+create table sales_order_item (
+  id int(11) not null auto_increment,
+  sales_order_id int(11) not null comment '销售单Id',
+  materiel_id int(11) not null comment '商品',
+  quantity int(11) comment '数量',
+  sell_price double(10,2) comment '售价',
+  remark    varchar(256) comment '备注',
+  PRIMARY KEY (id)
+)  ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -98,6 +98,10 @@
 	<script src="app/business_operation/controllers/inventory/purchaseOrder/purchaseOrderManage.js"></script>
 	<script src="app/business_operation/controllers/inventory/inventoryVerification/inventoryVerificationManage.js"></script>
 	<script src="app/business_operation/controllers/inventory/transfer/transferManage.js"></script>
+	<!-- 销售管理 -->
+	<script src="app/business_operation/controllers/sales/salesOrderManage.js"></script>
+	<!--客户管理-->
+	<script src="app/business_operation/controllers/customer/customerManager.js"></script>
 
 	<script src="angular-1.2.28/angular-route.min.js"></script>
 	<script src="js/angularjs-dropdown-multiselect.js"></script>

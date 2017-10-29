@@ -7,7 +7,7 @@
         <result property="gender" column="gender"/>
         <result property="birthday" column="birthday"/>
         <result property="mobileNumber" column="mobile_num"/>
-        <result property="wechatno" column="webchat_num"/>
+        <result property="wechatno" column="wechat_num"/>
         <result property="region" column="region"/>
         <result property="regionName" column="region_name"/>
         <result property="address" column="address"/>
@@ -18,7 +18,8 @@
 
     </select>
 
-    <insert id="saveCustomer" parameterType="com.luda.customer.model.CustomerModel">
+    <insert id="saveCustomer" parameterType="com.luda.customer.model.CustomerModel"
+            useGeneratedKeys="true" keyProperty="id">
         insert into customer
         (
            code,
@@ -26,11 +27,10 @@
            gender,
            birthday,
            mobile_num,
-           webchat_num,
+           wechat_num,
            region,
            region_name,
-           address,
-           delete_flag
+           address
         )
         values
         (
@@ -41,15 +41,10 @@
             #{mobileNumber},
             #{wechatno},
             #{region},
-            #{region_name},
-            #{address},
-            1
+            #{regionName},
+            #{address}
         )
     </insert>
-
-
-
-
 
     <select id="getById" resultMap="customerMapper">
         select * from customer where id = #{customerId} and delete_flag = 0

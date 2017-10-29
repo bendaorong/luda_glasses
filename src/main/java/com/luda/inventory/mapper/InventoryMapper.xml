@@ -141,6 +141,16 @@
         )
     </insert>
 
+    <update id="updatePurchaseOrderTotalQuantityAndTotalAmount"
+            parameterType="com.luda.inventory.model.PurchaseOrder">
+        update purchase_order
+        set
+            total_quantity = #{totalQuantity},
+            total_amount = #{totalAmount},
+            update_time = now
+        where purchase_order_id = #{purchaseOrderId}
+    </update>
+
     <insert id="insertPurchaseOrderItemBatch" parameterType="com.luda.inventory.model.PurchaseOrderItem">
         <foreach collection="list" item="item" index="index" open="" close="" separator=";">
             INSERT INTO purchase_order_item

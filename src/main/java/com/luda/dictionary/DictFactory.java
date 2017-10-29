@@ -29,6 +29,10 @@ public class DictFactory {
     private Map<String, String> unitMap = new HashMap<String, String>();
     private List<DictionaryModel> unitList = new ArrayList<>();
 
+    // 地区
+    private Map<String, String> regionMap = new HashMap<>();
+    private List<DictionaryModel> regionList = new ArrayList<>();
+
     /**
      *  初始化字典数据
      */
@@ -43,6 +47,22 @@ public class DictFactory {
             initBrandData(dictJson.getJSONArray("brand"));
             // 读取单位
             initUnitData(dictJson.getJSONArray("unit"));
+            // 读取地区
+            initRegionData(dictJson.getJSONArray("region"));
+        }
+    }
+
+    /**
+     * 初始化地区数据
+     * @param regions
+     */
+    private void initRegionData(JSONArray regions) {
+        for(int i=0; i<regions.size(); i++){
+            JSONObject region = regions.getJSONObject(i);
+            int id = region.getInt("id");
+            String name = region.getString("name");
+            regionMap.put(String.valueOf(id), name);
+            regionList.add(new DictionaryModel(id, name, DictionaryType.REGION.name()));
         }
     }
 
@@ -98,6 +118,14 @@ public class DictFactory {
     }
     public List<DictionaryModel> getUnitList(){
         return this.unitList;
+    }
+
+    public Map<String, String> getRegionMap() {
+        return regionMap;
+    }
+
+    public List<DictionaryModel> getRegionList() {
+        return regionList;
     }
 
     private DictFactory() {

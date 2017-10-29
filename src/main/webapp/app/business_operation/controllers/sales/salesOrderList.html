@@ -1,0 +1,35 @@
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
+        <div class="seat-manage-operate-container">
+            <h5 class="seat-manage-operate-title">销售单管理</h5>
+            <div class="seat-manage-operate-button form-inline">
+                <a type="button" class="btn btn-success btn-sm" href="#addSalesOrder"> 新增</a>
+                <input class="form-control" ng-model="filterText" ng-change="filter()"
+                       placeHolder="{{'BUSINESS_OPERATION_PRODUCT_SEARCH'|translate}}">
+                <button type="button" class="btn btn-sm btn-primary" ng-click="refresh()">
+                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+        <hr>
+
+        <table ng-table="tableParams" class="table table-bordered">
+            <tr ng-repeat="salesOrder in $data|filter:filterText">
+                <td data-title="'编号'" sortable="'code'">{{salesOrder.code}}</td>
+                <td data-title="'销售日期'" sortable="'code'">{{salesOrder.saleDate}}</td>
+                <td data-title="'取货日期'" sortable="'code'">{{salesOrder.pickUpDate}}</td>
+                <td data-title="'数量'" sortable="'code'">{{salesOrder.totalQuantity}}</td>
+                <td data-title="'应收金额'" sortable="'code'">{{salesOrder.totalAmount}}</td>
+                <td data-title="'门店'" sortable="'code'">{{salesOrder.storeName}}</td>
+                <td data-title="'业务员'" sortable="'code'">{{salesOrder.businessManName}}</td>
+                <td data-title="'操作'">
+                    <button type="button" class="btn btn-sm btn-primary"
+                            ng-click="gotoEdit(salesOrder.id)">编辑</button>
+                    <button type="button" class="btn btn-sm btn-primary"
+                            ng-click="removeSalesOrder(salesOrder.id)">删除</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>

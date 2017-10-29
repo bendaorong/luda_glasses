@@ -145,9 +145,11 @@ public class DictionaryServiceTest extends SpringSimpleJunit{
         Map<String, String> colors = dictFactory.getColorsMap();
         Map<String, String> brands = dictFactory.getBrandMap();
         Map<String, String> units = dictFactory.getUnitMap();
+        Map<String, String> regions = dictFactory.getRegionMap();
         System.out.println(colors);
         System.out.println(brands);
         System.out.println(units);
+        System.out.println(regions);
         System.out.println(dictFactory.getColorsList());
     }
 }
