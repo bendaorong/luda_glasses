@@ -11,6 +11,7 @@
     </resultMap>
 
     <resultMap id="mardVoMap" type="com.luda.inventory.model.MardVo" extends="mardMap">
+        <result property="storeName" column="store_name" />
         <association property="materiel" column="materiel_id" select="com.luda.materiel.dao.MaterielDao.getById"/>
     </resultMap>
 
@@ -218,7 +219,7 @@
     </select>
 
     <select id="fetchMardVoList" resultMap="mardVoMap">
-        select * from mard
+        select a.*,b.store_name from mard as a ,store as b where a.store_id =  b.store_id
     </select>
 
     <select id="fetchPurchaseOrderVoList" resultMap="purchaseOrderVoMap">

@@ -32,7 +32,17 @@ public class MardVo {
     /**
      * 商品
      */
+    private String storeName;
+
     private MaterielModel materiel;
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
 
     public int getId() {
         return id;

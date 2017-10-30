@@ -14,14 +14,15 @@
 
         <table ng-table="tableParams" class="table table-bordered">
             <tr ng-repeat="mard in $data|filter:filterText">
+                <td data-title="'门店'" sortable="'storeName'">{{mard.storeName}}</td>
                 <td data-title="'商品名称'" sortable="'name'">{{mard.materiel.name}}</td>
-                <td data-title="'商品编号'" sortable="'code'">{{mard.materiel.code}}</td>
-                <td data-title="'条码'" sortable="'barcode'">{{mard.materiel.barcode}}</td>
+         <!--       <td data-title="'商品编号'" sortable="'code'">{{mard.materiel.code}}</td>
+                <td data-title="'条码'" sortable="'barcode'">{{mard.materiel.barcode}}</td>-->
                 <td data-title="'类型'" sortable="'typeName'">{{mard.materiel.typeName}}</td>
                 <td data-title="'规格型号'" sortable="'typeName'">{{mard.materiel.specification}}</td>
                 <td data-title="'品牌'" sortable="'brand'">{{mard.materiel.brand}}</td>
                 <td data-title="'售价'" sortable="'sellPrice'">{{mard.materiel.sellPrice}}</td>
-                <td data-title="'批发价'" sortable="'tradePrice'">{{mard.materiel.tradePrice}}</td>
+        <!--        <td data-title="'批发价'" sortable="'tradePrice'">{{mard.materiel.tradePrice}}</td>-->
                 <td data-title="'成本价'" sortable="'costPrice'">{{mard.materiel.costPrice}}</td>
                 <td data-title="'单位'" sortable="'brand'">{{mard.materiel.unit}}</td>
                 <td data-title="'库存数量'" sortable="'costPrice'">{{mard.currentInventory}}</td>

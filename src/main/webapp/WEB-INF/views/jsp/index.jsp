@@ -11,7 +11,7 @@
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
-<title>后台管理中心</title>
+<title>鹭达眼镜管理</title>
 <!-- Bootstrap -->
 <link href="bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">

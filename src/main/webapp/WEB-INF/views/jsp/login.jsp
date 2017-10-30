@@ -12,7 +12,7 @@
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
-<title>管理员登录</title>
+<title>用户登录</title>
 <!-- Bootstrap -->
 <link href="bootstrap-3.3.5-dist/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -34,7 +34,7 @@
 							class="icon-bar"></span> <span class="icon-bar"></span>
 					</button>
 					<a class="navbar-brand" href="../"><span
-						 aria-hidden="true"></span>后台管理</a>
+						 aria-hidden="true"></span>用户登录</a>
 				</div>
 			</div>
 		</nav>
