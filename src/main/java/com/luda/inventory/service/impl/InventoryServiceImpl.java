@@ -201,6 +201,12 @@ public class InventoryServiceImpl implements InventoryService{
             inventoryDao.saveMard(mard);
         }else {
             log.info("update mard>> materielId:" + materielId + " storeId:" + storeId + " increment:" + increment + " current:" + mard.getCurrentInventory());
+            // 扣减库存时，判断商品库存数量是否足够
+            if(increment < 0){
+                if(mard.getCurrentInventory() + increment < 0){
+                    throw new InventoryException("商品库存不足");
+                }
+            }
             inventoryDao.updateMard(mard.getId(), increment);
         }
     }
@@ -268,8 +274,13 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
-    public List<MardVo> fetchMardVoList() {
-        return inventoryDao.fetchMardVoList();
+    public List<MardVo> fetchMardVoList(int storeId) {
+        return inventoryDao.fetchMardVoList(storeId);
+    }
+
+    @Override
+    public List<MardVo> fetchAllMardVoList() {
+        return inventoryDao.fetchAllMardVoList();
     }
 
     @Override

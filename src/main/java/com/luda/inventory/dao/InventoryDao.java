@@ -42,7 +42,9 @@ public interface InventoryDao {
 
     int saveMard(Mard mard);
 
-    List<MardVo> fetchMardVoList();
+    List<MardVo> fetchMardVoList(int storeId);
+
+    List<MardVo> fetchAllMardVoList();
 
     List<PurchaseOrderVo> fetchPurchaseOrderVoList();
 

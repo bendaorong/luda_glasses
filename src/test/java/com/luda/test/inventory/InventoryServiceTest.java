@@ -56,7 +56,7 @@ public class InventoryServiceTest extends SpringSimpleJunit{
 
     @Test
     public void testFetchMardList(){
-        List<MardVo> list = inventoryService.fetchMardVoList();
+        List<MardVo> list = inventoryService.fetchAllMardVoList();
         print(CommonUtils.convertBeanCollectionToJsonArray(list,null).toString());
     }
 

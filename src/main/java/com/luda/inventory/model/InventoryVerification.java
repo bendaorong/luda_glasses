@@ -28,7 +28,7 @@ public class InventoryVerification implements Serializable {
     /**
      * 备注
      */
-    private int remark;
+    private String remark;
     /**
      * 创建人
      */
@@ -90,11 +90,11 @@ public class InventoryVerification implements Serializable {
         this.businessmanId = businessmanId;
     }
 
-    public int getRemark() {
+    public String getRemark() {
         return remark;
     }
 
-    public void setRemark(int remark) {
+    public void setRemark(String remark) {
         this.remark = remark;
     }
 

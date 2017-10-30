@@ -218,8 +218,17 @@
         select * from mard where materiel_id = #{materielId} and store_id = #{storeId}
     </select>
 
+    <select id="fetchAllMardVoList" resultMap="mardVoMap">
+        select a.*,b.store_name
+        from mard as a ,store as b
+        where a.store_id =  b.store_id
+    </select>
+
     <select id="fetchMardVoList" resultMap="mardVoMap">
-        select a.*,b.store_name from mard as a ,store as b where a.store_id =  b.store_id
+        select a.*,b.store_name
+        from mard as a ,store as b
+        where a.store_id =  b.store_id
+        and a.store_id = #{storeId}
     </select>
 
     <select id="fetchPurchaseOrderVoList" resultMap="purchaseOrderVoMap">
@@ -338,6 +347,7 @@
         left join admin_user_detail u
         on po.businessman_id = u.admin_user_id
         where po.delete_flag = 0
+        order by po.id desc
     </select>
 
     <insert id="savePurchaseOrderItem" parameterType="com.luda.inventory.model.PurchaseOrderItem"

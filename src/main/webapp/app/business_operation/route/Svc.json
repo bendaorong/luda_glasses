@@ -40,7 +40,7 @@
 	}, {
 		"id" : "200400",
 		"name" : "调拨单",
-		"page" : "#"
+		"page" : "#transferOrderManage"
 	}]
 },{
 	"id" : "300",
@@ -52,7 +52,7 @@
 	}, {
 		"id" : "300300",
 		"name" : "退货单",
-		"page" : "#salesOrderManage"
+		"page" : "#refundOrderManage"
 	}]
 },{
 	"id" : "400",

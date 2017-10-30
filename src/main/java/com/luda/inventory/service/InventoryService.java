@@ -15,9 +15,15 @@ public interface InventoryService {
     public ResultHandle<PurchaseOrder> savePurchaseOrder(PurchaseOrder purchaseOrder);
 
     /**
-     * 查询商品库存
+     * 查询门店商品库存
+     * @param storeId 门店
      */
-    public List<MardVo> fetchMardVoList();
+    public List<MardVo> fetchMardVoList(int storeId);
+
+    /**
+     * 查询所有门店商品库存
+     */
+    public List<MardVo> fetchAllMardVoList();
 
     /**
      * 查询库存并加锁

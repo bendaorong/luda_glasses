@@ -200,7 +200,7 @@
         </tr>
     </table>
     <p>
-        <button ng-click="addItem()">添加</button>
+        <button ng-click="addItem()" ng-disabled="selectedMateriel.currentInventory==0">添加</button>
         <button ng-click="closeBtn()">关闭</button>
     </p>
 </div>

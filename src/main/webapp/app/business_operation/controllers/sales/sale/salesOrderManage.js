@@ -11,7 +11,7 @@
 
         // 显示销售单列表
         function initSalesOrderList() {
-            salesService.fetchSalesOrderVoList(function(data){
+            salesService.fetchSalesOrderVoList("01", function(data){
                 if(data.success){
                     $scope.salesOrderList = data.data;
                     $scope.tableParams = new NgTableParams({}, {
@@ -235,6 +235,7 @@
             // 销售日期
             $scope.newSalesOrder.saleDate = $("#saleDate").val();
             $scope.newSalesOrder.pickUpDate = $("#pickUpDate").val();
+            $scope.newSalesOrder.orderType = "01"; //销售单
             console.log("newSalesOrder:" + JSON.stringify($scope.newSalesOrder));
 
             salesService.saveSalesOrder($scope.newSalesOrder, function (data) {
@@ -404,6 +405,7 @@
                     });
 
                     // 明细添加到明细列表
+                    item.itemId = data.data.itemId;
                     var materiel = {};
                     item.materiel = materiel;
                     materiel.code = $scope.selectedMateriel.code;

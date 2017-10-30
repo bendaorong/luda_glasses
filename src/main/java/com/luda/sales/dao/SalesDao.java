@@ -14,7 +14,7 @@ public interface SalesDao {
 
     int saveSalesOrderItem(SalesOrderItem item);
 
-    List<SalesOrderVo> fetchSalesOrderVoList();
+    List<SalesOrderVo> fetchSalesOrderVoList(String orderType);
 
     SalesOrder getSalesOrderById(int id);
 

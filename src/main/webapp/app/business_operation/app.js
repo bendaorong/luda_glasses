@@ -119,17 +119,23 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
         templateUrl : "app/business_operation/controllers/inventory/transfer/editTransfer.html",
         controller : "editTransferOrderController"
     }).when("/salesOrderManage", {
-        templateUrl : "app/business_operation/controllers/sales/salesOrderList.html",
+        templateUrl : "app/business_operation/controllers/sales/sale/salesOrderList.html",
         controller : "salesOrderManageController"
     }).when("/addSalesOrder",{
-        templateUrl : "app/business_operation/controllers/sales/newSalesOrder.html",
+        templateUrl : "app/business_operation/controllers/sales/sale/newSalesOrder.html",
         controller : "addSalesOrderController"
     }).when("/editSalesOrder/:id", {
-        templateUrl : "app/business_operation/controllers/sales/editSalesOrder.html",
+        templateUrl : "app/business_operation/controllers/sales/sale/editSalesOrder.html",
         controller : "editSalesOrderController"
-    }).when("/addRefundOrder/:id", {
-        templateUrl : "app/business_operation/controllers/sales/newRefundOrder.html",
+    }).when("/addRefundOrder", {
+        templateUrl : "app/business_operation/controllers/sales/refund/newRefundOrder.html",
         controller : "addRefundOrderController"
+    }).when("/refundOrderManage", {
+        templateUrl : "app/business_operation/controllers/sales/refund/refundOrderList.html",
+        controller : "refundOrderManageController"
+    }).when("/editRefundOrder/:id", {
+        templateUrl : "app/business_operation/controllers/sales/refund/editRefundOrder.html",
+        controller : "editRefundOrderController"
     }).otherwise({
 		redirectTo : "/"
 	})
@@ -620,8 +626,8 @@ businessOperationApp.factory("inventoryService", function($http) {
  */
 businessOperationApp.factory("salesService", function($http) {
     return {
-        fetchSalesOrderVoList : function (successCallback, errorCallback) {
-            $http.get("/luda_glasses/rest/sales/fetchSalesOrderVoList")
+        fetchSalesOrderVoList : function (orderType, successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/sales/fetchSalesOrderVoList/" + orderType)
                 .success(successCallback).error(errorCallback);
         },
         saveSalesOrder : function (salesOrder, successCallback, errorCallback) {
@@ -659,13 +665,6 @@ businessOperationApp.factory("salesService", function($http) {
             $http({
                 method:"POST",
                 url:"/luda_glasses/rest/sales/removeSalesOrder/" + id
-            }).success(successCallback).error(errorCallback);
-        },
-        saveRefundOrder : function (refundOrder, successCallback, errorCallback) {
-            $http({
-                method:"POST",
-                url:"/luda_glasses/rest/sales/saveRefundOrder",
-                data:refundOrder
             }).success(successCallback).error(errorCallback);
         }
     }

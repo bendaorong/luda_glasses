@@ -34,13 +34,14 @@ public class SalesController extends BaseController{
 
     /**
      * 查询销售单列表
+     * @param orderType 订单类型 01:销售单 02:退货单
      */
-    @RequestMapping("/fetchSalesOrderVoList")
+    @RequestMapping("/fetchSalesOrderVoList/{orderType}")
     @ResponseBody
-    public String fetchSalesOrderVoList(){
+    public String fetchSalesOrderVoList(@PathVariable String orderType){
         String result = "";
         try {
-            List<SalesOrderVo> list = salesService.fetchSalesOrderVoList();
+            List<SalesOrderVo> list = salesService.fetchSalesOrderVoList(orderType);
             result = getSuccessResult(CommonUtils.convertBeanCollectionToJsonArray(list,null).toString());
         }catch (Exception e){
             result = getFailResult("系统异常");
@@ -50,7 +51,8 @@ public class SalesController extends BaseController{
     }
 
     /**
-     * 新增销售单
+     * 新增销售单/新增退货单
+     * 通过orderType区分
      * @param data
      * @return
      */
@@ -192,32 +194,6 @@ public class SalesController extends BaseController{
             }
         }catch (Exception e){
             log.error("removeSalesOrder error", e);
-            result = getFailResult("系统异常");
-        }
-        return result;
-    }
-
-    /**
-     * 保存退款单
-     */
-    @RequestMapping("/saveRefundOrder")
-    @ResponseBody
-    public String saveRefundOrder(@RequestBody String data){
-        String result = "";
-        try {
-            JSONObject jsonData = JSONObject.fromObject(data);
-            Map classMap = new HashMap();
-            classMap.put("refundOrderItems", RefundOrderItem.class);
-            RefundOrder refundOrder = CommonUtils.convertJsonToBean_(jsonData, RefundOrder.class, classMap);
-
-            ResultHandle<RefundOrder> resultHandle = salesService.saveRefundOrder(refundOrder);
-            if(resultHandle.isSuccess()){
-                result = getSuccessResult();
-            }else {
-                result = getFailResult(resultHandle.getMsg());
-            }
-        } catch (Exception e){
-            log.error("saveRefundOrder error", e);
             result = getFailResult("系统异常");
         }
         return result;

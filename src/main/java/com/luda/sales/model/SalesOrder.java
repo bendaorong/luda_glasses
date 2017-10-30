@@ -54,6 +54,10 @@ public class SalesOrder implements Serializable {
      */
     private String remark;
     /**
+     * 订单类型
+     */
+    private String orderType;
+    /**
      * 创建用户
      */
     private int createUserId;
@@ -71,6 +75,14 @@ public class SalesOrder implements Serializable {
     private Date updateTime;
 
     private List<SalesOrderItem> salesOrderItems;
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
 
     public List<SalesOrderItem> getSalesOrderItems() {
         return salesOrderItems;
@@ -233,6 +245,7 @@ public class SalesOrder implements Serializable {
                 ", totalQuantity=" + totalQuantity +
                 ", totalAmount=" + totalAmount +
                 ", remark='" + remark + '\'' +
+                ", orderType='" + orderType + '\'' +
                 ", createUserId=" + createUserId +
                 ", createTime=" + createTime +
                 ", updateUserId=" + updateUserId +

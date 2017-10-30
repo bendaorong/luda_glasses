@@ -35,13 +35,15 @@ public class InventoryController extends BaseController{
 
     /**
      * 查询商品库存
+     * 查询业务员门店商品库存
      */
     @RequestMapping("/mard/list")
     @ResponseBody
-    public String fetchMardList(){
+    public String fetchMardList(HttpSession httpSession){
         String result = "";
         try {
-            List<MardVo> mardVoList = inventoryService.fetchMardVoList();
+            int storeId = getLoginUser(httpSession).getStoreId();
+            List<MardVo> mardVoList = inventoryService.fetchMardVoList(storeId);
             String data = CommonUtils.convertBeanCollectionToJsonArray(mardVoList, null).toString();
             result = getSuccessResult(data);
         }catch (Exception e){

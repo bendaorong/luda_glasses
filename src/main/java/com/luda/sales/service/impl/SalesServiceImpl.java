@@ -1,5 +1,6 @@
 package com.luda.sales.service.impl;
 
+import com.luda.comm.po.Constants;
 import com.luda.comm.po.ResultHandle;
 import com.luda.inventory.model.Mard;
 import com.luda.inventory.service.InventoryService;
@@ -57,16 +58,21 @@ public class SalesServiceImpl implements SalesService {
 
         // 更新商品库存
         for(SalesOrderItem item : salesOrder.getSalesOrderItems()){
-            // 扣减库存
-            inventoryService.updateMard(item.getMaterielId(), salesOrder.getStoreId(), -item.getQuantity());
+            if(Constants.ORDER_TYPE_SALE.equals(salesOrder.getOrderType())){
+                // 销售单-扣减库存
+                inventoryService.updateMard(item.getMaterielId(), salesOrder.getStoreId(), -item.getQuantity());
+            }else {
+                // 退货单-增加库存
+                inventoryService.updateMard(item.getMaterielId(), salesOrder.getStoreId(), item.getQuantity());
+            }
         }
 
         return resultHandle;
     }
 
     @Override
-    public List<SalesOrderVo> fetchSalesOrderVoList() {
-        return salesDao.fetchSalesOrderVoList();
+    public List<SalesOrderVo> fetchSalesOrderVoList(String orderType) {
+        return salesDao.fetchSalesOrderVoList(orderType);
     }
 
     @Override
@@ -84,7 +90,7 @@ public class SalesServiceImpl implements SalesService {
         //更新销售单
         int result = salesDao.updateSalesOrder(salesOrder);
         if(result <= 0){
-            resultHandle.setMsg("销售单更新失败");
+            resultHandle.setMsg("更新失败");
         }
         return resultHandle;
     }
@@ -154,46 +160,56 @@ public class SalesServiceImpl implements SalesService {
         }
         if(isNew){
             if(CollectionUtils.isEmpty(salesOrder.getSalesOrderItems())){
-                return "请添加销售明细";
+                return "请添加明细";
             }
-            // 验证库存
-            for(SalesOrderItem item : salesOrder.getSalesOrderItems()){
-                Mard mard = inventoryService.lockMard(item.getMaterielId(), salesOrder.getStoreId());
-                if(mard == null){
-                    return "商品库存不存在";
-                }
-                if(mard.getCurrentInventory() < item.getQuantity()){
-                    return "商品库存不足";
+
+            // 销售单验证库存
+            if(Constants.ORDER_TYPE_SALE.equals(salesOrder.getOrderType())){
+                for(SalesOrderItem item : salesOrder.getSalesOrderItems()){
+                    Mard mard = inventoryService.lockMard(item.getMaterielId(), salesOrder.getStoreId());
+                    if(mard == null){
+                        return "商品库存不存在";
+                    }
+                    if(mard.getCurrentInventory() < item.getQuantity()){
+                        return "商品库存不足";
+                    }
                 }
             }
-            // 验证销售总金额和总数量
+
+            // 验证总金额和总数量
             if(salesOrder.getTotalQuantity() != salesOrder.getItemTotalQuantity()){
-                return "销售总数量与明细总数量不一致";
+                return "总数量与明细总数量不一致";
             }
             if(salesOrder.getTotalAmount().compareTo(salesOrder.getItemTotalAmount()) != 0){
-                return "销售总金额与明细总金额不一致";
+                return "总金额与明细总金额不一致";
             }
         }
         return null;
     }
 
-    // TODO
     @Override
     public ResultHandle<SalesOrder> removeSalesOrder(int id) {
         ResultHandle<SalesOrder> resultHandle = new ResultHandle<>();
 
         SalesOrder salesOrder = getSalesOrderWithItemsById(id);
         if(salesOrder == null){
-            resultHandle.setMsg("销售单不存在");
+            resultHandle.setMsg("订单不存在");
             return resultHandle;
         }
 
         // 删除销售单
         salesDao.removeSalesOrder(id);
-        // 增加销售商品库存量
+
+        // 更新库存
         if(CollectionUtils.isNotEmpty(salesOrder.getSalesOrderItems())){
             for(SalesOrderItem item : salesOrder.getSalesOrderItems()){
-                inventoryService.updateMard(item.getMaterielId(), salesOrder.getStoreId(), item.getQuantity());
+                if(Constants.ORDER_TYPE_SALE.equals(salesOrder.getOrderType())){
+                    // 销售单-增加商品库存
+                    inventoryService.updateMard(item.getMaterielId(), salesOrder.getStoreId(), item.getQuantity());
+                }else {
+                    // 退货单-扣减商品库存
+                    inventoryService.updateMard(item.getMaterielId(), salesOrder.getStoreId(), -item.getQuantity());
+                }
             }
         }
 
@@ -205,7 +221,7 @@ public class SalesServiceImpl implements SalesService {
         ResultHandle<SalesOrderItem> resultHandle = new ResultHandle<>();
         SalesOrderItem item = salesDao.getSalesOrderItemById(itemId);
         if(item == null){
-            resultHandle.setMsg("销售单明细不存在");
+            resultHandle.setMsg("明细不存在");
             return resultHandle;
         }
         // 删除明细
@@ -214,8 +230,23 @@ public class SalesServiceImpl implements SalesService {
             // 更新销售单金额和数量
             SalesOrder salesOrder = getSalesOrderWithItemsById(item.getSalesOrderId());
             updateSalesOrderTotalQuantityAndTotalAmount(salesOrder);
-            // 更新库存,增加销售商品对应库存
-            inventoryService.updateMard(item.getMaterielId(), salesOrder.getStoreId(), item.getQuantity());
+            // 更新库存
+            if(Constants.ORDER_TYPE_SALE.equals(salesOrder.getOrderType())){
+                // 销售单-增加商品库存
+                inventoryService.updateMard(item.getMaterielId(), salesOrder.getStoreId(), item.getQuantity());
+            }else {
+                Mard mard = inventoryService.lockMard(item.getMaterielId(), salesOrder.getStoreId());
+                if(mard == null){
+                    resultHandle.setMsg("商品库存不存在");
+                    return resultHandle;
+                }
+                if(mard.getCurrentInventory() < item.getQuantity()){
+                    resultHandle.setMsg("商品库存不足");
+                    return resultHandle;
+                }
+                // 退货单-扣减商品库存
+                inventoryService.updateMard(item.getMaterielId(), salesOrder.getStoreId(), -item.getQuantity());
+            }
         }
         return resultHandle;
     }
@@ -238,86 +269,20 @@ public class SalesServiceImpl implements SalesService {
             salesOrder = getSalesOrderWithItemsById(salesOrderItem.getSalesOrderId());
             updateSalesOrderTotalQuantityAndTotalAmount(salesOrder);
 
-            // 更新库存,扣减库存
-            inventoryService.updateMard(salesOrderItem.getMaterielId(), salesOrder.getStoreId(), -salesOrderItem.getQuantity());
+            // 更新库存
+            if(Constants.ORDER_TYPE_SALE.equals(salesOrder.getOrderType())){
+                // 销售单-扣减库存
+                inventoryService.updateMard(salesOrderItem.getMaterielId(), salesOrder.getStoreId(), -salesOrderItem.getQuantity());
+            }else {
+                // 退货单-增加库存
+                inventoryService.updateMard(salesOrderItem.getMaterielId(), salesOrder.getStoreId(), salesOrderItem.getQuantity());
+            }
 
             resultHandle.setReturnContent(salesOrderItem);
         }else {
             resultHandle.setMsg("明细添加失败");
         }
         return resultHandle;
-    }
-
-    @Override
-    public ResultHandle<RefundOrder> saveRefundOrder(RefundOrder refundOrder) {
-        ResultHandle<RefundOrder> resultHandle = new ResultHandle<>();
-        // 验证
-        String checkMsg = checkRefundOrder(refundOrder, true);
-        if(StringUtils.isNotEmpty(checkMsg)){
-            resultHandle.setMsg(checkMsg);
-            return resultHandle;
-        }
-        // 初始化
-        initRefundOrder(refundOrder, true);
-
-        // 保存退货单
-        salesDao.saveRefundOrder(refundOrder);
-
-        // 保存销售明细
-        for(RefundOrderItem item : refundOrder.getRefundOrderItems()){
-            item.setRefundOrderId(refundOrder.getId());
-            salesDao.saveRefundOrderItem(item);
-        }
-
-        // 更新商品库存
-        for(RefundOrderItem item : refundOrder.getRefundOrderItems()){
-            // 返还库存
-            inventoryService.updateMard(item.getMaterielId(), refundOrder.getStoreId(), item.getQuantity());
-        }
-
-        return resultHandle;
-    }
-
-    /**
-     * 初始化退货单信息
-     * @param refundOrder
-     * @param isNew 是否新增
-     */
-    private void initRefundOrder(RefundOrder refundOrder, boolean isNew) {
-        if(refundOrder.getRefundDate() == null){
-            refundOrder.setRefundDate(new Date());
-        }
-        if(isNew){
-            refundOrder.setCode(getRefundOrderCode());
-        }
-    }
-
-    /**
-     * 验证退货单
-     * @param refundOrder
-     * @param isNew
-     * @return
-     */
-    private String checkRefundOrder(RefundOrder refundOrder, boolean isNew) {
-        if(refundOrder.getStoreId() <= 0){
-            return "请选择门店";
-        }
-        if(refundOrder.getCustomerId() <= 0){
-            return "请选择客户";
-        }
-        if(isNew){
-            if(CollectionUtils.isEmpty(refundOrder.getRefundOrderItems())){
-                return "请选择退货商品";
-            }
-            // 验证退货总金额和总数量
-            if(refundOrder.getTotalQuantity() != refundOrder.getItemTotalQuantity()){
-                return "退货单总数量与明细总数量不一致";
-            }
-            if(refundOrder.getTotalAmount().compareTo(refundOrder.getItemTotalAmount()) != 0){
-                return "退货单总金额与明细总金额不一致";
-            }
-        }
-        return null;
     }
 
     /**
@@ -336,13 +301,15 @@ public class SalesServiceImpl implements SalesService {
         if(salesOrderItem.getSellPrice() == null || salesOrderItem.getSellPrice().compareTo(BigDecimal.ZERO) <= 0){
             return "单价不正确";
         }
-        // 验证商品库存
-        Mard mard = inventoryService.lockMard(salesOrderItem.getMaterielId(), salesOrder.getStoreId());
-        if(mard == null){
-            return "商品库存不存在";
-        }
-        if(mard.getCurrentInventory() < salesOrderItem.getQuantity()){
-            return "商品库存不足";
+        // 销售单-验证商品库存
+        if(Constants.ORDER_TYPE_SALE.equals(salesOrder.getOrderType())){
+            Mard mard = inventoryService.lockMard(salesOrderItem.getMaterielId(), salesOrder.getStoreId());
+            if(mard == null){
+                return "商品库存不存在";
+            }
+            if(mard.getCurrentInventory() < salesOrderItem.getQuantity()){
+                return "商品库存不足";
+            }
         }
         return null;
     }

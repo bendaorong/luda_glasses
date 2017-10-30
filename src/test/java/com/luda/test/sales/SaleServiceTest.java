@@ -49,7 +49,7 @@ public class SaleServiceTest extends SpringSimpleJunit{
 
     @Test
     public void testFetchSalesOrderVoList(){
-        List<SalesOrderVo> list = salesService.fetchSalesOrderVoList();
+        List<SalesOrderVo> list = salesService.fetchSalesOrderVoList("01");
         print(list.toString());
     }
 

@@ -423,6 +423,7 @@ create table sales_order (
   store_id              int(11)               not null,
   businessman_id        int(11),
   customer_id           int(11)                not null,
+  order_type            char(2)               null comment '订单类型 01:销售单 02:退货单'
   pick_up_date          DATE                  null comment '取货日期',
   total_quantity        int(11) comment '总数量',
   total_amount          double(10,2) comment '总价',
@@ -447,44 +448,5 @@ create table sales_order_item (
   sell_price double(10,2) comment '售价',
   remark    varchar(256) comment '备注',
   refund_flag
-  PRIMARY KEY (id)
-)  ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-/*==============================================================*/
-/* Table: sales_list 退货单                                     */
-/*==============================================================*/
-DROP TABLE IF EXISTS refund_order;
-create table refund_order (
-  id                    int(11)               not null auto_increment,
-  sales_order_id        int(11)               null comment '销售单id',
-  code                  varchar(16)           not null,
-  refund_date             date                  not null comment '退货日期',
-  store_id              int(11)               not null,
-  businessman_id        int(11),
-  customer_id           int(11)                not null,
-  total_quantity        int(11) comment '退货数量',
-  total_amount          double(10,2) comment '退货金额',
-  remark                varchar(512)          null,
-  create_user_id       int(11)                        null,
-  create_time          datetime                       null,
-  update_user_id       int(11)                        null,
-  update_time          datetime                       null,
-  delete_flag          tinyint(1)                     default 0,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*==============================================================*/
-/* Table: sales_list 退货明细                                   */
-/*==============================================================*/
-DROP TABLE IF EXISTS refund_order_item;
-create table refund_order_item (
-  id int(11) not null auto_increment,
-  refund_order_id int(11) not null comment '退货单Id',
-  sales_order_item_id int(11) comment '销售单明细id',
-  materiel_id int(11) not null comment '商品',
-  quantity int(11) comment '数量',
-  sell_price double(10,2) comment '售价',
-  remark    varchar(256) comment '备注',
   PRIMARY KEY (id)
 )  ENGINE=InnoDB DEFAULT CHARSET=utf8;

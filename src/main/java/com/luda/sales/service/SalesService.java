@@ -20,8 +20,9 @@ public interface SalesService {
 
     /**
      * 查询销售单列表
+     * @param orderType 订单类型
      */
-    List<SalesOrderVo> fetchSalesOrderVoList();
+    List<SalesOrderVo> fetchSalesOrderVoList(String orderType);
 
     /**
      * 查询销售单详情
@@ -54,11 +55,4 @@ public interface SalesService {
      * @return
      */
     ResultHandle<SalesOrderItem> saveSalesOrderItem(SalesOrderItem salesOrderItem);
-
-    /**
-     * 保存退货单
-     * @param refundOrder
-     * @return
-     */
-    ResultHandle<RefundOrder> saveRefundOrder(RefundOrder refundOrder);
 }
