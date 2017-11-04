@@ -35,6 +35,7 @@ public class MaterielModel implements Serializable{
     /**
      * 批发价
      */
+    @Deprecated
     private double tradePrice;
     /**
      * 成本价

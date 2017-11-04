@@ -115,11 +115,11 @@
 		var route = "app/business_operation/route/Svc.json";
 
 		// 登录用户角色
-		//var roleCode = sessionStorage.getItem("roleCode");
+		var roleCode = sessionStorage.getItem("roleCode");
 		// 根据用户角色加载用户操作权限
-		//if(roleCode != null && roleCode != ''){
-		//	route = "app/business_operation/route/Svc_"+roleCode+".json";
-		//}
+		if(roleCode != null && roleCode != ''){
+			route = "app/business_operation/route/Svc_"+roleCode+".json";
+		}
 	</script>
 </body>
 </html>

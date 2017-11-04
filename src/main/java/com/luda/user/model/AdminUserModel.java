@@ -17,6 +17,10 @@ public class AdminUserModel implements Serializable{
      */
     private String adminName;
     /**
+     * 员工工号
+     */
+    private String staffid;
+    /**
      * 手机号
      */
     private String mobileNumber;
@@ -125,12 +129,21 @@ public class AdminUserModel implements Serializable{
         this.activeFlag = activeFlag;
     }
 
+    public String getStaffid() {
+        return staffid;
+    }
+
+    public void setStaffid(String staffid) {
+        this.staffid = staffid;
+    }
+
     @Override
     public String toString() {
         return "AdminUserModel{" +
                 "adminUserId=" + adminUserId +
                 ", adminCode='" + adminCode + '\'' +
                 ", adminName='" + adminName + '\'' +
+                ", staffid='" + staffid + '\'' +
                 ", mobileNumber='" + mobileNumber + '\'' +
                 ", loginPassword='" + loginPassword + '\'' +
                 ", storeId=" + storeId +

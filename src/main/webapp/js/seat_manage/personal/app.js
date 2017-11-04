@@ -33,16 +33,19 @@ personalSeatManageApp.factory('sessionTimeoutInterceptor', ['$log', function($lo
     $log.debug('$log is here to show you that this is a regular factory with injection');
 
     var sessionTimeoutInterceptor = {
-    		 responseError: function(response) {
-   	            if(response.status == 419 ){//session is timeout
-                    alert("会话超时,请重新登录！");
- 	                //如果超时就处理 ，指定要跳转的页面  
-	                window.location.replace("/" + window.location.pathname.split("/")[1] + "/index");  
-    		    }else{
-    		    	return response;
-    		    }
-    			 
-    		 }
+		responseError: function(response) {
+			if(response.status == 419 ){//session is timeout
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : "失败",
+                    message : "会话超时,请重新登录！"
+                });
+				//如果超时就处理 ，指定要跳转的页面
+				window.location.replace("/" + window.location.pathname.split("/")[1] + "/index");
+			}else{
+				return response;
+			}
+		}
     };
 
     return sessionTimeoutInterceptor;
@@ -50,7 +53,7 @@ personalSeatManageApp.factory('sessionTimeoutInterceptor', ['$log', function($lo
 
 
 personalSeatManageApp.config(['$httpProvider', function($httpProvider) {
-    //$httpProvider.interceptors.push('sessionTimeoutInterceptor');
+    $httpProvider.interceptors.push('sessionTimeoutInterceptor');
 }]);
 /*
  * angular.module("seatManageApp").config([ '$routeProvider',

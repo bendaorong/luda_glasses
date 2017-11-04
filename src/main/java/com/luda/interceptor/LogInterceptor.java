@@ -6,8 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-public class LogInterceptor
-        implements HandlerInterceptor
+public class LogInterceptor implements HandlerInterceptor
 {
     private static final Logger LOG = Logger.getLogger(LogInterceptor.class);
     private ThreadLocal<Long> systime = new ThreadLocal();

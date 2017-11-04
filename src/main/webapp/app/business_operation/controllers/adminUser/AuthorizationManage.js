@@ -131,6 +131,7 @@
             }
             // 入职时间
 		    $scope.newAdminUser.adminUserDetailModel.onboardDate = $("#onboardDate").val();
+            $scope.newAdminUser.adminUserDetailModel.birthday = $("#birthday").val();
 
 			adminUserService.addAdminUser($scope.newAdminUser,function(data){
 				if(data.success){

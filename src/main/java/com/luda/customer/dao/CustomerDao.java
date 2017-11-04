@@ -21,7 +21,5 @@ public interface CustomerDao {
 
     int removeCustomer(int customerId);
 
-
-
-
+    String getMaxCode();
 }

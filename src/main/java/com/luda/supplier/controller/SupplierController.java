@@ -153,6 +153,7 @@ public class SupplierController extends BaseController{
      * @return
      */
     @RequestMapping(value = "/removeSupplier/{supplierId}", method = RequestMethod.POST)
+    @ResponseBody
     public String removeSupplier(@PathVariable int supplierId){
         String result = "";
         try {

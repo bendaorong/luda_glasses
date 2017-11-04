@@ -1,0 +1,65 @@
+[{
+  "id" : "100",
+  "name" : "基础资料",
+  "subpages" : [ {
+    "id" : "100100",
+    "name" : "门店",
+    "page" : "#storeManage"
+  }, {
+    "id" : "100200",
+    "name" : "员工",
+    "page" : "#AuthorizationManage"
+  }, {
+    "id" : "100300",
+    "name" : "商品",
+    "page" : "#materielManage"
+  }, {
+    "id" : "100400",
+    "name" : "供应商",
+    "page" : "#supplierManage"
+  }, {
+    "id" : "100500",
+    "name" : "商品类型",
+    "page" : "#goodsTypeManage"
+  }]
+} ,{
+  "id" : "200",
+  "name" : "库存管理",
+  "subpages" : [ {
+    "id" : "200100",
+    "name" : "商品库存",
+    "page" : "#mardManage"
+  }, {
+    "id" : "200200",
+    "name" : "采购入库单",
+    "page" : "#purchaseOrderManage"
+  }, {
+    "id" : "200300",
+    "name" : "库存盘点",
+    "page" : "#inventoryVerificationManage"
+  }, {
+    "id" : "200400",
+    "name" : "调拨单",
+    "page" : "#transferOrderManage"
+  }]
+},{
+  "id" : "500",
+  "name" : "报表管理",
+  "subpages" : [ {
+    "id" : "500100",
+    "name" : "销售报表",
+    "page" : "#0"
+  },{
+    "id" : "500200",
+    "name" : "采购报表",
+    "page" : "#0"
+  },{
+    "id" : "500300",
+    "name" : "库存报表",
+    "page" : "#0"
+  },{
+    "id" : "500400",
+    "name" : "财务报表",
+    "page" : "#0"
+  }]
+}]

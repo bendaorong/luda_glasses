@@ -34,6 +34,7 @@ public class CustomerServiceImpl implements CustomerService{
     public ResultHandle<CustomerModel> saveCustomer(CustomerModel customerModel) {
         ResultHandle<CustomerModel> resultHandle = new ResultHandle<CustomerModel>();
         try {
+            customerModel.setCode(getNextCustomerCode());
             this.customerDao.saveCustomer(customerModel);
             resultHandle.setReturnContent(customerModel);
         }catch (Exception e){
@@ -41,6 +42,21 @@ public class CustomerServiceImpl implements CustomerService{
             log.error("save customer error", e);
         }
         return resultHandle;
+    }
+
+    /**
+     * 获取下一个客户编号
+     * @return
+     */
+    private synchronized  String getNextCustomerCode() {
+        String currentCode = customerDao.getMaxCode();
+        // 默认从0001开始计数
+        if(StringUtils.isEmpty(currentCode)){
+            return "0001";
+        }
+        // 新编号=当前编号+1，不足4位数则前面补0
+        int newCode = Integer.valueOf(currentCode) + 1;
+        return String.format("%04d", newCode);
     }
 
     @Override

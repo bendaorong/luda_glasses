@@ -7,6 +7,7 @@
         <result property="loginPassword" column="login_password" />
         <result property="adminCode" column="admin_code"/>
         <result property="adminName" column="admin_name"/>
+        <result property="staffid" column="staffid"/>
         <result property="roleId" column="role_id"/>
         <result property="storeId" column="store_id"/>
         <result property="activeFlag" column="active_flag"/>
@@ -33,6 +34,13 @@
         <result property="onboardDate" column="onboard_date"/>
         <result property="dimissionDate" column="dimission_date"/>
         <result property="postcode" column="postcode"/>
+        <result property="birthday" column="birthday"/>
+        <result property="education" column="education"/>
+        <result property="maritalStatus" column="marital_status"/>
+        <result property="bankAccount" column="bank_account"/>
+        <result property="bank" column="bank"/>
+        <result property="wechatNumber" column="wechat_number"/>
+        <result property="qqNumber" column="qq_number"/>
     </resultMap>
 
     <resultMap id="adminUserModelWithDetailMap" type="com.luda.user.model.AdminUserModel" extends="adminUserModelMap">
@@ -89,7 +97,14 @@
             postcode = #{postcode},
             position = #{position},
             onboard_date = #{onboardDate},
-            dimission_date = #{dimissionDate}
+            dimission_date = #{dimissionDate},
+            birthday = #{birthday},
+            education = #{education},
+            marital_status = #{maritalStatus},
+            bank_account = #{bankAccount},
+            bank = #{bank},
+            wechat_number = #{wechatNumber},
+            qq_number = #{qqNumber}
         where
             admin_user_id = #{adminUserId}
     </update>
@@ -106,6 +121,7 @@
             admin_name,
             mobile_number,
             login_password,
+            staffid,
             store_id,
             role_id,
             active_flag
@@ -116,6 +132,7 @@
             #{adminName},
             #{mobileNumber},
             #{loginPassword},
+            #{staffid},
             #{storeId},
             #{roleId},
             #{activeFlag}
@@ -136,7 +153,14 @@
             create_datetime,
             update_datetime,
             position,
-            onboard_date
+            onboard_date,
+            birthday,
+            education,
+            marital_status,
+            bank_account,
+            bank,
+            wechat_number,
+            qq_number
         )
         values
         (
@@ -151,7 +175,14 @@
             now(),
             now(),
             #{position},
-            #{onboardDate}
+            #{onboardDate},
+            #{birthday},
+            #{education},
+            #{maritalStatus},
+            #{bankAccount},
+            #{bank},
+            #{wechatNumber},
+            #{qqNumber}
         )
     </insert>
 

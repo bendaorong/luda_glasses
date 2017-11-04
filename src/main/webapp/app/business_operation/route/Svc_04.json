@@ -1,0 +1,21 @@
+[{
+  "id" : "300",
+  "name" : "销售管理",
+  "subpages" : [{
+    "id" : "300200",
+    "name" : "销售单",
+    "page" : "#salesOrderManage"
+  }, {
+    "id" : "300300",
+    "name" : "退货单",
+    "page" : "#refundOrderManage"
+  }]
+},{
+  "id" : "400",
+  "name" : "客户管理",
+  "subpages" : [ {
+    "id" : "400100",
+    "name" : "客户管理",
+    "page" : "#customerManage"
+  }]
+}]

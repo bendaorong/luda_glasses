@@ -30,7 +30,13 @@
 				<div class="form-group">
 					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">用户</label>
 					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-						<input type="text" class="form-control" ng-model="selectAdminUser.adminName" ng-readonly="true">
+						<input type="text" class="form-control" ng-model="selectAdminUser.adminName" ng-readonly="true"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">工号</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="text" class="form-control" ng-model="selectAdminUser.staffid" />
 					</div>
 				</div>
 				<div class="form-group">
@@ -58,7 +64,7 @@
 				<div class="form-group">
 					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">性别</label>
 					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-						<select ng-model="selectAdminUser.gender">
+						<select ng-model="selectAdminUser.adminUserDetailModel.gender">
 							<option value="M" ng-selected="selectAdminUser.adminUserDetailModel.gender=='M'">男</option>
 							<option value="F" ng-selected="selectAdminUser.adminUserDetailModel.gender=='F'">女</option>
 						</select>
@@ -98,6 +104,63 @@
 					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">邮政编码</label>
 					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.postcode" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">出生年月</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input class="form-control" type="text"
+							   onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+							   ng-model="selectAdminUser.adminUserDetailModel.birthday" name="birthday"
+							   id="birthday" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">学历</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<select ng-model="selectAdminUser.adminUserDetailModel.education">
+							<option value="博士">博士</option>
+							<option value="硕士">硕士</option>
+							<option value="研究生">研究生</option>
+							<option value="本科">本科</option>
+							<option value="大专">大专</option>
+							<option value="高中">高中</option>
+							<option value="初中">初中</option>
+							<option value="小学">小学</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">婚姻状况</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<select ng-model="selectAdminUser.adminUserDetailModel.maritalStatus">
+							<option value="已婚">已婚</option>
+							<option value="未婚">未婚</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">银行账户</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.bankAccount" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">开户行</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.bank" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">微信</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.wechatNumber" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">QQ</label>
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.qqNumber" />
 					</div>
 				</div>
 				<div class="form-group">

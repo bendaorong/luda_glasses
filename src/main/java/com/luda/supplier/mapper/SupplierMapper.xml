@@ -12,6 +12,9 @@
         <result property="contactPhone" column="contact_phone"/>
         <result property="useFlag" column="use_flag"/>
         <result property="remark" column="remark"/>
+        <result property="companyName" column="company_name"/>
+        <result property="fax" column="fax"/>
+        <result property="address" column="address"/>
     </resultMap>
 
     <resultMap id="supplierContactMapper" type="com.luda.supplier.model.SupplierContactModel">
@@ -43,7 +46,10 @@
             contact_person,
             contact_phone,
             use_flag,
-            remark
+            remark,
+            company_name,
+            fax,
+            address
         )
         values
         (
@@ -55,7 +61,10 @@
             #{contactPerson},
             #{contactPhone},
             #{useFlag},
-            #{remark}
+            #{remark},
+            #{companyName},
+            #{fax},
+            #{address}
         )
     </insert>
 
@@ -101,7 +110,10 @@
             contact_person = #{contactPerson},
             contact_phone = #{contactPhone},
             use_flag = #{useFlag},
-            remark = #{remark}
+            remark = #{remark},
+            company_name = #{companyName},
+            fax = #{fax},
+            address = #{address}
         where supplier_id = #{supplierId}
     </update>
 

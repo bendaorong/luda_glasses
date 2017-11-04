@@ -20,15 +20,15 @@ public class SessionTimeoutInterceptor implements HandlerInterceptor{
             throws Exception
     {
         String contextPath = request.getContextPath();
-//        if (request.getSession().getAttribute("sessionInfo") == null) {
-//            if (isAjax(request)) {
-//                response.setStatus(419);
-//            } else {
-//                response.sendRedirect(request.getContextPath() + "/login");
-//                request.getRequestDispatcher("/WEB-INF/views/jsp/session_timeout.jsp").forward(request, response);
-//            }
-//            return false;
-//        }
+        if (request.getSession().getAttribute("sessionInfo") == null) {
+        if (isAjax(request)) {
+            response.setStatus(419);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/login");
+            request.getRequestDispatcher("/WEB-INF/views/jsp/session_timeout.jsp").forward(request, response);
+        }
+        return false;
+    }
         return true;
     }
 

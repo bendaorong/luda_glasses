@@ -21,6 +21,10 @@ public class SupplierModel implements Serializable {
      */
     private String supplierName;
     /**
+     * 公司名称
+     */
+    private String companyName;
+    /**
      * 银行
      */
     private String bank;
@@ -37,9 +41,17 @@ public class SupplierModel implements Serializable {
      */
     private String contactPerson;
     /**
-     * 电话号码
+     * 联系电话
      */
     private String contactPhone;
+    /**
+     * 传真
+     */
+    private String fax;
+    /**
+     * 地址
+     */
+    private String address;
     /**
      * 停用(1:使用 0:停用)
      */
@@ -129,17 +141,44 @@ public class SupplierModel implements Serializable {
         this.remark = remark;
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getFax() {
+        return fax;
+    }
+
+    public void setFax(String fax) {
+        this.fax = fax;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
         return "SupplierModel{" +
                 "supplierId=" + supplierId +
                 ", supplierCode='" + supplierCode + '\'' +
                 ", supplierName='" + supplierName + '\'' +
+                ", companyName='" + companyName + '\'' +
                 ", bank='" + bank + '\'' +
                 ", bankAccount='" + bankAccount + '\'' +
                 ", regTaxNo='" + regTaxNo + '\'' +
                 ", contactPerson='" + contactPerson + '\'' +
                 ", contactPhone='" + contactPhone + '\'' +
+                ", fax='" + fax + '\'' +
+                ", address='" + address + '\'' +
                 ", useFlag=" + useFlag +
                 ", remark='" + remark + '\'' +
                 '}';

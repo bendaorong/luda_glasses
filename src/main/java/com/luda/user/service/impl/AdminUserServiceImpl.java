@@ -16,6 +16,9 @@ import java.util.List;
 
 @Service("adminUserService")
 public class AdminUserServiceImpl implements AdminUserService {
+    // 缓存当前最大用户编号
+    private static String CURRENT__CODE = null;
+
     @Autowired
     private AdminUserDao adminUserDao;
 

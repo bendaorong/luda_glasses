@@ -43,6 +43,34 @@ public class AdminUserDetailModel implements Serializable{
      */
     private String address;
     /**
+     * 生日
+     */
+    private String birthday;
+    /**
+     * 学历
+     */
+    private String education;
+    /**
+     * 婚姻状况
+     */
+    private String maritalStatus;
+    /**
+     * 银行账号
+     */
+    private String bankAccount;
+    /**
+     * 开户行
+     */
+    private String bank;
+    /**
+     * 微信
+     */
+    private String wechatNumber;
+    /**
+     * QQ
+     */
+    private String qqNumber;
+    /**
      * 职位
      */
     private String position;
@@ -182,6 +210,62 @@ public class AdminUserDetailModel implements Serializable{
         this.updateDatetime = updateDatetime;
     }
 
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
+
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+    public String getBankAccount() {
+        return bankAccount;
+    }
+
+    public void setBankAccount(String bankAccount) {
+        this.bankAccount = bankAccount;
+    }
+
+    public String getBank() {
+        return bank;
+    }
+
+    public void setBank(String bank) {
+        this.bank = bank;
+    }
+
+    public String getWechatNumber() {
+        return wechatNumber;
+    }
+
+    public void setWechatNumber(String wechatNumber) {
+        this.wechatNumber = wechatNumber;
+    }
+
+    public String getQqNumber() {
+        return qqNumber;
+    }
+
+    public void setQqNumber(String qqNumber) {
+        this.qqNumber = qqNumber;
+    }
+
     @Override
     public String toString() {
         return "AdminUserDetailModel{" +
@@ -192,6 +276,13 @@ public class AdminUserDetailModel implements Serializable{
                 ", idNo='" + idNo + '\'' +
                 ", nativePlace='" + nativePlace + '\'' +
                 ", address='" + address + '\'' +
+                ", birthday='" + birthday + '\'' +
+                ", education='" + education + '\'' +
+                ", maritalStatus='" + maritalStatus + '\'' +
+                ", bankAccount='" + bankAccount + '\'' +
+                ", bank='" + bank + '\'' +
+                ", wechatNumber='" + wechatNumber + '\'' +
+                ", qqNumber='" + qqNumber + '\'' +
                 ", position='" + position + '\'' +
                 ", onboardDate=" + onboardDate +
                 ", dimissionDate=" + dimissionDate +

@@ -39,6 +39,7 @@ public class StoreModel implements Serializable{
     /**
      * qq号码
      */
+    @Deprecated
     private String qqNumber;
     /**
      * 是否总店

@@ -9,7 +9,6 @@
         <result property="contactPhone" column="contact_phone"/>
         <result property="faxPhone" column="fax_phone"/>
         <result property="storeAddress" column="store_address"/>
-        <result property="qqNumber" column="qq_number"/>
         <result property="headOfficeFlag" column="head_office_flag"/>
         <result property="remark" column="remark"/>
     </resultMap>
@@ -27,7 +26,6 @@
             contact_phone,
             fax_phone,
             store_address,
-            qq_number,
             head_office_flag,
             remark
         )
@@ -39,7 +37,6 @@
             #{contactPhone},
             #{faxPhone},
             #{storeAddress},
-            #{qqNumber},
             #{headOfficeFlag},
             #{remark}
         )
@@ -65,7 +62,6 @@
             contact_phone = #{contactPhone},
             fax_phone = #{faxPhone},
             store_address = #{storeAddress},
-            qq_number = #{qqNumber},
             head_office_flag = #{headOfficeFlag},
             remark = #{remark}
         where store_id = #{storeId}

@@ -18,6 +18,8 @@ create table admin_user
 
 CREATE UNIQUE INDEX idx_mobile_number on admin_user(mobile_number);
 
+alter table admin_user add staffid varchar(16) not null comment '员工工号';
+
 
 
 /*==============================================================*/
@@ -42,6 +44,13 @@ create table admin_user_detail
    PRIMARY KEY (admin_user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+alter table admin_user_detail add birthday varchar(16) comment '出生年月';
+alter table admin_user_detail add education varchar(16) comment '学历';
+alter table admin_user_detail add marital_status varchar(16) comment '婚姻状况';
+alter table admin_user_detail add bank_account VARCHAR (64) comment '银行账号';
+alter table admin_user_detail add bank varchar(64) comment '开户行';
+alter table admin_user_detail add wechat_number varchar(32) comment '微信号';
+alter table admin_user_detail add qq_number varchar(16) comment 'QQ号';
 
 
 insert into admin_user
@@ -121,6 +130,10 @@ create table supplier
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE UNIQUE INDEX idx_supplier_code on supplier(supplier_code);
+
+alter table supplier add company_name varchar(64) comment '公司名称';
+alter table supplier add fax varchar(32) comment '传真';
+alter table supplier add address varchar(128) comment '地址';
 
 /*==============================================================*/
 /* Table: supplier_contact                                      */
@@ -423,7 +436,7 @@ create table sales_order (
   store_id              int(11)               not null,
   businessman_id        int(11),
   customer_id           int(11)                not null,
-  order_type            char(2)               null comment '订单类型 01:销售单 02:退货单'
+  order_type            char(2)               null comment '订单类型 01:销售单 02:退货单',
   pick_up_date          DATE                  null comment '取货日期',
   total_quantity        int(11) comment '总数量',
   total_amount          double(10,2) comment '总价',
