@@ -5,6 +5,9 @@
         <id property="id" column="id"/>
         <result property="materielId" column="materiel_id"/>
         <result property="storeId" column="store_id"/>
+        <result property="sphere" column="sphere"/>
+        <result property="cylinder" column="cylinder"/>
+        <result property="axial" column="axial"/>
         <result property="currentInventory" column="cur_inventory"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
@@ -35,11 +38,13 @@
         <result property="createTime" column="create_time"/>
         <result property="updateUserId" column="update_user_id"/>
         <result property="updateTime" column="update_time"/>
+        <result property="orderType" column="order_type"/>
     </resultMap>
 
     <resultMap id="purchaseOrderItemMap" type="com.luda.inventory.model.PurchaseOrderItem">
         <id property="itemId" column="item_id"/>
         <result property="purchaseOrderId" column="purchase_order_id"/>
+        <result property="mardId" column="mard_id"/>
         <result property="materielId" column="materiel_id"/>
         <result property="purchasePrice" column="purchase_price"/>
         <result property="purchaseQuantity" column="purchase_quantity"/>
@@ -68,7 +73,11 @@
     <resultMap id="invntVerifItemMap" type="com.luda.inventory.model.InventoryVerificationItem">
         <id property="id" column="id"/>
         <result property="inventoryVerificationId" column="inventory_verification_id"/>
+        <result property="mardId" column="mard_id"/>
         <result property="materielId" column="materiel_id"/>
+        <result property="sphere" column="sphere"/>
+        <result property="cylinder" column="cylinder"/>
+        <result property="axial" column="axial"/>
         <result property="quantity" column="quantity"/>
         <result property="type" column="invnt_type"/>
         <result property="remark" column="remark"/>
@@ -98,7 +107,11 @@
     <resultMap id="transferOrderItemMap" type="com.luda.inventory.model.TransferOrderItem">
         <id property="itemId" column="id"/>
         <result property="transferOrderId" column="inventory_transfer_id"/>
+        <result property="mardId" column="mard_id"/>
         <result property="materielId" column="materiel_id"/>
+        <result property="sphere" column="sphere"/>
+        <result property="cylinder" column="cylinder"/>
+        <result property="axial" column="axial"/>
         <result property="quantity" column="quantity"/>
         <result property="remark" column="remark"/>
         <association property="materiel" column="materiel_id" select="com.luda.materiel.dao.MaterielDao.getById"/>
@@ -123,7 +136,8 @@
             create_User_id,
             create_time,
             update_user_id,
-            update_time
+            update_time,
+            order_type
         )
         values
         (
@@ -138,7 +152,8 @@
             #{createUserId},
             now(),
             #{updateUserId},
-            now()
+            now(),
+            #{orderType}
         )
     </insert>
 
@@ -160,14 +175,20 @@
                 materiel_id,
                 purchase_price,
                 purchase_quantity,
-                remark
+                remark,
+                sphere,
+                cylinder,
+                axial
             )
             VALUES (
                 #{item.purchaseOrderId},
                 #{item.materielId},
                 #{item.purchasePrice},
                 #{item.purchaseQuantity},
-                #{item.remark}
+                #{item.remark},
+                #{item.sphere},
+                #{item.cylinder},
+                #{item.axial}
             )
         </foreach>
     </insert>
@@ -186,7 +207,15 @@
     </update>
 
     <select id="lockMard" resultMap="mardMap">
-        select * from mard where materiel_id = #{materielId} and store_id = #{storeId} for update
+        select * from mard
+        where
+            materiel_id = #{materielId} and store_id = #{storeId}
+            and sphere = #{sphere} and cylinder = #{cylinder} and axial = #{axial}
+        for update
+    </select>
+
+    <select id="lockMardById" resultMap="mardMap">
+        select * from mard where id = #{id} for update
     </select>
 
     <update id="updateMard">
@@ -200,6 +229,9 @@
         (
             materiel_id,
             store_id,
+            sphere,
+            cylinder,
+            axial,
             cur_inventory,
             create_time,
             update_time
@@ -208,6 +240,9 @@
         (
             #{materielId},
             #{storeId},
+            #{sphere},
+            #{cylinder},
+            #{axial},
             #{currentInventory},
             now(),
             now()
@@ -215,7 +250,13 @@
     </insert>
 
     <select id="getMard" resultMap="mardMap">
-        select * from mard where materiel_id = #{materielId} and store_id = #{storeId}
+        select * from mard
+        where materiel_id = #{materielId} and store_id = #{storeId}
+        and sphere = #{sphere} and cylinder = #{cylinder} and axial = #{axial}
+    </select>
+
+    <select id="getMardById" resultMap="mardMap">
+        select * from mard where id = #{id}
     </select>
 
     <select id="fetchAllMardVoList" resultMap="mardVoMap">
@@ -240,7 +281,7 @@
         on po.supplier_id = sp.supplier_id
         left join admin_user_detail u
         on po.businessman_id = u.admin_user_id
-        where po.delete_flag = 0
+        where po.order_type = #{orderType} and po.delete_flag = 0
         order by po.purchase_order_id desc
     </select>
 
@@ -324,6 +365,7 @@
             INSERT INTO inventory_verification_item
             (
                 inventory_verification_id,
+                mard_id,
                 materiel_id,
                 quantity,
                 invnt_type,
@@ -331,6 +373,7 @@
             )
             VALUES (
                 #{item.inventoryVerificationId},
+                #{item.mardId},
                 #{item.materielId},
                 #{item.quantity},
                 #{item.type},
@@ -378,7 +421,11 @@
     </select>
 
     <select id="fetchInvntVerificationItemList" resultMap="invntVerifItemMap">
-        select * from inventory_verification_item where inventory_verification_id = #{inventoryVerificationId}
+        select a.*, b.sphere, b.cylinder, b.axial
+        from inventory_verification_item a
+        left join mard b
+        on a.mard_id = b.id
+        where a.inventory_verification_id = #{inventoryVerificationId}
     </select>
 
     <update id="updateInvntVerification" parameterType="com.luda.inventory.model.InventoryVerification">
@@ -397,6 +444,7 @@
         INSERT INTO inventory_verification_item
             (
                 inventory_verification_id,
+                mard_id,
                 materiel_id,
                 quantity,
                 invnt_type,
@@ -404,6 +452,7 @@
             )
             VALUES (
                 #{inventoryVerificationId},
+                #{mardId},
                 #{materielId},
                 #{quantity},
                 #{type},
@@ -416,7 +465,11 @@
     </delete>
 
     <select id="getInvntVerificationItemById" resultMap="invntVerifItemMap">
-        select * from inventory_verification_item where id = #{id}
+        select a.*, b.sphere, b.cylinder, b.axial
+        from inventory_verification_item a
+        left join mard b
+        on a.mard_id = b.id
+        where a.id = #{id}
     </select>
 
     <insert id="saveTransferOrder" parameterType="com.luda.inventory.model.TransferOrder"
@@ -454,6 +507,7 @@
         insert into inventory_transfer_item
         (
             inventory_transfer_id,
+            mard_id,
             materiel_id,
             quantity,
             remark
@@ -461,6 +515,7 @@
         values
         (
             #{transferOrderId},
+            #{mardId},
             #{materielId},
             #{quantity},
             #{remark}
@@ -489,11 +544,17 @@
     </select>
 
     <select id="getTransferOrderItems" resultMap="transferOrderItemMap">
-        select * from inventory_transfer_item where inventory_transfer_id = #{transferOrderId}
+        select a.*, b.sphere, b.cylinder, b.axial from inventory_transfer_item a
+        left join mard b
+        on a.mard_id = b.id
+        where a.inventory_transfer_id = #{transferOrderId}
     </select>
 
     <select id="getTransferOrderItemById" resultMap="transferOrderItemMap">
-        select * from inventory_transfer_item where id = #{itemId}
+        select a.*, b.sphere, b.cylinder, b.axial from inventory_transfer_item a
+        left join mard b
+        on a.mard_id = b.id
+        where a.id = #{itemId}
     </select>
 
     <delete id="removeTransferOrderItem">

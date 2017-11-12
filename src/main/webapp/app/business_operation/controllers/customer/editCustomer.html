@@ -26,7 +26,7 @@
 
 <div id="top">
     <div class="seat-manage-operate-container">
-        <h3 class="seat-manage-operate-title"></h3>
+        <h3 class="seat-manage-operate-title">编辑客户信息</h3>
         <div class="seat-manage-operate-button form-inline">
             <button class="btn btn-success btn-sm" ng-click="updateCustomer()" ng-disabled="!myform.$valid">保存</button>
             <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
@@ -57,6 +57,12 @@
                             <option value="M">男</option>
                             <option value="F">女</option>
                         </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">年龄</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" ng-model="selectCustomer.age"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -101,6 +107,7 @@
                                ng-model="selectCustomer.address" />
                     </div>
                 </div>
+            </fieldset>
         </form>
     </div>
 </div>

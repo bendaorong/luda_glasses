@@ -129,6 +129,12 @@
                                ng-model="selectPurchaseOrder.totalAmount"/>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">备注</label>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <textarea rows="5" ng-model="selectPurchaseOrder.remark" style="width:100%"></textarea>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -187,7 +193,7 @@
             <td>
                 <select class="form-control" id="abc" ng-model="purchaseOrderItem.materielId">
                     <option>请选择商品</option>
-                    <option ng-repeat="m in materielList" value="{{m.id}}">{{m.code}}</option>
+                    <option ng-repeat="m in materielList" value="{{m.id}}">{{m.name}}</option>
                 </select>
             </td>
         </tr>

@@ -16,9 +16,25 @@ public class SalesOrderItem implements Serializable {
      */
     private int salesOrderId;
     /**
+     * 库存id
+     */
+    private int mardId;
+    /**
      * 商品
      */
     private int materielId;
+    /**
+     * 球镜
+     */
+    private double sphere;
+    /**
+     * 柱镜
+     */
+    private double cylinder;
+    /**
+     * 轴向
+     */
+    private double axial;
     /**
      * 数量
      */
@@ -35,6 +51,14 @@ public class SalesOrderItem implements Serializable {
      * 商品
      */
     private MaterielModel materiel;
+
+    public int getMardId() {
+        return mardId;
+    }
+
+    public void setMardId(int mardId) {
+        this.mardId = mardId;
+    }
 
     public int getItemId() {
         return itemId;
@@ -92,12 +116,40 @@ public class SalesOrderItem implements Serializable {
         this.materiel = materiel;
     }
 
+    public double getSphere() {
+        return sphere;
+    }
+
+    public void setSphere(double sphere) {
+        this.sphere = sphere;
+    }
+
+    public double getCylinder() {
+        return cylinder;
+    }
+
+    public void setCylinder(double cylinder) {
+        this.cylinder = cylinder;
+    }
+
+    public double getAxial() {
+        return axial;
+    }
+
+    public void setAxial(double axial) {
+        this.axial = axial;
+    }
+
     @Override
     public String toString() {
-        return "SalesListItem{" +
+        return "SalesOrderItem{" +
                 "itemId=" + itemId +
                 ", salesOrderId=" + salesOrderId +
+                ", mardId=" + mardId +
                 ", materielId=" + materielId +
+                ", sphere=" + sphere +
+                ", cylinder=" + cylinder +
+                ", axial=" + axial +
                 ", quantity=" + quantity +
                 ", sellPrice=" + sellPrice +
                 ", remark='" + remark + '\'' +

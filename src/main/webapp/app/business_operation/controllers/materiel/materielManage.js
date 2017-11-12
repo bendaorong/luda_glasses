@@ -50,11 +50,6 @@
             if(confirm("确认删除该商品吗？")){
                 materielService.removeMateriel(id, function(data){
                     if(data.success){
-                        BootstrapDialog.show({
-                            type : BootstrapDialog.TYPE_SUCCESS,
-                            title : '消息',
-                            message : '商品删除成功'
-                        });
                         $scope.refresh();
                     }else {
                         BootstrapDialog.show({
@@ -72,7 +67,7 @@
                 });
             }
         }
-    }).controller("addMaterielController",function($location, $scope, materielService, dictionaryService){
+    }).controller("addMaterielController",function($location, $scope, materielService, dictionaryService, supplierService){
         $scope.newMateriel = {};
         // 商品类型
         $scope.goodsTypeList = [];
@@ -82,6 +77,19 @@
         $scope.goodsColorList = [];
         // 商品单位
         $scope.goodsUnitList = [];
+        // 供应商
+        $scope.supplierList = [];
+
+        // 查询供应商
+        supplierService.fetchSupplierList(function (data) {
+            $scope.supplierList = data.data;
+        },function (data) {
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取供应商失败:' + data.errorMsg
+            });
+        });
 
         // 查询商品类型
         dictionaryService.fetchGoodsTypeList(function(data){
@@ -156,7 +164,7 @@
         $scope.cancel = function(){
             history.back();
         }
-    }).controller("editMaterielController",function($location,$scope,$filter,materielService,dictionaryService,$routeParams){
+    }).controller("editMaterielController",function($location,$scope,$filter,supplierService,materielService,dictionaryService,$routeParams){
         $scope.selectMateriel={};
         // 商品类型
         $scope.goodsTypeList = [];
@@ -166,6 +174,19 @@
         $scope.goodsColorList = [];
         // 商品单位
         $scope.goodsUnitList = [];
+        // 供应商
+        $scope.supplierList = [];
+
+        // 查询供应商
+        supplierService.fetchSupplierList(function (data) {
+            $scope.supplierList = data.data;
+        },function (data) {
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取供应商失败:' + data.errorMsg
+            });
+        });
 
         // 查询商品类型
         dictionaryService.fetchGoodsTypeList(function(data){

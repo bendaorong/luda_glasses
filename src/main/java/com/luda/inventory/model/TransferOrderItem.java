@@ -15,9 +15,25 @@ public class TransferOrderItem implements Serializable{
      */
     private int transferOrderId;
     /**
+     * 库存id
+     */
+    private int mardId;
+    /**
      * 商品id
      */
     private int materielId;
+    /**
+     * 球镜
+     */
+    private double sphere;
+    /**
+     * 柱镜
+     */
+    private double cylinder;
+    /**
+     * 轴向
+     */
+    private double axial;
     /**
      * 调拨数量
      */
@@ -31,6 +47,14 @@ public class TransferOrderItem implements Serializable{
      * 商品
      */
     private MaterielModel materiel;
+
+    public int getMardId() {
+        return mardId;
+    }
+
+    public void setMardId(int mardId) {
+        this.mardId = mardId;
+    }
 
     public MaterielModel getMateriel() {
         return materiel;
@@ -80,12 +104,40 @@ public class TransferOrderItem implements Serializable{
         this.remark = remark;
     }
 
+    public double getSphere() {
+        return sphere;
+    }
+
+    public void setSphere(double sphere) {
+        this.sphere = sphere;
+    }
+
+    public double getCylinder() {
+        return cylinder;
+    }
+
+    public void setCylinder(double cylinder) {
+        this.cylinder = cylinder;
+    }
+
+    public double getAxial() {
+        return axial;
+    }
+
+    public void setAxial(double axial) {
+        this.axial = axial;
+    }
+
     @Override
     public String toString() {
         return "TransferOrderItem{" +
                 "itemId=" + itemId +
                 ", transferOrderId=" + transferOrderId +
+                ", mardId=" + mardId +
                 ", materielId=" + materielId +
+                ", sphere=" + sphere +
+                ", cylinder=" + cylinder +
+                ", axial=" + axial +
                 ", quantity=" + quantity +
                 ", remark='" + remark + '\'' +
                 ", materiel=" + materiel +

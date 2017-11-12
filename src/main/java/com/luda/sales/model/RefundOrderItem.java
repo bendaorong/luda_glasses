@@ -19,6 +19,10 @@ public class RefundOrderItem {
      */
     private int salesOrderItemId;
     /**
+     * 库存id
+     */
+    private int mardId;
+    /**
      * 商品
      */
     private int materielId;
@@ -38,6 +42,14 @@ public class RefundOrderItem {
      * 商品
      */
     private MaterielModel materiel;
+
+    public int getMardId() {
+        return mardId;
+    }
+
+    public void setMardId(int mardId) {
+        this.mardId = mardId;
+    }
 
     public int getItemId() {
         return itemId;
@@ -109,6 +121,7 @@ public class RefundOrderItem {
                 "itemId=" + itemId +
                 ", refundOrderId=" + refundOrderId +
                 ", salesOrderItemId=" + salesOrderItemId +
+                ", mardId=" + mardId +
                 ", materielId=" + materielId +
                 ", quantity=" + quantity +
                 ", sellPrice=" + sellPrice +

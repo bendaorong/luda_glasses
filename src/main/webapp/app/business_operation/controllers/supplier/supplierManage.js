@@ -109,11 +109,11 @@
         $scope.removeSupplier = function(supplierId){
             if(confirm("确认删除该供应商吗？")){
                 supplierService.removeSupplier(supplierId, function(data){
-                    BootstrapDialog.show({
-                        type : BootstrapDialog.TYPE_SUCCESS,
-                        title : '消息',
-                        message : '供应商删除成功'
-                    });
+                    // BootstrapDialog.show({
+                    //     type : BootstrapDialog.TYPE_SUCCESS,
+                    //     title : '消息',
+                    //     message : '供应商删除成功'
+                    // });
                     $scope.refresh();
                 },function(data){
                     BootstrapDialog.show({

@@ -91,6 +91,15 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/addPurchaseOrder",{
         templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/newPurchaseOrder.html",
         controller : "addPurchaseOrderController"
+    }).when("/purchaseRefundOrderManage", {
+        templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/refund/purchaseRefundOrderList.html",
+        controller : "purchaseRefundOrderManageController"
+    }).when("/editPurchaseRefundOrder/:id", {
+        templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/refund/editPurchaseRefundOrder.html",
+        controller : "editPurchaseRefundOrderController"
+    }).when("/addPurchaseRefundOrder",{
+        templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/refund/newPurchaseRefundOrder.html",
+        controller : "addPurchaseRefundOrderController"
     }).when("/inventoryVerificationManage", {
         templateUrl : "app/business_operation/controllers/inventory/inventoryVerification/inventoryVerificationList.html",
         controller : "invntVerifManageController"
@@ -109,6 +118,9 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/editCustomer/:customerId",{
         templateUrl : "app/business_operation/controllers/customer/editCustomer.html",
         controller : "editCustomerController"
+    }).when("/customerDetail/:customerId", {
+        templateUrl : "app/business_operation/controllers/customer/customerDetail.html",
+        controller : "customerDetailController"
     }).when("/transferOrderManage", {
         templateUrl : "app/business_operation/controllers/inventory/transfer/transferList.html",
         controller : "transferOrderManageController"
@@ -497,8 +509,9 @@ businessOperationApp.factory("inventoryService", function($http) {
         fetchMardVoList : function(successCallback, errorCallback){
             $http.get("/luda_glasses/rest/inventory/mard/list").success(successCallback).error(errorCallback);
         },
-        fetchPurchaseOrderList : function (successCallback, errorCallback) {
-            $http.get("/luda_glasses/rest/inventory/purchaseOrder/list").success(successCallback).error(errorCallback);
+        fetchPurchaseOrderList : function (orderType, successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/inventory/purchaseOrder/list/" + orderType)
+                .success(successCallback).error(errorCallback);
         },
         getPurchaseOrderById : function (id, successCallback, errorCallback) {
             $http.get("/luda_glasses/rest/inventory/purchaseOrder/getById/" + id).success(successCallback).error(errorCallback);
@@ -563,6 +576,7 @@ businessOperationApp.factory("inventoryService", function($http) {
             }).success(successCallback).error(errorCallback);
         },
         saveInvntVerificationItem : function (item, successCallback, errorCallback) {
+            console.log(JSON.stringify(item));
             $http({
                 method:"POST",
                 url:"/luda_glasses/rest/inventory/inventoryVerification/saveInvntVerificationItem",
@@ -628,6 +642,10 @@ businessOperationApp.factory("salesService", function($http) {
     return {
         fetchSalesOrderVoList : function (orderType, successCallback, errorCallback) {
             $http.get("/luda_glasses/rest/sales/fetchSalesOrderVoList/" + orderType)
+                .success(successCallback).error(errorCallback);
+        },
+        fetchCustomerSalesOrderVoList: function (customerId, successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/sales/fetchCustomerSalesOrderVoList/" + customerId)
                 .success(successCallback).error(errorCallback);
         },
         saveSalesOrder : function (salesOrder, successCallback, errorCallback) {
@@ -698,11 +716,16 @@ businessOperationApp.factory("customerService", function($http) {
             }).success(successCallback).error(errorCallback);
         },
         addCustomer : function(newCustomer, successCallback, errorCallback){
-            console.log("newCustomer:" + JSON.stringify(newCustomer));
             $http({
                 method:"POST",
                 url:"/luda_glasses/rest/customer/addCustomer",
                 data:newCustomer
+            }).success(successCallback).error(errorCallback);
+        },
+        fetchOptometryRecordsByCustomerId : function (customerId, successCallback, errorCallback) {
+            $http({
+                method:"GET",
+                url:"/luda_glasses/rest/customer/optometryRecord/getByCustomerId/" + customerId,
             }).success(successCallback).error(errorCallback);
         }
     }

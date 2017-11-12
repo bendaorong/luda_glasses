@@ -11,6 +11,10 @@ import java.io.Serializable;
 public class InventoryVerificationItem implements Serializable {
     private int id;
     /**
+     * 库存id
+     */
+    private int mardId;
+    /**
      * 盘点单Id
      */
     private int inventoryVerificationId;
@@ -22,6 +26,18 @@ public class InventoryVerificationItem implements Serializable {
      * 商品
      */
     private MaterielModel materiel;
+    /**
+     * 球镜
+     */
+    private double sphere;
+    /**
+     * 柱镜
+     */
+    private double cylinder;
+    /**
+     * 轴向
+     */
+    private double axial;
     /**
      * (盘盈盘亏)数量
      */
@@ -107,13 +123,49 @@ public class InventoryVerificationItem implements Serializable {
         this.remark = remark;
     }
 
+    public double getSphere() {
+        return sphere;
+    }
+
+    public void setSphere(double sphere) {
+        this.sphere = sphere;
+    }
+
+    public double getCylinder() {
+        return cylinder;
+    }
+
+    public void setCylinder(double cylinder) {
+        this.cylinder = cylinder;
+    }
+
+    public double getAxial() {
+        return axial;
+    }
+
+    public void setAxial(double axial) {
+        this.axial = axial;
+    }
+
+    public int getMardId() {
+        return mardId;
+    }
+
+    public void setMardId(int mardId) {
+        this.mardId = mardId;
+    }
+
     @Override
     public String toString() {
         return "InventoryVerificationItem{" +
                 "id=" + id +
+                ", mardId=" + mardId +
                 ", inventoryVerificationId=" + inventoryVerificationId +
                 ", materielId=" + materielId +
                 ", materiel=" + materiel +
+                ", sphere=" + sphere +
+                ", cylinder=" + cylinder +
+                ", axial=" + axial +
                 ", quantity=" + quantity +
                 ", type='" + type + '\'' +
                 ", remark='" + remark + '\'' +

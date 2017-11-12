@@ -4,6 +4,7 @@ import com.luda.comm.po.Constants;
 import com.luda.comm.po.ResultHandle;
 import com.luda.customer.dao.CustomerDao;
 import com.luda.customer.model.CustomerModel;
+import com.luda.customer.model.OptometryRecord;
 import com.luda.customer.service.CustomerService;
 import com.luda.store.dao.StoreDao;
 import com.luda.store.model.StoreModel;
@@ -13,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.transform.Result;
 import java.util.List;
 
 /**
@@ -76,5 +78,22 @@ public class CustomerServiceImpl implements CustomerService{
         ResultHandle<CustomerModel> resultHandle = new ResultHandle<CustomerModel>();
         this.customerDao.removeCustomer(customerId);
         return resultHandle;
+    }
+
+    @Override
+    public ResultHandle<OptometryRecord> saveOptometryRecord(OptometryRecord optometryRecord) {
+        ResultHandle<OptometryRecord> resultHandle = new ResultHandle<>();
+        int result = customerDao.saveOptometryRecord(optometryRecord);
+        if(result > 0){
+            resultHandle.setReturnContent(optometryRecord);
+        }else {
+            resultHandle.setMsg("验光单保存失败");
+        }
+        return resultHandle;
+    }
+
+    @Override
+    public List<OptometryRecord> fetchOptometryRecordsByCustomerId(int customerId) {
+        return customerDao.fetchOptometryRecordsByCustomerId(customerId);
     }
 }

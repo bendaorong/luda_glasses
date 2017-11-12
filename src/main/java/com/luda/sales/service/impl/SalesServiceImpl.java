@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -36,6 +37,7 @@ public class SalesServiceImpl implements SalesService {
     private SalesDao salesDao;
 
     @Override
+    @Transactional
     public ResultHandle<SalesOrder> saveSalesOrder(SalesOrder salesOrder) {
         ResultHandle<SalesOrder> resultHandle = new ResultHandle<>();
         // 验证
@@ -60,10 +62,10 @@ public class SalesServiceImpl implements SalesService {
         for(SalesOrderItem item : salesOrder.getSalesOrderItems()){
             if(Constants.ORDER_TYPE_SALE.equals(salesOrder.getOrderType())){
                 // 销售单-扣减库存
-                inventoryService.updateMard(item.getMaterielId(), salesOrder.getStoreId(), -item.getQuantity());
+                inventoryService.updateMardById(item.getMardId(), -item.getQuantity());
             }else {
                 // 退货单-增加库存
-                inventoryService.updateMard(item.getMaterielId(), salesOrder.getStoreId(), item.getQuantity());
+                inventoryService.updateMardById(item.getMardId(), item.getQuantity());
             }
         }
 
@@ -72,7 +74,9 @@ public class SalesServiceImpl implements SalesService {
 
     @Override
     public List<SalesOrderVo> fetchSalesOrderVoList(String orderType) {
-        return salesDao.fetchSalesOrderVoList(orderType);
+        SalesOrder salesOrder = new SalesOrder();
+        salesOrder.setOrderType(orderType);
+        return salesDao.fetchSalesOrderVoList(salesOrder);
     }
 
     @Override
@@ -166,7 +170,7 @@ public class SalesServiceImpl implements SalesService {
             // 销售单验证库存
             if(Constants.ORDER_TYPE_SALE.equals(salesOrder.getOrderType())){
                 for(SalesOrderItem item : salesOrder.getSalesOrderItems()){
-                    Mard mard = inventoryService.lockMard(item.getMaterielId(), salesOrder.getStoreId());
+                    Mard mard = inventoryService.lockMardById(item.getMardId());
                     if(mard == null){
                         return "商品库存不存在";
                     }
@@ -188,6 +192,7 @@ public class SalesServiceImpl implements SalesService {
     }
 
     @Override
+    @Transactional
     public ResultHandle<SalesOrder> removeSalesOrder(int id) {
         ResultHandle<SalesOrder> resultHandle = new ResultHandle<>();
 
@@ -205,10 +210,10 @@ public class SalesServiceImpl implements SalesService {
             for(SalesOrderItem item : salesOrder.getSalesOrderItems()){
                 if(Constants.ORDER_TYPE_SALE.equals(salesOrder.getOrderType())){
                     // 销售单-增加商品库存
-                    inventoryService.updateMard(item.getMaterielId(), salesOrder.getStoreId(), item.getQuantity());
+                    inventoryService.updateMardById(item.getMardId(), item.getQuantity());
                 }else {
                     // 退货单-扣减商品库存
-                    inventoryService.updateMard(item.getMaterielId(), salesOrder.getStoreId(), -item.getQuantity());
+                    inventoryService.updateMardById(item.getMardId(), -item.getQuantity());
                 }
             }
         }
@@ -217,8 +222,10 @@ public class SalesServiceImpl implements SalesService {
     }
 
     @Override
+    @Transactional
     public ResultHandle<SalesOrderItem> removeSalesOrderItem(int itemId) {
         ResultHandle<SalesOrderItem> resultHandle = new ResultHandle<>();
+
         SalesOrderItem item = salesDao.getSalesOrderItemById(itemId);
         if(item == null){
             resultHandle.setMsg("明细不存在");
@@ -226,6 +233,7 @@ public class SalesServiceImpl implements SalesService {
         }
         // 删除明细
         int result = salesDao.removeSalesOrderItem(itemId);
+
         if(result > 0){
             // 更新销售单金额和数量
             SalesOrder salesOrder = getSalesOrderWithItemsById(item.getSalesOrderId());
@@ -233,25 +241,17 @@ public class SalesServiceImpl implements SalesService {
             // 更新库存
             if(Constants.ORDER_TYPE_SALE.equals(salesOrder.getOrderType())){
                 // 销售单-增加商品库存
-                inventoryService.updateMard(item.getMaterielId(), salesOrder.getStoreId(), item.getQuantity());
+                inventoryService.updateMardById(item.getMardId(), item.getQuantity());
             }else {
-                Mard mard = inventoryService.lockMard(item.getMaterielId(), salesOrder.getStoreId());
-                if(mard == null){
-                    resultHandle.setMsg("商品库存不存在");
-                    return resultHandle;
-                }
-                if(mard.getCurrentInventory() < item.getQuantity()){
-                    resultHandle.setMsg("商品库存不足");
-                    return resultHandle;
-                }
                 // 退货单-扣减商品库存
-                inventoryService.updateMard(item.getMaterielId(), salesOrder.getStoreId(), -item.getQuantity());
+                inventoryService.updateMardById(item.getMardId(), -item.getQuantity());
             }
         }
         return resultHandle;
     }
 
     @Override
+    @Transactional
     public ResultHandle<SalesOrderItem> saveSalesOrderItem(SalesOrderItem salesOrderItem) {
         ResultHandle<SalesOrderItem> resultHandle = new ResultHandle<>();
 
@@ -272,10 +272,10 @@ public class SalesServiceImpl implements SalesService {
             // 更新库存
             if(Constants.ORDER_TYPE_SALE.equals(salesOrder.getOrderType())){
                 // 销售单-扣减库存
-                inventoryService.updateMard(salesOrderItem.getMaterielId(), salesOrder.getStoreId(), -salesOrderItem.getQuantity());
+                inventoryService.updateMardById(salesOrderItem.getMardId(), -salesOrderItem.getQuantity());
             }else {
                 // 退货单-增加库存
-                inventoryService.updateMard(salesOrderItem.getMaterielId(), salesOrder.getStoreId(), salesOrderItem.getQuantity());
+                inventoryService.updateMardById(salesOrderItem.getMardId(), salesOrderItem.getQuantity());
             }
 
             resultHandle.setReturnContent(salesOrderItem);
@@ -283,6 +283,14 @@ public class SalesServiceImpl implements SalesService {
             resultHandle.setMsg("明细添加失败");
         }
         return resultHandle;
+    }
+
+    @Override
+    public List<SalesOrderVo> fetchSalesOrderVoByCustomerId(int customerId) {
+        SalesOrder salesOrder = new SalesOrder();
+        salesOrder.setCustomerId(customerId);
+        salesOrder.setOrderType(Constants.ORDER_TYPE_SALE);
+        return salesDao.fetchSalesOrderVoList(salesOrder);
     }
 
     /**
@@ -303,7 +311,7 @@ public class SalesServiceImpl implements SalesService {
         }
         // 销售单-验证商品库存
         if(Constants.ORDER_TYPE_SALE.equals(salesOrder.getOrderType())){
-            Mard mard = inventoryService.lockMard(salesOrderItem.getMaterielId(), salesOrder.getStoreId());
+            Mard mard = inventoryService.lockMardById(salesOrderItem.getMardId());
             if(mard == null){
                 return "商品库存不存在";
             }

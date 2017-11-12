@@ -1,6 +1,8 @@
 package com.luda.customer.dao;
 
+import com.luda.comm.po.ResultHandle;
 import com.luda.customer.model.CustomerModel;
+import com.luda.customer.model.OptometryRecord;
 import com.luda.store.model.StoreModel;
 
 import java.util.List;
@@ -22,4 +24,8 @@ public interface CustomerDao {
     int removeCustomer(int customerId);
 
     String getMaxCode();
+
+    int saveOptometryRecord(OptometryRecord optometryRecord);
+
+    List<OptometryRecord> fetchOptometryRecordsByCustomerId(int customerId);
 }

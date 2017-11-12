@@ -10,6 +10,7 @@ import javax.xml.transform.Result;
 import java.util.List;
 
 /**
+ * 销售服务
  * Created by Administrator on 2017/10/28.
  */
 public interface SalesService {
@@ -55,4 +56,11 @@ public interface SalesService {
      * @return
      */
     ResultHandle<SalesOrderItem> saveSalesOrderItem(SalesOrderItem salesOrderItem);
+
+    /**
+     * 查询客户消费记录
+     * @param customerId 客户id
+     *
+     */
+    List<SalesOrderVo> fetchSalesOrderVoByCustomerId(int customerId);
 }

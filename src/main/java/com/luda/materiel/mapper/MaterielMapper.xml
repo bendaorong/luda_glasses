@@ -8,12 +8,15 @@
         <result property="code" column="code"/>
         <result property="barcode" column="bar_code"/>
         <result property="name" column="name"/>
+        <result property="supplierId" column="supplier_id"/>
+        <result property="supplierName" column="supplier_name"/>
         <result property="sellPrice" column="sell_price"/>
         <result property="tradePrice" column="trade_price"/>
         <result property="costPrice" column="cost_price"/>
         <result property="unit" column="unit"/>
         <result property="brand" column="brand"/>
         <result property="specification" column="specification"/>
+        <result property="refractiveIndex" column="refractive_index"/>
         <result property="color" column="color"/>
         <result property="texture" column="texture"/>
         <result property="manufacturer" column="manufacturer"/>
@@ -28,10 +31,12 @@
     </resultMap>
 
     <select id="fetchMaterielList" resultMap="materielMap">
-        select m.*, t.type_name
+        select m.*, t.type_name, s.supplier_name
         from materiel m
         left join goods_type t
         on m.type_id = t.type_id
+        left join supplier s
+        on m.supplier_id = s.supplier_id
         where m.delete_flag = 0
     </select>
 
@@ -43,11 +48,13 @@
             code,
             bar_code,
             name,
+            supplier_id,
             sell_price,
             trade_price,
             cost_price,
             unit,
             brand,
+            refractive_index,
             specification,
             color,
             texture,
@@ -67,11 +74,13 @@
             #{code},
             #{barcode},
             #{name},
+            #{supplierId},
             #{sellPrice},
             #{tradePrice},
             #{costPrice},
             #{unit},
             #{brand},
+            #{refractiveIndex},
             #{specification},
             #{color},
             #{texture},
@@ -100,6 +109,7 @@
         set
             name = #{name},
             type_id = #{typeId},
+            supplier_id = #{supplierId},
             code = #{code},
             bar_code = #{barcode},
             sell_price = #{sellPrice},
@@ -107,6 +117,7 @@
             cost_price = #{costPrice},
             unit = #{unit},
             brand = #{brand},
+            refractive_index = #{refractiveIndex},
             specification = #{specification},
             color = #{color},
             texture = #{texture},

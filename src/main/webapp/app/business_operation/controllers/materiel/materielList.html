@@ -18,15 +18,16 @@
                 <td data-title="'名称'" sortable="'name'" width="30%">{{materiel.name}}</td>
                 <td data-title="'类型'" sortable="'typeName'">{{materiel.typeName}}</td>
                 <td data-title="'品牌'" sortable="'brand'">{{materiel.brand}}</td>
+                <td data-title="'供应商'" sortable="'supplierId'">{{materiel.supplierName}}</td>
                 <td data-title="'材质'" sortable="'texture'">{{materiel.texture}}</td>
                 <td data-title="'售价'" sortable="'sellPrice'">{{materiel.sellPrice}}</td>
-                <td data-title="'成本价'" sortable="'costPrice'">{{materiel.costPrice}}</td>
+                <!--
                 <td data-title="'停用'" sortable="'useFlag'">
                     <div ng-switch="materiel.useFlag">
                         <div ng-switch-when="0">是</div>
                         <div ng-switch-when="1">否</div>
                     </div>
-                </td>
+                </td>-->
                 <td data-title="'操作'">
                     <button type="button" class="btn btn-sm btn-primary"
                             ng-click="gotoEdit(materiel.id)">编辑</button>

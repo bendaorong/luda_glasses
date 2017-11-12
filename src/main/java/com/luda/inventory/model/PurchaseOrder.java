@@ -61,6 +61,10 @@ public class PurchaseOrder implements Serializable {
      * 更新时间
      */
     private Date updateTime;
+    /**
+     * 订单类型
+     */
+    private String orderType;
 
     /**
      * 采购明细
@@ -179,6 +183,14 @@ public class PurchaseOrder implements Serializable {
         this.purchaseOrderItemList = purchaseOrderItemList;
     }
 
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
+
     /**
      * 获取采购明细总数量
      * @return
@@ -223,6 +235,7 @@ public class PurchaseOrder implements Serializable {
                 ", createTime=" + createTime +
                 ", updateUserId=" + updateUserId +
                 ", updateTime=" + updateTime +
+                ", orderType='" + orderType + '\'' +
                 ", purchaseOrderItemList=" + purchaseOrderItemList +
                 '}';
     }

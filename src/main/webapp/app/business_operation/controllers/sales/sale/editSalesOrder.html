@@ -169,12 +169,11 @@
                 <!-- 销售单明细数据录入 -->
                 <table class="table table-bordered" style="margin-top: 10px;" id="itemContainer">
                     <tr>
-                        <td>商品</td>
-                        <td>名称</td>
-                        <td>颜色</td>
-                        <td>条码</td>
+                        <td>商品名称</td>
                         <td>商品类型</td>
-                        <td>规格型号</td>
+                        <td>球镜</td>
+                        <td>柱镜</td>
+                        <td>轴向</td>
                         <td>数量</td>
                         <td>单价</td>
                         <td>小计</td>
@@ -182,12 +181,11 @@
                         <td>操作</td>
                     </tr>
                     <tr ng-repeat="item in selectedSalesOrder.salesOrderItems">
-                        <td>{{item.materiel.code}}</td>
                         <td>{{item.materiel.name}}</td>
-                        <td>{{item.materiel.color}}</td>
-                        <td>{{item.materiel.barcode}}</td>
                         <td>{{item.materiel.typeName}}</td>
-                        <td>{{item.materiel.specification}}</td>
+                        <td>{{item.sphere}}</td>
+                        <td>{{item.cylinder}}</td>
+                        <td>{{item.axial}}</td>
                         <td>{{item.quantity}}</td>
                         <td>{{item.sellPrice}}</td>
                         <td>{{item.quantity * item.sellPrice}}</td>
@@ -206,22 +204,22 @@
         <tr>
             <td>商品</td>
             <td>
-                <select class="form-control" id="abc" ng-model="salesOrderItem.materielId">
-                    <option>请选择商品</option>
-                    <option ng-repeat="m in materielList" value="{{m.id}}">{{m.code}}</option>
+                <select class="form-control" id="materiel" ng-model="salesOrderItem.mardId">
+                    <option value=""></option>
                 </select>
             </td>
         </tr>
-        <tr><td>名称</td><td><input type="text" ng-model="selectedMateriel.name" ng-readonly="true"/></td></tr>
-        <tr><td>条码</td><td><input type="text" ng-model="selectedMateriel.barcode" ng-readonly="true"/></td></tr>
+        <tr><td>名称</td><td><input type="text" ng-model="selectedMard.materiel.name" ng-readonly="true"/></td></tr>
+        <tr><td>条码</td><td><input type="text" ng-model="selectedMard.materiel.barcode" ng-readonly="true"/></td></tr>
+        <tr><td>剩余库存</td><td><input type="text" ng-model="selectedMard.currentInventory" ng-readonly="true"/></td></tr>
         <tr>
             <td>数量</td>
-            <td><input type="text" ng-model="salesOrderItem.quantity" min="1"
+            <td><input type="number" ng-model="salesOrderItem.quantity" min="1"
                        ng-init="salesOrderItem.quantity=1"/></td>
         </tr>
         <tr>
             <td>单价</td>
-            <td><input type="text" ng-model="salesOrderItem.sellPrice" ng-init="salesOrderItem.sellPrice=0"/></td>
+            <td><input type="number" ng-model="salesOrderItem.sellPrice" ng-init="salesOrderItem.sellPrice=0"/></td>
         </tr>
         <tr>
             <td>小计</td>

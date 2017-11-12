@@ -17,7 +17,7 @@
 <link href="css/style.css" rel="stylesheet">
 <link href="css/ng-table.min.css" rel="stylesheet">
 <link href="bootstrap-3.3.5-dist/css/bootstrap-dialog.min.css" rel="stylesheet">
-<!-- <link href="angular-datepicker/angular-datepicker.min.css" rel="stylesheet"> -->
+<link href="css/jquery.searchableSelect.css" rel="stylesheet">
 
 </head>
 
@@ -62,6 +62,7 @@
 
 	<%@ include file="loading.html"%>
 	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery.searchableSelect.js"></script>
 	<script src="bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
 	<script src="angular-1.2.28/angular.min.js"></script>
 	<script src="angular-1.2.28/angular-route.min.js"></script>
@@ -96,6 +97,7 @@
 	<!-- 库存管理 -->
 	<script src="app/business_operation/controllers/inventory/mard/mardManage.js"></script>
 	<script src="app/business_operation/controllers/inventory/purchaseOrder/purchaseOrderManage.js"></script>
+	<script src="app/business_operation/controllers/inventory/purchaseOrder/refund/purchaseRefundOrderManage.js"></script>
 	<script src="app/business_operation/controllers/inventory/inventoryVerification/inventoryVerificationManage.js"></script>
 	<script src="app/business_operation/controllers/inventory/transfer/transferManage.js"></script>
 	<!-- 销售管理 -->
@@ -115,11 +117,11 @@
 		var route = "app/business_operation/route/Svc.json";
 
 		// 登录用户角色
-		var roleCode = sessionStorage.getItem("roleCode");
+		//var roleCode = sessionStorage.getItem("roleCode");
 		// 根据用户角色加载用户操作权限
-		if(roleCode != null && roleCode != ''){
-			route = "app/business_operation/route/Svc_"+roleCode+".json";
-		}
+//		if(roleCode != null && roleCode != ''){
+//			route = "app/business_operation/route/Svc_"+roleCode+".json";
+//		}
 	</script>
 </body>
 </html>

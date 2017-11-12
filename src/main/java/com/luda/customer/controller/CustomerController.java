@@ -3,6 +3,7 @@ package com.luda.customer.controller;
 import com.luda.comm.po.ResultHandle;
 import com.luda.common.controller.BaseController;
 import com.luda.customer.model.CustomerModel;
+import com.luda.customer.model.OptometryRecord;
 import com.luda.customer.service.CustomerService;
 import com.luda.store.model.StoreModel;
 import com.luda.customer.service.CustomerService;
@@ -127,6 +128,25 @@ public class CustomerController extends BaseController {
         }catch (Exception e){
             result = returnErrorResult(httpServletResponse, "系统异常");
             log.error("remove store error, storeId:" + customerId, e);
+        }
+        return result;
+    }
+
+    /**
+     * 查询客户验光记录
+     * @param customerId 客户Id
+     */
+    @RequestMapping("/optometryRecord/getByCustomerId/{customerId}")
+    @ResponseBody
+    public String fetchOptometryRecordsByCustomerId(@PathVariable int customerId){
+        String result = "";
+        try {
+            List<OptometryRecord> list = customerService.fetchOptometryRecordsByCustomerId(customerId);
+            String data = CommonUtils.convertBeanCollectionToJsonArray(list, null).toString();
+            result = getSuccessResult(data);
+        }catch (Exception e){
+            log.error("fetchOptometryRecordsByCustomerId error, customerId：" + customerId, e);
+            result = getFailResult("系统异常");
         }
         return result;
     }

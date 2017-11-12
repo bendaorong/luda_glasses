@@ -51,12 +51,7 @@
             if(confirm("删除盘点单将恢复盘点商品的库存，确定删除吗？")){
                 inventoryService.removeInvntVerification(id, function (data) {
                     if(data.success){
-                        BootstrapDialog.show({
-                            type : BootstrapDialog.TYPE_SUCCESS,
-                            title : '成功',
-                            message : '盘点单删除成功'
-                        });
-                        refresh();
+                        $scope.refresh();
                     }else {
                         BootstrapDialog.show({
                             type : BootstrapDialog.TYPE_DANGER,
@@ -78,16 +73,49 @@
 
         $scope.storeList = [];
         $scope.adminUserList = [];
-        $scope.materielList = [];
+        $scope.mardList = [];
 
-        // 查询商品
-        materielService.fetchMaterielList(function(data){
-            $scope.materielList = data.data;
+        $scope.selectedMard = {}; //选择的商品库存
+        $scope.selectedMateriel = {}; //选择的商品
+        $scope.invntVerificationItem = {}; //盘点单明细
+
+        //查询商品库存
+        inventoryService.fetchMardVoList(function(data){
+            if(data.success){
+                $scope.mardList = data.data;
+                if($scope.mardList.length > 0){
+                    for(var i=0; i<$scope.mardList.length; i++){
+                        var tempMard = $scope.mardList[i];
+                        $("#materiel").append("<option value='" + tempMard.id + "'>" + tempMard.materiel.name + "("+tempMard.sphere+", " + tempMard.cylinder + ", " + tempMard.axial +")" + "</option>");
+                    }
+                }
+                $("#materiel").searchableSelect(function (mardId) {
+                    if(angular.isDefined(mardId) && mardId != null && mardId != ''){
+                        for(var i=0; i<$scope.mardList.length; i++){
+                            if($scope.mardList[i].id == mardId){
+                                $scope.selectedMard = $scope.mardList[i];
+                                $scope.invntVerificationItem.mardId = mardId;
+                                $scope.$apply();
+                                break;
+                            }
+                        }
+                    }else {
+                        $scope.selectedMateriel = {};
+                        //$scope.$apply();
+                    }
+                });
+            }else {
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '失败',
+                    message : '获取商品库存失败' + data.errorMsg
+                });
+            }
         },function(data){
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
                 title : '警告',
-                message : '获取商品错误' + data.errorMsg
+                message : '获取商品库存错误' + data.errorMsg
             });
         });
 
@@ -129,33 +157,17 @@
             $('.content').css({'display':'none'});
         }
 
-        $scope.selectedMateriel = {}; //选择的商品
-        $scope.invntVerificationItem = {}; //采购单明细
-        // 选择商品时加载数据
-        $('#abc').change(function(){
-            var materielId = $(this).children('option:selected').val();
-            materielService.getById(materielId, function(data){
-                $scope.selectedMateriel = data.data;
-            },function(data){
-                BootstrapDialog.show({
-                    type : BootstrapDialog.TYPE_DANGER,
-                    title : '错误',
-                    message : data.errorMsg
-                });
-            });
-        })
-
         // 添加新明细
         $scope.addItem = function () {
             var newItem = "<tr>" +
-                "<td>" + $scope.selectedMateriel.code + "<input type='hidden' value='"+$scope.selectedMateriel.id+"' /></td>" +
-                "<td>" + $scope.selectedMateriel.name + "<input type='hidden' value='0' /></td>" +
-                "<td>" + $scope.selectedMateriel.color + "</td>" +
-                "<td>" + $scope.selectedMateriel.barcode + "</td>" +
+                "<td>" + $scope.selectedMard.materiel.code + "<input type='hidden' value='"+$scope.selectedMard.materielId+"' /></td>" +
+                "<td>" + $scope.selectedMard.materiel.name + "<input type='hidden' value='"+$scope.selectedMard.id+"' /></td>" +
+                "<td>" + $scope.selectedMard.materiel.color + "</td>" +
+                "<td>" + $scope.selectedMard.materiel.barcode + "</td>" +
                 "<td>" + $scope.invntVerificationItem.quantity + "</td>" +
                 "<td>" + $scope.invntVerificationItem.type + "</td>" +
-                "<td>" + $scope.selectedMateriel.typeName + "</td>" +
-                "<td>" + $scope.selectedMateriel.specification + "</td>" +
+                "<td>" + $scope.selectedMard.materiel.typeName + "</td>" +
+                "<td>" + $scope.selectedMard.materiel.specification + "</td>" +
                 "<td>" + $scope.invntVerificationItem.remark + "</td>" +
                 "</tr>";
             $('#itemContainer').append(newItem);
@@ -165,7 +177,7 @@
             $('.content').css({'display':'none'});
         }
 
-        // 保存采购单
+        // 保存盘点单
         $scope.saveInvntVerification = function () {
             // 收集采购单明细
             var invtVerifItems = buildInvtVerifItemsItems();
@@ -212,6 +224,8 @@
             var items = [];
             $("#itemContainer").find("tr:not(':first')").each(function(){
                 var tdArr = $(this).children();
+                // 商品库存id
+                var mardId = tdArr.eq(1).find("input").val();
                 // 商品id
                 var materielId = tdArr.eq(0).find("input").val();
                 // 数量
@@ -222,6 +236,7 @@
                 var remark = tdArr.eq(8).text();
 
                 var item = {};
+                item.mardId = Number(mardId);
                 item.materielId = Number(materielId);
                 item.quantity = Number(quantity);
                 item.type = type;
@@ -239,6 +254,49 @@
         $scope.storeList = [];
         $scope.adminUserList = [];
         $scope.materielList = [];
+
+        $scope.selectedMard = {}; //选择的商品库存
+        $scope.invntVerificationItem = {}; //盘点明细
+
+        //查询商品库存
+        inventoryService.fetchMardVoList(function(data){
+            if(data.success){
+                $scope.mardList = data.data;
+                if($scope.mardList.length > 0){
+                    for(var i=0; i<$scope.mardList.length; i++){
+                        var tempMard = $scope.mardList[i];
+                        $("#materiel").append("<option value='" + tempMard.id + "'>" + tempMard.materiel.name + "("+tempMard.sphere+", " + tempMard.cylinder + ", " + tempMard.axial +")" + "</option>");
+                    }
+                }
+                $("#materiel").searchableSelect(function (mardId) {
+                    if(angular.isDefined(mardId) && mardId != null && mardId != ''){
+                        for(var i=0; i<$scope.mardList.length; i++){
+                            if($scope.mardList[i].id == mardId){
+                                $scope.selectedMard = $scope.mardList[i];
+                                $scope.invntVerificationItem.mardId = mardId;
+                                $scope.$apply();
+                                break;
+                            }
+                        }
+                    }else {
+                        $scope.selectedMateriel = {};
+                        //$scope.$apply();
+                    }
+                });
+            }else {
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '失败',
+                    message : '获取商品库存失败' + data.errorMsg
+                });
+            }
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品库存错误' + data.errorMsg
+            });
+        });
 
         // 查询盘点单
         inventoryService.getInvntVerificationById($routeParams.id, function(data){
@@ -296,28 +354,13 @@
             $('.content').css({'display':'none'});
         }
 
-        $scope.selectedMateriel = {}; //选择的商品
-        $scope.invntVerificationItem = {}; //盘点明细
-        // 选择商品时加载数据
-        $('#abc').change(function(){
-            var materielId = $(this).children('option:selected').val();
-            materielService.getById(materielId, function(data){
-                $scope.selectedMateriel = data.data;
-            },function(data){
-                BootstrapDialog.show({
-                    type : BootstrapDialog.TYPE_DANGER,
-                    title : '错误',
-                    message : data.errorMsg
-                });
-            });
-        })
-
         // 添加新明细
         $scope.addItem = function () {
             var item = {};
             item.itemId = 0;
             item.inventoryVerificationId = $scope.selectInvntVerification.id;
-            item.materielId = $scope.selectedMateriel.id;
+            item.mardId = $scope.selectedMard.id;
+            item.materielId = $scope.selectedMard.materielIdId;
             item.quantity = $scope.invntVerificationItem.quantity;
             item.type = $scope.invntVerificationItem.type;
             item.remark = $scope.invntVerificationItem.remark;
@@ -333,12 +376,12 @@
                     var materiel = {};
                     item.materiel = materiel;
                     item.id = data.data.id;
-                    materiel.code = $scope.selectedMateriel.code;
+                    item.sphere = $scope.selectedMard.sphere;
+                    item.cylinder = $scope.selectedMard.cylinder;
+                    item.axial = $scope.selectedMard.axial;
                     materiel.name = $scope.selectedMateriel.name;
-                    materiel.color = $scope.selectedMateriel.color;
-                    materiel.barcode = $scope.selectedMateriel.barcode;
                     materiel.typeName = $scope.selectedMateriel.typeName;
-                    materiel.specification = $scope.selectedMateriel.specification;
+
                     $scope.selectInvntVerification.invtVerifItemList.push(item);
                 }else {
                     BootstrapDialog.show({

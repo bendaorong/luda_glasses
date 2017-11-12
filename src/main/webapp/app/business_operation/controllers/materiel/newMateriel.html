@@ -38,101 +38,94 @@
         <form id="myform" name="myform" class="form-horizontal" novalidate>
             <fieldset id="basicInfo">
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">条码</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="newMateriel.barcode"/>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">条码</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input type="text" class="form-control" required ng-model="newMateriel.barcode"/>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">名称</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="newMateriel.name"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">商品类型</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">商品类型</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <select class="form-control" required ng-model="newMateriel.typeId">
                             <option ng-repeat="goodsType in goodsTypeList" value="{{goodsType.typeId}}">{{goodsType.typeName}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">售价</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="number" class="form-control" ng-model="newMateriel.sellPrice"
-                               ng-init="newMateriel.sellPrice=0" />
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">商品名称</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input type="text" class="form-control" required
+                               ng-model="newMateriel.name"/>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">成本价</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="number" class="form-control" ng-model="newMateriel.costPrice"
-                               ng-init="newMateriel.costPrice=0"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">品牌</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">品牌</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <select class="form-control" required ng-model="newMateriel.brand">
                             <option ng-repeat="goodsBrand in goodsBrandList" value="{{goodsBrand.dictName}}">{{goodsBrand.dictName}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">单位</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">供应商</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <select class="form-control" required ng-model="newMateriel.supplierId">
+                            <option ng-repeat="supplier in supplierList" value="{{supplier.supplierId}}">{{supplier.supplierName}}</option>
+                        </select>
+                    </div>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">单位</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <select class="form-control" required ng-model="newMateriel.unit">
                             <option ng-repeat="goodsUnit in goodsUnitList" value="{{goodsUnit.dictName}}">{{goodsUnit.dictName}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">颜色</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">颜色</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <select class="form-control" required ng-model="newMateriel.color">
                             <option ng-repeat="goodsColor in goodsColorList" value="{{goodsColor.dictName}}">{{goodsColor.dictName}}</option>
                         </select>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">规格型号</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">型号</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="text" class="form-control" ng-model="newMateriel.specification" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">材质</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">材质</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="text" class="form-control" ng-model="newMateriel.texture" />
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">生产企业</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newMateriel.manufacturer" />
+
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">折射率</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input type="text" class="form-control" ng-model="newMateriel.refractiveIndex" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">库存下限</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">库存下限</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="number" class="form-control" ng-model="newMateriel.minInventory"
                                min="0" ng-init="newMateriel.minInventory=0"/>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">库存上限</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">库存上限</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="number" class="form-control" ng-model="newMateriel.maxInventory"
                                min="0" ng-init="newMateriel.maxInventory=100"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">备注</label>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">售价</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input type="number" class="form-control" ng-model="newMateriel.sellPrice"
+                               ng-init="newMateriel.sellPrice=0" />
+                    </div>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">生产企业</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input type="text" class="form-control" ng-model="newMateriel.manufacturer" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">备注</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newMateriel.remark" />
+                        <textarea rows="5" ng-model="newMateriel.remark" style="width:100%"></textarea>
                     </div>
                 </div>
             </fieldset>

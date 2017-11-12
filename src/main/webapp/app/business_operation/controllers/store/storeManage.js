@@ -46,11 +46,11 @@
         $scope.removeStore = function(storeId){
             if(confirm("确认删除门店吗？")){
                 storeService.removeStore(storeId, function(data){
-                    BootstrapDialog.show({
-                        type : BootstrapDialog.TYPE_SUCCESS,
-                        title : '消息',
-                        message : '门店删除成功'
-                    });
+                    // BootstrapDialog.show({
+                    //     type : BootstrapDialog.TYPE_SUCCESS,
+                    //     title : '消息',
+                    //     message : '门店删除成功'
+                    // });
                     $scope.refresh();
                 },function(data){
                     BootstrapDialog.show({

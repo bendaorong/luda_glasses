@@ -3,14 +3,11 @@ package com.luda.customer.model;
 import java.io.Serializable;
 
 /**
+ * 客户
  * Created by I075723 on 10/25/2017.
  */
 public class CustomerModel implements Serializable{
-
-
     private int id;
-
-
 
     private String code;
 
@@ -18,22 +15,15 @@ public class CustomerModel implements Serializable{
 
     private String gender;
 
+    private int age;
+
     private String birthday;
 
     private String mobileNumber;
 
     private String wechatno;
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     private String address;
-
 
     private String region;
 
@@ -109,5 +99,38 @@ public class CustomerModel implements Serializable{
 
     public void setRegionName(String regionName) {
         this.regionName = regionName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerModel{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", gender='" + gender + '\'' +
+                ", age=" + age +
+                ", birthday='" + birthday + '\'' +
+                ", mobileNumber='" + mobileNumber + '\'' +
+                ", wechatno='" + wechatno + '\'' +
+                ", address='" + address + '\'' +
+                ", region='" + region + '\'' +
+                ", regionName='" + regionName + '\'' +
+                '}';
     }
 }

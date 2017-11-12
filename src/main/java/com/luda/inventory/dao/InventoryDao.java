@@ -30,7 +30,10 @@ public interface InventoryDao {
      */
     int insertPurchaseOrderItemBatch(List<PurchaseOrderItem> purchaseOrderItemList);
 
-    Mard lockMard(@Param("materielId") int materielId, @Param("storeId")  int storeId);
+    Mard lockMard(@Param("materielId") int materielId, @Param("storeId")  int storeId,
+                  @Param("sphere") double sphere, @Param("cylinder") double cylinder, @Param("axial") double axial);
+
+    Mard lockMardById(int id);
 
     /**
      * 更新商品库存
@@ -46,7 +49,7 @@ public interface InventoryDao {
 
     List<MardVo> fetchAllMardVoList();
 
-    List<PurchaseOrderVo> fetchPurchaseOrderVoList();
+    List<PurchaseOrderVo> fetchPurchaseOrderVoList(String orderType);
 
     PurchaseOrder getPurchaseOrderById(int id);
 
@@ -104,7 +107,10 @@ public interface InventoryDao {
 
     List<TransferOrderItem> getTransferOrderItems(int transferOrderId);
 
-    Mard getMard(@Param("materielId") int materielId, @Param("storeId") int storeId);
+    Mard getMard(@Param("materielId") int materielId, @Param("storeId") int storeId,
+                 @Param("sphere") double sphere, @Param("cylinder") double cylinder, @Param("axial") double axial);
+
+    Mard getMardById(int id);
 
     TransferOrderItem getTransferOrderItemById(int itemId);
 

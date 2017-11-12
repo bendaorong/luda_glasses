@@ -56,12 +56,12 @@ public class InventoryController extends BaseController{
     /**
      * 查询商品库存
      */
-    @RequestMapping("/mard/getMard/{materielId}/{storeId}")
+    @RequestMapping("/mard/getMard/{mardId}")
     @ResponseBody
-    public String getMard(@PathVariable int materielId, @PathVariable int storeId){
+    public String getMard(@PathVariable int mardId){
         String result = "";
         try {
-            Mard mard = inventoryService.getMard(materielId, storeId);
+            Mard mard = inventoryService.getMardById(mardId);
             if(mard == null){
                 result = getSuccessResult(0);
             }else{
@@ -76,13 +76,14 @@ public class InventoryController extends BaseController{
 
     /**
      * 查询采购单
+     * @param orderType 订单类型 01：采购单 02：采购退货单
      */
-    @RequestMapping("/purchaseOrder/list")
+    @RequestMapping("/purchaseOrder/list/{orderType}")
     @ResponseBody
-    public String fetchPurchaseOrderList(){
+    public String fetchPurchaseOrderList(@PathVariable String orderType){
         String result = "";
         try {
-            List<PurchaseOrderVo> purchaseOrderVoList = inventoryService.fetchPurchaseOrderVoList();
+            List<PurchaseOrderVo> purchaseOrderVoList = inventoryService.fetchPurchaseOrderVoList(orderType);
             String data = CommonUtils.convertBeanCollectionToJsonArray(purchaseOrderVoList, null).toString();
             result = getSuccessResult(data);
         }catch (Exception e){

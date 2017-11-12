@@ -163,18 +163,18 @@ DROP TABLE IF EXISTS materiel;
 create table materiel
 (
    id                   int(11)                        not null auto_increment,
-   type_id              int(4)                         not null,
+   type_id              int(4)                         not null comment '商品类型',
    code                 varchar(16)                    not null,
-   bar_code             varchar(16)                    null,
-   name                 varchar(128)                   null,
-   sell_price           double(10,2)                   null,
-   trade_price          double(10,2)                   null,
-   cost_price           double(10,2)                   null,
-   unit                 varchar(32)                    null,
-   brand                varchar(32)                    null,
-   specification        varchar(64)                    null,
+   bar_code             varchar(16)                    null comment '条码',
+   name                 varchar(128)                   not null comment '物料名称',
+   brand                varchar(32)                    null comment '品牌',
+   supplier_id          int(11)                         null comment '供应商',
+   unit                 varchar(32)                    null comment '单位',
+   specification        varchar(64)                    null comment '规格型号',
+   texture              varchar(32)                    null comment '材质',
+   refractive_index     double(10,4)                  null comment '折射率',
    color                varchar(32)                   null,
-   texture              varchar(32)                    null,
+   sell_price           double(10,2)                   null comment '售价',
    manufacturer         varchar(128)                   null,
    min_inventory        int(11)                        null,
    max_inventory        int(11)                        null,
@@ -184,6 +184,8 @@ create table materiel
    create_time          datetime                       null,
    update_user_id       int(11)                        null,
    update_time          datetime                       null,
+   trade_price          double(10,2)                   null,
+   cost_price           double(10,2)                   null,
    delete_flag          tinyint(1)                      default 0,
    PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -273,21 +275,25 @@ create table goods_brand
 
 
 /*==============================================================*/
-/* Table: MARD 商品库存表，与商品表一一对应                     */
+/* Table: MARD 商品库存表，与商品表一一对应(镜片库存除外)       */
 /*==============================================================*/
 DROP TABLE IF EXISTS mard;
 create table mard
 (
    id                   int(11)                        not null auto_increment,
-   materiel_id          int(11)                        not null comment '商品id',
    store_id             int(11)                        not null comment '门店id',
-   cur_inventory        int(11)                        not null comment '当前库存量',
+   materiel_id          int(11)                        not null comment '商品id',
+   sphere               double(6,2)                    not null default 0 comment '球镜',
+   cylinder             double(6,2)                    not null default 0 comment '柱镜',
+   axial                double(6,2)                    not null default 0 comment '轴向',
+   cur_inventory        int(11)                        not null default 0 comment '当前库存量',
    create_time          datetime                       null,
    update_time          datetime                       null,
    PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-alter table mard add unique index(materiel_id, store_id);
+CREATE UNIQUE INDEX idx_uni on mard(store_id, materiel_id, sphere, cylinder, axial);
+
 
 /*==============================================================*/
 /* Table: purchase_order 采购入库单                             */
@@ -308,9 +314,11 @@ create table purchase_order
    create_time          datetime                       null,
    update_user_id       int(11)                        null,
    update_time          datetime                       null,
-   delete_flag          tinyint(1)                    default 0 comment '删除标示 1:删除 0:不删除'
+   delete_flag          tinyint(1)                    default 0 comment '删除标示 1:删除 0:不删除',
    PRIMARY KEY (purchase_order_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+alter table purchase_order add order_type char(2) null comment '订单类型 01:采购单 02:退货单';
 
 
 /*==============================================================*/
@@ -322,6 +330,9 @@ create table purchase_order_item
    item_id              int(11)                        not null auto_increment,
    purchase_order_id    int(11)                        not null comment '采购单id',
    materiel_id          int(11)                        not null comment '商品id',
+   sphere               double(6,2)                    not null default 0 comment '球镜',
+   cylinder             double(6,2)                    not null default 0 comment '柱镜',
+   axial                double(6,2)                    not null default 0 comment '轴向',
    purchase_price       double(10,2)                   not null comment '采购价',
    purchase_quantity    int(11)                        not null comment '采购数量',
    remark               varchar(256)                   null,
@@ -357,6 +368,7 @@ create table inventory_verification_item
 (
    id                   int(11)                        not null auto_increment,
    inventory_verification_id int(11)                   not null,
+   mard_id              int(11)                        not null,
    materiel_id          int(11)                        not null,
    quantity             int(11)                        not null,
    invnt_type           char(2)                        not null,
@@ -393,6 +405,7 @@ create table inventory_transfer_item
 (
    id                   int(11)                        not null auto_increment,
    inventory_transfer_id int(11)                       not null,
+   mard_id              int(11)                        not null,
    materiel_id          int(11)                        not null,
    quantity             int(11)                        not null,
    remark               varchar(256)                   null,
@@ -425,6 +438,39 @@ create table customer
 CREATE UNIQUE INDEX idx_mobile_number on customer(mobile_num);
 CREATE UNIQUE INDEX idx_code on customer(code);
 
+alter table customer add age tinyint(4) default 0 comment '年龄';
+
+
+/*==============================================================*/
+/* Table: optometry_record                                      */
+/*==============================================================*/
+DROP TABLE IF EXISTS optometry_record;
+create table optometry_record
+(
+   id                   int(11)                        not null auto_increment,
+   customer_id          int(11)                        not null comment '客户',
+   businessman_id       int(11)                        not null comment '验光员',
+   optometry_date       date                           not null comment '验光日期',
+   r_sphere            double(6,2)                    null comment '右球镜',
+   l_sphere            double(6,2)                    null comment '左球镜',
+   r_cylinder            double(6,2)                    null comment '右柱镜',
+   l_cylinder            double(6,2)                    null comment '左柱镜',
+   r_axial            double(6,2)                         null comment '右轴向',
+   l_axial            double(6,2)                         null comment '左轴向',
+   r_uncorrected_visual_acuity double(6,2)                    null comment '右裸视',
+   l_uncorrected_visual_acuity double(6,2)                    null comment '左裸视',
+   r_corrected_visual_acuity double(6,2)                    null comment '右矫正',
+   l_corrected_visual_acuity double(6,2)                    null comment '左矫正',
+   remark                varchar(512)          null,
+   create_user_id       int(11)                        null,
+   create_time          datetime                       null,
+   update_user_id       int(11)                        null,
+   update_time          datetime                       null,
+   delete_flag          tinyint(1)                     default 0,
+   PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 /*==============================================================*/
 /* Table: sales_list 销售单                                     */
 /*==============================================================*/
@@ -456,10 +502,10 @@ DROP TABLE IF EXISTS sales_order_item;
 create table sales_order_item (
   id int(11) not null auto_increment,
   sales_order_id int(11) not null comment '销售单Id',
+  mard_id       int(11) not null,
   materiel_id int(11) not null comment '商品',
   quantity int(11) comment '数量',
   sell_price double(10,2) comment '售价',
   remark    varchar(256) comment '备注',
-  refund_flag
   PRIMARY KEY (id)
 )  ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -51,6 +51,24 @@ public class SalesController extends BaseController{
     }
 
     /**
+     * 查询客户销售记录
+     * @param customerId 客户id
+     */
+    @RequestMapping("/fetchCustomerSalesOrderVoList/{customerId}")
+    @ResponseBody
+    public String fetchCustomerSalesOrderVoList(@PathVariable int customerId){
+        String result = "";
+        try {
+            List<SalesOrderVo> list = salesService.fetchSalesOrderVoByCustomerId(customerId);
+            result = getSuccessResult(CommonUtils.convertBeanCollectionToJsonArray(list,null).toString());
+        }catch (Exception e){
+            result = getFailResult("系统异常");
+            log.error("fetchSalesOrderVoList error", e);
+        }
+        return result;
+    }
+
+    /**
      * 新增销售单/新增退货单
      * 通过orderType区分
      * @param data

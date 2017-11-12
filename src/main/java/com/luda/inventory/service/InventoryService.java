@@ -29,8 +29,17 @@ public interface InventoryService {
      * 查询库存并加锁
      * @param materielId 商品
      * @param storeId 门店
+     * @param sphere 球镜
+     * @param cylinder 柱镜
+     * @param axial 轴向
      */
-    public Mard lockMard(int materielId, int storeId);
+    public Mard lockMard(int materielId, int storeId, double sphere, double cylinder, double axial);
+
+    /**
+     * 查询库存并加锁
+     * @param mardId 库存id
+     */
+    public Mard lockMardById(int mardId);
 
     /**
      * 更新商品库存
@@ -38,13 +47,22 @@ public interface InventoryService {
      * @param storeId 门店
      * @param increment 库存增量(小于0为扣减库存)
      */
-    public void updateMard(int materielId, int storeId, int increment);
+    // public void updateMard(int materielId, int storeId, int increment);
+
+    /**
+     * 更新商品库存
+     * @param mardId 库存id
+     * @param increment 库存增量(小于0为扣减库存)
+     * @return
+     */
+    public int updateMardById(int mardId, int increment);
 
     /**
      * 查询采购单
+     * @param orderType 订单类型
      * @return
      */
-    List<PurchaseOrderVo> fetchPurchaseOrderVoList();
+    List<PurchaseOrderVo> fetchPurchaseOrderVoList(String orderType);
 
     /**
      * 根据id查询采购单
@@ -149,7 +167,13 @@ public interface InventoryService {
      * @param storeId 门店id
      * @return
      */
-    Mard getMard(int materielId, int storeId);
+    // Mard getMard(int materielId, int storeId);
+
+    /**
+     * 根据库存id查询库存信息
+     * @param mardId 库存id
+     */
+    Mard getMardById(int mardId);
 
     /**
      * 删除调拨单明细

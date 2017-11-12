@@ -1,7 +1,7 @@
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
         <div class="seat-manage-operate-container">
-            <h5 class="seat-manage-operate-title">采购入库单</h5>
+            <h5 class="seat-manage-operate-title">采购退货单</h5>
             <div class="seat-manage-operate-button form-inline">
                 <!--<a type="button" class="btn btn-success btn-sm" href="#addPurchaseOrder"> 新增</a>-->
                 <input class="form-control" ng-model="filterText" ng-change="filter()"
@@ -16,12 +16,12 @@
         <table ng-table="tableParams" class="table table-bordered">
             <tr ng-repeat="order in $data|filter:filterText">
                 <td data-title="'编号'" sortable="'code'">{{order.code}}</td>
-                <td data-title="'采购日期'" sortable="'purchaseDate'">{{order.purchaseDate}}</td>
+                <td data-title="'退货日期'" sortable="'purchaseDate'">{{order.purchaseDate}}</td>
                 <td data-title="'门店'" sortable="'code'">{{order.storeName}}</td>
                 <td data-title="'供应商'" sortable="'code'">{{order.supplierName}}</td>
                 <td data-title="'业务员'" sortable="'code'">{{order.businessmanName}}</td>
                 <td data-title="'数量'" sortable="'code'">{{order.totalQuantity}}</td>
-                <td data-title="'应付金额'" sortable="'code'">{{order.totalAmount}}</td>
+                <td data-title="'退货金额'" sortable="'code'">{{order.totalAmount}}</td>
                 <td data-title="'操作'">
                     <button type="button" class="btn btn-sm btn-primary"
                             ng-click="gotoEdit(order.purchaseOrderId)">编辑</button>

@@ -11,13 +11,25 @@ import java.util.Date;
 public class Mard {
     private int id;
     /**
+     * 门店Id
+     */
+    private int storeId;
+    /**
      * 商品id
      */
     private int materielId;
     /**
-     * 门店Id
+     * 球镜
      */
-    private int storeId;
+    private double sphere;
+    /**
+     * 柱镜
+     */
+    private double cylinder;
+    /**
+     * 轴向
+     */
+    private double axial;
     /**
      * 当前库存量
      */
@@ -87,12 +99,39 @@ public class Mard {
         this.updateTime = updateTime;
     }
 
+    public double getSphere() {
+        return sphere;
+    }
+
+    public void setSphere(double sphere) {
+        this.sphere = sphere;
+    }
+
+    public double getCylinder() {
+        return cylinder;
+    }
+
+    public void setCylinder(double cylinder) {
+        this.cylinder = cylinder;
+    }
+
+    public double getAxial() {
+        return axial;
+    }
+
+    public void setAxial(double axial) {
+        this.axial = axial;
+    }
+
     @Override
     public String toString() {
         return "Mard{" +
                 "id=" + id +
-                ", materielId=" + materielId +
                 ", storeId=" + storeId +
+                ", materielId=" + materielId +
+                ", sphere=" + sphere +
+                ", cylinder=" + cylinder +
+                ", axial=" + axial +
                 ", currentInventory=" + currentInventory +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +

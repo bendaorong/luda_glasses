@@ -24,8 +24,14 @@ public class Constants {
     public static final String INVNT_VERIF_TYPE_LOSE = "02"; //盘亏
 
     /**
-     * 订单类型
+     * 销售订单类型
      */
     public static final String ORDER_TYPE_SALE = "01"; //销售单
-    public static final String ORDER_TYPE_REFUND = "02"; //退货单
+    public static final String ORDER_TYPE_REFUND = "02"; //销售退货单
+
+    /**
+     * 采购订单类型
+     */
+    public static final String ORDER_TYPE_PURCHASE = "01"; //采购单
+    public static final String ORDER_TYPE_PURCHASE_REFUND = "02"; //采购退货单
 }

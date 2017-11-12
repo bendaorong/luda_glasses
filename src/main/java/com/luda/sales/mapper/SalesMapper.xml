@@ -30,7 +30,11 @@
     <resultMap id="salesOrderItemMap" type="com.luda.sales.model.SalesOrderItem">
         <id property="itemId" column="id"/>
         <result property="salesOrderId" column="sales_order_id"/>
+        <result property="mardId" column="mard_id"/>
         <result property="materielId" column="materiel_id"/>
+        <result property="sphere" column="sphere"/>
+        <result property="cylinder" column="cylinder"/>
+        <result property="axial" column="axial"/>
         <result property="quantity" column="quantity"/>
         <result property="sellPrice" column="sell_price"/>
         <result property="remark" column="remark"/>
@@ -84,6 +88,7 @@
         insert into sales_order_item
         (
             sales_order_id,
+            mard_id,
             materiel_id,
             quantity,
             sell_price,
@@ -92,6 +97,7 @@
         values
         (
             #{salesOrderId},
+            #{mardId},
             #{materielId},
             #{quantity},
             #{sellPrice},
@@ -108,7 +114,13 @@
         on o.businessman_id = d.admin_user_id
         left join customer c
         on o.customer_id = c.id
-        where o.order_type = #{orderType} and o.delete_flag = 0
+        where o.delete_flag = 0
+        <if test="orderType != null and orderType != ''">
+            and o.order_type = #{orderType}
+        </if>
+        <if test="customerId != 0">
+            and o.customer_id = #{customerId}
+        </if>
         order by o.id desc
     </select>
 
@@ -117,7 +129,11 @@
     </select>
 
     <select id="fetchSalesOrderItems" resultMap="salesOrderItemMap">
-        select * from sales_order_item where sales_order_id = #{salesOrderId}
+        select a.*, b.sphere, b.cylinder, b.axial
+        from sales_order_item a
+        left join mard b
+        on a.mard_id = b.id
+        where a.sales_order_id = #{salesOrderId}
     </select>
 
     <update id="updateSalesOrder" parameterType="com.luda.sales.model.SalesOrder">

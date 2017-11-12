@@ -5,12 +5,36 @@
         <id property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="gender" column="gender"/>
+        <result property="age" column="age"/>
         <result property="birthday" column="birthday"/>
         <result property="mobileNumber" column="mobile_num"/>
         <result property="wechatno" column="wechat_num"/>
         <result property="region" column="region"/>
         <result property="regionName" column="region_name"/>
         <result property="address" column="address"/>
+    </resultMap>
+
+    <resultMap id="optometryRecordMap" type="com.luda.customer.model.OptometryRecord">
+        <id property="id" column="id"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="businessManId" column="businessman_id"/>
+        <result property="optometryDate" column="optometry_date"/>
+        <result property="rightSphere" column="r_sphere"/>
+        <result property="leftSphere" column="l_sphere"/>
+        <result property="rightCylinder" column="r_cylinder"/>
+        <result property="leftCylinder" column="l_cylinder"/>
+        <result property="rightAxial" column="r_axial"/>
+        <result property="leftAxial" column="l_axial"/>
+        <result property="rightUncorrectedVisualAcuity" column="r_uncorrected_visual_acuity"/>
+        <result property="leftUncorrectedVisualAcuity" column="l_uncorrected_visual_acuity"/>
+        <result property="rightCorrectedVisualAcuity" column="r_corrected_visual_acuity"/>
+        <result property="leftCorrectedVisualAcuity" column="l_corrected_visual_acuity"/>
+        <result property="remark" column="remark"/>
+        <result property="createUserId" column="create_user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUserId" column="update_user_id"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="businessManName" column="real_name"/>
     </resultMap>
 
     <select id="fetchCustomerList" resultMap="customerMapper">
@@ -25,6 +49,7 @@
            code,
            name,
            gender,
+           age,
            birthday,
            mobile_num,
            wechat_num,
@@ -37,6 +62,7 @@
             #{code},
             #{name},
             #{gender},
+            #{age},
             #{birthday},
             #{mobileNumber},
             #{wechatno},
@@ -59,6 +85,7 @@
         set
             name = #{name},
             gender = #{gender},
+            age = #{age},
             birthday = #{birthday},
             mobile_num = #{mobileNumber},
             wechat_num = #{wechatno},
@@ -70,4 +97,60 @@
     <update id="removeCustomer" parameterType="int">
         update customer set delete_flag = 1 where id = #{id}
     </update>
+
+    <insert id="saveOptometryRecord" parameterType="com.luda.customer.model.OptometryRecord"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into optometry_record
+        (
+            customer_id,
+            businessman_id,
+            optometry_date,
+            r_sphere,
+            l_sphere,
+            r_cylinder,
+            l_cylinder,
+            r_axial,
+            l_axial,
+            r_uncorrected_visual_acuity,
+            l_uncorrected_visual_acuity,
+            r_corrected_visual_acuity,
+            l_corrected_visual_acuity,
+            remark,
+            create_user_id,
+            create_time,
+            update_user_id,
+            update_time
+        )
+        values
+        (
+            #{customerId},
+            #{businessManId},
+            #{optometryDate},
+            #{rightSphere},
+            #{leftSphere},
+            #{rightCylinder},
+            #{leftCylinder},
+            #{rightAxial},
+            #{leftAxial},
+            #{rightUncorrectedVisualAcuity},
+            #{leftUncorrectedVisualAcuity},
+            #{rightCorrectedVisualAcuity},
+            #{leftCorrectedVisualAcuity},
+            #{remark},
+            #{createUserId},
+            now(),
+            #{updateUserId},
+            now()
+        )
+    </insert>
+
+    <select id="fetchOptometryRecordsByCustomerId" resultMap="optometryRecordMap">
+        select a.*, b.real_name from (
+            select * from optometry_record
+            where customer_id = #{customerId} and delete_flag = 0
+        ) a
+        left join admin_user_detail b
+        on a.businessman_id = b.admin_user_id
+        order by a.id desc
+    </select>
 </mapper>

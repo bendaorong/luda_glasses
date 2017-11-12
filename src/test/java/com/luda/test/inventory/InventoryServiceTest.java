@@ -62,7 +62,7 @@ public class InventoryServiceTest extends SpringSimpleJunit{
 
     @Test
     public void testFetchPurchaseOrderList(){
-        List<PurchaseOrderVo> list = inventoryService.fetchPurchaseOrderVoList();
+        List<PurchaseOrderVo> list = inventoryService.fetchPurchaseOrderVoList("01");
         print(CommonUtils.convertBeanCollectionToJsonArray(list,null).toString());
     }
 
@@ -183,7 +183,7 @@ public class InventoryServiceTest extends SpringSimpleJunit{
 
     @Test
     public void testGetMard(){
-        Mard mard = inventoryService.getMard(1,1);
+        Mard mard = inventoryService.getMardById(1);
         print(mard.toString());
     }
 }

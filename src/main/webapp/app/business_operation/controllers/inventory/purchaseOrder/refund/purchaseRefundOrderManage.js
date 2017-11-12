@@ -1,6 +1,6 @@
 (function() {
-    angular.module("businessOperationApp").controller("purchaseOrderManageController", function($scope, $location, NgTableParams, inventoryService) {
-        setActiveSubPage($scope, "purchaseOrderManage");
+    angular.module("businessOperationApp").controller("purchaseRefundOrderManageController", function($scope, $location, NgTableParams, inventoryService) {
+        setActiveSubPage($scope, "purchaseRefundOrderManage");
 
         $scope.roleCode = sessionStorage.getItem("roleCode");
         $scope.currentTab = 0;
@@ -10,9 +10,9 @@
             $scope.currentTab = currentTab;
         }
 
-        // 显示采购单列表
+        // 显示采购退货单列表
         function initPurchaseOrderList() {
-            inventoryService.fetchPurchaseOrderList("01", function(data){
+            inventoryService.fetchPurchaseOrderList("02", function(data){
                 if(data.success){
                     $scope.purchaseOrderList = data.data;
                     $scope.tableParams = new NgTableParams({}, {
@@ -44,7 +44,7 @@
 
         // 编辑采购单
         $scope.gotoEdit = function(id) {
-            $location.path("/editPurchaseOrder/" + id);
+            $location.path("/editPurchaseRefundOrder/" + id);
         }
 
         // 删除采购单
@@ -62,20 +62,20 @@
                         BootstrapDialog.show({
                             type : BootstrapDialog.TYPE_DANGER,
                             title : '失败',
-                            message : '采购单删除失败:' + data.errorMsg
+                            message : '删除失败:' + data.errorMsg
                         });
                     }
                 }, function (data) {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,
                         title : '警告',
-                        message : '采购单删除错误:' + data.errorMsg
+                        message : '删除错误:' + data.errorMsg
                     });
                 });
             }
         }
-    }).controller("addPurchaseOrderController", function ($location,$scope,$filter,materielService,inventoryService,storeService,supplierService,adminUserService,$routeParams) {
-        setActiveSubPage($scope, "addPurchaseOrder");
+    }).controller("addPurchaseRefundOrderController", function ($location,$scope,$filter,materielService,inventoryService,storeService,supplierService,adminUserService,$routeParams) {
+        setActiveSubPage($scope, "addPurchaseRefundOrder");
 
         $scope.newPurchaseOrder = {};//采购单
         $scope.newPurchaseOrder.totalQuantity = 0;
@@ -88,32 +88,9 @@
         $scope.adminUserList = [];
         $scope.materielList = [];
 
-        $scope.selectedMateriel = {}; //选择的商品
-        $scope.purchaseOrderItem = {}; //采购单明细
-        $scope.purchaseOrderItem.purchasePrice = 0;
-        $scope.purchaseOrderItem.purchaseQuantity = 0;
-
         // 查询商品
         materielService.fetchMaterielList(function(data){
             $scope.materielList = data.data;
-            for(var i=0; i<data.data.length; i++){
-                $("#materiel").append("<option value='" + data.data[i].id + "'>" + data.data[i].name + "</option>");
-            }
-            $("#materiel").searchableSelect(function (materielId) {
-                if(angular.isDefined(materielId) && materielId != null && materielId != ''){
-                    for(var i=0; i<$scope.materielList.length; i++){
-                        if($scope.materielList[i].id == materielId){
-                            $scope.selectedMateriel = $scope.materielList[i];
-                            $scope.purchaseOrderItem.materielId = materielId;
-                            $scope.$apply();
-                            break;
-                        }
-                    }
-                }else {
-                    $scope.selectedMateriel = {};
-                    //$scope.$apply();
-                }
-            });
         },function(data){
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
@@ -155,6 +132,11 @@
             });
         });
 
+        $scope.selectedMateriel = {}; //选择的商品
+        $scope.purchaseOrderItem = {}; //采购单明细
+        $scope.purchaseOrderItem.purchasePrice = 0;
+        $scope.purchaseOrderItem.purchaseQuantity = 0;
+
         $scope.newPurchaseOrderItem = function (){
             $('.bg').css({'display':'block'});
             $('.content').css({'display':'block'});
@@ -170,16 +152,27 @@
             $('.content').css({'display':'none'});
         }
 
+        // 选择商品时加载数据
+        $('#abc').change(function(){
+            var materielId = $(this).children('option:selected').val();
+            materielService.getById(materielId, function(data){
+                $scope.selectedMateriel = data.data;
+                $scope.purchaseOrderItem.purchasePrice = $scope.selectedMateriel.tradePrice;
+            },function(data){
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '错误',
+                    message : data.errorMsg
+                });
+            });
+        })
+
         // 添加新明细
         $scope.addItem = function () {
-            if($scope.purchaseOrderItem.materielId == null){
+            if($scope.selectedMateriel.id == null){
                 alert("请选择商品");
                 return false;
             }
-            // 镜片商品必须填写球镜、柱镜、轴向
-            // TODO
-
-
             if($scope.purchaseOrderItem.purchasePrice == null || $scope.purchaseOrderItem.purchasePrice == 0){
                 alert("请填写采购价格");
                 return false;
@@ -205,9 +198,6 @@
             materiel.typeName = $scope.selectedMateriel.typeName;
             materiel.specification = $scope.selectedMateriel.specification;
             item.remark = $scope.purchaseOrderItem.remark;
-            item.sphere = $scope.purchaseOrderItem.sphere;
-            item.cylinder = $scope.purchaseOrderItem.cylinder;
-            item.axial = $scope.purchaseOrderItem.axial;
             $scope.purchaseOrderItemList.push(item);
 
             // 采购单总数量
@@ -244,9 +234,9 @@
                 });
                 return false;
             }
-            // 采购日期
+            // 退货日期
             $scope.newPurchaseOrder.purchaseDate = $("#purchaseDate").val();
-            $scope.newPurchaseOrder.orderType = "01";
+            $scope.newPurchaseOrder.orderType = "02";
             //console.log("newPurchaseOrder:" + JSON.stringify($scope.newPurchaseOrder));
 
             inventoryService.savePurchaseOrder($scope.newPurchaseOrder, function (data) {
@@ -256,7 +246,7 @@
                         title : '成功',
                         message : '创建成功'
                     });
-                    $location.path("/purchaseOrderManage");
+                    $location.path("/purchaseRefundOrderManage");
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,
@@ -273,30 +263,6 @@
             });
         }
 
-        // // 构造采购单明细
-        // function buildPurchaseOrderItems(){
-        //     var purchaseOrderItems = [];
-        //     $("#itemContainer").find("tr:not(':first')").each(function(){
-        //         var tdArr = $(this).children();
-        //         // 商品id
-        //         var materielId = tdArr.eq(0).find("input").val();
-        //         // 采购价格
-        //         var purchasePrice = tdArr.eq(4).text();
-        //         // 采购数量
-        //         var purchaseQuantity = tdArr.eq(5).text();
-        //         // 备注
-        //         var remark = tdArr.eq(9).text();
-        //
-        //         var item = {};
-        //         item.materielId = Number(materielId);
-        //         item.purchasePrice = Number(purchasePrice);
-        //         item.purchaseQuantity = Number(purchaseQuantity);
-        //         item.remark = remark;
-        //         purchaseOrderItems.push(item);
-        //     });
-        //     return purchaseOrderItems;
-        // }
-
         $scope.cancel = function(){
             history.back();
         }
@@ -305,7 +271,7 @@
             $('.bg').css({'display':'none'});
             $('.content').css({'display':'none'});
         }
-    }).controller("editPurchaseOrderController",function($location,$scope,$filter,materielService,inventoryService,storeService,supplierService,adminUserService,$routeParams){
+    }).controller("editPurchaseRefundOrderController",function($location,$scope,$filter,materielService,inventoryService,storeService,supplierService,adminUserService,$routeParams){
         $scope.selectPurchaseOrder={};
         $scope.storeList = [];
         $scope.supplierList = [];
@@ -399,45 +365,6 @@
 
         // 添加新明细
         $scope.addItem_ = function () {
-            // var newItem = "<tr>" +
-            //     "<td>" + $scope.selectedMateriel.code + "<input type='hidden' value='"+$scope.selectedMateriel.id+"' /></td>" +
-            //     "<td>" + $scope.selectedMateriel.name + "<input type='hidden' value='0' /></td>" +
-            //     "<td>" + $scope.selectedMateriel.color + "</td>" +
-            //     "<td>" + $scope.selectedMateriel.barcode + "</td>" +
-            //     "<td>" + $scope.purchaseOrderItem.purchasePrice + "</td>" +
-            //     "<td>" + $scope.purchaseOrderItem.purchaseQuantity + "</td>" +
-            //     "<td>" + $scope.selectedMateriel.typeName + "</td>" +
-            //     "<td>" + $scope.selectedMateriel.specification + "</td>" +
-            //     "<td>" + $scope.purchaseOrderItem.purchasePrice * $scope.purchaseOrderItem.purchaseQuantity + "</td>" +
-            //     "<td>" + $scope.purchaseOrderItem.remark + "</td>" +
-            //     "<td><button name='del'>删除</button></td>" +
-            //     "</tr>";
-            // $('#itemContainer').append(newItem);
-
-            // // 删除明细
-            // $("#itemContainer").find("button[name='del']").each(function(){
-            //     $(this).unbind("click");
-            //     $(this).bind("click", function () {
-            //         var tdArr = $(this).parent().parent().children();
-            //         if(tdArr.eq(1).find("input").val() == 0){
-            //             //删除该明细
-            //             $(this).parent().parent().remove();
-            //         }else {
-            //             if(confirm("确定删除该条明细吗？")){
-            //                 // 采购价格
-            //                 var purchasePrice = tdArr.eq(4).text();
-            //                 // 采购数量
-            //                 var purchaseQuantity = tdArr.eq(5).text();
-            //                 //计算采购数量和采购金额
-            //                 $scope.newPurchaseOrder.totalQuantity -= Number(purchaseQuantity);
-            //                 $scope.newPurchaseOrder.totalAmount -= purchasePrice * purchaseQuantity;
-            //                 //删除该明细
-            //                 $(this).parent().parent().remove();
-            //             }
-            //         }
-            //     });
-            // });
-
             var item = {};
             item.itemId = 0;
             item.purchaseOrderId = $scope.selectPurchaseOrder.purchaseOrderId;
@@ -446,7 +373,7 @@
             item.purchaseQuantity = $scope.purchaseOrderItem.purchaseQuantity;
             item.remark = $scope.purchaseOrderItem.remark;
 
-            console.log(JSON.stringify(item));
+            //console.log(JSON.stringify(item));
             inventoryService.savePurchaseOrderItem(item, function (data) {
                 if(data.success){
                     BootstrapDialog.show({
@@ -519,34 +446,6 @@
                 });
             });
         }
-
-        // // 构造采购单明细
-        // function buildPurchaseOrderItems(){
-        //     var purchaseOrderItems = [];
-        //     $("#itemContainer").find("tr:not(':first')").each(function(){
-        //         var tdArr = $(this).children();
-        //         // 商品id
-        //         var materielId = tdArr.eq(0).find("input").val();
-        //         // 采购价格
-        //         var purchasePrice = tdArr.eq(4).text();
-        //         // 采购数量
-        //         var purchaseQuantity = tdArr.eq(5).text();
-        //         // 备注
-        //         var remark = tdArr.eq(9).text();
-        //         // 明细id
-        //         var itemId = tdArr.eq(1).find("input").val();
-        //
-        //         var item = {};
-        //         item.materielId = Number(materielId);
-        //         item.purchasePrice = Number(purchasePrice);
-        //         item.purchaseQuantity = Number(purchaseQuantity);
-        //         item.remark = remark;
-        //         item.purchaseOrderId = Number($scope.selectPurchaseOrder.purchaseOrderId);
-        //         item.itemId = Number(itemId);
-        //         purchaseOrderItems.push(item);
-        //     });
-        //     return purchaseOrderItems;
-        // }
 
         // 删除明细
         $scope.delItem_ = function (index) {

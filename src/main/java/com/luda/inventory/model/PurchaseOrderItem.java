@@ -16,6 +16,10 @@ public class PurchaseOrderItem implements Serializable {
      */
     private int purchaseOrderId;
     /**
+     * 库存id
+     */
+    private int mardId;
+    /**
      * 商品id
      */
     private int materielId;
@@ -32,9 +36,29 @@ public class PurchaseOrderItem implements Serializable {
      */
     private int purchaseQuantity;
     /**
+     * 球镜
+     */
+    private double sphere;
+    /**
+     * 柱镜
+     */
+    private double cylinder;
+    /**
+     * 轴向
+     */
+    private double axial;
+    /**
      * 备注
      */
     private String remark;
+
+    public int getMardId() {
+        return mardId;
+    }
+
+    public void setMardId(int mardId) {
+        this.mardId = mardId;
+    }
 
     public int getItemId() {
         return itemId;
@@ -84,6 +108,30 @@ public class PurchaseOrderItem implements Serializable {
         this.remark = remark;
     }
 
+    public double getSphere() {
+        return sphere;
+    }
+
+    public void setSphere(double sphere) {
+        this.sphere = sphere;
+    }
+
+    public double getCylinder() {
+        return cylinder;
+    }
+
+    public void setCylinder(double cylinder) {
+        this.cylinder = cylinder;
+    }
+
+    public double getAxial() {
+        return axial;
+    }
+
+    public void setAxial(double axial) {
+        this.axial = axial;
+    }
+
     public MaterielModel getMateriel() {
         return materiel;
     }
@@ -106,9 +154,14 @@ public class PurchaseOrderItem implements Serializable {
         return "PurchaseOrderItem{" +
                 "itemId=" + itemId +
                 ", purchaseOrderId=" + purchaseOrderId +
+                ", mardId=" + mardId +
                 ", materielId=" + materielId +
+                ", materiel=" + materiel +
                 ", purchasePrice=" + purchasePrice +
                 ", purchaseQuantity=" + purchaseQuantity +
+                ", sphere=" + sphere +
+                ", cylinder=" + cylinder +
+                ", axial=" + axial +
                 ", remark='" + remark + '\'' +
                 '}';
     }

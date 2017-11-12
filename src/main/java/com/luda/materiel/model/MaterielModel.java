@@ -29,6 +29,10 @@ public class MaterielModel implements Serializable{
      */
     private int typeId;
     /**
+     * 供应商
+     */
+    private int supplierId;
+    /**
      * 售价
      */
     private double sellPrice;
@@ -40,6 +44,7 @@ public class MaterielModel implements Serializable{
     /**
      * 成本价
      */
+    @Deprecated
     private double costPrice;
     /**
      * 单位
@@ -49,7 +54,10 @@ public class MaterielModel implements Serializable{
      * 品牌
      */
     private String brand;
-
+    /**
+     * 折射率
+     */
+    private double refractiveIndex;
     /**
      * 规格型号
      */
@@ -104,6 +112,19 @@ public class MaterielModel implements Serializable{
      * 商品类型名称
      */
     private String typeName;
+
+    /**
+     * 供应商名称
+     */
+    private String supplierName;
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
 
     public String getTypeName() {
         return typeName;
@@ -289,6 +310,22 @@ public class MaterielModel implements Serializable{
         this.updateTime = updateTime;
     }
 
+    public int getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(int supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public double getRefractiveIndex() {
+        return refractiveIndex;
+    }
+
+    public void setRefractiveIndex(double refractiveIndex) {
+        this.refractiveIndex = refractiveIndex;
+    }
+
     @Override
     public String toString() {
         return "MaterielModel{" +
@@ -297,14 +334,15 @@ public class MaterielModel implements Serializable{
                 ", barcode='" + barcode + '\'' +
                 ", name='" + name + '\'' +
                 ", typeId=" + typeId +
-                ", typeName='" + typeName + '\'' +
+                ", supplierId=" + supplierId +
                 ", sellPrice=" + sellPrice +
                 ", tradePrice=" + tradePrice +
                 ", costPrice=" + costPrice +
-                ", unit=" + unit +
-                ", brand=" + brand +
+                ", unit='" + unit + '\'' +
+                ", brand='" + brand + '\'' +
+                ", refractiveIndex=" + refractiveIndex +
                 ", specification='" + specification + '\'' +
-                ", color=" + color +
+                ", color='" + color + '\'' +
                 ", texture='" + texture + '\'' +
                 ", manufacturer='" + manufacturer + '\'' +
                 ", minInventory=" + minInventory +
@@ -315,6 +353,8 @@ public class MaterielModel implements Serializable{
                 ", createTime=" + createTime +
                 ", updateUserId=" + updateUserId +
                 ", updateTime=" + updateTime +
+                ", typeName='" + typeName + '\'' +
+                ", supplierName='" + supplierName + '\'' +
                 '}';
     }
 }
