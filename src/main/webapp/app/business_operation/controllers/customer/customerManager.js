@@ -78,6 +78,7 @@
 
         //保存门店信息
         $scope.saveCustomer = function(){
+            $scope.newCustomer.birthday = $("#birthday").val();
             customerService.addCustomer($scope.newCustomer, function(data){
                 if(data.success){
                     BootstrapDialog.show({
@@ -122,6 +123,9 @@
 
         customerService.getById($routeParams.customerId, function(data){
             $scope.selectCustomer = data;
+            if($scope.selectCustomer.region == null || $scope.selectCustomer.region == ''){
+                $scope.selectCustomer.region = '瑞昌市';
+            }
         },function(data){
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
@@ -131,6 +135,7 @@
         });
 
         $scope.updateCustomer = function(){
+            $scope.selectCustomer.birthday = $("#birthday").val();
             customerService.updateCustomer($scope.selectCustomer, function(data){
                 if(data.success){
                     BootstrapDialog.show({

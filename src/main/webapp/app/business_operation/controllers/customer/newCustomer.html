@@ -85,9 +85,9 @@
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">地区</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <select class="form-control" required ng-model="newCustomer.region">
+                        <select class="form-control" ng-model="newCustomer.region" ng-init="newCustomer.region='瑞昌市'">
                             <option ng-repeat="region in regionList" value="{{region.dictName}}"
-                                    ng-selected="region.dictName=='瑞昌市'">
+                                    ng-selected="region.dictName==newCustomer.region">
                                 {{region.dictName}}
                             </option>
                         </select>

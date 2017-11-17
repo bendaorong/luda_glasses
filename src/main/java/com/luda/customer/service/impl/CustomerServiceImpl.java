@@ -36,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService{
     public ResultHandle<CustomerModel> saveCustomer(CustomerModel customerModel) {
         ResultHandle<CustomerModel> resultHandle = new ResultHandle<CustomerModel>();
         try {
-            customerModel.setCode(getNextCustomerCode());
+            initAddCustomer(customerModel);
             this.customerDao.saveCustomer(customerModel);
             resultHandle.setReturnContent(customerModel);
         }catch (Exception e){
@@ -44,6 +44,20 @@ public class CustomerServiceImpl implements CustomerService{
             log.error("save customer error", e);
         }
         return resultHandle;
+    }
+
+    /**
+     * 初始化客户资料
+     * @param customerModel
+     */
+    private void initAddCustomer(CustomerModel customerModel) {
+        customerModel.setCode(getNextCustomerCode());
+        if(StringUtils.isEmpty(customerModel.getGender())){
+            customerModel.setGender(Constants.GENDER_MALE);
+        }
+        if(StringUtils.isEmpty(customerModel.getRegion())){
+            customerModel.setRegion("瑞昌市");
+        }
     }
 
     /**

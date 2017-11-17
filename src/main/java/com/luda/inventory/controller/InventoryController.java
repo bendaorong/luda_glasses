@@ -2,6 +2,7 @@ package com.luda.inventory.controller;
 
 import com.luda.comm.po.ResultHandle;
 import com.luda.common.controller.BaseController;
+import com.luda.inventory.exception.InventoryException;
 import com.luda.inventory.model.*;
 import com.luda.inventory.service.InventoryService;
 import com.luda.user.model.AdminUserModel;
@@ -149,7 +150,10 @@ public class InventoryController extends BaseController{
             }else {
                 result = getFailResult(resultHandle.getMsg());
             }
-        }catch (Exception e){
+        } catch (InventoryException e){
+            log.error("save purchase order error", e);
+            result = getFailResult(e.getMessage());
+        } catch (Exception e){
             log.error("save purchase order error", e);
             result = getFailResult("系统异常");
         }
@@ -418,9 +422,10 @@ public class InventoryController extends BaseController{
      */
     @RequestMapping("/inventoryVerification/saveInvntVerificationItem")
     @ResponseBody
-    public String saveInvntVerificationItem(@RequestBody InventoryVerificationItem item){
+    public String saveInvntVerificationItem(@RequestBody String itemData){
         String result = "";
         try {
+            InventoryVerificationItem item = CommonUtils.convertJsonToBean(JSONObject.fromObject(itemData), InventoryVerificationItem.class);
             ResultHandle<InventoryVerificationItem> resultHandle = inventoryService.saveInvntVerificationItem(item);
             if(resultHandle.isSuccess()){
                 String data = CommonUtils.convertBeanToJson(resultHandle.getReturnContent(), null).toString();

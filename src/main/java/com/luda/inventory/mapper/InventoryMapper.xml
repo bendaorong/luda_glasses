@@ -396,20 +396,26 @@
     <insert id="savePurchaseOrderItem" parameterType="com.luda.inventory.model.PurchaseOrderItem"
             useGeneratedKeys="true" keyProperty="itemId">
         INSERT INTO purchase_order_item
-        (
-            purchase_order_id,
-            materiel_id,
-            purchase_price,
-            purchase_quantity,
-            remark
-        )
-        VALUES (
-            #{purchaseOrderId},
-            #{materielId},
-            #{purchasePrice},
-            #{purchaseQuantity},
-            #{remark}
-        )
+            (
+                purchase_order_id,
+                materiel_id,
+                purchase_price,
+                purchase_quantity,
+                remark,
+                sphere,
+                cylinder,
+                axial
+            )
+            VALUES (
+                #{purchaseOrderId},
+                #{materielId},
+                #{purchasePrice},
+                #{purchaseQuantity},
+                #{remark},
+                #{sphere},
+                #{cylinder},
+                #{axial}
+            )
     </insert>
 
     <update id="removeInvntVerification">

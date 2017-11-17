@@ -34,7 +34,7 @@ public class InventoryServiceImpl implements InventoryService{
     private InventoryDao inventoryDao;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public ResultHandle<PurchaseOrder> savePurchaseOrder(PurchaseOrder purchaseOrder) {
         ResultHandle<PurchaseOrder> resultHandle = new ResultHandle<>();
         // 验证采购单
@@ -57,10 +57,10 @@ public class InventoryServiceImpl implements InventoryService{
         // 更新商品库存,增加库存
         for(PurchaseOrderItem item : purchaseOrder.getPurchaseOrderItemList()){
             // 采购单则增加库存，采购退货单则扣减库存
+            Mard mard = getMard(item.getMaterielId(), purchaseOrder.getStoreId(),
+                    item.getSphere(), item.getCylinder(), item.getAxial());
             if(Constants.ORDER_TYPE_PURCHASE.equals(purchaseOrder.getOrderType())){
                 // 采购
-                Mard mard = getMard(item.getMaterielId(), purchaseOrder.getStoreId(),
-                        item.getSphere(), item.getCylinder(), item.getAxial());
                 if(mard == null){
                     saveMard(item.getMaterielId(), purchaseOrder.getStoreId(), item.getPurchaseQuantity(),
                             item.getSphere(), item.getCylinder(), item.getAxial());
@@ -69,7 +69,11 @@ public class InventoryServiceImpl implements InventoryService{
                 }
             }else {
                 // 退货
-                updateMardById(item.getMardId(), -item.getPurchaseQuantity());
+                if(mard == null){
+                    resultHandle.setMsg("商品库存不存在");
+                    return resultHandle;
+                }
+                updateMardById(mard.getId(), -item.getPurchaseQuantity());
             }
         }
         return resultHandle;
@@ -145,25 +149,32 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
+    @Transactional
     public ResultHandle<PurchaseOrderItem> removePurchaseOrderItem(int itemId) {
         ResultHandle<PurchaseOrderItem> resultHandle = new ResultHandle<>();
+
         PurchaseOrderItem purchaseOrderItem = inventoryDao.getPurchaseOrderItemById(itemId);
         if(purchaseOrderItem == null){
             resultHandle.setMsg("采购明细不存在");
             return resultHandle;
         }
-        int result = inventoryDao.removePurchaseOrderItem(itemId);
-        if(result > 0){
-            // 更新采购单总数量和总金额
-            PurchaseOrder purchaseOrder = getPurchaseOrderById(purchaseOrderItem.getPurchaseOrderId());
-            updatePurchaseOrderTotalQuantityAndTotalAmount(purchaseOrder);
-            // 更新库存，删除采购单明细则扣减库存，删除采购退货单则增加库存
-            if(Constants.ORDER_TYPE_PURCHASE.equals(purchaseOrder.getOrderType())){
-                updateMardById(purchaseOrderItem.getMardId(), -purchaseOrderItem.getPurchaseQuantity());
-            }else {
-                updateMardById(purchaseOrderItem.getMardId(), purchaseOrderItem.getPurchaseQuantity());
-            }
+
+        // 删除明细
+        inventoryDao.removePurchaseOrderItem(itemId);
+
+        PurchaseOrder purchaseOrder = getPurchaseOrderById(purchaseOrderItem.getPurchaseOrderId());
+        Mard mard = getMard(purchaseOrderItem.getMaterielId(), purchaseOrder.getStoreId(),
+                purchaseOrderItem.getSphere(), purchaseOrderItem.getCylinder(), purchaseOrderItem.getAxial());
+
+        // 更新采购单总数量和总金额
+        updatePurchaseOrderTotalQuantityAndTotalAmount(purchaseOrder);
+        // 更新库存，删除采购单明细则扣减库存，删除采购退货单则增加库存
+        if(Constants.ORDER_TYPE_PURCHASE.equals(purchaseOrder.getOrderType())){
+            updateMardById(mard.getId(), -purchaseOrderItem.getPurchaseQuantity());
+        }else {
+            updateMardById(mard.getId(), purchaseOrderItem.getPurchaseQuantity());
         }
+
         return resultHandle;
     }
 
@@ -255,7 +266,7 @@ public class InventoryServiceImpl implements InventoryService{
 
     @Override
     public int updateMardById(int mardId, int increment) {
-        Mard mard = inventoryDao.lockMardById(mardId);
+        Mard mard = lockMardById(mardId);
         if(mard == null){
             throw new InventoryException("商品库存不存在");
         }
@@ -293,6 +304,7 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
+    @Transactional
     public ResultHandle removePurchaseOrder(int id) {
         ResultHandle resultHandle = new ResultHandle();
         PurchaseOrder purchaseOrder = getPurchaseOrderById(id);
@@ -303,10 +315,16 @@ public class InventoryServiceImpl implements InventoryService{
             // 采购单扣减库存，采购退货单增加库存
             if(org.apache.commons.collections.CollectionUtils.isNotEmpty(purchaseOrder.getPurchaseOrderItemList())){
                 for(PurchaseOrderItem item : purchaseOrder.getPurchaseOrderItemList()){
+                    Mard mard = getMard(item.getMaterielId(), purchaseOrder.getStoreId(),
+                            item.getSphere(), item.getCylinder(), item.getAxial());
+                    if(mard == null){
+                        resultHandle.setMsg("商品库存不存在");
+                        return resultHandle;
+                    }
                     if(Constants.ORDER_TYPE_PURCHASE.equals(purchaseOrder.getOrderType())){
-                        updateMardById(item.getMardId(), -item.getPurchaseQuantity());
+                        updateMardById(mard.getId(), -item.getPurchaseQuantity());
                     }else {
-                        updateMardById(item.getMardId(), item.getPurchaseQuantity());
+                        updateMardById(mard.getId(), item.getPurchaseQuantity());
                     }
                 }
             }

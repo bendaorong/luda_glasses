@@ -30,7 +30,7 @@ public class CustomerController extends BaseController {
     private CustomerService customerService;
 
     /**
-     * 门店列表
+     * 客户列表
      * @param httpServletResponse
      * @return
      */
@@ -51,7 +51,7 @@ public class CustomerController extends BaseController {
 }
 
     /**
-     * 新增门店
+     * 新增客户
      */
     @RequestMapping(value = "/addCustomer", method = RequestMethod.POST)
     @ResponseBody
@@ -61,7 +61,7 @@ public class CustomerController extends BaseController {
             CustomerModel customerModel = CommonUtils.convertJsonToBean(JSONObject.fromObject(data), CustomerModel.class);
             ResultHandle<CustomerModel> resultHandle = customerService.saveCustomer(customerModel);
             if(resultHandle.isSuccess()){
-                result = getSuccessResult();
+                result = getSuccessResult(resultHandle.getReturnContent());
             }else{
                 result = getFailResult(resultHandle.getMsg());
             }
@@ -95,9 +95,10 @@ public class CustomerController extends BaseController {
      */
     @RequestMapping(value = "/updateCustomer", method = RequestMethod.POST)
     @ResponseBody
-    public String updateCustomer(@RequestBody CustomerModel customerModel, HttpServletResponse httpServletResponse){
+    public String updateCustomer(@RequestBody String data, HttpServletResponse httpServletResponse){
         String result = "";
         try {
+            CustomerModel customerModel = CommonUtils.convertJsonToBean(JSONObject.fromObject(data), CustomerModel.class);
             ResultHandle<CustomerModel> resultHandle = customerService.updateCustomer(customerModel);
             if(resultHandle.isSuccess()){
                 result = getSuccessResult();
@@ -105,8 +106,8 @@ public class CustomerController extends BaseController {
                 result = getFailResult(resultHandle.getMsg());
             }
         }catch (Exception e){
-            result = returnErrorResult(httpServletResponse, "系统异常");
-            log.error("update store error, storeId:" + customerModel.getId(), e);
+            result = getFailResult("系统异常");
+            log.error("update customer error", e);
         }
         return result;
     }

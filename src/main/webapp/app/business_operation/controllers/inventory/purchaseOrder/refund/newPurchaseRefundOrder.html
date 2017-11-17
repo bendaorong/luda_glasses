@@ -8,13 +8,14 @@
         width:400px;
         height:500px;
         position:fixed;
-        top:10%;
+        top:5%;
         background:#fff;
         z-index:3;
         left:50%;
         margin-left:-250px;
         TEXT-ALIGN: center;
         padding-left:15px;
+        padding-right:15px;
     }
     table {
         border: 1px solid lightgray;
@@ -144,27 +145,25 @@
                 <!-- 采购退货单明细 -->
                 <table class="table table-bordered" style="margin-top: 10px;" id="itemContainer">
                     <tr>
-                        <td>商品</td>
                         <td>名称</td>
-                        <td>颜色</td>
-                        <td>条码</td>
-                        <td>采购价格</td>
-                        <td>采购数量</td>
                         <td>商品类型</td>
-                        <td>规格型号</td>
+                        <td>球镜</td>
+                        <td>柱镜</td>
+                        <td>轴向</td>
+                        <td>价格</td>
+                        <td>数量</td>
                         <td>小计</td>
                         <td>备注</td>
                         <td>操作</td>
                     </tr>
                     <tr ng-repeat="item in purchaseOrderItemList">
-                        <td>{{item.materiel.code}}<input type="hidden" value="{{item.materielId}}" /></td>
-                        <td>{{item.materiel.name}}<input type="hidden" value="{{item.itemId}}" /></td>
-                        <td>{{item.materiel.color}}</td>
-                        <td>{{item.materiel.barcode}}</td>
+                        <td>{{item.materiel.name}}</td>
+                        <td>{{item.materiel.typeName}}</td>
+                        <td>{{item.sphere}}</td>
+                        <td>{{item.cylinder}}</td>
+                        <td>{{item.axial}}</td>
                         <td>{{item.purchasePrice}}</td>
                         <td>{{item.purchaseQuantity}}</td>
-                        <td>{{item.materiel.typeName}}</td>
-                        <td>{{item.materiel.specification}}</td>
                         <td>{{item.purchasePrice * item.purchaseQuantity}}</td>
                         <td>{{item.remark}}</td>
                         <td><button ng-click="delItem($index)">删除</button></td>
@@ -177,24 +176,27 @@
 
 <div class="bg"></div>
 <div class="content">
+    <h3>退货单明细</h3>
     <table class="table table-bordered" style="margin-top: 10px;">
         <tr>
             <td>商品</td>
             <td>
-                <select class="form-control" id="abc" ng-model="purchaseOrderItem.materielId">
-                    <option>请选择商品</option>
-                    <option ng-repeat="m in materielList" value="{{m.id}}">{{m.name}}</option>
+                <select class="form-control" id="materiel" ng-model="purchaseOrderItem.materielId">
+                    <option value=""></option>
                 </select>
             </td>
         </tr>
-        <tr><td>名称</td><td><input type="text" ng-model="selectedMateriel.name" ng-readonly="true"/></td></tr>
-        <tr><td>条码</td><td><input type="text" ng-model="selectedMateriel.barcode" ng-readonly="true"/></td></tr>
-        <tr><td>采购价格</td><td><input type="text" ng-model="purchaseOrderItem.purchasePrice" /></td></tr>
+        <tr><td>名称</td><td><input type="text" ng-model="selectedMard.materiel.name" ng-readonly="true"/></td></tr>
+        <tr><td>条码</td><td><input type="text" ng-model="selectedMard.materiel.barcode" ng-readonly="true"/></td></tr>
         <tr>
-            <td>退货数量</td>
-            <td><input type="text" ng-model="purchaseOrderItem.purchaseQuantity"
-                       min="1" ng-init="purchaseOrderItem.purchaseQuantity=1"/>
+            <td>当前库存</td>
+            <td><input type="text" readonly="true" ng-model="selectedMard.currentInventory"/>
             </td>
+        </tr>
+        <tr><td>价格</td><td><input type="number" min="0" ng-model="purchaseOrderItem.purchasePrice" /></td></tr>
+        <tr>
+            <td>数量</td>
+            <td><input type="number" step="1" ng-model="purchaseOrderItem.purchaseQuantity" min="1"/></td>
         </tr>
         <tr><td>小计</td><td>{{purchaseOrderItem.purchasePrice * purchaseOrderItem.purchaseQuantity}}</td></tr>
         <tr>

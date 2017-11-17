@@ -576,7 +576,6 @@ businessOperationApp.factory("inventoryService", function($http) {
             }).success(successCallback).error(errorCallback);
         },
         saveInvntVerificationItem : function (item, successCallback, errorCallback) {
-            console.log(JSON.stringify(item));
             $http({
                 method:"POST",
                 url:"/luda_glasses/rest/inventory/inventoryVerification/saveInvntVerificationItem",

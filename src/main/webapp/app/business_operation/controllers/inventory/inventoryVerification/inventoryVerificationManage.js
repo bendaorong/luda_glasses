@@ -274,6 +274,7 @@
                             if($scope.mardList[i].id == mardId){
                                 $scope.selectedMard = $scope.mardList[i];
                                 $scope.invntVerificationItem.mardId = mardId;
+                                $scope.invntVerificationItem.materielId = $scope.selectedMard.materielId;
                                 $scope.$apply();
                                 break;
                             }
@@ -301,7 +302,6 @@
         // 查询盘点单
         inventoryService.getInvntVerificationById($routeParams.id, function(data){
             $scope.selectInvntVerification = data.data;
-            console.log($scope.selectPurchaseOrder);
         },function(data){
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
@@ -356,14 +356,9 @@
 
         // 添加新明细
         $scope.addItem = function () {
-            var item = {};
+            var item = angular.copy($scope.invntVerificationItem);
             item.itemId = 0;
             item.inventoryVerificationId = $scope.selectInvntVerification.id;
-            item.mardId = $scope.selectedMard.id;
-            item.materielId = $scope.selectedMard.materielIdId;
-            item.quantity = $scope.invntVerificationItem.quantity;
-            item.type = $scope.invntVerificationItem.type;
-            item.remark = $scope.invntVerificationItem.remark;
 
             inventoryService.saveInvntVerificationItem(item, function (data) {
                 if(data.success){
@@ -373,14 +368,11 @@
                         message : '新增明细成功'
                     });
 
-                    var materiel = {};
-                    item.materiel = materiel;
                     item.id = data.data.id;
+                    item.materiel = $scope.selectedMard.materiel;
                     item.sphere = $scope.selectedMard.sphere;
                     item.cylinder = $scope.selectedMard.cylinder;
                     item.axial = $scope.selectedMard.axial;
-                    materiel.name = $scope.selectedMateriel.name;
-                    materiel.typeName = $scope.selectedMateriel.typeName;
 
                     $scope.selectInvntVerification.invtVerifItemList.push(item);
                 }else {

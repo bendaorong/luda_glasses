@@ -104,17 +104,19 @@
         $scope.selectedMard = {};
 
         // 查询客户
+        $scope.customerSearchableSelect;
         customerService.fetchCustomerList(function (data) {
             $scope.customerList = data;
             for(var i=0; i<data.length; i++){
                 $("#customer").append("<option value='" + data[i].id + "'>" + data[i].name + "</option>");
             }
-            $("#customer").searchableSelect(function (customerId) {
+            $scope.customerSearchableSelect = $("#customer").searchableSelect(function (customerId) {
                 if(angular.isDefined(customerId) && customerId != null && customerId != ''){
                     $scope.newSalesOrder.customerId = customerId;
                     $scope.$apply();
                 }
             });
+
         }, function (data) {
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
@@ -176,6 +178,31 @@
                 message : '获取业务员失败:' + data.errorMsg
             });
         });
+
+        $scope.customer = {}; //临时添加新客户
+        $scope.newCustomer = function () {
+            $('.bg').css({'display':'block'});
+            $('.customerContent').css({'display':'block'});
+        }
+
+        $scope.addCustomer = function () {
+            customerService.addCustomer($scope.customer, function (data) {
+                // 关闭明细弹框
+                $('.bg').css({'display':'none'});
+                $('.customerContent').css({'display':'none'});
+            }, function (data) {
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '警告',
+                    message : '客户添加失败:' + data.errorMsg
+                });
+            });
+        }
+
+        $scope.closeCustomerBtn = function () {
+            $('.bg').css({'display':'none'});
+            $('.customerContent').css({'display':'none'});
+        }
 
         $scope.newItem = function (){
             $('.bg').css({'display':'block'});

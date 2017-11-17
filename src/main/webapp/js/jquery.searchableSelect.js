@@ -161,6 +161,10 @@
       }
     },
 
+    addItem : function(){
+        console.log('add new item');
+    },
+
     buildItems: function(){
       var _this = this;
       this.element.find('option').each(function(){

@@ -8,13 +8,14 @@
         width:400px;
         height:500px;
         position:fixed;
-        top:10%;
+        top:5%;
         background:#fff;
         z-index:3;
         left:50%;
         margin-left:-250px;
         TEXT-ALIGN: center;
         padding-left:15px;
+        padding-right:15px;
     }
     table {
         border: 1px solid lightgray;
@@ -177,6 +178,7 @@
 
 <div class="bg"></div>
 <div class="content">
+    <h3>采购单明细</h3>
     <table class="table table-bordered" style="margin-top: 10px;">
         <tr>
             <td>商品</td>
@@ -197,9 +199,7 @@
         <tr><td>采购价格</td><td><input type="number" min="0" ng-model="purchaseOrderItem.purchasePrice" /></td></tr>
         <tr>
             <td>采购数量</td>
-            <td><input type="number" step="1" ng-model="purchaseOrderItem.purchaseQuantity"
-                       min="1"/>
-            </td>
+            <td><input type="number" step="1" ng-model="purchaseOrderItem.purchaseQuantity" min="1"/></td>
         </tr>
         <tr><td>小计</td><td>{{purchaseOrderItem.purchasePrice * purchaseOrderItem.purchaseQuantity}}</td></tr>
         <tr>

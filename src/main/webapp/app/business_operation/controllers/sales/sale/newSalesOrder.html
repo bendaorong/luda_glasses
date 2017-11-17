@@ -6,7 +6,22 @@
     .content{
         display:none;
         width:400px;
-        height:500px;
+        height:580px;
+        position:fixed;
+        top:5%;
+        bottom:5%;
+        background:#fff;
+        z-index:3;
+        left:50%;
+        margin-left:-250px;
+        TEXT-ALIGN: center;
+        padding-left:15px;
+        padding-right:15px;
+    }
+    .customerContent {
+        display:none;
+        width:400px;
+        height:300px;
         position:fixed;
         top:10%;
         background:#fff;
@@ -15,6 +30,7 @@
         margin-left:-250px;
         TEXT-ALIGN: center;
         padding-left:15px;
+        padding-right:15px;
     }
     table {
         border: 1px solid lightgray;
@@ -79,6 +95,7 @@
                         <select id="customer" class="form-control"  ng-model="newSalesOrder.customerId" required>
                             <option value=""></option>
                         </select>
+                        <button class="btn btn-success btn-sm" ng-click="newCustomer()">添加新客户</button>
                     </div>
                 </div>
                 <div class="form-group">
@@ -183,7 +200,23 @@
 </div>
 
 <div class="bg"></div>
+
+<!--添加新客户-->
+<div class="customerContent">
+    <h3>添加新客户</h3>
+    <table class="table table-bordered" style="margin-top: 10px;">
+        <tr><td>姓名</td><td><input type="text" ng-model="customer.name" /></td></tr>
+        <tr><td>手机号码</td><td><input type="text" ng-model="customer.mobileNumber"/></td></tr>
+    </table>
+    <p>
+        <button ng-click="addCustomer()">添加</button>
+        <button ng-click="closeCustomerBtn()">关闭</button>
+    </p>
+</div>
+
+<!--添加销售明细-->
 <div class="content">
+    <h3>销售单明细</h3>
     <table class="table table-bordered" style="margin-top: 10px;">
         <tr>
             <td>商品</td>
