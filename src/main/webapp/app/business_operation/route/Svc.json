@@ -74,4 +74,16 @@
 		"name" : "库存调拨",
 		"page" : "#transferOrderManage"
 	}]
+},{
+	"id" : "500",
+	"name" : "统计报表",
+	"subpages" : [{
+		"id" : "500100",
+		"name" : "销售报表",
+		"page" : "#saleStatisticsManage"
+	}, {
+		"id" : "500200",
+		"name" : "库存报表",
+		"page" : "#mardStatisticsManage"
+	}]
 }]

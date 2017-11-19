@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.luda.statistics.dao.SaleStatisticsDao">
+    <select id="saleStatisticsByMateriel" parameterType="com.luda.statistics.model.StatisticsCondition"
+            resultType="com.luda.statistics.model.SaleStatisticsByMateriel">
+        select a.mard_id as mardId, a.t_quantity as subtotalQuantity, a.t_amount as subtotalAmount,
+        ma.id as materielId, ma.name as materielName, m.sphere, m.cylinder, m.axial, t.type_name as typeName
+        from (
+            SELECT soi.mard_id, sum(soi.quantity) as t_quantity, sum(soi.quantity * soi.sell_price) t_amount
+            from sales_order so
+            left join sales_order_item soi
+            on so.id = soi.sales_order_id
+            where so.delete_flag = 0 and so.order_type = '01'
+            <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''">
+                and so.sale_date >= #{beginDate} and #{endDate} >= so.sale_date
+            </if>
+            GROUP BY soi.mard_id
+        ) a
+        left join mard m on a.mard_id = m.id
+        left join materiel ma on m.materiel_id = ma.id
+        left join goods_type t on ma.type_id = t.type_id
+        where 1 = 1
+        <if test="typeId != null and typeId != ''">
+            and ma.type_id = #{typeId}
+        </if>
+        order by a.t_quantity desc
+    </select>
+
+    <select id="saleStatisticsByAdminUser" parameterType="com.luda.statistics.model.StatisticsCondition"
+            resultType="com.luda.statistics.model.SaleStatisticsByUser">
+        select a.businessman_id as adminUserId, d.real_name as adminName,
+        a.t_quantity as subtotalQuantity, a.t_amount as subtotalAmount
+        from (
+            SELECT so.businessman_id, sum(soi.quantity) as t_quantity, sum(soi.quantity * soi.sell_price) as t_amount
+            from sales_order so
+            left join sales_order_item soi
+            on so.id = soi.sales_order_id
+            where so.delete_flag = 0 and so.order_type = '01'
+            <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''">
+                and so.sale_date >= #{beginDate} and #{endDate} >= so.sale_date
+            </if>
+            GROUP BY so.businessman_id
+        ) a
+        left join admin_user_detail d on a.businessman_id = d.admin_user_id
+        order by a.t_amount desc
+    </select>
+</mapper>

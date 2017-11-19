@@ -148,6 +148,9 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/editRefundOrder/:id", {
         templateUrl : "app/business_operation/controllers/sales/refund/editRefundOrder.html",
         controller : "editRefundOrderController"
+    }).when("/saleStatisticsManage", {
+        templateUrl : "app/business_operation/controllers/statistics/sale/saleStatistics.html",
+        controller : "saleStatisticsController"
     }).otherwise({
 		redirectTo : "/"
 	})
@@ -729,6 +732,29 @@ businessOperationApp.factory("customerService", function($http) {
         }
     }
 });
+
+/**
+ * 销售报表服务
+ */
+businessOperationApp.factory("saleStatisticsService", function($http) {
+    return {
+        saleStatisticsByMateriel : function(statisticsCondition, successCallback, errorCallback){
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/statistics/sale/byMateriel",
+                data : statisticsCondition
+            }).success(successCallback).error(errorCallback);
+        },
+        saleStatisticsByAdminUser : function(statisticsCondition, successCallback, errorCallback){
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/statistics/sale/byAdminUser",
+                data : statisticsCondition
+            }).success(successCallback).error(errorCallback);
+        }
+    }
+});
+
 
 businessOperationApp.factory("sessionTimeoutInteceptor", ['$q','$injector', function($q,$injector) {
 	var httpInterceptor  = {

@@ -105,6 +105,10 @@
 	<script src="app/business_operation/controllers/sales/refund/refundOrderManage.js"></script>
 	<!--客户管理-->
 	<script src="app/business_operation/controllers/customer/customerManager.js"></script>
+	<!-- 统计报表 -->
+	<script src="app/business_operation/controllers/statistics/sale/saleStatisticsManage.js"></script>
+
+
 
 	<script src="angular-1.2.28/angular-route.min.js"></script>
 	<script src="js/angularjs-dropdown-multiselect.js"></script>
