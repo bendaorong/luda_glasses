@@ -221,6 +221,34 @@
             $scope.$emit("loadingEnd");
         }
 
+        // 显示添加眼光记录表单
+        $scope.addOptometryRecord = function () {
+            $('.bg').css({'display':'block'});
+            $('.content').css({'display':'block'});
+        }
+
+        // 保存眼光记录
+        $scope.optometryRecord = {};
+        $scope.optometryRecord.customerId =  $routeParams.customerId;
+        $scope.saveOptometryRecord = function () {
+            customerService.saveOptometryRecord($scope.optometryRecord, function (data) {
+                queryOptometryRecords();
+                $('.bg').css({'display':'none'});
+                $('.content').css({'display':'none'});
+            }, function (data) {
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '失败',
+                    message : '保存失败' + data.errorMsg
+                });
+            });
+        }
+
+        $scope.closeBtn = function () {
+            $('.bg').css({'display':'none'});
+            $('.content').css({'display':'none'});
+        }
+
         $scope.cancel = function(){
             history.back();
         }

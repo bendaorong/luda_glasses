@@ -6,6 +6,9 @@
     <li role="presentation" ng-class="{'active': currentTab===1}">
         <a href="javascript(0)" ng-click="currentTab=1" role="tab" data-toggle="tab">按员工</a>
     </li>
+    <li role="presentation" ng-class="{'active': currentTab===2}" ng-show="roleCode == '00' || roleCode == '01'">
+        <a href="javascript(0)" ng-click="currentTab=2" role="tab" data-toggle="tab">按门店</a>
+    </li>
 </ul>
 
 <div class="tab-content">
@@ -104,6 +107,48 @@
                 </tr>
                 <tr ng-repeat="item in saleStatisticsByAdminUserList">
                     <td>{{item.adminName}}</td>
+                    <td>{{item.subtotalQuantity}}</td>
+                    <td>{{item.subtotalAmount | currency:'￥'}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- 按门店 -->
+    <div role="tabpanel" class="tab-pane active" ng-show="currentTab===2">
+        <div class="seat-manage-operate-container">
+            <div class="seat-manage-operate-button form-inline">
+                <button class="btn btn-success btn-sm" ng-click="queryByStore()">查询</button>
+            </div>
+        </div>
+
+        <div class="col-sm-12" style="margin-top: 10px;">
+            <table class="table table-bordered" style="margin-top: 10px;">
+                <tr>
+                    <td>日期</td>
+                    <td>
+                        <input type="text" placeholder="请输入开始日期" onClick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d', readOnly:true})"
+                               ng-model="statisticsCondition_2.beginDate" id="beginDate_2" />
+                        -
+                        <input type="text" placeholder="请输入结束日期" onClick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d', readOnly:true})"
+                               ng-model="statisticsCondition_2.endDate" id="endDate_2" />
+                    </td>
+                </tr>
+            </table>
+            <hr/>
+            <p>
+                <b>总数量：</b><span>{{ totalQuantity_2 }}</span><br/>
+                <b>总金额：</b><span>{{ totalAmount_2 | currency:'￥'}}</span>
+            </p>
+            <table class="table table-bordered" style="margin-top: 10px;">
+                <tr>
+                    <th>门店</th>
+                    <th>销售数量</th>
+                    <th>销售金额</th>
+                </tr>
+                <tr ng-repeat="item in saleStatisticsByStoreList">
+                    <td>{{item.storeName}}</td>
                     <td>{{item.subtotalQuantity}}</td>
                     <td>{{item.subtotalAmount | currency:'￥'}}</td>
                 </tr>

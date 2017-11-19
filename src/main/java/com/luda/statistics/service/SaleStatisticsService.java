@@ -1,6 +1,7 @@
 package com.luda.statistics.service;
 
 import com.luda.statistics.model.SaleStatisticsByMateriel;
+import com.luda.statistics.model.SaleStatisticsByStore;
 import com.luda.statistics.model.SaleStatisticsByUser;
 import com.luda.statistics.model.StatisticsCondition;
 
@@ -22,7 +23,7 @@ public interface SaleStatisticsService {
     List<SaleStatisticsByUser> saleStatisticsByAdminUser(StatisticsCondition statisticsCondition);
 
     /**
-     * 按客户统计
+     * 按门店统计
      */
-    //void saleStatisticsByCustomer();
+    List<SaleStatisticsByStore> saleStatisticsByStore(StatisticsCondition statisticsCondition);
 }

@@ -18,6 +18,22 @@
     p{
         padding-top:10px;
     }
+    .bg{display:none;position:fixed;width:100%;height:100%;background:lightgray;z-index:2;top:0;left:0;opacity:0.6;}
+    .content{
+        display:none;
+        width:700px;
+        height:580px;
+        position:fixed;
+        top:5%;
+        bottom:5%;
+        background:#fff;
+        z-index:3;
+        left:50%;
+        margin-left:-250px;
+        TEXT-ALIGN: center;
+        padding-left:15px;
+        padding-right:15px;
+    }
 </style>
 
 <div class="alert alert-danger alert-dismissible fade in" role="alert"
@@ -169,7 +185,7 @@
         <div class="seat-manage-operate-container">
             <div class="seat-manage-operate-button form-inline">
                 <div style="text-align: center;">
-                    <a type="button" class="btn btn-success btn-sm" href="#addCustomer">添加验光记录</a>
+                    <a type="button" class="btn btn-success btn-sm" ng-click="addOptometryRecord()">添加验光记录</a>
                     <input class="form-control" ng-model="filterOptometryRecordText" ng-change="filterOptometryRecord()"
                            placeHolder="搜索">
                     <button type="button" class="btn btn-sm btn-primary" ng-click="refreshOptometryRecord()">
@@ -199,6 +215,56 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="bg"></div>
+
+<!--添加新客户-->
+<div class="content">
+    <h3>添加验光记录</h3>
+    <table class="table table-bordered" style="margin-top: 10px;">
+        <tr>
+            <td>右球镜</td>
+            <td><input type="text" ng-model="optometryRecord.rightSphere" /></td>
+            <td>左球镜</td>
+            <td><input type="text" ng-model="optometryRecord.leftSphere" /></td>
+        </tr>
+        <tr>
+            <td>右柱镜</td>
+            <td><input type="text" ng-model="optometryRecord.rightCylinder" /></td>
+            <td>左柱镜</td>
+            <td><input type="text" ng-model="optometryRecord.leftCylinder" /></td>
+        </tr>
+        <tr>
+            <td>右轴向</td>
+            <td><input type="text" ng-model="optometryRecord.rightAxial" /></td>
+            <td>左轴向</td>
+            <td><input type="text" ng-model="optometryRecord.leftAxial" /></td>
+        </tr>
+        <tr>
+            <td>右裸视</td>
+            <td><input type="text" ng-model="optometryRecord.rightUncorrectedVisualAcuity" /></td>
+            <td>左裸视</td>
+            <td><input type="text" ng-model="optometryRecord.leftUncorrectedVisualAcuity" /></td>
+        </tr>
+        <tr>
+            <td>右矫正</td>
+            <td><input type="text" ng-model="optometryRecord.rightCorrectedVisualAcuity" /></td>
+            <td>左矫正</td>
+            <td><input type="text" ng-model="optometryRecord.leftCorrectedVisualAcuity" /></td>
+        </tr>
+
+        <tr>
+            <td>备注</td>
+            <td colspan="3">
+                <textarea rows="5" ng-model="optometryRecord.remark" style="width:100%"></textarea>
+            </td>
+        </tr>
+    </table>
+    <p>
+        <button ng-click="saveOptometryRecord()">保存</button>
+        <button ng-click="closeBtn()">关闭</button>
+    </p>
 </div>
 
 <script type="text/javascript" charset="utf-8" src="My97DatePicker/WdatePicker.js"></script>

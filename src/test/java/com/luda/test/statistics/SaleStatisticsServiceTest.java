@@ -33,4 +33,13 @@ public class SaleStatisticsServiceTest extends SpringSimpleJunit{
         List list = saleStatisticsService.saleStatisticsByAdminUser(condition);
         System.out.println(list);
     }
+
+    @Test
+    public void saleStatisticsByStore(){
+        StatisticsCondition condition = new StatisticsCondition();
+        condition.setBeginDate("2017-10-10");
+        condition.setEndDate("2017-11-19");
+        List list = saleStatisticsService.saleStatisticsByStore(condition);
+        System.out.println(list);
+    }
 }

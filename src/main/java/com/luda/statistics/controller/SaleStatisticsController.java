@@ -2,6 +2,7 @@ package com.luda.statistics.controller;
 
 import com.luda.common.controller.BaseController;
 import com.luda.statistics.model.SaleStatisticsByMateriel;
+import com.luda.statistics.model.SaleStatisticsByStore;
 import com.luda.statistics.model.SaleStatisticsByUser;
 import com.luda.statistics.model.StatisticsCondition;
 import com.luda.statistics.service.SaleStatisticsService;
@@ -60,6 +61,25 @@ public class SaleStatisticsController extends BaseController{
             StatisticsCondition statisticsCondition = CommonUtils.convertJsonToBean(
                     JSONObject.fromObject(data), StatisticsCondition.class);
             List<SaleStatisticsByUser> saleStatisticsList = saleStatisticsService.saleStatisticsByAdminUser(statisticsCondition);
+            result = getSuccessResult(CommonUtils.convertBeanCollectionToJsonArray(saleStatisticsList, null).toString());
+        }catch (Exception e){
+            log.error("sale statistics by materiel error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 按门店统计
+     */
+    @RequestMapping("/byStore")
+    @ResponseBody
+    public String saleStatisticsByStore(@RequestBody String data){
+        String result = "";
+        try {
+            StatisticsCondition statisticsCondition = CommonUtils.convertJsonToBean(
+                    JSONObject.fromObject(data), StatisticsCondition.class);
+            List<SaleStatisticsByStore> saleStatisticsList = saleStatisticsService.saleStatisticsByStore(statisticsCondition);
             result = getSuccessResult(CommonUtils.convertBeanCollectionToJsonArray(saleStatisticsList, null).toString());
         }catch (Exception e){
             log.error("sale statistics by materiel error", e);

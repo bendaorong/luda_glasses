@@ -729,6 +729,13 @@ businessOperationApp.factory("customerService", function($http) {
                 method:"GET",
                 url:"/luda_glasses/rest/customer/optometryRecord/getByCustomerId/" + customerId,
             }).success(successCallback).error(errorCallback);
+        },
+        saveOptometryRecord : function (optometryRecord, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/customer/optometryRecord/saveOptometryRecord",
+                data:optometryRecord
+            }).success(successCallback).error(errorCallback);
         }
     }
 });
@@ -749,6 +756,13 @@ businessOperationApp.factory("saleStatisticsService", function($http) {
             $http({
                 method:"POST",
                 url:"/luda_glasses/rest/statistics/sale/byAdminUser",
+                data : statisticsCondition
+            }).success(successCallback).error(errorCallback);
+        },
+        saleStatisticsByStore : function (statisticsCondition, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/statistics/sale/byStore",
                 data : statisticsCondition
             }).success(successCallback).error(errorCallback);
         }

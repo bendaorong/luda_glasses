@@ -17,6 +17,18 @@ public class StatisticsCondition {
      * 商品类型
      */
     private Integer typeId;
+    /**
+     * 门店
+     */
+    private Integer storeId;
+
+    public Integer getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Integer storeId) {
+        this.storeId = storeId;
+    }
 
     public Integer getTypeId() {
         return typeId;
@@ -48,6 +60,7 @@ public class StatisticsCondition {
                 "beginDate='" + beginDate + '\'' +
                 ", endDate='" + endDate + '\'' +
                 ", typeId=" + typeId +
+                ", storeId=" + storeId +
                 '}';
     }
 }

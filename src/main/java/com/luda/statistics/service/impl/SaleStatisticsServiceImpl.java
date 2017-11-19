@@ -2,6 +2,7 @@ package com.luda.statistics.service.impl;
 
 import com.luda.statistics.dao.SaleStatisticsDao;
 import com.luda.statistics.model.SaleStatisticsByMateriel;
+import com.luda.statistics.model.SaleStatisticsByStore;
 import com.luda.statistics.model.SaleStatisticsByUser;
 import com.luda.statistics.model.StatisticsCondition;
 import com.luda.statistics.service.SaleStatisticsService;
@@ -42,5 +43,16 @@ public class SaleStatisticsServiceImpl implements SaleStatisticsService{
             statisticsCondition.setEndDate(DateFormatUtils.format(new Date(), "yyyy-MM-dd"));
         }
         return saleStatisticsDao.saleStatisticsByAdminUser(statisticsCondition);
+    }
+
+    @Override
+    public List<SaleStatisticsByStore> saleStatisticsByStore(StatisticsCondition statisticsCondition) {
+        if(StringUtils.isEmpty(statisticsCondition.getBeginDate())){
+            statisticsCondition.setBeginDate(DateFormatUtils.format(new Date(), "yyyy-MM-dd"));
+        }
+        if(StringUtils.isEmpty(statisticsCondition.getEndDate())){
+            statisticsCondition.setEndDate(DateFormatUtils.format(new Date(), "yyyy-MM-dd"));
+        }
+        return saleStatisticsDao.saleStatisticsByStore(statisticsCondition);
     }
 }

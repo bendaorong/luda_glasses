@@ -3,18 +3,18 @@ package com.luda.statistics.model;
 import java.math.BigDecimal;
 
 /**
- * 按业务员统计销售信息
+ * 按门店统计销售信息
  * Created by Administrator on 2017/11/19.
  */
-public class SaleStatisticsByUser {
+public class SaleStatisticsByStore {
     /**
-     * 用户
+     * 门店
      */
-    private int adminUserId;
+    private int storeId;
     /**
-     * 用户名
+     * 门店名称
      */
-    private String adminName;
+    private String storeName;
     /**
      * 数量小计
      */
@@ -24,20 +24,20 @@ public class SaleStatisticsByUser {
      */
     private BigDecimal subtotalAmount;
 
-    public int getAdminUserId() {
-        return adminUserId;
+    public int getStoreId() {
+        return storeId;
     }
 
-    public void setAdminUserId(int adminUserId) {
-        this.adminUserId = adminUserId;
+    public void setStoreId(int storeId) {
+        this.storeId = storeId;
     }
 
-    public String getAdminName() {
-        return adminName;
+    public String getStoreName() {
+        return storeName;
     }
 
-    public void setAdminName(String adminName) {
-        this.adminName = adminName;
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
     public int getSubtotalQuantity() {
@@ -58,9 +58,9 @@ public class SaleStatisticsByUser {
 
     @Override
     public String toString() {
-        return "SaleStatisticsByUser{" +
-                "adminUserId=" + adminUserId +
-                ", adminName='" + adminName + '\'' +
+        return "SaleStatisticsByStore{" +
+                "storeId=" + storeId +
+                ", storeName='" + storeName + '\'' +
                 ", subtotalQuantity=" + subtotalQuantity +
                 ", subtotalAmount=" + subtotalAmount +
                 '}';

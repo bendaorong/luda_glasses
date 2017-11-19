@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -147,6 +148,29 @@ public class CustomerController extends BaseController {
             result = getSuccessResult(data);
         }catch (Exception e){
             log.error("fetchOptometryRecordsByCustomerId error, customerId：" + customerId, e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 添加客户眼光记录
+     */
+    @RequestMapping("/optometryRecord/saveOptometryRecord")
+    @ResponseBody
+    public String saveOptometryRecord(@RequestBody OptometryRecord optometryRecord, HttpSession httpSession){
+        String result = "";
+        try {
+            optometryRecord.setCreateUserId(getLoginUser(httpSession).getAdminUserId());
+            optometryRecord.setUpdateUserId(getLoginUser(httpSession).getAdminUserId());
+            ResultHandle<OptometryRecord> resultHandle = customerService.saveOptometryRecord(optometryRecord);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult(resultHandle.getReturnContent());
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("save optometry record error", e);
             result = getFailResult("系统异常");
         }
         return result;

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.xml.transform.Result;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -97,6 +98,8 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public ResultHandle<OptometryRecord> saveOptometryRecord(OptometryRecord optometryRecord) {
         ResultHandle<OptometryRecord> resultHandle = new ResultHandle<>();
+        optometryRecord.setOptometryDate(new Date());
+        optometryRecord.setBusinessManId(optometryRecord.getCreateUserId());
         int result = customerDao.saveOptometryRecord(optometryRecord);
         if(result > 0){
             resultHandle.setReturnContent(optometryRecord);

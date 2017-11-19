@@ -1,6 +1,7 @@
 package com.luda.statistics.dao;
 
 import com.luda.statistics.model.SaleStatisticsByMateriel;
+import com.luda.statistics.model.SaleStatisticsByStore;
 import com.luda.statistics.model.SaleStatisticsByUser;
 import com.luda.statistics.model.StatisticsCondition;
 
@@ -13,4 +14,6 @@ public interface SaleStatisticsDao {
     List<SaleStatisticsByMateriel> saleStatisticsByMateriel(StatisticsCondition statisticsCondition);
 
     List<SaleStatisticsByUser> saleStatisticsByAdminUser(StatisticsCondition statisticsCondition);
+
+    List<SaleStatisticsByStore> saleStatisticsByStore(StatisticsCondition statisticsCondition);
 }

@@ -2,6 +2,7 @@
     angular.module("businessOperationApp").controller("saleStatisticsController", function($scope, NgTableParams, $filter, $location, saleStatisticsService, dictionaryService) {
         setActiveSubPage($scope);
         $scope.roleCode = sessionStorage.getItem("roleCode");
+        console.log('roleCode:'+$scope.roleCode);
         $scope.currentTab = 0;
 
         $scope.setCurrentTab = function(currentTab) {
@@ -118,6 +119,59 @@
                 $scope.statisticsCondition_1.endDate = endDate;
             }
             saleStatisticsByAdminUser();
+        }
+
+
+        /**
+         * ------------------------------------------------------------------------------------------------
+         */
+        // 按门店统计
+        // 查询条件
+        $scope.statisticsCondition_2 = {};
+        $scope.saleStatisticsByStoreList = [];
+        $scope.totalQuantity_2 = 0;
+        $scope.totalAmount_2 = 0;
+
+        // 初始化查询条件
+        // 默认查询一个月内的销售数据
+        $scope.statisticsCondition_2.beginDate = $filter('date')(addDate(new Date(), -30), "yyyy-MM-dd");
+        $scope.statisticsCondition_2.endDate = $filter('date')(new Date(), "yyyy-MM-dd");
+
+        function saleStatisticsByStore(){
+            console.log(JSON.stringify($scope.statisticsCondition_2));
+            saleStatisticsService.saleStatisticsByStore($scope.statisticsCondition_2, function (data) {
+                $scope.saleStatisticsByStoreList = data.data;
+                var totalQuantity = 0;
+                var totalAmount = 0;
+                angular.forEach($scope.saleStatisticsByStoreList, function (each) {
+                    totalQuantity += each.subtotalQuantity;
+                    totalAmount += each.subtotalAmount;
+                });
+                $scope.totalQuantity_2 = totalQuantity;
+                $scope.totalAmount_2 = totalAmount;
+            }, function (data) {
+
+            });
+        }
+        saleStatisticsByStore();
+
+        // 按门店-过滤查询
+        $scope.queryByStore = function () {
+            var beginDate = $("#beginDate_2").val();
+            var endDate = $("#endDate_2").val();
+            if(beginDate != null && endDate != null){
+                if(beginDate > endDate){
+                    BootstrapDialog.show({
+                        type : BootstrapDialog.TYPE_DANGER,
+                        title : '错误',
+                        message : '开始日期不可大于结束日期'
+                    });
+                    return false;
+                }
+                $scope.statisticsCondition_2.beginDate = beginDate;
+                $scope.statisticsCondition_2.endDate = endDate;
+            }
+            saleStatisticsByStore();
         }
     });
 

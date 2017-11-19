@@ -107,7 +107,7 @@
         customerService.fetchCustomerList(function (data) {
             $scope.customerList = data;
             for(var i=0; i<data.length; i++){
-                $("#customer").append("<option value='" + data[i].id + "'>" + data[i].name + "</option>");
+                $("#customer").append("<option value='" + data[i].id + "'>" + data[i].name + "-" + data[i].mobileNumber + "</option>");
             }
             $("#customer").searchableSelect(function (customerId) {
                 if(angular.isDefined(customerId) && customerId != null && customerId != ''){
