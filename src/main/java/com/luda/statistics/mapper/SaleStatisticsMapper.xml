@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.luda.statistics.dao.SaleStatisticsDao">
+<mapper namespace="com.luda.statistics.dao.StatisticsDao">
+    <!-- 销售报表 -->
     <select id="saleStatisticsByMateriel" parameterType="com.luda.statistics.model.StatisticsCondition"
             resultType="com.luda.statistics.model.SaleStatisticsByMateriel">
         select a.mard_id as mardId, a.t_quantity as subtotalQuantity, a.t_amount as subtotalAmount,
@@ -50,17 +51,66 @@
         select a.store_id as storeId, s.store_name as storeName,
         a.t_quantity as subtotalQuantity, a.t_amount as subtotalAmount
         from (
-        SELECT so.store_id, sum(soi.quantity) as t_quantity, sum(soi.quantity * soi.sell_price) as t_amount
-        from sales_order so
-        left join sales_order_item soi
-        on so.id = soi.sales_order_id
-        where so.delete_flag = 0 and so.order_type = '01'
-        <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''">
-            and so.sale_date >= #{beginDate} and #{endDate} >= so.sale_date
-        </if>
-        GROUP BY so.store_id
+            SELECT so.store_id, sum(soi.quantity) as t_quantity, sum(soi.quantity * soi.sell_price) as t_amount
+            from sales_order so
+            left join sales_order_item soi
+            on so.id = soi.sales_order_id
+            where so.delete_flag = 0 and so.order_type = '01'
+            <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''">
+                and so.sale_date >= #{beginDate} and #{endDate} >= so.sale_date
+            </if>
+            GROUP BY so.store_id
         ) a
         left join store s on a.store_id = s.store_id
+        order by a.t_amount desc
+    </select>
+
+
+    <!-- 采购报表 -->
+    <select id="purchaseStatisticsByMateriel" parameterType="com.luda.statistics.model.StatisticsCondition"
+            resultType="com.luda.statistics.model.PurchaseStatisticsByMateriel">
+        SELECT a.materiel_id as materielId, a.sphere, a.cylinder, a.axial,
+        a.t_quantity as subtotalQuantity, a.t_amount as subtotalAmount,
+        m.name as materielName, g.type_name as typeName
+        from (
+            SELECT poi.materiel_id, poi.sphere, poi.cylinder, poi.axial,
+            sum(poi.purchase_quantity) as t_quantity, sum(poi.purchase_quantity * poi.purchase_price) as t_amount
+            from purchase_order po
+            left join purchase_order_item poi on po.purchase_order_id = poi.purchase_order_id
+            where po.delete_flag = 0 and po.order_type= '01'
+            <if test="supplierId != null">
+                and po.supplier_id = #{supplierId}
+            </if>
+            <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''">
+                and po.purchase_date >= #{beginDate} and #{endDate} >= po.purchase_date
+            </if>
+            group by poi.materiel_id, poi.sphere, poi.cylinder, poi.axial
+        ) a
+        left join materiel m on a.materiel_id = m.id
+        left join goods_type g on m.type_id = g.type_id
+        where 1 = 1
+        <if test="typeId != null and typeId != ''">
+            and m.type_id = #{typeId}
+        </if>
+        order by a.t_amount desc
+    </select>
+
+    <select id="purchaseStatisticsBySupplier" parameterType="com.luda.statistics.model.StatisticsCondition"
+            resultType="com.luda.statistics.model.PurchaseStatisticsBySupplier">
+        SELECT a.t_quantity as subtotalQuantity, a.t_amount as subtotalAmount,
+        s.supplier_id as supplierId, s.supplier_name as supplierName
+        from (
+            SELECT po.supplier_id,
+            sum(poi.purchase_quantity) as t_quantity, sum(poi.purchase_quantity * poi.purchase_price) as t_amount
+            from purchase_order po
+            left join purchase_order_item poi on po.purchase_order_id = poi.purchase_order_id
+            where po.delete_flag = 0 and po.order_type= '01'
+            <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''">
+                and po.purchase_date >= #{beginDate} and #{endDate} >= po.purchase_date
+            </if>
+            group by po.supplier_id
+        ) a
+        left join supplier s on a.supplier_id = s.supplier_id
         order by a.t_amount desc
     </select>
 </mapper>

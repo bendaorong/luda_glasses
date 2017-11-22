@@ -83,7 +83,7 @@
 		"page" : "#saleStatisticsManage"
 	}, {
 		"id" : "500200",
-		"name" : "库存报表",
-		"page" : "#mardStatisticsManage"
+		"name" : "采购报表",
+		"page" : "#purchaseStatisticsManage"
 	}]
 }]

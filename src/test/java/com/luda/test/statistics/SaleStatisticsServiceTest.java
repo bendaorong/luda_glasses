@@ -1,7 +1,7 @@
 package com.luda.test.statistics;
 
 import com.luda.statistics.model.StatisticsCondition;
-import com.luda.statistics.service.SaleStatisticsService;
+import com.luda.statistics.service.StatisticsService;
 import com.luda.test.SpringSimpleJunit;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class SaleStatisticsServiceTest extends SpringSimpleJunit{
     @Autowired
-    private SaleStatisticsService saleStatisticsService;
+    private StatisticsService statisticsService;
 
     @Test
     public void testSaleStatisticsByMateriel(){
@@ -21,7 +21,7 @@ public class SaleStatisticsServiceTest extends SpringSimpleJunit{
         condition.setBeginDate("2017-10-10");
         condition.setEndDate("2017-11-19");
         //condition.setTypeId(4);
-        List list = saleStatisticsService.saleStatisticsByMateriel(condition);
+        List list = statisticsService.saleStatisticsByMateriel(condition);
         System.out.println(list);
     }
 
@@ -30,7 +30,7 @@ public class SaleStatisticsServiceTest extends SpringSimpleJunit{
         StatisticsCondition condition = new StatisticsCondition();
         condition.setBeginDate("2017-10-10");
         condition.setEndDate("2017-11-19");
-        List list = saleStatisticsService.saleStatisticsByAdminUser(condition);
+        List list = statisticsService.saleStatisticsByAdminUser(condition);
         System.out.println(list);
     }
 
@@ -39,7 +39,16 @@ public class SaleStatisticsServiceTest extends SpringSimpleJunit{
         StatisticsCondition condition = new StatisticsCondition();
         condition.setBeginDate("2017-10-10");
         condition.setEndDate("2017-11-19");
-        List list = saleStatisticsService.saleStatisticsByStore(condition);
+        List list = statisticsService.saleStatisticsByStore(condition);
+        System.out.println(list);
+    }
+
+    @Test
+    public void purchaseStatisticsByMateriel(){
+        StatisticsCondition condition = new StatisticsCondition();
+        condition.setBeginDate("2017-11-10");
+        condition.setEndDate("2017-11-19");
+        List list = statisticsService.purchaseStatisticsByMateriel(condition);
         System.out.println(list);
     }
 }

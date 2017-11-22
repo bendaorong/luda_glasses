@@ -22,6 +22,19 @@ public class StatisticsCondition {
      */
     private Integer storeId;
 
+    /**
+     * 供应商
+     */
+    private Integer supplierId;
+
+    public Integer getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Integer supplierId) {
+        this.supplierId = supplierId;
+    }
+
     public Integer getStoreId() {
         return storeId;
     }
@@ -61,6 +74,7 @@ public class StatisticsCondition {
                 ", endDate='" + endDate + '\'' +
                 ", typeId=" + typeId +
                 ", storeId=" + storeId +
+                ", supplierId=" + supplierId +
                 '}';
     }
 }

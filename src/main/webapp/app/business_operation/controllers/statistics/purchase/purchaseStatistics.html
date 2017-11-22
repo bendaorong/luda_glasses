@@ -1,0 +1,160 @@
+<h3 class="seat-manage-operate-title">采购报表</h3>
+<ul class="nav nav-tabs" role="tablist" ng-init="currentTab=0">
+    <li role="presentation" ng-class="{'active': currentTab===0}">
+        <a href="javascript(0)" ng-click="currentTab=0" role="tab" data-toggle="tab">按商品</a>
+    </li>
+    <li role="presentation" ng-class="{'active': currentTab===1}">
+        <a href="javascript(0)" ng-click="currentTab=1" role="tab" data-toggle="tab">按供应商</a>
+    </li>
+    <li role="presentation" ng-class="{'active': currentTab===2}" ng-show="roleCode == '00' || roleCode == '01'">
+        <a href="javascript(0)" ng-click="currentTab=2" role="tab" data-toggle="tab">按门店</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <!-- 按商品 -->
+    <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
+        <div class="seat-manage-operate-container">
+            <div class="seat-manage-operate-button form-inline">
+                <button class="btn btn-success btn-sm" ng-click="queryByMateriel()">查询</button>
+            </div>
+        </div>
+
+        <div class="col-sm-12" style="margin-top: 10px;">
+            <table class="table table-bordered" style="margin-top: 10px;">
+                <tr>
+                    <td>日期</td>
+                    <td>
+                        <input type="text" placeholder="请输入开始日期" onClick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d', readOnly:true})"
+                               ng-model="statisticsCondition.beginDate" id="beginDate" />
+                        -
+                        <input type="text" placeholder="请输入结束日期" onClick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d', readOnly:true})"
+                               ng-model="statisticsCondition.endDate" id="endDate" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>商品类型</td>
+                    <td>
+                        <select ng-model="statisticsCondition.typeId">
+                            <option value=""></option>
+                            <option ng-repeat="goodsType in goodsTypeList" value="{{goodsType.typeId}}">{{goodsType.typeName}}</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+
+            <hr/>
+
+            <p>
+                <b>总数量：</b><span>{{ totalQuantity }}</span><br/>
+                <b>总金额：</b><span>{{ totalAmount | currency:'￥'}}</span>
+            </p>
+
+            <table class="table table-bordered" style="margin-top: 10px;">
+                <tr>
+                    <th>商品名称</th>
+                    <th>商品类型</th>
+                    <th>球镜</th>
+                    <th>柱镜</th>
+                    <th>轴向</th>
+                    <th>采购数量</th>
+                    <th>采购金额</th>
+                </tr>
+                <tr ng-repeat="item in purchaseStatisticsByMaterielList">
+                    <td>{{item.materielName}}</td>
+                    <td>{{item.typeName}}</td>
+                    <td>{{item.sphere}}</td>
+                    <td>{{item.cylinder}}</td>
+                    <td>{{item.axial}}</td>
+                    <td>{{item.subtotalQuantity}}</td>
+                    <td>{{item.subtotalAmount | currency:'￥'}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- 按供应商 -->
+    <div role="tabpanel" class="tab-pane active" ng-show="currentTab===1">
+        <div class="seat-manage-operate-container">
+            <div class="seat-manage-operate-button form-inline">
+                <button class="btn btn-success btn-sm" ng-click="queryByUser()">查询</button>
+            </div>
+        </div>
+
+        <div class="col-sm-12" style="margin-top: 10px;">
+            <table class="table table-bordered" style="margin-top: 10px;">
+                <tr>
+                    <td>日期</td>
+                    <td>
+                        <input type="text" placeholder="请输入开始日期" onClick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d', readOnly:true})"
+                               ng-model="statisticsCondition_1.beginDate" id="beginDate_1" />
+                         -
+                        <input type="text" placeholder="请输入结束日期" onClick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d', readOnly:true})"
+                               ng-model="statisticsCondition_1.endDate" id="endDate_1" />
+                    </td>
+                </tr>
+            </table>
+            <hr/>
+            <p>
+                <b>总数量：</b><span>{{ totalQuantity_1 }}</span><br/>
+                <b>总金额：</b><span>{{ totalAmount_1 | currency:'￥'}}</span>
+            </p>
+            <table class="table table-bordered" style="margin-top: 10px;">
+                <tr>
+                    <th>供应商名称</th>
+                    <th>采购数量</th>
+                    <th>采购金额</th>
+                </tr>
+                <tr ng-repeat="item in purchaseStatisticsBySupplierList">
+                    <td>{{item.supplierName}}</td>
+                    <td>{{item.subtotalQuantity}}</td>
+                    <td>{{item.subtotalAmount | currency:'￥'}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!--&lt;!&ndash; 按门店 &ndash;&gt;-->
+    <!--<div role="tabpanel" class="tab-pane active" ng-show="currentTab===2">-->
+        <!--<div class="seat-manage-operate-container">-->
+            <!--<div class="seat-manage-operate-button form-inline">-->
+                <!--<button class="btn btn-success btn-sm" ng-click="queryByStore()">查询</button>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="col-sm-12" style="margin-top: 10px;">-->
+            <!--<table class="table table-bordered" style="margin-top: 10px;">-->
+                <!--<tr>-->
+                    <!--<td>日期</td>-->
+                    <!--<td>-->
+                        <!--<input type="text" placeholder="请输入开始日期" onClick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d', readOnly:true})"-->
+                               <!--ng-model="statisticsCondition_2.beginDate" id="beginDate_2" />-->
+                        <!-- - -->
+                        <!--<input type="text" placeholder="请输入结束日期" onClick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d', readOnly:true})"-->
+                               <!--ng-model="statisticsCondition_2.endDate" id="endDate_2" />-->
+                    <!--</td>-->
+                <!--</tr>-->
+            <!--</table>-->
+            <!--<hr/>-->
+            <!--<p>-->
+                <!--<b>总数量：</b><span>{{ totalQuantity_2 }}</span><br/>-->
+                <!--<b>总金额：</b><span>{{ totalAmount_2 | currency:'￥'}}</span>-->
+            <!--</p>-->
+            <!--<table class="table table-bordered" style="margin-top: 10px;">-->
+                <!--<tr>-->
+                    <!--<th>门店</th>-->
+                    <!--<th>销售数量</th>-->
+                    <!--<th>销售金额</th>-->
+                <!--</tr>-->
+                <!--<tr ng-repeat="item in saleStatisticsByStoreList">-->
+                    <!--<td>{{item.storeName}}</td>-->
+                    <!--<td>{{item.subtotalQuantity}}</td>-->
+                    <!--<td>{{item.subtotalAmount | currency:'￥'}}</td>-->
+                <!--</tr>-->
+            <!--</table>-->
+        <!--</div>-->
+    <!--</div>-->
+</div>
+
+<script type="text/javascript" charset="utf-8" src="My97DatePicker/WdatePicker.js"></script>

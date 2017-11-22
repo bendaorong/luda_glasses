@@ -151,6 +151,9 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/saleStatisticsManage", {
         templateUrl : "app/business_operation/controllers/statistics/sale/saleStatistics.html",
         controller : "saleStatisticsController"
+    }).when("/purchaseStatisticsManage", {
+        templateUrl : "app/business_operation/controllers/statistics/purchase/purchaseStatistics.html",
+        controller : "purchaseStatisticsController"
     }).otherwise({
 		redirectTo : "/"
 	})
@@ -741,9 +744,9 @@ businessOperationApp.factory("customerService", function($http) {
 });
 
 /**
- * 销售报表服务
+ * 报表服务
  */
-businessOperationApp.factory("saleStatisticsService", function($http) {
+businessOperationApp.factory("statisticsService", function($http) {
     return {
         saleStatisticsByMateriel : function(statisticsCondition, successCallback, errorCallback){
             $http({
@@ -763,6 +766,20 @@ businessOperationApp.factory("saleStatisticsService", function($http) {
             $http({
                 method:"POST",
                 url:"/luda_glasses/rest/statistics/sale/byStore",
+                data : statisticsCondition
+            }).success(successCallback).error(errorCallback);
+        },
+        purchaseStatisticsByMateriel : function (statisticsCondition, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/statistics/purchase/byMateriel",
+                data : statisticsCondition
+            }).success(successCallback).error(errorCallback);
+        },
+        purchaseStatisticsBySupplier : function (statisticsCondition, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/statistics/purchase/bySupplier",
                 data : statisticsCondition
             }).success(successCallback).error(errorCallback);
         }

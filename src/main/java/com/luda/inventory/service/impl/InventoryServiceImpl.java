@@ -96,6 +96,7 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
+    @Transactional
     public ResultHandle<PurchaseOrderItem> savePurchaseOrderItem(PurchaseOrderItem purchaseOrderItem) {
         ResultHandle<PurchaseOrderItem> resultHandle = new ResultHandle<>();
         String errorMsg = checkPurchaseOrderItem(purchaseOrderItem);
@@ -332,24 +333,6 @@ public class InventoryServiceImpl implements InventoryService{
         return resultHandle;
     }
 
-    /**
-     * 从采购单明细中收集商品库存信息
-     * @param itemList
-     * @return
-     */
-    private Map<Integer, Integer> gatherInventoryFromItems(List<PurchaseOrderItem> itemList){
-        Map<Integer, Integer> invtMap = new HashMap<>();
-        for(PurchaseOrderItem item : itemList){
-            Integer materielId = Integer.valueOf(item.getMaterielId());
-            if(invtMap.get(materielId) != null){
-                invtMap.put(materielId, invtMap.get(materielId) + item.getPurchaseQuantity());
-            }else {
-                invtMap.put(materielId, item.getPurchaseQuantity());
-            }
-        }
-        return invtMap;
-    }
-
     //初始化采购单明细
     private void initPurchaseOrderItem(PurchaseOrder purchaseOrder) {
         List<PurchaseOrderItem> itemList = purchaseOrder.getPurchaseOrderItemList();
@@ -581,6 +564,7 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
+    @Transactional
     public ResultHandle<InventoryVerificationItem> saveInvntVerificationItem(InventoryVerificationItem item) {
         ResultHandle<InventoryVerificationItem> resultHandle = new ResultHandle<>();
 
@@ -602,6 +586,7 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
+    @Transactional
     public ResultHandle<InventoryVerificationItem> removeInvntVerificationItem(int id) {
         ResultHandle<InventoryVerificationItem> resultHandle = new ResultHandle<>();
         InventoryVerificationItem item = inventoryDao.getInvntVerificationItemById(id);
@@ -751,6 +736,7 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
+    @Transactional
     public ResultHandle<TransferOrderItem> saveTransferOrderItem(TransferOrderItem transferOrderItem) {
         ResultHandle<TransferOrderItem> resultHandle = new ResultHandle<>();
 
