@@ -1,7 +1,7 @@
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
         <div class="seat-manage-operate-container">
-            <h5 class="seat-manage-operate-title">供应商管理</h5>
+            <h4 class="seat-manage-operate-title">供应商管理</h4>
             <div class="seat-manage-operate-button form-inline">
                 <a type="button" class="btn btn-success btn-sm" href="#addSupplier"> 新增</a>
                 <input class="form-control" ng-model="filterText" ng-change="filter()"
@@ -15,10 +15,14 @@
 
         <table ng-table="tableParams" class="table table-bordered">
             <tr ng-repeat="supplier in $data|filter:filterText">
+                <!--
                 <td data-title="'编号'" sortable="'supplierCode'">
                     <a ng-href="#/supplierDetail/{{supplier.supplierId}}">{{supplier.supplierCode}}</a>
                 </td>
-                <td data-title="'名称'" sortable="'supplierName'">{{supplier.supplierName}}</td>
+                -->
+                <td data-title="'名称'" sortable="'supplierName'">
+                    <a ng-href="#/supplierDetail/{{supplier.supplierId}}">{{supplier.supplierName}}</a>
+                </td>
                 <!--<td data-title="'银行'" sortable="'bank'">{{supplier.bank}}</td>-->
                 <!--<td data-title="'银行账号'" sortable="'bankAccount'">{{supplier.bankAccount}}</td>-->
                 <td data-title="'公司名称'" sortable="'regTaxNo'">{{supplier.companyName}}</td>
@@ -42,8 +46,10 @@
                     <button type="button" class="btn btn-sm btn-primary" ng-show="supplier.useFlag==0"
                             ng-click="enableSupplier(supplier.supplierId)">启用</button>
 
+                    <!--
                     <button type="button" class="btn btn-sm btn-primary"
                             ng-click="removeSupplier(supplier.supplierId)">删除</button>
+                    -->
                 </td>
             </tr>
         </table>

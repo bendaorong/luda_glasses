@@ -137,19 +137,7 @@ public class CommonUtils {
 
 
 	
-	/**
-	 * 手机号验证
-	 * @param mobileNumber:手机号
-	 * @return 验证通过返回true
-	 */
-	public static boolean isMobile(String mobileNumber) {
-		if(StringUtils.isNotBlank(mobileNumber)){
-			Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0-9]))\\d{8}$"); // 验证手机号 ;
-			Matcher m = p.matcher(mobileNumber);
-			return m.matches();
-		}
-		return false;
-	}
+
 	
 	/**
 	 * 获取最大有效时间
@@ -366,5 +354,31 @@ public class CommonUtils {
 		return data;
 	}
 
-    
+	/**
+	 * 是否为电子邮箱地址
+	 */
+	public static boolean isEmail(String email){
+		return matchString("^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$", email);
+	}
+
+	/**
+	 * 是否为手机号码
+	 */
+	public static boolean isMobileNumber(String mobileNumber){
+		return matchString("^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$", mobileNumber);
+	}
+
+	/**
+	 * 是否为身份证号码
+	 */
+	public static boolean isIdNumber(String idNumber){
+		return matchString("^\\d{15}|\\d{18}$", idNumber);
+	}
+
+	/**
+	 * 是否为邮政编码
+	 */
+	public static boolean isPostcode(String postcode){
+		return matchString("[1-9]\\d{5}(?!\\d)", postcode);
+	}
 }

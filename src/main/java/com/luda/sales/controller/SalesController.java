@@ -38,10 +38,16 @@ public class SalesController extends BaseController{
      */
     @RequestMapping("/fetchSalesOrderVoList/{orderType}")
     @ResponseBody
-    public String fetchSalesOrderVoList(@PathVariable String orderType){
+    public String fetchSalesOrderVoList(@PathVariable String orderType, HttpSession httpSession){
         String result = "";
         try {
-            List<SalesOrderVo> list = salesService.fetchSalesOrderVoList(orderType);
+            SalesOrderQueryBean queryBean = new SalesOrderQueryBean();
+            queryBean.setOrderType(orderType);
+            if(!isSuperManage(httpSession)){
+                queryBean.setStoreId(getStoreId(httpSession));
+            }
+
+            List<SalesOrderVo> list = salesService.fetchSalesOrderVoList(queryBean);
             result = getSuccessResult(CommonUtils.convertBeanCollectionToJsonArray(list,null).toString());
         }catch (Exception e){
             result = getFailResult("系统异常");

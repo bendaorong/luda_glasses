@@ -2,11 +2,13 @@ package com.luda.user.service.impl;
 
 import com.luda.comm.po.Constants;
 import com.luda.comm.po.ResultHandle;
+import com.luda.inventory.model.CommonQueryBean;
 import com.luda.user.dao.AdminUserDao;
 import com.luda.user.model.AdminRoleModel;
 import com.luda.user.model.AdminUserDetailModel;
 import com.luda.user.model.AdminUserModel;
 import com.luda.user.service.AdminUserService;
+import com.luda.util.CommonUtils;
 import com.luda.util.MD5;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,8 +77,8 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public List<AdminUserModel> fetchAdminUserListWithDetail() {
-        return adminUserDao.fetchAdminUserListWithDetail();
+    public List<AdminUserModel> fetchAdminUserListWithDetail(CommonQueryBean queryBean) {
+        return adminUserDao.fetchAdminUserListWithDetail(queryBean);
     }
 
     @Override
@@ -116,13 +118,42 @@ public class AdminUserServiceImpl implements AdminUserService {
         if(StringUtils.isEmpty(adminUserModel.getMobileNumber())){
             return "请填写手机号码";
         }
+        if(!CommonUtils.isMobileNumber(adminUserModel.getMobileNumber())){
+            return "手机号码不合法";
+        }
         AdminUserModel checkModel = getByMobileNumber(adminUserModel.getMobileNumber());
         if(checkModel != null && checkModel.getAdminUserId() != adminUserModel.getAdminUserId()){
             return "该手机号码已被占用";
         }
+        // 姓名
+        if(StringUtils.isEmpty(adminUserModel.getAdminUserDetailModel().getRealname())){
+            return "请填写姓名";
+        }
         // 验证门店
         if(adminUserModel.getStoreId() <= 0){
             return "请选择门店";
+        }
+        // 角色
+        if(adminUserModel.getRoleId() <= 0){
+            return "请选择角色";
+        }
+        // 邮箱
+        if(StringUtils.isNotEmpty(adminUserModel.getAdminUserDetailModel().getEmail())){
+            if(!CommonUtils.isEmail(adminUserModel.getAdminUserDetailModel().getEmail())){
+                return "邮箱不合法";
+            }
+        }
+        // 邮政编码
+        if(StringUtils.isNotEmpty(adminUserModel.getAdminUserDetailModel().getPostcode())){
+            if(!CommonUtils.isPostcode(adminUserModel.getAdminUserDetailModel().getPostcode())){
+                return "邮政编码不合法";
+            }
+        }
+        // 身份证
+        if(StringUtils.isNotEmpty(adminUserModel.getAdminUserDetailModel().getIdNo())){
+            if(!CommonUtils.isIdNumber(adminUserModel.getAdminUserDetailModel().getIdNo())){
+                return "身份证不合法";
+            }
         }
         return null;
     }
@@ -236,6 +267,9 @@ public class AdminUserServiceImpl implements AdminUserService {
         if(StringUtils.isEmpty(adminUserModel.getMobileNumber())){
             return "请填写手机号码";
         }
+        if(!CommonUtils.isMobileNumber(adminUserModel.getMobileNumber())){
+            return "手机号码不合法";
+        }
         checkModel = getByMobileNumber(adminUserModel.getMobileNumber());
         if(checkModel != null){
             return "该手机号码已被占用";
@@ -244,6 +278,44 @@ public class AdminUserServiceImpl implements AdminUserService {
         if(adminUserModel.getStoreId() <= 0){
             return "请选择门店";
         }
+        // 验证角色
+        if(adminUserModel.getRoleId() <= 0){
+            return "请选择角色";
+        }
+        // 工号
+        if(StringUtils.isEmpty(adminUserModel.getStaffid())){
+            return "请填写工号";
+        }
+        checkModel = getByStaffid(adminUserModel.getStaffid());
+        if(checkModel != null){
+            return "该工号已被占用";
+        }
+        // 姓名
+        if(StringUtils.isEmpty(adminUserModel.getAdminUserDetailModel().getRealname())){
+            return "请填写姓名";
+        }
+        // 邮箱
+        if(StringUtils.isNotEmpty(adminUserModel.getAdminUserDetailModel().getEmail())){
+            if(!CommonUtils.isEmail(adminUserModel.getAdminUserDetailModel().getEmail())){
+                return "邮箱不合法";
+            }
+        }
+        // 邮政编码
+        if(StringUtils.isNotEmpty(adminUserModel.getAdminUserDetailModel().getPostcode())){
+            if(!CommonUtils.isPostcode(adminUserModel.getAdminUserDetailModel().getPostcode())){
+                return "邮政编码不合法";
+            }
+        }
+        // 身份证
+        if(StringUtils.isNotEmpty(adminUserModel.getAdminUserDetailModel().getIdNo())){
+            if(!CommonUtils.isIdNumber(adminUserModel.getAdminUserDetailModel().getIdNo())){
+                return "身份证不合法";
+            }
+        }
         return null;
+    }
+
+    private AdminUserModel getByStaffid(String staffid) {
+        return adminUserDao.getByStaffid(staffid);
     }
 }

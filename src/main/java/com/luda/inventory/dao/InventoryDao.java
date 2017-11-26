@@ -45,11 +45,9 @@ public interface InventoryDao {
 
     int saveMard(Mard mard);
 
-    List<MardVo> fetchMardVoList(int storeId);
+    List<MardVo> fetchMardVoList(CommonQueryBean queryBean);
 
-    List<MardVo> fetchAllMardVoList();
-
-    List<PurchaseOrderVo> fetchPurchaseOrderVoList(String orderType);
+    List<PurchaseOrderVo> fetchPurchaseOrderVoList(CommonQueryBean queryBean);
 
     PurchaseOrder getPurchaseOrderById(int id);
 
@@ -71,7 +69,7 @@ public interface InventoryDao {
 
     int insertInvtVerifItemBatch(List<InventoryVerificationItem> invtVerifItemList);
 
-    List<InventoryVerificationVo> fetchInvntVerifVoList();
+    List<InventoryVerificationVo> fetchInvntVerifVoList(CommonQueryBean queryBean);
 
     int savePurchaseOrderItem(PurchaseOrderItem purchaseOrderItem);
 
@@ -101,7 +99,7 @@ public interface InventoryDao {
 
     String getTransferOrderMaxCode();
 
-    List<TransferOrderVo> fetchTransferOrders();
+    List<TransferOrderVo> fetchTransferOrders(CommonQueryBean queryBean);
 
     TransferOrder getTransferOrderById(int id);
 

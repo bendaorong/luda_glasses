@@ -34,4 +34,12 @@ public class Constants {
      */
     public static final String ORDER_TYPE_PURCHASE = "01"; //采购单
     public static final String ORDER_TYPE_PURCHASE_REFUND = "02"; //采购退货单
+
+    /**
+     * 角色
+     */
+    public static final String ROLE_SUPERMANAGER = "01"; //总经理
+    public static final String ROLE_MANAGER = "02"; //经理
+    public static final String ROLE_OPTOMETRIST = "03"; //验光师
+    public static final String ROLE_SALES = "04"; //业务员
 }

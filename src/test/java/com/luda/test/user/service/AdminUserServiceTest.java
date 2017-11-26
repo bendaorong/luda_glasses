@@ -2,6 +2,7 @@ package com.luda.test.user.service;
 
 import com.luda.comm.po.Constants;
 import com.luda.comm.po.ResultHandle;
+import com.luda.inventory.model.CommonQueryBean;
 import com.luda.test.SpringSimpleJunit;
 import com.luda.user.model.AdminRoleModel;
 import com.luda.user.model.AdminUserDetailModel;
@@ -30,7 +31,7 @@ public class AdminUserServiceTest extends SpringSimpleJunit{
 
     @Test
     public void testFetchAdminUserListWithDetail(){
-        List<AdminUserModel> userList = adminUserService.fetchAdminUserListWithDetail();
+        List<AdminUserModel> userList = adminUserService.fetchAdminUserListWithDetail(new CommonQueryBean());
         print(CommonUtils.convertBeanCollectionToJsonArray(userList, "yyyy-MM-dd HH:mm:ss").toString());
     }
 

@@ -105,7 +105,8 @@
         )
     </insert>
 
-    <select id="fetchSalesOrderVoList" resultMap="salesOrderVoMap">
+    <select id="fetchSalesOrderVoList" parameterType="com.luda.sales.model.SalesOrderQueryBean"
+            resultMap="salesOrderVoMap">
         select o.*, s.store_name, d.real_name, c.name
         from sales_order o
         left join store s
@@ -115,11 +116,20 @@
         left join customer c
         on o.customer_id = c.id
         where o.delete_flag = 0
+        <if test="orderId != null">
+            and o.id = #{orderId}
+        </if>
+        <if test="storeId != null">
+            and o.store_id = #{storeId}
+        </if>
         <if test="orderType != null and orderType != ''">
             and o.order_type = #{orderType}
         </if>
-        <if test="customerId != 0">
+        <if test="customerId != null">
             and o.customer_id = #{customerId}
+        </if>
+        <if test="businessManId != null">
+            and o.businessman_id = #{businessManId}
         </if>
         order by o.id desc
     </select>

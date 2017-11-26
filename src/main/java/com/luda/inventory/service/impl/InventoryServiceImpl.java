@@ -246,13 +246,8 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
-    public List<MardVo> fetchMardVoList(int storeId) {
-        return inventoryDao.fetchMardVoList(storeId);
-    }
-
-    @Override
-    public List<MardVo> fetchAllMardVoList() {
-        return inventoryDao.fetchAllMardVoList();
+    public List<MardVo> fetchMardVoList(CommonQueryBean queryBean) {
+        return inventoryDao.fetchMardVoList(queryBean);
     }
 
     @Override
@@ -292,8 +287,8 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
-    public List<PurchaseOrderVo> fetchPurchaseOrderVoList(String orderType) {
-        return inventoryDao.fetchPurchaseOrderVoList(orderType);
+    public List<PurchaseOrderVo> fetchPurchaseOrderVoList(CommonQueryBean queryBean) {
+        return inventoryDao.fetchPurchaseOrderVoList(queryBean);
     }
 
     @Override
@@ -520,8 +515,8 @@ public class InventoryServiceImpl implements InventoryService{
 
 
     @Override
-    public List<InventoryVerificationVo> fetchInvntVerifVoList() {
-        return inventoryDao.fetchInvntVerifVoList();
+    public List<InventoryVerificationVo> fetchInvntVerifVoList(CommonQueryBean queryBean) {
+        return inventoryDao.fetchInvntVerifVoList(queryBean);
     }
 
     @Override
@@ -701,8 +696,8 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
-    public List<TransferOrderVo> fetchTransferOrders() {
-        return inventoryDao.fetchTransferOrders();
+    public List<TransferOrderVo> fetchTransferOrders(CommonQueryBean queryBean) {
+        return inventoryDao.fetchTransferOrders(queryBean);
     }
 
     @Override

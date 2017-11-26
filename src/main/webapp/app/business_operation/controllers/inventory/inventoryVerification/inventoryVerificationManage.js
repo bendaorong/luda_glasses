@@ -69,7 +69,13 @@
             }
         }
     }).controller("addInventoryVerificationController", function ($location,$scope,$filter,materielService,inventoryService,storeService,supplierService,adminUserService,$routeParams) {
+        $scope.storeId = sessionStorage.getItem("storeId");
+        $scope.adminUserId = sessionStorage.getItem("adminUserId");
+
         $scope.newInvntVerification = {};
+        $scope.newInvntVerification.storeId = $scope.storeId;
+        $scope.newInvntVerification.businessmanId = $scope.adminUserId;
+        $scope.newInvntVerification.verifDate = $filter("date")(new Date(), "yyyy-MM-dd");
 
         $scope.storeList = [];
         $scope.adminUserList = [];
@@ -121,7 +127,11 @@
 
         // 查询门店
         storeService.fetchStoreList(function(data){
-            $scope.storeList = data;
+            angular.forEach(data, function (each) {
+                if(each.storeId == $scope.storeId){
+                    $scope.storeList.push(angular.copy(each));
+                }
+            });
         },function(data){
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
@@ -131,7 +141,7 @@
         });
 
         // 查询业务员
-        adminUserService.fetchUserList(function(data){
+        adminUserService.fetchUserListByStore(function(data){
             $scope.adminUserList  =  data;
         },function(data){
             BootstrapDialog.show({
@@ -333,7 +343,7 @@
         });
 
         // 查询业务员
-        adminUserService.fetchUserList(function(data){
+        adminUserService.fetchUserListByStore(function(data){
             $scope.adminUserList  =  data;
         },function(data){
             BootstrapDialog.show({

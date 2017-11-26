@@ -2,6 +2,7 @@ package com.luda.user.controller;
 
 import com.luda.comm.po.ResultHandle;
 import com.luda.common.controller.BaseController;
+import com.luda.inventory.model.CommonQueryBean;
 import com.luda.user.exception.AdminUserException;
 import com.luda.user.model.AdminRoleModel;
 import com.luda.user.model.AdminUserDetailModel;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +42,30 @@ public class AdminUserController extends BaseController{
     public String fetchAdminUserList(HttpServletResponse httpServletResponse){
         String result;
         try {
-            List<AdminUserModel> adminUserList = adminUserService.fetchAdminUserListWithDetail();
+            List<AdminUserModel> adminUserList = adminUserService.fetchAdminUserListWithDetail(new CommonQueryBean());
+            JSONArray jsonArray = CommonUtils.convertBeanCollectionToJsonArray(adminUserList, "yyyy-MM-dd");
+            result =  jsonArray.toString();
+            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+        } catch (AdminUserException e) {
+            result = returnErrorResult(httpServletResponse, "系统异常");
+            log.error("fetchAdminUserList error", e);
+        }
+        return result;
+    }
+
+    /**
+     * 查询门店业务员
+     */
+    @RequestMapping("/listByStore")
+    @ResponseBody
+    public String fetchAdminUserByStore(HttpServletResponse httpServletResponse, HttpSession httpSession){
+        String result;
+        try {
+            CommonQueryBean queryBean = new CommonQueryBean();
+            if(!isSuperManage(httpSession)){
+                queryBean.setStoreId(getStoreId(httpSession));
+            }
+            List<AdminUserModel> adminUserList = adminUserService.fetchAdminUserListWithDetail(queryBean);
             JSONArray jsonArray = CommonUtils.convertBeanCollectionToJsonArray(adminUserList, "yyyy-MM-dd");
             result =  jsonArray.toString();
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);

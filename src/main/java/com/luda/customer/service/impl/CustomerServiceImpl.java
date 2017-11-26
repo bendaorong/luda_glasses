@@ -9,10 +9,12 @@ import com.luda.customer.service.CustomerService;
 import com.luda.store.dao.StoreDao;
 import com.luda.store.model.StoreModel;
 import com.luda.store.service.StoreService;
+import com.luda.util.CommonUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 import javax.xml.transform.Result;
 import java.util.Date;
@@ -37,6 +39,12 @@ public class CustomerServiceImpl implements CustomerService{
     public ResultHandle<CustomerModel> saveCustomer(CustomerModel customerModel) {
         ResultHandle<CustomerModel> resultHandle = new ResultHandle<CustomerModel>();
         try {
+            String errorMsg = checkCustomer(customerModel);
+            if(StringUtils.isNotEmpty(errorMsg)){
+                resultHandle.setMsg(errorMsg);
+                return resultHandle;
+            }
+
             initAddCustomer(customerModel);
             this.customerDao.saveCustomer(customerModel);
             resultHandle.setReturnContent(customerModel);
@@ -45,6 +53,22 @@ public class CustomerServiceImpl implements CustomerService{
             log.error("save customer error", e);
         }
         return resultHandle;
+    }
+
+    // 验证客户信息
+    private String checkCustomer(CustomerModel customerModel) {
+        //验证客户名称
+        if(StringUtils.isEmpty(customerModel.getName())){
+            return "请填写客户姓名";
+        }
+        //验证手机号码
+        if(StringUtils.isEmpty(customerModel.getMobileNumber())){
+            return "请填写手机号码";
+        }
+        if(!CommonUtils.isMobileNumber(customerModel.getMobileNumber())){
+            return "手机号码不合法";
+        }
+        return null;
     }
 
     /**
@@ -84,6 +108,11 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public ResultHandle<CustomerModel> updateCustomer(CustomerModel customerModel) {
         ResultHandle<CustomerModel> resultHandle = new ResultHandle<CustomerModel>();
+        String errorMsg = checkCustomer(customerModel);
+        if(StringUtils.isNotEmpty(errorMsg)){
+            resultHandle.setMsg(errorMsg);
+            return resultHandle;
+        }
         this.customerDao.updateCustomer(customerModel);
         return resultHandle;
     }

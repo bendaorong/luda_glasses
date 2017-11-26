@@ -1,5 +1,6 @@
 package com.luda.user.dao;
 
+import com.luda.inventory.model.CommonQueryBean;
 import com.luda.user.model.AdminRoleModel;
 import com.luda.user.model.AdminUserDetailModel;
 import com.luda.user.model.AdminUserModel;
@@ -17,7 +18,7 @@ public interface AdminUserDao {
 
     AdminUserModel getByAdminName(String adminName);
 
-    List<AdminUserModel> fetchAdminUserListWithDetail();
+    List<AdminUserModel> fetchAdminUserListWithDetail(CommonQueryBean queryBean);
 
     AdminUserDetailModel getAdminUserDetail(int adminUserId);
 
@@ -36,4 +37,6 @@ public interface AdminUserDao {
     int updatePwd(@Param("adminUserId") int adminUserId, @Param("password") String password);
 
     List<AdminRoleModel> getAdminRoleList();
+
+    AdminUserModel getByStaffid(String staffid);
 }

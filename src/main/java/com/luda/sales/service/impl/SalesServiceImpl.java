@@ -73,10 +73,8 @@ public class SalesServiceImpl implements SalesService {
     }
 
     @Override
-    public List<SalesOrderVo> fetchSalesOrderVoList(String orderType) {
-        SalesOrder salesOrder = new SalesOrder();
-        salesOrder.setOrderType(orderType);
-        return salesDao.fetchSalesOrderVoList(salesOrder);
+    public List<SalesOrderVo> fetchSalesOrderVoList(SalesOrderQueryBean queryBean) {
+        return salesDao.fetchSalesOrderVoList(queryBean);
     }
 
     @Override
@@ -287,10 +285,9 @@ public class SalesServiceImpl implements SalesService {
 
     @Override
     public List<SalesOrderVo> fetchSalesOrderVoByCustomerId(int customerId) {
-        SalesOrder salesOrder = new SalesOrder();
-        salesOrder.setCustomerId(customerId);
-        salesOrder.setOrderType(Constants.ORDER_TYPE_SALE);
-        return salesDao.fetchSalesOrderVoList(salesOrder);
+        SalesOrderQueryBean queryBean = new SalesOrderQueryBean();
+        queryBean.setCustomerId(customerId);
+        return salesDao.fetchSalesOrderVoList(queryBean);
     }
 
     /**

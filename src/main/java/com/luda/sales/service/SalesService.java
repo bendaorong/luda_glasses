@@ -1,10 +1,7 @@
 package com.luda.sales.service;
 
 import com.luda.comm.po.ResultHandle;
-import com.luda.sales.model.RefundOrder;
-import com.luda.sales.model.SalesOrder;
-import com.luda.sales.model.SalesOrderItem;
-import com.luda.sales.model.SalesOrderVo;
+import com.luda.sales.model.*;
 
 import javax.xml.transform.Result;
 import java.util.List;
@@ -21,9 +18,9 @@ public interface SalesService {
 
     /**
      * 查询销售单列表
-     * @param orderType 订单类型
+     * @param queryBean 查询条件
      */
-    List<SalesOrderVo> fetchSalesOrderVoList(String orderType);
+    List<SalesOrderVo> fetchSalesOrderVoList(SalesOrderQueryBean queryBean);
 
     /**
      * 查询销售单详情

@@ -12,6 +12,9 @@
             left join sales_order_item soi
             on so.id = soi.sales_order_id
             where so.delete_flag = 0 and so.order_type = '01'
+            <if test="storeId != null">
+                and so.store_id = #{storeId}
+            </if>
             <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''">
                 and so.sale_date >= #{beginDate} and #{endDate} >= so.sale_date
             </if>
@@ -37,6 +40,9 @@
             left join sales_order_item soi
             on so.id = soi.sales_order_id
             where so.delete_flag = 0 and so.order_type = '01'
+            <if test="storeId != null">
+                and so.store_id = #{storeId}
+            </if>
             <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''">
                 and so.sale_date >= #{beginDate} and #{endDate} >= so.sale_date
             </if>
@@ -78,6 +84,9 @@
             from purchase_order po
             left join purchase_order_item poi on po.purchase_order_id = poi.purchase_order_id
             where po.delete_flag = 0 and po.order_type= '01'
+            <if test="storeId != null">
+                and po.store_id = #{storeId}
+            </if>
             <if test="supplierId != null">
                 and po.supplier_id = #{supplierId}
             </if>
@@ -105,6 +114,9 @@
             from purchase_order po
             left join purchase_order_item poi on po.purchase_order_id = poi.purchase_order_id
             where po.delete_flag = 0 and po.order_type= '01'
+            <if test="storeId != null">
+                and po.store_id = #{storeId}
+            </if>
             <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''">
                 and po.purchase_date >= #{beginDate} and #{endDate} >= po.purchase_date
             </if>

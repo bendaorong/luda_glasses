@@ -1,5 +1,6 @@
 package com.luda.common.controller;
 
+import com.luda.comm.po.Constants;
 import com.luda.user.model.AdminUserModel;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -65,5 +66,20 @@ public class BaseController {
     public AdminUserModel getLoginUser(HttpSession session){
         AdminUserModel adminUserModel = (AdminUserModel) session.getAttribute("sessionInfo");
         return adminUserModel;
+    }
+
+    /**
+     * 判断当前登录用户是否为总经理
+     * @return
+     */
+    public boolean isSuperManage(HttpSession session){
+        return Constants.ROLE_SUPERMANAGER.equals(getLoginUser(session).getAdminRoleModel().getRoleCode());
+    }
+
+    /**
+     * 获取当前登录用户所属门店
+     */
+    public int getStoreId(HttpSession session){
+        return getLoginUser(session).getStoreId();
     }
 }

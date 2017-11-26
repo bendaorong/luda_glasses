@@ -1,5 +1,7 @@
 package com.luda.user.model;
 
+import com.luda.comm.po.Constants;
+
 import java.io.Serializable;
 
 public class AdminUserModel implements Serializable{
@@ -135,6 +137,14 @@ public class AdminUserModel implements Serializable{
 
     public void setStaffid(String staffid) {
         this.staffid = staffid;
+    }
+
+    /**
+     * 是否为总经理
+     * @return
+     */
+    public boolean isSuperManager(){
+        return Constants.ROLE_SUPERMANAGER.equals(this.adminRoleModel.getRoleCode());
     }
 
     @Override

@@ -52,7 +52,7 @@
     <p>{{successMsg}}</p>
 </div>
 
-<h3 class="seat-manage-operate-title" style="margin-bottom: 10px">编辑采购退货单</h3>
+<h4 class="seat-manage-operate-title" style="margin-bottom: 10px">编辑采购退货单</h4>
 <ul class="nav nav-tabs" role="tablist" ng-init="currentTab=0">
     <li role="presentation" ng-class="{'active': currentTab===0}"><a
             href="javascript(0)" ng-click="currentTab=0" role="tab"
@@ -101,8 +101,11 @@
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">供应商</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <select class="form-control" required ng-model="selectPurchaseOrder.supplierId">
-                            <option ng-repeat="supplier in supplierList" value="{{supplier.supplierId}}">{{supplier.supplierName}}</option>
+                        <select class="form-control" required ng-model="selectPurchaseOrder.supplierId" disabled="true">
+                            <option ng-repeat="supplier in supplierList" value="{{supplier.supplierId}}"
+                                    ng-selected="selectPurchaseOrder.supplierId == supplier.supplierId">
+                                {{supplier.supplierName}}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -111,7 +114,9 @@
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <select class="form-control" required ng-model="selectPurchaseOrder.businessmanId">
                             <option ng-repeat="adminUser in adminUserList" value="{{adminUser.adminUserId}}"
-                                    ng-selected="adminUser.adminUserId==selectPurchaseOrder.businessmanId">{{adminUser.adminUserDetailModel.realname}}</option>
+                                    ng-selected="adminUser.adminUserId==selectPurchaseOrder.businessmanId">
+                                {{adminUser.adminUserDetailModel.realname}}
+                            </option>
                         </select>
                     </div>
                 </div>

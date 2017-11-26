@@ -52,7 +52,7 @@
     <p>{{successMsg}}</p>
 </div>
 
-<h3 class="seat-manage-operate-title" style="margin-bottom: 10px">新增采购单</h3>
+<h4 class="seat-manage-operate-title" style="margin-bottom: 10px">新增采购单</h4>
 <ul class="nav nav-tabs" role="tablist" ng-init="currentTab=0">
     <li role="presentation" ng-class="{'active': currentTab===0}"><a
             href="javascript(0)" ng-click="currentTab=0" role="tab"
@@ -85,26 +85,31 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">门店</label>
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label"><span class="red">*</span>门店</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <select class="form-control"  ng-model="newPurchaseOrder.storeId">
-                            <option ng-repeat="store in storeList" value="{{store.storeId}}">{{store.storeName}}</option>
+                        <select class="form-control"  ng-model="newPurchaseOrder.storeId" required>
+                            <option ng-repeat="store in storeList" value="{{store.storeId}}" ng-selected="storeId == store.storeId">
+                                {{store.storeName}}
+                            </option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">供应商</label>
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label"><span class="red">*</span>供应商</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <select class="form-control"  ng-model="newPurchaseOrder.supplierId">
+                        <select class="form-control"  ng-model="newPurchaseOrder.supplierId" ng-change="selectSupplier()" required>
                             <option ng-repeat="supplier in supplierList" value="{{supplier.supplierId}}">{{supplier.supplierName}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">业务员</label>
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label"><span class="red">*</span>业务员</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <select class="form-control" ng-model="newPurchaseOrder.businessmanId">
-                            <option ng-repeat="adminUser in adminUserList" value="{{adminUser.adminUserId}}">{{adminUser.adminUserDetailModel.realname}}</option>
+                        <select class="form-control" ng-model="newPurchaseOrder.businessmanId" required>
+                            <option ng-repeat="adminUser in adminUserList" value="{{adminUser.adminUserId}}"
+                                    ng-selected="adminUserId == adminUser.adminUserId">
+                                {{adminUser.adminUserDetailModel.realname}}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -185,7 +190,6 @@
             <td>
                 <select class="form-control" id="materiel" ng-model="purchaseOrderItem.materielId">
                     <option value=""></option>
-                    <!--<option ng-repeat="m in materielList" value="{{m.id}}">{{m.name}}</option>-->
                 </select>
             </td>
         </tr>
@@ -193,9 +197,9 @@
         <tr><td>名称</td><td><input type="text" ng-model="selectedMateriel.name" ng-readonly="true"/></td></tr>
         <tr><td>条码</td><td><input type="text" ng-model="selectedMateriel.barcode" ng-readonly="true"/></td></tr>
         -->
-        <tr><td>球镜</td><td><input type="number" step="0.25" ng-model="purchaseOrderItem.sphere" /></td></tr>
-        <tr><td>柱镜</td><td><input type="number" step="0.25" ng-model="purchaseOrderItem.cylinder" /></td></tr>
-        <tr><td>轴向</td><td><input type="number" step="0.25" ng-model="purchaseOrderItem.axial" /></td></tr>
+        <tr><td>球镜</td><td><input id="sphere" type="number" step="0.25" ng-model="purchaseOrderItem.sphere" ng-disabled="selectedMateriel.typeName != '镜片'"/></td></tr>
+        <tr><td>柱镜</td><td><input id="cylinder" type="number" step="0.25" ng-model="purchaseOrderItem.cylinder" ng-disabled="selectedMateriel.typeName != '镜片'"/></td></tr>
+        <tr><td>轴向</td><td><input id="axial" type="number" step="0.25" ng-model="purchaseOrderItem.axial" ng-disabled="selectedMateriel.typeName != '镜片'"/></td></tr>
         <tr><td>采购价格</td><td><input type="number" min="0" ng-model="purchaseOrderItem.purchasePrice" /></td></tr>
         <tr>
             <td>采购数量</td>

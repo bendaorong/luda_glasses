@@ -245,6 +245,9 @@ businessOperationApp.factory("adminUserService", function($http) {
         fetchUserList : function(successCallback, errorCallback){
             $http.get("/luda_glasses/rest/adminUser/list").success(successCallback).error(errorCallback);
         },
+        fetchUserListByStore : function(successCallback, errorCallback){
+            $http.get("/luda_glasses/rest/adminUser/listByStore").success(successCallback).error(errorCallback);
+        },
 		addAdminUser:function(adminUser, successCallback, errorCallback){
 			$http({
 				method:"POST",

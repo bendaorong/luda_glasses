@@ -53,7 +53,13 @@
     <p>{{successMsg}}</p>
 </div>
 
-<h3 class="seat-manage-operate-title" style="margin-bottom: 10px">客户详情</h3>
+<h4 class="seat-manage-operate-title" style="margin-bottom: 10px">客户详情</h4>
+<div class="seat-manage-operate-container">
+    <div class="seat-manage-operate-button form-inline">
+        <button class="btn btn-success btn-sm" ng-click="cancel()">返回</button>
+    </div>
+</div>
+
 <ul class="nav nav-tabs" role="tablist" ng-init="currentTab=0">
     <li role="presentation" ng-class="{'active': currentTab===0}"><a
             href="javascript(0)" ng-click="currentTab=0" role="tab"
@@ -68,15 +74,6 @@
 
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
-        <div class="seat-manage-operate-container">
-            <div class="seat-manage-operate-button form-inline">
-                <!--
-                <button class="btn btn-success btn-sm" ng-click="saveSalesOrder()" ng-disabled="!myform.$valid">保存</button>
-                <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
-                -->
-            </div>
-        </div>
-
         <div class="col-sm-12" style="margin-top: 10px;">
             <form class="form-horizontal" novalidate id="myform" name="myform">
                 <fieldset id="basicInfo">

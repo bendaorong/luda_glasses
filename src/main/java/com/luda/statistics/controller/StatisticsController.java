@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -33,11 +34,15 @@ public class StatisticsController extends BaseController{
      */
     @RequestMapping("/sale/byMateriel")
     @ResponseBody
-    public String saleStatisticsByMateriel(@RequestBody String data){
+    public String saleStatisticsByMateriel(@RequestBody String data, HttpSession httpSession){
         String result = "";
         try {
             StatisticsCondition statisticsCondition = CommonUtils.convertJsonToBean(
                     JSONObject.fromObject(data), StatisticsCondition.class);
+            // 非总经理只统计本店的数据
+            if(!isSuperManage(httpSession)){
+                statisticsCondition.setStoreId(getStoreId(httpSession));
+            }
             List<SaleStatisticsByMateriel> saleStatisticsList = statisticsService.saleStatisticsByMateriel(statisticsCondition);
             result = getSuccessResult(CommonUtils.convertBeanCollectionToJsonArray(saleStatisticsList, null).toString());
         }catch (Exception e){
@@ -52,11 +57,15 @@ public class StatisticsController extends BaseController{
      */
     @RequestMapping("/sale/byAdminUser")
     @ResponseBody
-    public String saleStatisticsByAdminUser(@RequestBody String data){
+    public String saleStatisticsByAdminUser(@RequestBody String data, HttpSession httpSession){
         String result = "";
         try {
             StatisticsCondition statisticsCondition = CommonUtils.convertJsonToBean(
                     JSONObject.fromObject(data), StatisticsCondition.class);
+            // 非总经理只统计本店的数据
+            if(!isSuperManage(httpSession)){
+                statisticsCondition.setStoreId(getStoreId(httpSession));
+            }
             List<SaleStatisticsByUser> saleStatisticsList = statisticsService.saleStatisticsByAdminUser(statisticsCondition);
             result = getSuccessResult(CommonUtils.convertBeanCollectionToJsonArray(saleStatisticsList, null).toString());
         }catch (Exception e){
@@ -90,11 +99,14 @@ public class StatisticsController extends BaseController{
      */
     @RequestMapping("/purchase/byMateriel")
     @ResponseBody
-    public String purchaseStatisticsByMateriel(@RequestBody String data){
+    public String purchaseStatisticsByMateriel(@RequestBody String data, HttpSession httpSession){
         String result = "";
         try {
             StatisticsCondition statisticsCondition = CommonUtils.convertJsonToBean(
                     JSONObject.fromObject(data), StatisticsCondition.class);
+            if(!isSuperManage(httpSession)){
+                statisticsCondition.setStoreId(getStoreId(httpSession));
+            }
             List<PurchaseStatisticsByMateriel> purchaseStatisticsList = statisticsService.purchaseStatisticsByMateriel(statisticsCondition);
             result = getSuccessResult(CommonUtils.convertBeanCollectionToJsonArray(purchaseStatisticsList, null).toString());
         }catch (Exception e){
@@ -109,11 +121,14 @@ public class StatisticsController extends BaseController{
      */
     @RequestMapping("/purchase/bySupplier")
     @ResponseBody
-    public String purchaseStatisticsBySupplier(@RequestBody String data){
+    public String purchaseStatisticsBySupplier(@RequestBody String data, HttpSession httpSession){
         String result = "";
         try {
             StatisticsCondition statisticsCondition = CommonUtils.convertJsonToBean(
                     JSONObject.fromObject(data), StatisticsCondition.class);
+            if(!isSuperManage(httpSession)){
+                statisticsCondition.setStoreId(getStoreId(httpSession));
+            }
             List<PurchaseStatisticsBySupplier> purchaseStatisticsList = statisticsService.purchaseStatisticsBySupplier(statisticsCondition);
             result = getSuccessResult(CommonUtils.convertBeanCollectionToJsonArray(purchaseStatisticsList, null).toString());
         }catch (Exception e){

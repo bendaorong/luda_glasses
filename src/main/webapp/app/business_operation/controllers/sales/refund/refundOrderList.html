@@ -1,7 +1,7 @@
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
         <div class="seat-manage-operate-container">
-            <h5 class="seat-manage-operate-title">退货单管理</h5>
+            <h4 class="seat-manage-operate-title">退货单管理</h4>
             <div class="seat-manage-operate-button form-inline">
                 <a type="button" class="btn btn-success btn-sm" href="#addRefundOrder"> 新增</a>
                 <input class="form-control" ng-model="filterText" ng-change="filter()"
@@ -17,6 +17,7 @@
             <tr ng-repeat="salesOrder in $data|filter:filterText">
                 <td data-title="'编号'" sortable="'code'">{{salesOrder.code}}</td>
                 <td data-title="'退货日期'" sortable="'code'">{{salesOrder.saleDate}}</td>
+                <td data-title="'客户'" sortable="'code'">{{salesOrder.customerName}}</td>
                 <td data-title="'数量'" sortable="'code'">{{salesOrder.totalQuantity}}</td>
                 <td data-title="'退付金额'" sortable="'code'">{{salesOrder.totalAmount}}</td>
                 <td data-title="'门店'" sortable="'code'">{{salesOrder.storeName}}</td>

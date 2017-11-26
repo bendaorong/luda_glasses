@@ -1,6 +1,7 @@
 package com.luda.user.service;
 
 import com.luda.comm.po.ResultHandle;
+import com.luda.inventory.model.CommonQueryBean;
 import com.luda.user.model.AdminRoleModel;
 import com.luda.user.model.AdminUserDetailModel;
 import com.luda.user.model.AdminUserModel;
@@ -31,7 +32,7 @@ public interface AdminUserService {
      * 查询用户
      * @return
      */
-    List<AdminUserModel> fetchAdminUserListWithDetail();
+    List<AdminUserModel> fetchAdminUserListWithDetail(CommonQueryBean queryBean);
 
     /**
      * 查询用户详情

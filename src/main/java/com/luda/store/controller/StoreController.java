@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,7 +40,7 @@ public class StoreController extends BaseController {
         String result;
         try {
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);
-            List<StoreModel> storeList = storeService.fetchStoreList();
+            List<StoreModel> storeList = storeService.fetchStoreList();;
             JSONArray jsonArray =  CommonUtils.convertBeanCollectionToJsonArray(storeList, "yyyy-MM-dd HH:mm:ss");
             result = jsonArray.toString();
         }catch (Exception e){

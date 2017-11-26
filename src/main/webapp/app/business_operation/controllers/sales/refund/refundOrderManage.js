@@ -81,6 +81,8 @@
     }).controller("addRefundOrderController", function($location,$scope,$filter,materielService,inventoryService,salesService,storeService,adminUserService,customerService) {
         setActiveSubPage($scope);
         $scope.roleCode = sessionStorage.getItem("roleCode");
+        $scope.adminUserId = sessionStorage.getItem("adminUserId");
+        $scope.storeId = sessionStorage.getItem("storeId");
         $scope.currentTab = 0;
 
         $scope.newSalesOrder = {};   // 销售单
@@ -90,6 +92,8 @@
         $scope.newSalesOrder.saleDate = $filter("date")(new Date(), "yyyy-MM-dd");
         $scope.newSalesOrder.totalQuantity = 0;
         $scope.newSalesOrder.totalAmount = 0;
+        $scope.newSalesOrder.storeId = $scope.storeId;
+        $scope.newSalesOrder.businessManId = $scope.adminUserId;
 
         $scope.storeList = []; //门店
         $scope.adminUserList = []; //业务员
@@ -167,7 +171,7 @@
         });
 
         // 查询业务员
-        adminUserService.fetchUserList(function(data){
+        adminUserService.fetchUserListByStore(function(data){
             $scope.adminUserList  =  data;
         },function(data){
             BootstrapDialog.show({
@@ -384,7 +388,7 @@
         });
 
         // 查询业务员
-        adminUserService.fetchUserList(function(data){
+        adminUserService.fetchUserListByStore(function(data){
             $scope.adminUserList  =  data;
         },function(data){
             BootstrapDialog.show({

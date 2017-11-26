@@ -26,7 +26,7 @@
 
 <div id="top">
     <div class="seat-manage-operate-container">
-        <h5 class="seat-manage-operate-title">新增供应商</h5>
+        <h4 class="seat-manage-operate-title">新增供应商</h4>
         <div class="seat-manage-operate-button form-inline">
             <button class="btn btn-success btn-sm" ng-click="saveSupplier()" ng-disabled="!myform.$valid">保存</button>
             <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
@@ -38,62 +38,52 @@
         <form id="myform" name="myform" class="form-horizontal" novalidate>
             <fieldset id="basicInfo">
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">供应商名称</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>供应商名称</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="text" class="form-control" ng-model="newSupplier.supplierName" required/>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">公司名称</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>公司名称</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="text" class="form-control" ng-model="newSupplier.companyName" required/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">联系电话</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>联系电话</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="text" class="form-control" ng-model="newSupplier.contactPhone" required/>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">传真</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.fax" required/>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">传真</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input type="text" class="form-control" ng-model="newSupplier.fax"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">地址</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.address" required/>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">地址</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input type="text" class="form-control" ng-model="newSupplier.address" />
+                    </div>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">负责人</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input type="text" class="form-control" ng-model="newSupplier.contactPerson" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">负责人</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" ng-model="newSupplier.contactPerson" required/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">银行</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">银行</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="text" class="form-control" ng-model="newSupplier.bank" />
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">银行账号</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">银行账号</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="text" class="form-control" ng-model="newSupplier.bankAccount" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">工商税务登记证号</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">工商税务登记证号</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="text" class="form-control" ng-model="newSupplier.regTaxNo" />
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">备注</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">备注</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <textarea rows="5" ng-model="newSupplier.remark" style="width:100%"></textarea>
                     </div>
                 </div>

@@ -1,15 +1,7 @@
 [{
   "id" : "100",
   "name" : "基础资料",
-  "subpages" : [ {
-    "id" : "100100",
-    "name" : "门店",
-    "page" : "#storeManage"
-  }, {
-    "id" : "100200",
-    "name" : "员工",
-    "page" : "#AuthorizationManage"
-  }, {
+  "subpages" : [{
     "id" : "100300",
     "name" : "商品",
     "page" : "#materielManage"
@@ -32,7 +24,7 @@
   "subpages" : [{
     "id" : "200100",
     "name" : "采购单",
-    "page" : "#purchaseOrderManage"
+    "page" : "#addPurchaseOrder"
   },{
     "id" : "200200",
     "name" : "采购单查询",
@@ -40,11 +32,11 @@
   },{
     "id" : "200300",
     "name" : "退货单",
-    "page" : "#"
+    "page" : "#addPurchaseRefundOrder"
   },{
     "id" : "200400",
     "name" : "退货单查询",
-    "page" : "#"
+    "page" : "#purchaseRefundOrderManage"
   }]
 },{
   "id" : "300",
@@ -71,7 +63,19 @@
     "page" : "#inventoryVerificationManage"
   }, {
     "id" : "400300",
-    "name" : "调拨单",
+    "name" : "库存调拨",
     "page" : "#transferOrderManage"
+  }]
+},{
+  "id" : "500",
+  "name" : "统计报表",
+  "subpages" : [{
+    "id" : "500100",
+    "name" : "销售报表",
+    "page" : "#saleStatisticsManage"
+  }, {
+    "id" : "500200",
+    "name" : "采购报表",
+    "page" : "#purchaseStatisticsManage"
   }]
 }]

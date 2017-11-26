@@ -3,6 +3,7 @@ package com.luda.test.sales;
 import com.luda.comm.po.ResultHandle;
 import com.luda.sales.model.SalesOrder;
 import com.luda.sales.model.SalesOrderItem;
+import com.luda.sales.model.SalesOrderQueryBean;
 import com.luda.sales.model.SalesOrderVo;
 import com.luda.sales.service.SalesService;
 import com.luda.test.SpringSimpleJunit;
@@ -49,7 +50,10 @@ public class SaleServiceTest extends SpringSimpleJunit{
 
     @Test
     public void testFetchSalesOrderVoList(){
-        List<SalesOrderVo> list = salesService.fetchSalesOrderVoList("01");
+        SalesOrderQueryBean queryBean = new SalesOrderQueryBean();
+        queryBean.setOrderType("01");
+        queryBean.setStoreId(4);
+        List<SalesOrderVo> list = salesService.fetchSalesOrderVoList(queryBean);
         print(list.toString());
     }
 

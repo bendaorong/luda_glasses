@@ -1,7 +1,7 @@
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
         <div class="seat-manage-operate-container">
-            <h5 class="seat-manage-operate-title">客户管理</h5>
+            <h4 class="seat-manage-operate-title">客户管理</h4>
             <div class="seat-manage-operate-button form-inline">
                 <a type="button" class="btn btn-success btn-sm" href="#addCustomer"> 新增</a>
                 <input class="form-control" ng-model="filterText" ng-change="filter()"
@@ -15,7 +15,9 @@
         <table ng-table="tableParams" class="table table-bordered">
             <tr ng-repeat="customerItem in $data|filter:filterText">
                 <!--<td data-title="'编号'" sortable="'code'">{{customerItem.code}}</td>-->
-                <td data-title="'姓名'" sortable="'customerName'">{{customerItem.name}}</td>
+                <td data-title="'姓名'" sortable="'customerName'">
+                    <a ng-href="#/customerDetail/{{customerItem.id}}">{{customerItem.name}}</a>
+                </td>
                 <td data-title="'性别'" sortable="'gender'">
                     <div ng-switch="customerItem.gender">
                         <div ng-switch-when="M">男</div>
@@ -42,9 +44,6 @@
 
                 <!--<td data-title="'地址'" sortable="'address'">{{customerItem.address}}</td>-->
                 <td data-title="'操作'">
-                    <button type="button" class="btn btn-sm btn-primary"
-                            ng-click="customerDetail(customerItem.id)">详情</button>
-
                     <button type="button" class="btn btn-sm btn-primary"
                             ng-click="gotoEdit(customerItem.id)">编辑</button>
 

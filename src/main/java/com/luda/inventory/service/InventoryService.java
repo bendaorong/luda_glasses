@@ -15,15 +15,10 @@ public interface InventoryService {
     public ResultHandle<PurchaseOrder> savePurchaseOrder(PurchaseOrder purchaseOrder);
 
     /**
-     * 查询门店商品库存
-     * @param storeId 门店
+     * 查询商品库存
+     * @param queryBean
      */
-    public List<MardVo> fetchMardVoList(int storeId);
-
-    /**
-     * 查询所有门店商品库存
-     */
-    public List<MardVo> fetchAllMardVoList();
+    public List<MardVo> fetchMardVoList(CommonQueryBean queryBean);
 
     /**
      * 查询库存并加锁
@@ -59,10 +54,10 @@ public interface InventoryService {
 
     /**
      * 查询采购单
-     * @param orderType 订单类型
+     * @param queryBean
      * @return
      */
-    List<PurchaseOrderVo> fetchPurchaseOrderVoList(String orderType);
+    List<PurchaseOrderVo> fetchPurchaseOrderVoList(CommonQueryBean queryBean);
 
     /**
      * 根据id查询采购单
@@ -108,7 +103,7 @@ public interface InventoryService {
     /**
      * 查询盘点单列表
      */
-    List<InventoryVerificationVo> fetchInvntVerifVoList();
+    List<InventoryVerificationVo> fetchInvntVerifVoList(CommonQueryBean queryBean);
 
     /**
      * 根据id查询盘点单
@@ -154,7 +149,7 @@ public interface InventoryService {
     /**
      * 查询调拨单
      */
-    List<TransferOrderVo> fetchTransferOrders();
+    List<TransferOrderVo> fetchTransferOrders(CommonQueryBean queryBean);
 
     /**
      * 根据id查询调拨单(包含调拨单明细)

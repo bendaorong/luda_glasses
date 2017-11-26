@@ -56,7 +56,7 @@ public class CustomerController extends BaseController {
      */
     @RequestMapping(value = "/addCustomer", method = RequestMethod.POST)
     @ResponseBody
-    public String addCustomer(@RequestBody String  data, HttpServletResponse httpServletResponse){
+    public String addCustomer(@RequestBody String data, HttpServletResponse httpServletResponse){
         String result = "";
         try {
             CustomerModel customerModel = CommonUtils.convertJsonToBean(JSONObject.fromObject(data), CustomerModel.class);

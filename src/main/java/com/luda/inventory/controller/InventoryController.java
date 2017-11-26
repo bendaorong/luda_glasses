@@ -36,15 +36,17 @@ public class InventoryController extends BaseController{
 
     /**
      * 查询商品库存
-     * 查询业务员门店商品库存
      */
     @RequestMapping("/mard/list")
     @ResponseBody
     public String fetchMardList(HttpSession httpSession){
         String result = "";
         try {
-            int storeId = getLoginUser(httpSession).getStoreId();
-            List<MardVo> mardVoList = inventoryService.fetchMardVoList(storeId);
+            CommonQueryBean queryBean = new CommonQueryBean();
+            if(!isSuperManage(httpSession)){
+                queryBean.setStoreId(getStoreId(httpSession));
+            }
+            List<MardVo> mardVoList = inventoryService.fetchMardVoList(queryBean);
             String data = CommonUtils.convertBeanCollectionToJsonArray(mardVoList, null).toString();
             result = getSuccessResult(data);
         }catch (Exception e){
@@ -81,10 +83,17 @@ public class InventoryController extends BaseController{
      */
     @RequestMapping("/purchaseOrder/list/{orderType}")
     @ResponseBody
-    public String fetchPurchaseOrderList(@PathVariable String orderType){
+    public String fetchPurchaseOrderList(@PathVariable String orderType, HttpSession httpSession){
         String result = "";
         try {
-            List<PurchaseOrderVo> purchaseOrderVoList = inventoryService.fetchPurchaseOrderVoList(orderType);
+            CommonQueryBean queryBean = new CommonQueryBean();
+            queryBean.setOrderType(orderType);
+            // 非总经理则加上门店过滤查询
+            if(!isSuperManage(httpSession)){
+                queryBean.setStoreId(getStoreId(httpSession));
+            }
+
+            List<PurchaseOrderVo> purchaseOrderVoList = inventoryService.fetchPurchaseOrderVoList(queryBean);
             String data = CommonUtils.convertBeanCollectionToJsonArray(purchaseOrderVoList, null).toString();
             result = getSuccessResult(data);
         }catch (Exception e){
@@ -293,10 +302,14 @@ public class InventoryController extends BaseController{
      */
     @RequestMapping("/inventoryVerification/list")
     @ResponseBody
-    public String fetchInventoryVerificationList(){
+    public String fetchInventoryVerificationList(HttpSession httpSession){
         String result = "";
         try {
-            List<InventoryVerificationVo> list = inventoryService.fetchInvntVerifVoList();
+            CommonQueryBean queryBean = new CommonQueryBean();
+            if(!isSuperManage(httpSession)){
+                queryBean.setStoreId(getStoreId(httpSession));
+            }
+            List<InventoryVerificationVo> list = inventoryService.fetchInvntVerifVoList(queryBean);
             String data = CommonUtils.convertBeanCollectionToJsonArray(list, null).toString();
             result = getSuccessResult(data);
         }catch (Exception e){
@@ -466,10 +479,14 @@ public class InventoryController extends BaseController{
      */
     @RequestMapping("/transfer/fetchTransferOrders")
     @ResponseBody
-    public String fetchTransferOrders(){
+    public String fetchTransferOrders(HttpSession httpSession){
         String result = "";
         try {
-            List<TransferOrderVo> orderList = inventoryService.fetchTransferOrders();
+            CommonQueryBean queryBean = new CommonQueryBean();
+            if(!isSuperManage(httpSession)){
+                queryBean.setStoreId(getStoreId(httpSession));
+            }
+            List<TransferOrderVo> orderList = inventoryService.fetchTransferOrders(queryBean);
             String data = CommonUtils.convertBeanCollectionToJsonArray(orderList, null).toString();
             result = getSuccessResult(data);
         }catch (Exception e){

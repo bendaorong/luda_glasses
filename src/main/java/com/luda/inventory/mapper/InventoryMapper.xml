@@ -259,20 +259,19 @@
         select * from mard where id = #{id}
     </select>
 
-    <select id="fetchAllMardVoList" resultMap="mardVoMap">
-        select a.*,b.store_name
-        from mard as a ,store as b
-        where a.store_id =  b.store_id
+    <select id="fetchMardVoList" parameterType="com.luda.inventory.model.CommonQueryBean" resultMap="mardVoMap">
+        select a.*, b.store_name
+        from mard as a
+        left join store b
+        on a.store_id = b.store_id
+        where 1=1
+        <if test="storeId != null">
+            and a.store_id = #{storeId}
+        </if>
     </select>
 
-    <select id="fetchMardVoList" resultMap="mardVoMap">
-        select a.*,b.store_name
-        from mard as a ,store as b
-        where a.store_id =  b.store_id
-        and a.store_id = #{storeId}
-    </select>
-
-    <select id="fetchPurchaseOrderVoList" resultMap="purchaseOrderVoMap">
+    <select id="fetchPurchaseOrderVoList" parameterType="com.luda.inventory.model.CommonQueryBean"
+            resultMap="purchaseOrderVoMap">
         select po.*, s.store_name, sp.supplier_name, u.real_name
         from purchase_order po
         left join store s
@@ -281,7 +280,19 @@
         on po.supplier_id = sp.supplier_id
         left join admin_user_detail u
         on po.businessman_id = u.admin_user_id
-        where po.order_type = #{orderType} and po.delete_flag = 0
+        where po.delete_flag = 0
+        <if test="orderId != null">
+            and po.purchase_order_id = #{orderId}
+        </if>
+        <if test="storeId != null">
+            and po.store_id = #{storeId}
+        </if>
+        <if test="businessManId != null">
+            and po.businessman_id = #{businessManId}
+        </if>
+        <if test="orderType != null and orderType != ''">
+            and po.order_type = #{orderType}
+        </if>
         order by po.purchase_order_id desc
     </select>
 
@@ -390,6 +401,9 @@
         left join admin_user_detail u
         on po.businessman_id = u.admin_user_id
         where po.delete_flag = 0
+        <if test="storeId != null">
+            and po.store_id = #{storeId}
+        </if>
         order by po.id desc
     </select>
 
@@ -542,7 +556,11 @@
         on t.out_store_id = s1.store_id
         left join store s2
         on t.in_store_id = s2.store_id
-        where t.delete_flag = 0 order by t.id desc
+        where t.delete_flag = 0
+        <if test="storeId != null">
+            and (t.out_store_id = #{storeId} or t.in_store_id = #{storeId})
+        </if>
+        order by t.id desc
     </select>
 
     <select id="getTransferOrderById" resultMap="transferOrderMap">

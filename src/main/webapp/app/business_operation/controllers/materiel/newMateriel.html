@@ -26,7 +26,7 @@
 
 <div id="top">
     <div class="seat-manage-operate-container">
-        <h5 class="seat-manage-operate-title">新增商品</h5>
+        <h4 class="seat-manage-operate-title">新增商品</h4>
         <div class="seat-manage-operate-button form-inline">
             <button class="btn btn-success btn-sm" ng-click="saveMateriel()" ng-disabled="!myform.$valid">保存</button>
             <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
@@ -38,11 +38,11 @@
         <form id="myform" name="myform" class="form-horizontal" novalidate>
             <fieldset id="basicInfo">
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">条码</label>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>条码</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="text" class="form-control" required ng-model="newMateriel.barcode"/>
                     </div>
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">商品类型</label>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>商品类型</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <select class="form-control" required ng-model="newMateriel.typeId">
                             <option ng-repeat="goodsType in goodsTypeList" value="{{goodsType.typeId}}">{{goodsType.typeName}}</option>
@@ -50,12 +50,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">商品名称</label>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>商品名称</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <input type="text" class="form-control" required
-                               ng-model="newMateriel.name"/>
+                        <input type="text" class="form-control" required ng-model="newMateriel.name"/>
                     </div>
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">品牌</label>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>品牌</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <select class="form-control" required ng-model="newMateriel.brand">
                             <option ng-repeat="goodsBrand in goodsBrandList" value="{{goodsBrand.dictName}}">{{goodsBrand.dictName}}</option>
@@ -63,13 +62,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">供应商</label>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>供应商</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <select class="form-control" required ng-model="newMateriel.supplierId">
                             <option ng-repeat="supplier in supplierList" value="{{supplier.supplierId}}">{{supplier.supplierName}}</option>
                         </select>
                     </div>
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">单位</label>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>单位</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <select class="form-control" required ng-model="newMateriel.unit">
                             <option ng-repeat="goodsUnit in goodsUnitList" value="{{goodsUnit.dictName}}">{{goodsUnit.dictName}}</option>
@@ -77,7 +76,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">颜色</label>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>颜色</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <select class="form-control" required ng-model="newMateriel.color">
                             <option ng-repeat="goodsColor in goodsColorList" value="{{goodsColor.dictName}}">{{goodsColor.dictName}}</option>
@@ -100,22 +99,22 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">库存下限</label>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>库存下限</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="number" class="form-control" ng-model="newMateriel.minInventory"
-                               min="0" ng-init="newMateriel.minInventory=0"/>
+                               min="1" ng-init="newMateriel.minInventory=1" required/>
                     </div>
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">库存上限</label>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>库存上限</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="number" class="form-control" ng-model="newMateriel.maxInventory"
-                               min="0" ng-init="newMateriel.maxInventory=100"/>
+                               min="1" ng-init="newMateriel.maxInventory=100" required/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">售价</label>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>售价</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="number" class="form-control" ng-model="newMateriel.sellPrice"
-                               ng-init="newMateriel.sellPrice=0" />
+                               ng-init="newMateriel.sellPrice=0" required/>
                     </div>
                     <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">生产企业</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">

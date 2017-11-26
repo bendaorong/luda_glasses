@@ -442,6 +442,9 @@ transform: rotate(360deg);
 SUP{
 	color:red;
 }
+.red{
+	color:red
+}
 ul.nostyle-list li{
 	list-style-type: none;
 }

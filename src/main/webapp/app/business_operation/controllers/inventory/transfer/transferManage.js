@@ -71,13 +71,20 @@
     }).controller("addTransferOrderController", function($location,$scope,$filter,materielService,inventoryService,storeService,adminUserService) {
         setActiveSubPage($scope);
         $scope.roleCode = sessionStorage.getItem("roleCode");
+        $scope.storeId = sessionStorage.getItem("storeId");
+        $scope.adminUserId = sessionStorage.getItem("adminUserId");
+
         $scope.currentTab = 0;
 
         $scope.newTransferOrder = {};   //调拨单
         $scope.transferOrderItems = []; //调拨单明细
         $scope.newTransferOrder.transferOrderItems = $scope.transferOrderItems;
+        $scope.newTransferOrder.transferDate = $filter("date")(new Date(), "yyyy-MM-dd");
+        $scope.newTransferOrder.outStoreId = $scope.storeId;
+        $scope.newTransferOrder.businessmanId = $scope.adminUserId;
 
-        $scope.storeList = []; //门店
+        $scope.outStoreList = []; //调出门店
+        $scope.inStoreList = []; //调入门店
         $scope.adminUserList = []; //业务员
         $scope.materielList = []; //商品
 
@@ -126,7 +133,15 @@
 
         // 查询门店
         storeService.fetchStoreList(function(data){
-            $scope.storeList = data;
+            //调出门店=登录用户当前所属门店
+            //调入门店=除去调出门店的其他所有门店
+            angular.forEach(data, function (each) {
+                if(each.storeId == $scope.storeId){
+                    $scope.outStoreList.push(angular.copy(each));
+                }else {
+                    $scope.inStoreList.push(angular.copy(each));
+                }
+            });
         },function(data){
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
@@ -136,7 +151,7 @@
         });
 
         // 查询业务员
-        adminUserService.fetchUserList(function(data){
+        adminUserService.fetchUserListByStore(function(data){
             $scope.adminUserList  =  data;
         },function(data){
             BootstrapDialog.show({
@@ -330,7 +345,7 @@
         });
 
         // 查询业务员
-        adminUserService.fetchUserList(function(data){
+        adminUserService.fetchUserListByStore(function(data){
             $scope.adminUserList  =  data;
         },function(data){
             BootstrapDialog.show({

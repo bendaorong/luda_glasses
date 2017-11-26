@@ -1,22 +1,10 @@
 [{
   "id" : "100",
   "name" : "基础资料",
-  "subpages" : [ {
-    "id" : "100100",
-    "name" : "门店",
-    "page" : "#storeManage"
-  }, {
-    "id" : "100200",
-    "name" : "员工",
-    "page" : "#AuthorizationManage"
-  }, {
+  "subpages" : [{
     "id" : "100300",
     "name" : "商品",
     "page" : "#materielManage"
-  }, {
-    "id" : "100400",
-    "name" : "供应商",
-    "page" : "#supplierManage"
   }, {
     "id" : "100500",
     "name" : "商品类型",
@@ -27,26 +15,6 @@
     "page" : "#customerManage"
   }]
 }, {
-  "id" : "200",
-  "name" : "采购管理",
-  "subpages" : [{
-    "id" : "200100",
-    "name" : "采购单",
-    "page" : "#purchaseOrderManage"
-  },{
-    "id" : "200200",
-    "name" : "采购单查询",
-    "page" : "#purchaseOrderManage"
-  },{
-    "id" : "200300",
-    "name" : "退货单",
-    "page" : "#"
-  },{
-    "id" : "200400",
-    "name" : "退货单查询",
-    "page" : "#"
-  }]
-},{
   "id" : "300",
   "name" : "销售管理",
   "subpages" : [{
@@ -69,9 +37,5 @@
     "id" : "400200",
     "name" : "库存盘点",
     "page" : "#inventoryVerificationManage"
-  }, {
-    "id" : "400300",
-    "name" : "调拨单",
-    "page" : "#transferOrderManage"
   }]
 }]

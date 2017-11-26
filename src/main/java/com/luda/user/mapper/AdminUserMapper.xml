@@ -51,6 +51,10 @@
         select * from admin_user where mobile_number = #{mobileNumber} and delete_flag = 0
     </select>
 
+    <select id="getByStaffid" resultMap="adminUserModelMap">
+        select * from admin_user where staffid = #{staffid} and delete_flag = 0
+    </select>
+
     <select id="getByAdminName" resultMap="adminUserModelMap">
         select * from admin_user where admin_name = #{adminName} and delete_flag = 0
     </select>
@@ -59,8 +63,13 @@
         select * from admin_role where role_id = #{roleId}
     </select>
 
-    <select id="fetchAdminUserListWithDetail" resultMap="adminUserModelWithDetailMap">
-        select * from admin_user where delete_flag = 0
+    <select id="fetchAdminUserListWithDetail" parameterType="com.luda.inventory.model.CommonQueryBean"
+            resultMap="adminUserModelWithDetailMap">
+        select * from admin_user
+        where delete_flag = 0
+        <if test="storeId != null">
+            and store_id = #{storeId}
+        </if>
     </select>
 
     <select id="getAdminUserDetail" resultMap="adminUserDetailModelMap">
