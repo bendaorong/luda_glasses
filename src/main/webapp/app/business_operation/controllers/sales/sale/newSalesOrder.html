@@ -68,6 +68,14 @@
 </div>
 
 <h4 class="seat-manage-operate-title" style="margin-bottom: 10px">新增销售单</h4>
+
+<div class="seat-manage-operate-container">
+    <div class="seat-manage-operate-button form-inline">
+        <button class="btn btn-success btn-sm" ng-click="saveSalesOrder()" ng-disabled="!myform.$valid">保存</button>
+        <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
+    </div>
+</div>
+
 <ul class="nav nav-tabs" role="tablist" ng-init="currentTab=0">
     <li role="presentation" ng-class="{'active': currentTab===0}"><a
             href="javascript(0)" ng-click="currentTab=0" role="tab"
@@ -80,13 +88,6 @@
 <div class="tab-content">
     <!-- 调拨单 -->
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
-        <div class="seat-manage-operate-container">
-            <div class="seat-manage-operate-button form-inline">
-                <button class="btn btn-success btn-sm" ng-click="saveSalesOrder()" ng-disabled="!myform.$valid">保存</button>
-                <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
-            </div>
-        </div>
-
         <div class="col-sm-12" style="margin-top: 10px;">
             <form class="form-horizontal" novalidate id="myform" name="myform">
                 <div class="form-group">
@@ -133,7 +134,7 @@
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label"><span class="red">*</span>门店</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <select class="form-control"  ng-model="newSalesOrder.storeId" required>
+                        <select class="form-control"  ng-model="newSalesOrder.storeId" required ng-change="selectStore()">
                             <option ng-repeat="store in storeList" value="{{store.storeId}}" ng-selected="storeId == store.storeId">
                                 {{store.storeName}}
                             </option>
@@ -154,7 +155,7 @@
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">备注</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <textarea rows="5" ng-model="newTransferOrder.remark" style="width:100%"></textarea>
+                        <textarea rows="5" ng-model="newSalesOrder.remark" style="width:100%"></textarea>
                     </div>
                 </div>
             </form>
@@ -163,6 +164,43 @@
 
     <!-- 销售单明细 -->
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===1">
+        <div class="col-sm-12">
+            <fieldset id="latestOptometryRecord">
+                <legend>
+                    <h5>最近验光记录</h5>
+                </legend>
+                <table class="table table-bordered">
+                    <tr>
+                        <td>验光日期</td>
+                        <td>右球镜</td>
+                        <td>左球镜</td>
+                        <td>右柱镜</td>
+                        <td>左柱镜</td>
+                        <td>右轴向</td>
+                        <td>左轴向</td>
+                        <td>右裸视</td>
+                        <td>左裸视</td>
+                        <td>右矫正</td>
+                        <td>左矫正</td>
+                        <td>验光员</td>
+                    </tr>
+                    <tr>
+                        <td>{{record.optometryDate}}</td>
+                        <td>{{record.rightSphere}}</td>
+                        <td>{{record.leftSphere}}</td>
+                        <td>{{record.rightCylinder}}</td>
+                        <td>{{record.leftCylinder}}</td>
+                        <td>{{record.rightAxial}}</td>
+                        <td>{{record.leftAxial}}</td>
+                        <td>{{record.rightUncorrectedVisualAcuity}}</td>
+                        <td>{{record.leftUncorrectedVisualAcuity}}</td>
+                        <td>{{record.rightCorrectedVisualAcuity}}</td>
+                        <td>{{record.leftCorrectedVisualAcuity}}</td>
+                        <td>{{record.businessManName}}</td>
+                    </tr>
+                </table>
+            </fieldset>
+        </div>
         <div class="seat-manage-operate-container">
             <div class="seat-manage-operate-button form-inline">
                 <div style="text-align: center;">

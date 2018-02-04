@@ -2,10 +2,7 @@ package com.luda.dictionary.controller;
 
 import com.luda.comm.po.ResultHandle;
 import com.luda.common.controller.BaseController;
-import com.luda.dictionary.model.DictionaryModel;
-import com.luda.dictionary.model.GoodsColor;
-import com.luda.dictionary.model.GoodsKind;
-import com.luda.dictionary.model.GoodsType;
+import com.luda.dictionary.model.*;
 import com.luda.dictionary.service.DictionaryService;
 import com.luda.util.CommonUtils;
 import org.apache.log4j.Logger;
@@ -387,5 +384,109 @@ public class DictionaryController extends BaseController{
         return result;
     }
 
+    /**
+     * ------------------------------------商品品牌----------------------------------------
+     */
+    /**
+     * 查询品牌列表
+     * @return
+     */
+    @RequestMapping("/goodsBrand/list")
+    @ResponseBody
+    public String fetchGoodsBrandList(){
+        String result;
+        try {
+            List<GoodsBrand> goodsBrandList = dictionaryService.fetchGoodsBrandList();
+            String data = CommonUtils.convertBeanCollectionToJsonArray(goodsBrandList,null).toString();
+            result = getSuccessResult(data);
+        }catch (Exception e){
+            log.error("fetch goods brand list error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
 
+    /**
+     * 保存商品品牌
+     * @param goodsBrand
+     * @return
+     */
+    @RequestMapping("/goodsBrand/saveGoodsBrand")
+    @ResponseBody
+    public String saveGoodsBrand(@RequestBody GoodsBrand goodsBrand){
+        String result = "";
+        try {
+            ResultHandle<GoodsBrand> resultHandle = dictionaryService.saveGoodsBrand(goodsBrand);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("save goods brand error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 根据id查询品牌
+     * @return
+     */
+    @RequestMapping("/goodsBrand/getById/{brandId}")
+    @ResponseBody
+    public String getGoodsBrandById(@PathVariable int brandId){
+        String result = "";
+        try {
+            GoodsBrand goodsBrand = dictionaryService.getGoodsBrandById(brandId);
+            String data = CommonUtils.convertBeanToJson(goodsBrand, null).toString();
+            result = getSuccessResult(data);
+        }catch (Exception e){
+            result = getFailResult("系统异常");
+            log.error("get goods brand by id error, colorId:" + brandId, e);
+        }
+        return result;
+    }
+
+    /**
+     * 更新品牌
+     */
+    @RequestMapping("/goodsBrand/updateGoodsBrand")
+    @ResponseBody
+    public String updateGoodsBrand(@RequestBody GoodsBrand goodsBrand){
+        String result = "";
+        try {
+            ResultHandle<GoodsBrand> resultHandle = dictionaryService.updateGoodsBrand(goodsBrand);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("update goods brand error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 删除品牌
+     */
+    @RequestMapping("/goodsBrand/removeGoodsBrand/{brandId}")
+    @ResponseBody
+    public String removeGoodsBrand(@PathVariable int brandId){
+        String result = "";
+        try {
+            ResultHandle<GoodsBrand> resultHandle = dictionaryService.removeGoodsBrand(brandId);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("remove goods brand error, colorId:" + brandId, e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
 }

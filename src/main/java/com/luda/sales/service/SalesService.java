@@ -60,4 +60,11 @@ public interface SalesService {
      *
      */
     List<SalesOrderVo> fetchSalesOrderVoByCustomerId(int customerId);
+
+    /**
+     * 销售单退货
+     * @param id
+     * @return
+     */
+    ResultHandle<SalesOrder> orderRefund(int id);
 }

@@ -46,6 +46,13 @@
             $location.path("/editSalesOrder/" + id);
         }
 
+        /**
+         * 查看退货单详情
+         */
+        $scope.refundOrderDetail = function (id) {
+            $location.path("/refundOrderDetail/" + id);
+        }
+
         //删除销售单
         $scope.removeSalesOrder = function(id){
             if(confirm("确认删除吗？")){
@@ -74,9 +81,192 @@
             }
         }
 
+        // 订单退货
+        $scope.orderRefund = function (id) {
+            $location.path("/orderRefund/" + id);
+        }
+
         // 创建退货单
         $scope.addRefundOrder = function (id) {
             $location.path("/addRefundOrder/" + id);
+        }
+    }).controller("salesOrderDetailController", function($location,$scope,$filter,inventoryService,materielService,salesService,storeService,adminUserService,customerService,$routeParams) {
+        setActiveSubPage($scope);
+        $scope.roleCode = sessionStorage.getItem("roleCode");
+        $scope.currentTab = 0;
+
+        $scope.selectedSalesOrder = {};   // 销售单
+
+        $scope.storeList = []; //门店
+        $scope.adminUserList = []; //业务员
+        $scope.materielList = []; //商品
+        $scope.customerList = []; //客户
+
+        // 查询销售单
+        salesService.getSalesOrderWithItemsById($routeParams.id, function (data) {
+            $scope.selectedSalesOrder = data.data;
+        }, function (data) {
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取销售单失败：' + data.errorMsg
+            });
+        });
+
+        // 查询客户
+        customerService.fetchCustomerList(function (data) {
+            $scope.customerList = data;
+        }, function (data) {
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取客户列表错误' + data.errorMsg
+            });
+        });
+
+        // 查询商品
+        materielService.fetchMaterielList(function(data){
+            $scope.materielList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品错误' + data.errorMsg
+            });
+        });
+
+        // 查询门店
+        storeService.fetchStoreList(function(data){
+            $scope.storeList = data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取门店失败:' + data.errorMsg
+            });
+        });
+
+        // 查询业务员
+        adminUserService.fetchUserListByStore(function(data){
+            $scope.adminUserList  =  data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取业务员失败:' + data.errorMsg
+            });
+        });
+
+        $scope.cancel = function(){
+            history.back();
+        }
+
+        $scope.setCurrentTab = function(currentTab) {
+            $scope.currentTab = currentTab;
+        }
+    }).controller("orderRefundController", function($location,$scope,$filter,inventoryService,materielService,salesService,storeService,adminUserService,customerService,$routeParams) {
+        setActiveSubPage($scope);
+        $scope.roleCode = sessionStorage.getItem("roleCode");
+        $scope.currentTab = 0;
+
+        $scope.selectedSalesOrder = {};   // 销售单
+
+        $scope.storeList = []; //门店
+        $scope.adminUserList = []; //业务员
+        $scope.materielList = []; //商品
+        $scope.customerList = []; //客户
+        
+        // 查询销售单
+        salesService.getSalesOrderWithItemsById($routeParams.id, function (data) {
+            $scope.selectedSalesOrder = data.data;
+        }, function (data) {
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取销售单失败：' + data.errorMsg
+            });
+        });
+
+        // 查询客户
+        customerService.fetchCustomerList(function (data) {
+            $scope.customerList = data;
+        }, function (data) {
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取客户列表错误' + data.errorMsg
+            });
+        });
+
+        // 查询商品
+        materielService.fetchMaterielList(function(data){
+            $scope.materielList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品错误' + data.errorMsg
+            });
+        });
+
+        // 查询门店
+        storeService.fetchStoreList(function(data){
+            $scope.storeList = data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取门店失败:' + data.errorMsg
+            });
+        });
+
+        // 查询业务员
+        adminUserService.fetchUserListByStore(function(data){
+            $scope.adminUserList  =  data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取业务员失败:' + data.errorMsg
+            });
+        });
+
+        /**
+         * 订单退货，生成退货单
+         */
+        $scope.doOrderRefund = function () {
+            if(confirm("确认退货吗？")){
+                salesService.orderRefund($routeParams.id, function (data) {
+                    if(data.success){
+                        BootstrapDialog.show({
+                            type : BootstrapDialog.TYPE_SUCCESS,
+                            title : '成功',
+                            message : '退货成功'
+                        });
+                        $location.path("/salesOrderManage");
+                    }else {
+                        BootstrapDialog.show({
+                            type : BootstrapDialog.TYPE_DANGER,
+                            title : '失败',
+                            message : '退货失败:' + data.errorMsg
+                        });
+                    }
+                }, function (data) {
+                    BootstrapDialog.show({
+                        type : BootstrapDialog.TYPE_DANGER,
+                        title : '失败',
+                        message : '退货失败:' + data.errorMsg
+                    });
+                });
+            }
+        }
+
+        $scope.cancel = function(){
+            history.back();
+        }
+
+        $scope.setCurrentTab = function(currentTab) {
+            $scope.currentTab = currentTab;
         }
     }).controller("addSalesOrderController", function($location,$scope,$filter,inventoryService,materielService,salesService,storeService,adminUserService,customerService) {
         setActiveSubPage($scope);
@@ -90,6 +280,7 @@
         $scope.newSalesOrder.salesOrderItems = $scope.salesOrderItems;
         // 销售日期默认为当前时间
         $scope.newSalesOrder.saleDate = $filter("date")(new Date(), "yyyy-MM-dd");
+        $scope.newSalesOrder.pickUpDate = $filter("date")(new Date(), "yyyy-MM-dd");
         $scope.newSalesOrder.totalQuantity = 0;
         $scope.newSalesOrder.totalAmount = 0;
         $scope.newSalesOrder.storeId = $scope.storeId;
@@ -107,6 +298,8 @@
         $scope.mardList = []; //商品库存
         $scope.selectedMard = {};
 
+        $scope.record = {}; //最新验光记录
+
         // 查询客户
         $scope.customerSearchableSelect;
         customerService.fetchCustomerList(function (data) {
@@ -117,10 +310,17 @@
             $scope.customerSearchableSelect = $("#customer").searchableSelect(function (customerId) {
                 if(angular.isDefined(customerId) && customerId != null && customerId != ''){
                     $scope.newSalesOrder.customerId = customerId;
+                    // 查询该客户验光记录
+                    customerService.fetchOptometryRecordsByCustomerId(customerId, function (data) {
+                        if(data.data.length > 0){
+                            $scope.record = data.data[0];
+                        }else {
+                            $scope.record = {};
+                        }
+                    }, function (data) {});
                     $scope.$apply();
                 }
             });
-
         }, function (data) {
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
@@ -135,7 +335,9 @@
             if($scope.mardList.length > 0){
                 for(var i=0; i<$scope.mardList.length; i++){
                     var tempMard = $scope.mardList[i];
-                    $("#materiel").append("<option value='" + tempMard.id + "'>" + tempMard.materiel.name + "("+tempMard.sphere+", " + tempMard.cylinder + ", " + tempMard.axial +")" + "</option>");
+                    if(tempMard.storeId == $scope.newSalesOrder.storeId){
+                        $("#materiel").append("<option value='" + tempMard.id + "'>" + tempMard.materiel.name + "("+tempMard.sphere+", " + tempMard.cylinder + ", " + tempMard.axial +")" + "</option>");
+                    }
                 }
             }
             $("#materiel").searchableSelect(function (mardId) {
@@ -182,6 +384,45 @@
                 message : '获取业务员失败:' + data.errorMsg
             });
         });
+
+        // 选择门店时，重新加载门店商品
+        $scope.selectStore = function () {
+            $scope.selectedMard = {}; //选择的商品
+            $scope.salesOrderItem = {}; //销售单明细
+            $scope.salesOrderItem.quantity = 0;
+            $scope.salesOrderItem.sellPrice = 0;
+            $scope.$apply();
+
+            // 初始化商品下拉框
+            angular.element("#materiel").find("option").remove();
+            $("#materiel").append("<option value=''></option>");
+            if($scope.mardList.length > 0){
+                for(var i=0; i<$scope.mardList.length; i++){
+                    var tempMard = $scope.mardList[i];
+                    if(tempMard.storeId == $scope.newSalesOrder.storeId){
+                        $("#materiel").append("<option value='" + tempMard.id + "'>" + tempMard.materiel.name + "("+tempMard.sphere+", " + tempMard.cylinder + ", " + tempMard.axial +")" + "</option>");
+                    }
+                }
+            }
+
+            // 先删除原有商品下拉框
+            angular.element("#materiel").parent().find(".searchable-select").remove();
+            $("#materiel").searchableSelect(function (mardId) {
+                if(angular.isDefined(mardId) && mardId != null && mardId != ''){
+                    for(var i=0; i<$scope.mardList.length; i++){
+                        if($scope.mardList[i].id == mardId){
+                            $scope.selectedMard = $scope.mardList[i];
+                            $scope.salesOrderItem.mardId = mardId;
+                            $scope.salesOrderItem.materielId = $scope.selectedMard.materielId;
+                            $scope.salesOrderItem.sellPrice = $scope.selectedMard.materiel.sellPrice;
+                            $scope.$apply();
+                            break;
+                        }
+                    }
+                }else {
+                }
+            });
+        }
 
         $scope.customer = {}; //临时添加新客户
         $scope.newCustomer = function () {
@@ -286,7 +527,6 @@
             $scope.newSalesOrder.saleDate = $("#saleDate").val();
             $scope.newSalesOrder.pickUpDate = $("#pickUpDate").val();
             $scope.newSalesOrder.orderType = "01"; //销售单
-            console.log("newSalesOrder:" + JSON.stringify($scope.newSalesOrder));
 
             salesService.saveSalesOrder($scope.newSalesOrder, function (data) {
                 if(data.success){
@@ -344,41 +584,52 @@
         $scope.salesOrderItem.quantity = 0;
         $scope.salesOrderItem.sellPrice = 0;
 
-        // 查询商品库存
-        inventoryService.fetchMardVoList(function(data){
-            $scope.mardList = data.data;
-            if($scope.mardList.length > 0){
-                for(var i=0; i<$scope.mardList.length; i++){
-                    var tempMard = $scope.mardList[i];
-                    $("#materiel").append("<option value='" + tempMard.id + "'>" + tempMard.materiel.name + "("+tempMard.sphere+", " + tempMard.cylinder + ", " + tempMard.axial +")" + "</option>");
-                }
-            }
-            $("#materiel").searchableSelect(function (mardId) {
-                if(angular.isDefined(mardId) && mardId != null && mardId != ''){
-                    for(var i=0; i<$scope.mardList.length; i++){
-                        if($scope.mardList[i].id == mardId){
-                            $scope.selectedMard = $scope.mardList[i];
-                            $scope.salesOrderItem.mardId = mardId;
-                            $scope.salesOrderItem.materielId = $scope.selectedMard.materielId;
-                            $scope.salesOrderItem.sellPrice = $scope.selectedMard.materiel.sellPrice;
-                            $scope.$apply();
-                            break;
-                        }
-                    }
-                }else {
-                }
-            });
-        },function(data){
-            BootstrapDialog.show({
-                type : BootstrapDialog.TYPE_DANGER,
-                title : '警告',
-                message : '获取商品错误' + data.errorMsg
-            });
-        });
-
         // 查询销售单
         salesService.getSalesOrderWithItemsById($routeParams.id, function (data) {
             $scope.selectedSalesOrder = data.data
+
+            // 查询该客户验光记录
+            customerService.fetchOptometryRecordsByCustomerId($scope.selectedSalesOrder.customerId, function (data) {
+                if(data.data.length > 0){
+                    $scope.record = data.data[0];
+                }else {
+                    $scope.record = {};
+                }
+            }, function (data) {});
+
+            // 查询商品库存
+            inventoryService.fetchMardVoList(function(data){
+                $scope.mardList = data.data;
+                if($scope.mardList.length > 0){
+                    for(var i=0; i<$scope.mardList.length; i++){
+                        var tempMard = $scope.mardList[i];
+                        if(tempMard.storeId == $scope.selectedSalesOrder.storeId){
+                            $("#materiel").append("<option value='" + tempMard.id + "'>" + tempMard.materiel.name + "("+tempMard.sphere+", " + tempMard.cylinder + ", " + tempMard.axial +")" + "</option>");
+                        }
+                    }
+                }
+                $("#materiel").searchableSelect(function (mardId) {
+                    if(angular.isDefined(mardId) && mardId != null && mardId != ''){
+                        for(var i=0; i<$scope.mardList.length; i++){
+                            if($scope.mardList[i].id == mardId){
+                                $scope.selectedMard = $scope.mardList[i];
+                                $scope.salesOrderItem.mardId = mardId;
+                                $scope.salesOrderItem.materielId = $scope.selectedMard.materielId;
+                                $scope.salesOrderItem.sellPrice = $scope.selectedMard.materiel.sellPrice;
+                                $scope.$apply();
+                                break;
+                            }
+                        }
+                    }else {
+                    }
+                });
+            },function(data){
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '警告',
+                    message : '获取商品错误' + data.errorMsg
+                });
+            });
         }, function (data) {
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,

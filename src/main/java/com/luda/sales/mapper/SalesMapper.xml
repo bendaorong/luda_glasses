@@ -19,6 +19,7 @@
         <result property="createTime" column="create_time"/>
         <result property="updateUserId" column="update_user_id"/>
         <result property="updateTime" column="update_time"/>
+        <result property="relatedOrderId" column="related_order_id"/>
     </resultMap>
 
     <resultMap id="salesOrderVoMap" type="com.luda.sales.model.SalesOrderVo" extends="salesOrderMap">
@@ -62,7 +63,8 @@
             create_user_id,
             create_time,
             update_user_id,
-            update_time
+            update_time,
+            related_order_id
         )
         values
         (
@@ -79,7 +81,8 @@
             #{createUserId},
             now(),
             #{updateUserId},
-            now()
+            now(),
+            #{relatedOrderId}
         )
     </insert>
 
@@ -182,4 +185,8 @@
     <select id="getMaxRefundOrderCode" resultType="java.lang.String">
         select max(code) from sales_order where order_type = '02'
     </select>
+
+    <update id="updateRelatedOrderId">
+        update sales_order set related_order_id = #{relatedOrderId} where id = #{id}
+    </update>
 </mapper>

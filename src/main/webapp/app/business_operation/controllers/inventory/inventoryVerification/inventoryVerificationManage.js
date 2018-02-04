@@ -468,6 +468,59 @@
         $scope.cancel = function(){
             history.back();
         }
+    }).controller("inventoryVerificationDetailController",function($location,$scope,$filter,materielService,inventoryService,storeService,supplierService,adminUserService,$routeParams){
+        $scope.selectInvntVerification = {};
+        $scope.storeList = [];
+        $scope.adminUserList = [];
+        $scope.materielList = [];
+
+        // 查询盘点单
+        inventoryService.getInvntVerificationById($routeParams.id, function(data){
+            $scope.selectInvntVerification = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '错误',
+                message : data.errorMsg
+            });
+        });
+
+        // 查询商品
+        materielService.fetchMaterielList(function(data){
+            $scope.materielList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品错误' + data.errorMsg
+            });
+        });
+
+        // 查询门店
+        storeService.fetchStoreList(function(data){
+            $scope.storeList = data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取门店失败:' + data.errorMsg
+            });
+        });
+
+        // 查询业务员
+        adminUserService.fetchUserListByStore(function(data){
+            $scope.adminUserList  =  data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取业务员失败:' + data.errorMsg
+            });
+        });
+
+        $scope.cancel = function(){
+            history.back();
+        }
     });
 
     function setActiveSubPage($scope) {

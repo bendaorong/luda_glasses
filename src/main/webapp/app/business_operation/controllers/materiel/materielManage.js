@@ -73,8 +73,6 @@
         $scope.goodsTypeList = [];
         // 商品品牌
         $scope.goodsBrandList = [];
-        // 商品颜色
-        $scope.goodsColorList = [];
         // 商品单位
         $scope.goodsUnitList = [];
         // 供应商
@@ -103,24 +101,13 @@
         });
 
         // 查询商品品牌
-        dictionaryService.fetchDictionaryByType("GOODS_BRAND", function(data){
+        dictionaryService.fetchGoodsBrandList(function(data){
             $scope.goodsBrandList = data.data;
         },function(data){
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
                 title : '警告',
                 message : '获取商品品牌失败:' + data.errorMsg
-            });
-        });
-
-        // 查询商品颜色
-        dictionaryService.fetchDictionaryByType("GOODS_COLOR", function(data){
-            $scope.goodsColorList = data.data;
-        },function(data){
-            BootstrapDialog.show({
-                type : BootstrapDialog.TYPE_DANGER,
-                title : '警告',
-                message : '获取商品颜色失败:' + data.errorMsg
             });
         });
 
@@ -170,8 +157,6 @@
         $scope.goodsTypeList = [];
         // 商品品牌
         $scope.goodsBrandList = [];
-        // 商品颜色
-        $scope.goodsColorList = [];
         // 商品单位
         $scope.goodsUnitList = [];
         // 供应商
@@ -200,7 +185,7 @@
         });
 
         // 查询商品品牌
-        dictionaryService.fetchDictionaryByType("GOODS_BRAND", function(data){
+        dictionaryService.fetchGoodsBrandList(function(data){
             $scope.goodsBrandList = data.data;
         },function(data){
             BootstrapDialog.show({
@@ -210,14 +195,115 @@
             });
         });
 
-        // 查询商品颜色
-        dictionaryService.fetchDictionaryByType("GOODS_COLOR", function(data){
-            $scope.goodsColorList = data.data;
+        // 查询商品单位
+        dictionaryService.fetchDictionaryByType("GOODS_UNIT", function(data){
+            $scope.goodsUnitList = data.data;
         },function(data){
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
                 title : '警告',
-                message : '获取商品颜色失败:' + data.errorMsg
+                message : '获取商品单位失败:' + data.errorMsg
+            });
+        });
+
+        materielService.getById($routeParams.id, function(data){
+            $scope.selectMateriel = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '错误',
+                message : data.errorMsg
+            });
+        });
+
+        $scope.updateMateriel = function(){
+            // 是否停用
+            if($("#useFlag").is(":checked")){
+                $scope.selectMateriel.useFlag = 0;
+            }else {
+                $scope.selectMateriel.useFlag = 1;
+            }
+            $scope.selectMateriel.createTime = null;
+            $scope.selectMateriel.updateTime = null;
+
+            // 库存上下限校验
+            if($scope.selectMateriel.minInventory > $scope.selectMateriel.maxInventory){
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '警告',
+                    message : '库存上限不能大于库存下限'
+                });
+                return;
+            }
+
+            materielService.updateMateriel($scope.selectMateriel, function(data){
+                if(data.success){
+                    BootstrapDialog.show({
+                        type : BootstrapDialog.TYPE_SUCCESS,
+                        title : '消息',
+                        message : '修改成功'
+                    });
+                    $location.path("/materielManage");
+                }else {
+                    BootstrapDialog.show({
+                        type : BootstrapDialog.TYPE_DANGER,
+                        title : '失败',
+                        message : '修改失败:'+data.errorMsg
+                    });
+                }
+            },function(data){
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '错误',
+                    message : data.errorMsg
+                });
+            });
+        }
+
+        $scope.cancel = function(){
+            history.back();
+        }
+    }).controller("materielDetailController",function($location,$scope,$filter,supplierService,materielService,dictionaryService,$routeParams){
+        $scope.selectMateriel={};
+        // 商品类型
+        $scope.goodsTypeList = [];
+        // 商品品牌
+        $scope.goodsBrandList = [];
+        // 商品单位
+        $scope.goodsUnitList = [];
+        // 供应商
+        $scope.supplierList = [];
+
+        // 查询供应商
+        supplierService.fetchSupplierList(function (data) {
+            $scope.supplierList = data.data;
+        },function (data) {
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取供应商失败:' + data.errorMsg
+            });
+        });
+
+        // 查询商品类型
+        dictionaryService.fetchGoodsTypeList(function(data){
+            $scope.goodsTypeList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品类型失败:' + data.errorMsg
+            });
+        });
+
+        // 查询商品品牌
+        dictionaryService.fetchGoodsBrandList(function(data){
+            $scope.goodsBrandList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品品牌失败:' + data.errorMsg
             });
         });
 

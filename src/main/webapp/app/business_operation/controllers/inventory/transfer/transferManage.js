@@ -485,6 +485,63 @@
         $scope.setCurrentTab = function(currentTab) {
             $scope.currentTab = currentTab;
         }
+    }).controller("transferOrderDetailController", function($location,$scope,$filter,$routeParams,materielService,inventoryService,storeService,adminUserService) {
+        setActiveSubPage($scope);
+        $scope.roleCode = sessionStorage.getItem("roleCode");
+        $scope.currentTab = 0;
+
+        $scope.selectTransferOrder = {};   //调拨单
+        $scope.storeList = []; //门店
+        $scope.adminUserList = []; //业务员
+
+        // 查询调拨单
+        inventoryService.getTransferOrderById($routeParams.id, function (data) {
+            if(data.success){
+                $scope.selectTransferOrder = data.data;
+            }else {
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '失败',
+                    message : '调拨单查询失败:'+data.errorMsg
+                });
+            }
+        }, function (data) {
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '失败',
+                message : '调拨单查询失败:'+data.errorMsg
+            });
+        });
+
+        // 查询门店
+        storeService.fetchStoreList(function(data){
+            $scope.storeList = data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取门店失败:' + data.errorMsg
+            });
+        });
+
+        // 查询业务员
+        adminUserService.fetchUserListByStore(function(data){
+            $scope.adminUserList  =  data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取业务员失败:' + data.errorMsg
+            });
+        });
+
+        $scope.cancel = function(){
+            history.back();
+        }
+
+        $scope.setCurrentTab = function(currentTab) {
+            $scope.currentTab = currentTab;
+        }
     });
 
     function setActiveSubPage($scope) {

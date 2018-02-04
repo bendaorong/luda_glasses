@@ -73,4 +73,9 @@ public class StatisticsServiceImpl implements StatisticsService{
         }
         return statisticsDao.purchaseStatisticsBySupplier(statisticsCondition);
     }
+
+    @Override
+    public List<SaleStatisticsChartByMaterielType> saleStatisticsByMaterielType(StatisticsCondition statisticsCondition) {
+        return statisticsDao.saleStatisticsByMaterielType(statisticsCondition);
+    }
 }

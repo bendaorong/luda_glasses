@@ -53,6 +53,14 @@
 </div>
 
 <h4 class="seat-manage-operate-title" style="margin-bottom: 10px">编辑销售单</h4>
+
+<div class="seat-manage-operate-container">
+    <div class="seat-manage-operate-button form-inline">
+        <button class="btn btn-success btn-sm" ng-click="updateSalesOrder()" ng-disabled="!myform.$valid">保存</button>
+        <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
+    </div>
+</div>
+
 <ul class="nav nav-tabs" role="tablist" ng-init="currentTab=0">
     <li role="presentation" ng-class="{'active': currentTab===0}"><a
             href="javascript(0)" ng-click="currentTab=0" role="tab"
@@ -65,13 +73,6 @@
 <div class="tab-content">
     <!-- 调拨单 -->
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
-        <div class="seat-manage-operate-container">
-            <div class="seat-manage-operate-button form-inline">
-                <button class="btn btn-success btn-sm" ng-click="updateSalesOrder()" ng-disabled="!myform.$valid">保存</button>
-                <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
-            </div>
-        </div>
-
         <div class="col-sm-12" style="margin-top: 10px;">
             <form class="form-horizontal" novalidate id="myform" name="myform">
                 <div class="form-group">
@@ -158,42 +159,84 @@
 
     <!-- 销售单明细 -->
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===1">
+        <div class="col-sm-12">
+            <fieldset id="latestOptometryRecord">
+                <legend>
+                    <h5>最近验光记录</h5>
+                </legend>
+                <table class="table table-bordered">
+                    <tr>
+                        <td>验光日期</td>
+                        <td>右球镜</td>
+                        <td>左球镜</td>
+                        <td>右柱镜</td>
+                        <td>左柱镜</td>
+                        <td>右轴向</td>
+                        <td>左轴向</td>
+                        <td>右裸视</td>
+                        <td>左裸视</td>
+                        <td>右矫正</td>
+                        <td>左矫正</td>
+                        <td>验光员</td>
+                    </tr>
+                    <tr>
+                        <td>{{record.optometryDate}}</td>
+                        <td>{{record.rightSphere}}</td>
+                        <td>{{record.leftSphere}}</td>
+                        <td>{{record.rightCylinder}}</td>
+                        <td>{{record.leftCylinder}}</td>
+                        <td>{{record.rightAxial}}</td>
+                        <td>{{record.leftAxial}}</td>
+                        <td>{{record.rightUncorrectedVisualAcuity}}</td>
+                        <td>{{record.leftUncorrectedVisualAcuity}}</td>
+                        <td>{{record.rightCorrectedVisualAcuity}}</td>
+                        <td>{{record.leftCorrectedVisualAcuity}}</td>
+                        <td>{{record.businessManName}}</td>
+                    </tr>
+                </table>
+            </fieldset>
+        </div>
         <div class="seat-manage-operate-container">
             <div class="seat-manage-operate-button form-inline">
-                <div style="text-align: center;">
+                <div style="text-align: center;" ng-show="selectedSalesOrder.relatedOrderId === 0">
                     <button class="btn btn-success btn-sm" ng-click="newItem()">添加明细</button>
                 </div>
             </div>
         </div>
         <div class="col-sm-12">
             <div class="oz-form-fields"  style="width:100%;padding-top: 5px">
-                <!-- 销售单明细数据录入 -->
-                <table class="table table-bordered" style="margin-top: 10px;" id="itemContainer">
-                <tr>
-                    <td>商品名称</td>
-                    <td>商品类型</td>
-                    <td>球镜</td>
-                    <td>柱镜</td>
-                    <td>轴向</td>
-                    <td>数量</td>
-                    <td>单价</td>
-                    <td>小计</td>
-                    <td>备注</td>
-                    <td>操作</td>
-                </tr>
-                <tr ng-repeat="item in selectedSalesOrder.salesOrderItems">
-                    <td>{{item.materiel.name}}</td>
-                    <td>{{item.materiel.typeName}}</td>
-                    <td>{{item.sphere}}</td>
-                    <td>{{item.cylinder}}</td>
-                    <td>{{item.axial}}</td>
-                    <td>{{item.quantity}}</td>
-                    <td>{{item.sellPrice}}</td>
-                    <td>{{item.quantity * item.sellPrice}}</td>
-                    <td>{{item.remark}}</td>
-                    <td><button ng-click="delItem($index)">删除</button></td>
-                </tr>
-            </table>
+                <fieldset id="salesOrderItems">
+                    <legend>
+                        <h5>销售明细</h5>
+                    </legend>
+                    <!-- 销售单明细数据录入 -->
+                    <table class="table table-bordered" style="margin-top: 10px;" id="itemContainer">
+                        <tr>
+                            <td>商品名称</td>
+                            <td>商品类型</td>
+                            <td>球镜</td>
+                            <td>柱镜</td>
+                            <td>轴向</td>
+                            <td>数量</td>
+                            <td>单价</td>
+                            <td>小计</td>
+                            <td>备注</td>
+                            <td>操作</td>
+                        </tr>
+                        <tr ng-repeat="item in selectedSalesOrder.salesOrderItems">
+                            <td>{{item.materiel.name}}</td>
+                            <td>{{item.materiel.typeName}}</td>
+                            <td>{{item.sphere}}</td>
+                            <td>{{item.cylinder}}</td>
+                            <td>{{item.axial}}</td>
+                            <td>{{item.quantity}}</td>
+                            <td>{{item.sellPrice}}</td>
+                            <td>{{item.quantity * item.sellPrice}}</td>
+                            <td>{{item.remark}}</td>
+                            <td><button ng-click="delItem($index)" ng-show="selectedSalesOrder.relatedOrderId === 0">删除</button></td>
+                        </tr>
+                    </table>
+                </fieldset>
             </div>
         </div>
     </div>

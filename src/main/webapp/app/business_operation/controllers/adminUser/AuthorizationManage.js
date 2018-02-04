@@ -262,7 +262,55 @@
 			$scope.newAdminUser;
 		}
 
-	});
+	}).controller("adminUserDetailController",function($location,$scope,$filter,adminUserService,storeService,$routeParams){
+        $scope.roleCode = sessionStorage.getItem("roleCode");
+        $scope.selectAdminUser={};
+        $scope.roleList = [];
+        $scope.storeList = [];
+        //初始化门店下拉框
+        function initStoreList(){
+            storeService.fetchStoreList(function(data){
+                $scope.storeList = data;
+            },function(data){
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '警告',
+                    message : '获取门店信息失败:' + data.errorMsg
+                });
+            });
+        }
+
+        //初始化角色下拉框
+        function initRoleList(){
+            adminUserService.getAdminRoleList(function(data){
+                $scope.roleList = data;
+            },function(data){
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '警告',
+                    message : '获取角色信息失败:' + data.errorMsg
+                });
+            });
+        }
+
+        initStoreList();
+        initRoleList();
+
+        adminUserService.getWithDetailById($routeParams.adminUserId, function(data){
+            $scope.selectAdminUser = data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '错误',
+                message : data.errorMsg
+            });
+        });
+
+        $scope.cancel = function(){
+            history.back();
+            $scope.newAdminUser;
+        }
+    });
 
 	function setActiveSubPage($scope) {
 		$scope.$emit("setActive", "AuthorizationManage");

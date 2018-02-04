@@ -41,10 +41,9 @@
 							class="dropdown-toggle" data-toggle="dropdown">${sessionScope.sessionInfo.adminName}<b class="caret"></b>
 						</a>
 							<ul class="dropdown-menu user-menu" aria-labelledby="dLabel">
-								<li>手机号: </li>
-								<li><strong>${sessionScope.sessionInfo.mobileNumber}</strong></li>
-								<li>角色 : </li>
-								<li><strong>${sessionScope.sessionInfo.adminRoleModel.roleName}</strong></li>
+								<li>手机号:<strong>${sessionScope.sessionInfo.mobileNumber}</strong></li>
+								<li>角色:<strong>${sessionScope.sessionInfo.adminRoleModel.roleName}</strong></li>
+								<li>门店:<strong>${sessionScope.sessionInfo.storeModel.storeName}</strong></li>
 								<li><a href="logout">安全退出</a></li>
 							</ul></li>
 						<li><p class="navbar-text">
@@ -93,6 +92,7 @@
 	<!-- 字典管理 -->
 	<script src="app/business_operation/controllers/dictionary/goodsType/goodsTypeManage.js"></script>
 	<script src="app/business_operation/controllers/dictionary/goodsColor/goodsColorManage.js"></script>
+	<script src="app/business_operation/controllers/dictionary/goodsBrand/goodsBrandManage.js"></script>
 	<script src="app/business_operation/controllers/dictionary/dictManage.js"></script>
 	<!-- 库存管理 -->
 	<script src="app/business_operation/controllers/inventory/mard/mardManage.js"></script>

@@ -290,6 +290,40 @@ public class SalesServiceImpl implements SalesService {
         return salesDao.fetchSalesOrderVoList(queryBean);
     }
 
+    @Override
+    public ResultHandle<SalesOrder> orderRefund(int id) {
+        ResultHandle<SalesOrder> resultHandle = new ResultHandle<>();
+
+        SalesOrder salesOrder = getSalesOrderWithItemsById(id);
+        if(salesOrder == null){
+            resultHandle.setSuccess(false);
+            resultHandle.setMsg("订单不存在");
+        }
+        // 1 若该订单为退货单则不可退货
+        // 2 若该订单为销售单且已退货则不可退货
+        if(Constants.ORDER_TYPE_REFUND.equals(salesOrder.getOrderType())
+                || (Constants.ORDER_TYPE_SALE.equals(salesOrder.getOrderType()) && salesOrder.getRelatedOrderId() > 0)){
+            resultHandle.setSuccess(false);
+            resultHandle.setMsg("订单不可退货");
+        }
+
+        // 创建退货单
+        salesOrder.setOrderType(Constants.ORDER_TYPE_REFUND);
+        salesOrder.setRelatedOrderId(id); //退货单对应的销售单Id
+        salesOrder.setSaleDate(new Date());
+        salesOrder.setPickUpDate(null);
+        ResultHandle<SalesOrder> refundHandle = saveSalesOrder(salesOrder);
+        if(refundHandle.isSuccess()){
+            //设置销售单对应的退货单id
+            salesDao.updateRelatedOrderId(id, salesOrder.getId());
+        }else {
+            resultHandle.setSuccess(false);
+            resultHandle.setMsg(refundHandle.getMsg());
+        }
+
+        return resultHandle;
+    }
+
     /**
      * 验证销售明细
      * @param salesOrderItem

@@ -77,28 +77,20 @@ public class AdminUserDetailModel implements Serializable{
     /**
      * 入职时间
      */
-//    @JsonSerialize(using = DateJsonSerializer.class)
-//    @JsonDeserialize(using = DateJsonDeserializer.class)
-    private Date onboardDate;
+    private String onboardDate;
     /**
      * 离职时间
      */
-//    @JsonSerialize(using = DateJsonSerializer.class)
-//    @JsonDeserialize(using = DateJsonDeserializer.class)
-    private Date dimissionDate;
+    private String dimissionDate;
 
     /**
      * 创建时间
      */
-//    @JsonSerialize(using = DateJsonSerializer.class)
-//    @JsonDeserialize(using = DateJsonDeserializer.class)
     private Date createDatetime;
 
     /**
      * 更新时间
      */
-//    @JsonSerialize(using = DateJsonSerializer.class)
-//    @JsonDeserialize(using = DateJsonDeserializer.class)
     private Date updateDatetime;
 
     /**
@@ -178,19 +170,19 @@ public class AdminUserDetailModel implements Serializable{
         this.position = position;
     }
 
-    public Date getOnboardDate() {
+    public String getOnboardDate() {
         return onboardDate;
     }
 
-    public void setOnboardDate(Date onboardDate) {
+    public void setOnboardDate(String onboardDate) {
         this.onboardDate = onboardDate;
     }
 
-    public Date getDimissionDate() {
+    public String getDimissionDate() {
         return dimissionDate;
     }
 
-    public void setDimissionDate(Date dimissionDate) {
+    public void setDimissionDate(String dimissionDate) {
         this.dimissionDate = dimissionDate;
     }
 

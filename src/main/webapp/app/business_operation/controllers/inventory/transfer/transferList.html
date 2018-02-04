@@ -15,7 +15,9 @@
 
         <table ng-table="tableParams" class="table table-bordered">
             <tr ng-repeat="transfer in $data|filter:filterText">
-                <td data-title="'编号'" sortable="'code'">{{transfer.code}}</td>
+                <td data-title="'编号'" sortable="'code'">
+                    <a href="#/transferOrderDetail/{{transfer.id}}">{{transfer.code}}</a>
+                </td>
                 <td data-title="'调拨日期'" sortable="'code'">{{transfer.transferDate}}</td>
                 <td data-title="'调出门店'" sortable="'code'">{{transfer.outStoreName}}</td>
                 <td data-title="'调入门店'" sortable="'code'">{{transfer.inStoreName}}</td>

@@ -1,0 +1,160 @@
+<style type="text/css">
+    #myform input.ng-invalid.ng-dirty {
+        background-color: #FFC0CB;
+    }
+    table {
+        border: 1px solid lightgray;
+        width:95%;
+        border-collapse:collapse;
+        border-spacing:0;
+        empty-cells:hide;
+        word-break:break-all;
+        word-wrap:break-word;
+    }
+    table tr td {
+        height:30px;
+    }
+
+    p{
+        padding-top:10px;
+    }
+</style>
+
+<div class="alert alert-danger alert-dismissible fade in" role="alert"
+     ng-show="errorMsg!=null||errorMsg!=undefined">
+    <button type="button" class="close" ng-click="errorMsg=null"
+            aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p>{{errorMsg}}</p>
+</div>
+<div class="alert alert-success alert-dismissible fade in" role="alert"
+     ng-show="successMsg">
+    <button type="button" class="close" ng-click="successMsg=''"
+            aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p>{{successMsg}}</p>
+</div>
+
+<h4 class="seat-manage-operate-title" style="margin-bottom: 10px">退货确认单</h4>
+<hr/>
+<div class="seat-manage-operate-container">
+    <div class="seat-manage-operate-button form-inline">
+        <button class="btn btn-success btn-sm" ng-click="doOrderRefund()" ng-disabled="!myform.$valid">确认退货</button>
+        <button class="btn btn-danger btn-sm" ng-click="cancel()">取消</button>
+    </div>
+</div>
+
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active">
+        <!-- 销售单 -->
+        <div class="col-sm-12" style="margin-top: 10px;">
+            <form class="form-horizontal" novalidate id="myform" name="myform">
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">销售编号</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input class="form-control" type="text"
+                               ng-model="selectedSalesOrder.code" ng-readonly="true"/>
+                    </div>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">客户</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <select class="form-control"  ng-model="selectedSalesOrder.customerId" required disabled="true">
+                            <option ng-repeat="customer in customerList" value="{{customer.id}}"
+                                    ng-selected="selectedSalesOrder.customerId == customer.id">
+                                {{customer.name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">销售日期</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input class="form-control" type="text"
+                               onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                               ng-model="selectedSalesOrder.saleDate" name="saleDate"
+                               id="saleDate" ng-readonly="true"/>
+                    </div>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">取货日期</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input class="form-control" type="text"
+                               onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                               ng-model="selectedSalesOrder.pickUpDate" name="pickUpDate"
+                               id="pickUpDate" ng-readonly="true"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">数量</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input class="form-control" type="text"
+                               ng-model="selectedSalesOrder.totalQuantity" ng-readonly="true"/>
+                    </div>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">应收金额</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input class="form-control" type="text"
+                               ng-model="selectedSalesOrder.totalAmount" ng-readonly="true"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">门店</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <select class="form-control"  ng-model="selectedSalesOrder.storeId" disabled="true">
+                            <option ng-repeat="store in storeList" value="{{store.storeId}}"
+                                    ng-selected="selectedSalesOrder.storeId == store.storeId">
+                                {{store.storeName}}
+                            </option>
+                        </select>
+                    </div>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">业务员</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <select class="form-control" ng-model="selectedSalesOrder.businessManId" disabled="true">
+                            <option ng-repeat="adminUser in adminUserList" value="{{adminUser.adminUserId}}"
+                                    ng-selected="selectedSalesOrder.businessManId == adminUser.adminUserId">
+                                {{adminUser.adminUserDetailModel.realname}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">备注</label>
+                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                        <textarea rows="5" ng-model="selectedSalesOrder.remark" style="width:100%" ng-readonly="true"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- 销售单明细 -->
+        <div class="col-sm-12">
+            <fieldset id="latestOptometryRecord">
+                <legend>
+                    <h4>销售单明细</h4>
+                </legend>
+                <table class="table table-bordered" style="margin-top: 10px;" id="itemContainer">
+                    <tr>
+                        <td>商品名称</td>
+                        <td>商品类型</td>
+                        <td>球镜</td>
+                        <td>柱镜</td>
+                        <td>轴向</td>
+                        <td>数量</td>
+                        <td>单价</td>
+                        <td>小计</td>
+                        <td>备注</td>
+                    </tr>
+                    <tr ng-repeat="item in selectedSalesOrder.salesOrderItems">
+                        <td>{{item.materiel.name}}</td>
+                        <td>{{item.materiel.typeName}}</td>
+                        <td>{{item.sphere}}</td>
+                        <td>{{item.cylinder}}</td>
+                        <td>{{item.axial}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td>{{item.sellPrice}}</td>
+                        <td>{{item.quantity * item.sellPrice}}</td>
+                        <td>{{item.remark}}</td>
+                    </tr>
+                </table>
+            </fieldset>
+        </div>
+    </div>
+</div>

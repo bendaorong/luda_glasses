@@ -1,10 +1,7 @@
 package com.luda.dictionary.service;
 
 import com.luda.comm.po.ResultHandle;
-import com.luda.dictionary.model.DictionaryModel;
-import com.luda.dictionary.model.GoodsColor;
-import com.luda.dictionary.model.GoodsKind;
-import com.luda.dictionary.model.GoodsType;
+import com.luda.dictionary.model.*;
 
 import java.util.List;
 
@@ -107,4 +104,30 @@ public interface DictionaryService {
     ResultHandle<DictionaryModel> removeDictionary(int dictId);
 
     List<DictionaryModel> fetchDictionaryByType(String dictType);
+
+    /**
+     * 查询商品品牌
+     * @return
+     */
+    List<GoodsBrand> fetchGoodsBrandList();
+
+    /**
+     * 保存商品品牌
+     */
+    ResultHandle<GoodsBrand> saveGoodsBrand(GoodsBrand goodsBrand);
+
+    /**
+     * 查询商品品牌
+     */
+    GoodsBrand getGoodsBrandById(int brandId);
+
+    /**
+     * 修改商品品牌
+     */
+    ResultHandle<GoodsBrand> updateGoodsBrand(GoodsBrand goodsBrand);
+
+    /**
+     * 删除商品品牌
+     */
+    ResultHandle<GoodsBrand> removeGoodsBrand(int BrandId);
 }

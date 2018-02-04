@@ -8,6 +8,7 @@ import com.luda.user.model.AdminUserModel;
 import com.luda.util.CommonUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -86,6 +87,9 @@ public class SalesController extends BaseController{
         String result = "";
         try {
             JSONObject jsonData = JSONObject.fromObject(data);
+            pretreatment(jsonData);
+
+
             Map classMap = new HashMap();
             classMap.put("salesOrderItems", SalesOrderItem.class);
             SalesOrder salesOrder = CommonUtils.convertJsonToBean_(jsonData, SalesOrder.class, classMap);
@@ -108,6 +112,24 @@ public class SalesController extends BaseController{
     }
 
     /**
+     * 创建销售单对页面数据预先处理，日期类型的字段如果为空则删除掉
+     * @param jsonData
+     */
+    private void pretreatment(JSONObject jsonData) {
+        // 销售日期
+        Object saleDate = jsonData.get("saleDate");
+        if(saleDate == null || StringUtils.isEmpty(saleDate.toString())){
+            jsonData.remove("saleDate");
+        }
+
+        // 提货日期
+        Object pickupDate = jsonData.get("pickupDate");
+        if(pickupDate == null || StringUtils.isEmpty(pickupDate.toString())){
+            jsonData.remove("pickupDate");
+        }
+    }
+
+    /**
      * 查询销售单及销售明细
      * @param id 销售单id
      * @return
@@ -127,8 +149,8 @@ public class SalesController extends BaseController{
     }
 
     /**
-     * 更新采购单
-     * (更新时只更新采购单信息，明细信息单独更新)
+     * 更新销售单
+     * (更新时只更新销售单信息，明细信息单独更新)
      * @param data
      * @return
      */
@@ -218,6 +240,29 @@ public class SalesController extends BaseController{
             }
         }catch (Exception e){
             log.error("removeSalesOrder error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 销售单退货
+     * @param id
+     * @return
+     */
+    @RequestMapping("/orderRefund/{id}")
+    @ResponseBody
+    public String orderRefund(@PathVariable int id){
+        String result = "";
+        try {
+            ResultHandle<SalesOrder> resultHandle = salesService.orderRefund(id);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("orderRefund error", e);
             result = getFailResult("系统异常");
         }
         return result;

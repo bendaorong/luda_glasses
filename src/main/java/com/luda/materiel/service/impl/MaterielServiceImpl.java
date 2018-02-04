@@ -54,6 +54,30 @@ public class MaterielServiceImpl implements MaterielService{
     private void initMateriel(MaterielModel materielModel) {
         materielModel.setCode(getMaterielCode());
         materielModel.setUseFlag(1);
+        materielModel.setName(buildMaterielName(materielModel));
+    }
+
+    /**
+     * 拼装商品名称
+     * 商品名称=商品名称 + 空 + 品牌 + 空 + 规格 + 空 + 颜色
+     * @param materielModel
+     * @return
+     */
+    private String buildMaterielName(MaterielModel materielModel) {
+        String name = materielModel.getName();
+        String[] arr = name.split(" ");
+        name = arr[0];
+
+        if(StringUtils.isNotEmpty(materielModel.getBrand())){
+            name += " " + materielModel.getBrand();
+        }
+        if(StringUtils.isNotEmpty(materielModel.getSpecification())){
+            name += " " + materielModel.getSpecification();
+        }
+        if(StringUtils.isNotEmpty(materielModel.getColor())){
+            name += " " + materielModel.getColor();
+        }
+        return name;
     }
 
     /**
@@ -81,9 +105,6 @@ public class MaterielServiceImpl implements MaterielService{
         if(StringUtils.isEmpty(materielModel.getName())){
             return "请填写商品名称";
         }
-        if(StringUtils.isEmpty(materielModel.getBarcode())){
-            return "请填写条码";
-        }
         if(materielModel.getTypeId() == 0){
             return "请选择商品类型";
         }
@@ -105,6 +126,7 @@ public class MaterielServiceImpl implements MaterielService{
             return resultHandle;
         }
 
+        materielModel.setName(buildMaterielName(materielModel));
         int result = materielDao.updateMateriel(materielModel);
         if(result > 0){
             resultHandle.setReturnContent(materielModel);

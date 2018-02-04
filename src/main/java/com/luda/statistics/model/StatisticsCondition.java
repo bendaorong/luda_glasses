@@ -27,6 +27,21 @@ public class StatisticsCondition {
      */
     private Integer supplierId;
 
+    /**
+     * 统计维度
+     * 1-按商品类型 2-按门店
+     * @return
+     */
+    private int dimension;
+
+    public int getDimension() {
+        return dimension;
+    }
+
+    public void setDimension(int dimension) {
+        this.dimension = dimension;
+    }
+
     public Integer getSupplierId() {
         return supplierId;
     }

@@ -21,40 +21,40 @@
 		<form id="myform" name="myform" class="form-horizontal" novalidate>
 			<fieldset id="basicInfo">
 				<div class="form-group">
-					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>编号</label>
-					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-						<input type="text" class="form-control" ng-model="selectAdminUser.adminCode" ng-readonly="true">
-					</div>
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>用户名</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input type="text" class="form-control" ng-model="selectAdminUser.adminName" ng-readonly="true"/>
 					</div>
-				</div>
-				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>工号</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input type="text" class="form-control" ng-model="selectAdminUser.staffid" ng-readonly="true"/>
 					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>所属门店</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<select class="form-control" required ng-model="selectAdminUser.storeId">
-							<option ng-repeat="store in storeList" value="{{store.storeId}}">{{store.storeName}}</option>
+							<option ng-repeat="store in storeList" value="{{store.storeId}}"
+									ng-selected="selectAdminUser.storeId==store.storeId">
+								{{store.storeName}}
+							</option>
+						</select>
+					</div>
+					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>角色</label>
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+						<select class="form-control" required ng-model="selectAdminUser.roleId">
+							<option ng-repeat="role in roleList" value="{{role.roleId}}"
+									ng-selected="selectAdminUser.roleId==role.roleId">
+								{{role.roleName}}
+							</option>
 						</select>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>角色</label>
-					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-						<select class="form-control" required ng-model="selectAdminUser.roleId">
-							<option ng-repeat="role in roleList" value="{{role.roleId}}">{{role.roleName}}</option>
-						</select>
-					</div>
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>姓名</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input type="text" class="form-control" required ng-model="selectAdminUser.adminUserDetailModel.realname"/>
 					</div>
-				</div>
-				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">性别</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<select ng-model="selectAdminUser.adminUserDetailModel.gender">
@@ -62,36 +62,38 @@
 							<option value="F" ng-selected="selectAdminUser.adminUserDetailModel.gender=='F'">女</option>
 						</select>
 					</div>
-					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">手机号码</label>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>手机号码</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input type="tel" class="form-control" required ng-model="selectAdminUser.mobileNumber" required/>
 					</div>
-				</div>
-				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">邮箱</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input type="email" name = "email" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.email" />
 					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">身份证</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.idNo" />
 					</div>
-				</div>
-				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">籍贯</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input type="text" class="form-control"  ng-model="selectAdminUser.adminUserDetailModel.nativePlace" />
 					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">地址</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.address" />
 					</div>
-				</div>
-				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">邮政编码</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.postcode" />
 					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">出生年月</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input class="form-control" type="text"
@@ -99,8 +101,6 @@
 							   ng-model="selectAdminUser.adminUserDetailModel.birthday" name="birthday"
 							   id="birthday" />
 					</div>
-				</div>
-				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">学历</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<select ng-model="selectAdminUser.adminUserDetailModel.education">
@@ -114,6 +114,8 @@
 							<option value="小学">小学</option>
 						</select>
 					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">婚姻状况</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<select ng-model="selectAdminUser.adminUserDetailModel.maritalStatus">
@@ -121,28 +123,26 @@
 							<option value="未婚">未婚</option>
 						</select>
 					</div>
-				</div>
-				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">银行账户</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.bankAccount" />
 					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">开户行</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.bank" />
 					</div>
-				</div>
-				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">微信</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.wechatNumber" />
 					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">QQ</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.qqNumber" />
 					</div>
-				</div>
-				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">入职时间</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input class="form-control" type="text"
@@ -150,6 +150,8 @@
 							   ng-model="selectAdminUser.adminUserDetailModel.onboardDate" name="onboardDate"
 							   id="onboardDate" />
 					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">离职时间</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input class="form-control" type="text"
@@ -157,16 +159,6 @@
 							   ng-model="selectAdminUser.adminUserDetailModel.dimissionDate" name="dimissionDate"
 							   id="dimissionDate" />
 					</div>
-				</div>
-				<!--
-				<div class="form-group">
-					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">职位</label>
-					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-						<input type="text" class="form-control" ng-model="selectAdminUser.adminUserDetailModel.position" />
-					</div>
-				</div>
-				-->
-				<div class="form-group">
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">激活</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<input type="checkbox" ng-model="selectAdminUser.activeFlag"

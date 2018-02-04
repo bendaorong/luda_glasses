@@ -74,6 +74,11 @@ public class SalesOrder implements Serializable {
      */
     private Date updateTime;
 
+    /**
+     * 相关订单
+     */
+    private int relatedOrderId;
+
     private List<SalesOrderItem> salesOrderItems;
 
     public String getOrderType() {
@@ -202,6 +207,14 @@ public class SalesOrder implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public int getRelatedOrderId() {
+        return relatedOrderId;
+    }
+
+    public void setRelatedOrderId(int relatedOrderId) {
+        this.relatedOrderId = relatedOrderId;
     }
 
     /**

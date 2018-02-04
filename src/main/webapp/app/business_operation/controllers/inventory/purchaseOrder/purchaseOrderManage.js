@@ -74,7 +74,7 @@
                 });
             }
         }
-    }).controller("addPurchaseOrderController", function ($location,$scope,$filter,materielService,inventoryService,storeService,supplierService,adminUserService,$routeParams) {
+    }).controller("addPurchaseOrderController", function ($location,$scope,$filter,materielService,inventoryService,storeService,supplierService,adminUserService,dictionaryService) {
         setActiveSubPage($scope, "addPurchaseOrder");
         $scope.adminUserId = sessionStorage.getItem("adminUserId");
         $scope.storeId = sessionStorage.getItem("storeId");
@@ -97,6 +97,24 @@
 
         $scope.selectedMateriel = {}; //选择的商品
         $scope.purchaseOrderItem = {}; //采购单明细
+
+        // 元素显示隐藏控制
+        $scope.sphereDisplay = true; //球镜
+        $scope.cylinderDisplay = true; //柱镜
+        $scope.axialDisplay = true; //度数
+
+        $scope.goodsTypeList = [];//商品类型
+        $scope.selectGoodsTypeId = 0; //选择的商品类型
+        // 查询商品类型
+        dictionaryService.fetchGoodsTypeList(function(data){
+            $scope.goodsTypeList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品类型失败:' + data.errorMsg
+            });
+        });
 
         // 查询商品
         materielService.fetchMaterielList(function(data){
@@ -152,7 +170,13 @@
             // 过滤出当前选中供应商的商品
             angular.forEach($scope.materielList, function (each) {
                 if(each.supplierId == $scope.newPurchaseOrder.supplierId){
-                    $scope.usedMaterielList.push(each);
+                    if($scope.selectGoodsTypeId != 0){
+                        if($scope.selectGoodsTypeId == each.typeId){
+                            $scope.usedMaterielList.push(each);
+                        }
+                    }else {
+                        $scope.usedMaterielList.push(each);
+                    }
                 }
             });
             // 初始化商品下拉框
@@ -170,12 +194,97 @@
                         if($scope.materielList[i].id == materielId){
                             $scope.selectedMateriel = $scope.materielList[i];
                             $scope.purchaseOrderItem.materielId = materielId;
+                            $scope.switchHideAndShow($scope.materielList[i].typeId);
                             break;
                         }
                     }
                 }else {
                     $scope.selectedMateriel = {};
                     $scope.purchaseOrderItem.materielId = null;
+                    $scope.switchHideAndShow(0);
+                }
+                $scope.purchaseOrderItem.sphere = 0;
+                $scope.purchaseOrderItem.cylinder = 0;
+                $scope.purchaseOrderItem.axial = 0;
+                $scope.$apply();
+            });
+        }
+
+        // 根据商品类型控制球镜柱镜度数字段的显示和隐藏
+        $scope.switchHideAndShow = function(typeId){
+            // 老花眼镜
+            if(typeId == 4){
+                $scope.sphereDisplay = false;
+                $scope.cylinderDisplay = false;
+                $scope.axialDisplay = true;
+                $("#axial").attr({"min" : 1.00, "max" : 4, "step" : 0.5});
+                $("#axial").val(1.00);
+            }
+            // 隐形眼镜
+            else if(typeId == 3){
+                $scope.sphereDisplay = false;
+                $scope.cylinderDisplay = false;
+                $scope.axialDisplay = true;
+                $("#axial").attr({"min" : -20, "max" : 0, "step" : 0.25});
+                $("#axial").val(0);
+            }
+            // 镜片
+            else if(typeId == 7){
+                $scope.sphereDisplay = true;
+                $scope.cylinderDisplay = true;
+                $scope.axialDisplay = false;
+            }
+            // 镜架、护理产品、太阳镜
+            else if(typeId == 5 || typeId == 6 || typeId == 10){
+                $scope.sphereDisplay = false;
+                $scope.cylinderDisplay = false;
+                $scope.axialDisplay = false;
+            }else {
+                $scope.sphereDisplay = true;
+                $scope.cylinderDisplay = true;
+                $scope.axialDisplay = true;
+            }
+        }
+
+        // 选择商品类型
+        $scope.selectGoodsType = function () {
+            $scope.usedMaterielList = [];
+            // 过滤出当前选中供应商的商品
+            angular.forEach($scope.materielList, function (each) {
+                if($scope.selectGoodsTypeId > 0){
+                    if(each.supplierId == $scope.newPurchaseOrder.supplierId
+                        && each.typeId == $scope.selectGoodsTypeId){
+                        $scope.usedMaterielList.push(each);
+                    }
+                }else {
+                    if(each.supplierId == $scope.newPurchaseOrder.supplierId){
+                        $scope.usedMaterielList.push(each);
+                    }
+                }
+            });
+            // 初始化商品下拉框
+            angular.element("#materiel").find("option").remove();
+            $("#materiel").append("<option value=''></option>");
+            for(var i=0; i<$scope.usedMaterielList.length; i++){
+                $("#materiel").append("<option value='" + $scope.usedMaterielList[i].id + "'>" + $scope.usedMaterielList[i].name + "</option>");
+            }
+            // 先删除原有商品下拉框
+            angular.element(".searchable-select").remove();
+            // 新建商品下拉框
+            $("#materiel").searchableSelect(function (materielId) {
+                if(angular.isDefined(materielId) && materielId != null && materielId != ''){
+                    for(var i=0; i<$scope.materielList.length; i++){
+                        if($scope.materielList[i].id == materielId){
+                            $scope.selectedMateriel = $scope.materielList[i];
+                            $scope.purchaseOrderItem.materielId = materielId;
+                            $scope.switchHideAndShow($scope.selectedMateriel.typeId);
+                            break;
+                        }
+                    }
+                }else {
+                    $scope.selectedMateriel = {};
+                    $scope.purchaseOrderItem.materielId = null;
+                    $scope.switchHideAndShow(0);
                 }
                 $scope.purchaseOrderItem.sphere = 0;
                 $scope.purchaseOrderItem.cylinder = 0;
@@ -301,7 +410,6 @@
             // 采购日期
             $scope.newPurchaseOrder.purchaseDate = $("#purchaseDate").val();
             $scope.newPurchaseOrder.orderType = "01";
-            //console.log("newPurchaseOrder:" + JSON.stringify($scope.newPurchaseOrder));
 
             inventoryService.savePurchaseOrder($scope.newPurchaseOrder, function (data) {
                 if(data.success){
@@ -330,7 +438,7 @@
             $('.bg').css({'display':'none'});
             $('.content').css({'display':'none'});
         }
-    }).controller("editPurchaseOrderController",function($location,$scope,$filter,materielService,inventoryService,storeService,supplierService,adminUserService,$routeParams){
+    }).controller("editPurchaseOrderController",function($location,$scope,$filter,materielService,inventoryService,storeService,supplierService,adminUserService,$routeParams,dictionaryService){
         $scope.selectPurchaseOrder={};
         $scope.purchaseOrderItemList = [];
         $scope.storeList = [];
@@ -372,12 +480,14 @@
                             if($scope.materielList[i].id == materielId){
                                 $scope.selectedMateriel = $scope.materielList[i];
                                 $scope.purchaseOrderItem.materielId = materielId;
+                                $scope.switchHideAndShow($scope.materielList[i].typeId);
                                 break;
                             }
                         }
                     }else {
                         $scope.selectedMateriel = {};
                         $scope.purchaseOrderItem.materielId = null;
+                        $scope.switchHideAndShow(0);
                     }
                     $scope.purchaseOrderItem.sphere = 0;
                     $scope.purchaseOrderItem.cylinder = 0;
@@ -421,6 +531,19 @@
             });
         });
 
+        $scope.goodsTypeList = [];//商品类型
+        $scope.selectGoodsTypeId = 0; //选择的商品类型
+        // 查询商品类型
+        dictionaryService.fetchGoodsTypeList(function(data){
+            $scope.goodsTypeList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品类型失败:' + data.errorMsg
+            });
+        });
+
         // 查询业务员
         adminUserService.fetchUserListByStore(function(data){
             $scope.adminUserList  =  data;
@@ -431,6 +554,42 @@
                 message : '获取业务员失败:' + data.errorMsg
             });
         });
+
+        // 根据商品类型控制球镜柱镜度数字段的显示和隐藏
+        $scope.switchHideAndShow = function(typeId){
+            // 老花眼镜
+            if(typeId == 4){
+                $scope.sphereDisplay = false;
+                $scope.cylinderDisplay = false;
+                $scope.axialDisplay = true;
+                $("#axial").attr({"min" : 1.00, "max" : 4, "step" : 0.5});
+                $("#axial").val(1.00);
+            }
+            // 隐形眼镜
+            else if(typeId == 3){
+                $scope.sphereDisplay = false;
+                $scope.cylinderDisplay = false;
+                $scope.axialDisplay = true;
+                $("#axial").attr({"min" : -20, "max" : 0, "step" : 0.25});
+                $("#axial").val(0);
+            }
+            // 镜片
+            else if(typeId == 7){
+                $scope.sphereDisplay = true;
+                $scope.cylinderDisplay = true;
+                $scope.axialDisplay = false;
+            }
+            // 镜架、护理产品、太阳镜
+            else if(typeId == 5 || typeId == 6 || typeId == 10){
+                $scope.sphereDisplay = false;
+                $scope.cylinderDisplay = false;
+                $scope.axialDisplay = false;
+            }else {
+                $scope.sphereDisplay = true;
+                $scope.cylinderDisplay = true;
+                $scope.axialDisplay = true;
+            }
+        }
 
         $scope.newPurchaseOrderItem_ = function (){
             $('.bg').css({'display':'block'});
@@ -448,6 +607,50 @@
         $scope.closeBtn_ = function () {
             $('.bg').css({'display':'none'});
             $('.content').css({'display':'none'});
+        }
+
+        // 选择商品类型
+        $scope.selectGoodsType = function () {
+            $scope.usedMaterielList = [];
+            // 过滤出当前选中的类型的商品
+            angular.forEach($scope.materielList, function (each) {
+                if($scope.selectGoodsTypeId > 0){
+                    if(each.typeId == $scope.selectGoodsTypeId){
+                        $scope.usedMaterielList.push(each);
+                    }
+                }else {
+                    $scope.usedMaterielList.push(each);
+                }
+            });
+            // 初始化商品下拉框
+            angular.element("#materiel").find("option").remove();
+            $("#materiel").append("<option value=''></option>");
+            for(var i=0; i<$scope.usedMaterielList.length; i++){
+                $("#materiel").append("<option value='" + $scope.usedMaterielList[i].id + "'>" + $scope.usedMaterielList[i].name + "</option>");
+            }
+            // 先删除原有商品下拉框
+            angular.element(".searchable-select").remove();
+            // 新建商品下拉框
+            $("#materiel").searchableSelect(function (materielId) {
+                if(angular.isDefined(materielId) && materielId != null && materielId != ''){
+                    for(var i=0; i<$scope.materielList.length; i++){
+                        if($scope.materielList[i].id == materielId){
+                            $scope.selectedMateriel = $scope.materielList[i];
+                            $scope.purchaseOrderItem.materielId = materielId;
+                            $scope.switchHideAndShow($scope.materielList[i].typeId);
+                            break;
+                        }
+                    }
+                }else {
+                    $scope.selectedMateriel = {};
+                    $scope.purchaseOrderItem.materielId = null
+                    $scope.switchHideAndShow(0);
+                }
+                $scope.purchaseOrderItem.sphere = 0;
+                $scope.purchaseOrderItem.cylinder = 0;
+                $scope.purchaseOrderItem.axial = 0;
+                $scope.$apply();
+            });
         }
 
         // 添加新明细
@@ -557,6 +760,62 @@
                 });
             }
         }
+
+        $scope.cancel = function(){
+            history.back();
+        }
+    }).controller("purchaseOrderDetailController",function($location,$scope,$filter,materielService,inventoryService,storeService,supplierService,adminUserService,$routeParams,dictionaryService){
+        $scope.selectPurchaseOrder={};
+        $scope.purchaseOrderItemList = [];
+        $scope.storeList = [];
+        $scope.supplierList = [];
+        $scope.adminUserList = [];
+        $scope.materielList = [];
+
+        // 查询采购单
+        inventoryService.getPurchaseOrderById($routeParams.id, function(data){
+            $scope.selectPurchaseOrder = data.data;
+            $scope.purchaseOrderItemList = $scope.selectPurchaseOrder.purchaseOrderItemList;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '错误',
+                message : data.errorMsg
+            });
+        });
+
+        // 查询门店
+        storeService.fetchStoreList(function(data){
+            $scope.storeList = data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取门店失败:' + data.errorMsg
+            });
+        });
+
+        // 查询供应商
+        supplierService.fetchSupplierList(function (data) {
+            $scope.supplierList = data.data;
+        },function (data) {
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取供应商失败:' + data.errorMsg
+            });
+        });
+
+        // 查询业务员
+        adminUserService.fetchUserListByStore(function(data){
+            $scope.adminUserList  =  data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取业务员失败:' + data.errorMsg
+            });
+        });
 
         $scope.cancel = function(){
             history.back();

@@ -1,6 +1,7 @@
 package com.luda.sales.dao;
 
 import com.luda.sales.model.*;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -35,4 +36,6 @@ public interface SalesDao {
     int saveRefundOrder(RefundOrder refundOrder);
 
     int saveRefundOrderItem(RefundOrderItem item);
+
+    int updateRelatedOrderId(@Param("id") int id, @Param("relatedOrderId") int relatedOrderId);
 }

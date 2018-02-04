@@ -125,4 +125,24 @@
         left join supplier s on a.supplier_id = s.supplier_id
         order by a.t_amount desc
     </select>
+
+    <select id="saleStatisticsByMaterielType" parameterType="com.luda.statistics.model.StatisticsCondition"
+            resultType="com.luda.statistics.model.SaleStatisticsChartByMaterielType">
+        SELECT a.typeId as typeId, a.t_amount as amount, g.type_name as typeName
+        FROM (
+            SELECT m.`type_id` AS typeId, SUM(soi.quantity * soi.sell_price) t_amount
+            FROM sales_order so
+            LEFT JOIN sales_order_item soi
+            ON so.id = soi.sales_order_id
+            LEFT JOIN materiel m
+            ON soi.`materiel_id` = m.id
+            WHERE so.`delete_flag` = 0 AND so.`order_type` = '01'
+            <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''">
+                and so.sale_date >= #{beginDate} and #{endDate} >= so.sale_date
+            </if>
+            GROUP BY m.`type_id`
+        ) a
+        LEFT JOIN goods_type g
+        ON a.typeId = g.`type_id`
+    </select>
 </mapper>

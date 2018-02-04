@@ -35,4 +35,6 @@ public interface StatisticsService {
      * 采购报表-按供应商统计
      */
     List<PurchaseStatisticsBySupplier> purchaseStatisticsBySupplier(StatisticsCondition statisticsCondition);
+
+    List<SaleStatisticsChartByMaterielType> saleStatisticsByMaterielType(StatisticsCondition statisticsCondition);
 }

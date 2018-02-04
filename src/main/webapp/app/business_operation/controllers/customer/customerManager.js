@@ -166,6 +166,19 @@
     }).controller("customerDetailController",function($location,$scope,$filter,customerService,dictionaryService,salesService,$routeParams,NgTableParams){
         $scope.selectCustomer={};
 
+        $scope.regionList = []; //地区
+
+        // 查询客户地区
+        dictionaryService.fetchDictionaryByType("REGION", function(data){
+            $scope.regionList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取地区失败:' + data.errorMsg
+            });
+        });
+
         // 查询客户详情
         customerService.getById($routeParams.customerId, function(data){
             $scope.selectCustomer = data;

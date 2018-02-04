@@ -75,69 +75,69 @@
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
         <div class="col-sm-12" style="margin-top: 10px;">
-            <form class="form-horizontal" novalidate id="myform" name="myform">
+            <form id="myform" name="myform" class="form-horizontal" novalidate>
                 <fieldset id="basicInfo">
-                    <!--
                     <div class="form-group">
-                        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">编号</label>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                            <input type="text" class="form-control" readonly="true" ng-model="selectCustomer.code"/>
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">编号</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input type="text" class="form-control" ng-model="selectCustomer.code" ng-disabled="true"/>
+                        </div>
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">姓名</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input type="text" class="form-control" ng-model="selectCustomer.name" ng-disabled="true"/>
                         </div>
                     </div>
-                    -->
+
                     <div class="form-group">
-                        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">姓名</label>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                            <div>{{selectCustomer.name}}</div>
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">性别</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <select ng-model="selectCustomer.gender" class="form-control" ng-disabled="true">
+                                <option value="M">男</option>
+                                <option value="F">女</option>
+                            </select>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">性别</label>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                            <div ng-switch="selectCustomer.gender">
-                                <div ng-switch-when="M">男</div>
-                                <div ng-switch-when="F">女</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">年龄</label>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                            <div>{{selectCustomer.age}}</div>
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">年龄</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input type="text" class="form-control" ng-model="selectCustomer.age" ng-disabled="true"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">生日</label>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                            <div>{{selectCustomer.birthday}}</div>
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">生日</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input class="form-control" type="text"
+                                   onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                                   ng-model="selectCustomer.birthday" name="birthday"
+                                   id="birthday" ng-disabled="true"/>
+                        </div>
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">手机号码</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input type="text" class="form-control" required
+                                   ng-model="selectCustomer.mobileNumber" ng-disabled="true"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">手机号码</label>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                            <div>{{selectCustomer.mobileNumber}}</div>
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">微信</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input type="text" class="form-control" ng-model="selectCustomer.wechatno" ng-disabled="true"/>
+                        </div>
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">地区</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <select class="form-control" ng-model="selectCustomer.region" ng-disabled="true">
+                                <option ng-repeat="region in regionList" value="{{region.dictName}}"
+                                        ng-selected="region.dictName==selectCustomer.region">
+                                    {{region.dictName}}
+                                </option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">微信</label>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                            <div>{{selectCustomer.wechatno}}</div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">地区</label>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                            <div>{{selectCustomer.region}}</div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">地址</label>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                            <div>{{selectCustomer.address}}</div>
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">地址</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input type="text" class="form-control" ng-model="selectCustomer.address" ng-disabled="true"/>
                         </div>
                     </div>
                 </fieldset>
-            </form>s
+            </form>
         </div>
     </div>
 
@@ -222,33 +222,33 @@
     <table class="table table-bordered" style="margin-top: 10px;">
         <tr>
             <td>右球镜</td>
-            <td><input type="text" ng-model="optometryRecord.rightSphere" /></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.rightSphere" /></td>
             <td>左球镜</td>
-            <td><input type="text" ng-model="optometryRecord.leftSphere" /></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.leftSphere" /></td>
         </tr>
         <tr>
             <td>右柱镜</td>
-            <td><input type="text" ng-model="optometryRecord.rightCylinder" /></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.rightCylinder" /></td>
             <td>左柱镜</td>
-            <td><input type="text" ng-model="optometryRecord.leftCylinder" /></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.leftCylinder" /></td>
         </tr>
         <tr>
             <td>右轴向</td>
-            <td><input type="text" ng-model="optometryRecord.rightAxial" /></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.rightAxial" /></td>
             <td>左轴向</td>
-            <td><input type="text" ng-model="optometryRecord.leftAxial" /></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.leftAxial" /></td>
         </tr>
         <tr>
             <td>右裸视</td>
-            <td><input type="text" ng-model="optometryRecord.rightUncorrectedVisualAcuity" /></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.rightUncorrectedVisualAcuity" /></td>
             <td>左裸视</td>
-            <td><input type="text" ng-model="optometryRecord.leftUncorrectedVisualAcuity" /></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.leftUncorrectedVisualAcuity" /></td>
         </tr>
         <tr>
             <td>右矫正</td>
-            <td><input type="text" ng-model="optometryRecord.rightCorrectedVisualAcuity" /></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.rightCorrectedVisualAcuity" /></td>
             <td>左矫正</td>
-            <td><input type="text" ng-model="optometryRecord.leftCorrectedVisualAcuity" /></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.leftCorrectedVisualAcuity" /></td>
         </tr>
 
         <tr>

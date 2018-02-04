@@ -4,10 +4,7 @@ import com.luda.comm.po.DictionaryType;
 import com.luda.comm.po.ResultHandle;
 import com.luda.dictionary.DictFactory;
 import com.luda.dictionary.dao.DictionaryDao;
-import com.luda.dictionary.model.DictionaryModel;
-import com.luda.dictionary.model.GoodsColor;
-import com.luda.dictionary.model.GoodsKind;
-import com.luda.dictionary.model.GoodsType;
+import com.luda.dictionary.model.*;
 import com.luda.dictionary.service.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -170,5 +167,45 @@ public class DictionaryServiceImpl implements DictionaryService{
             return DictFactory.getInstance().getRegionList();
         }
         return Collections.emptyList();
+    }
+
+    @Override
+    public List<GoodsBrand> fetchGoodsBrandList() {
+        return dictionaryDao.fetchGoodsBrandList();
+    }
+
+    @Override
+    public ResultHandle<GoodsBrand> saveGoodsBrand(GoodsBrand goodsBrand) {
+        ResultHandle<GoodsBrand> resultHandle = new ResultHandle<>();
+        int result = dictionaryDao.saveGoodsBrand(goodsBrand);
+        if(result < 0){
+            resultHandle.setMsg("商品品牌保存失败");
+        }
+        return resultHandle;
+    }
+
+    @Override
+    public GoodsBrand getGoodsBrandById(int brandId) {
+        return dictionaryDao.getGoodsBrandById(brandId);
+    }
+
+    @Override
+    public ResultHandle<GoodsBrand> updateGoodsBrand(GoodsBrand goodsBrand) {
+        ResultHandle<GoodsBrand> resultHandle = new ResultHandle<>();
+        int result = dictionaryDao.updateGoodsBrand(goodsBrand);
+        if(result < 0){
+            resultHandle.setMsg("商品品牌更新失败");
+        }
+        return resultHandle;
+    }
+
+    @Override
+    public ResultHandle<GoodsBrand> removeGoodsBrand(int brandId) {
+        ResultHandle<GoodsBrand> resultHandle = new ResultHandle<>();
+        int result = dictionaryDao.removeGoodsBrand(brandId);
+        if(result < 0){
+            resultHandle.setMsg("商品品牌删除失败");
+        }
+        return resultHandle;
     }
 }

@@ -1,0 +1,159 @@
+<style type="text/css">
+    #myform input.ng-invalid.ng-dirty {
+        background-color: #FFC0CB;
+    }
+    .bg{display:none;position:fixed;width:100%;height:100%;background:lightgray;z-index:2;top:0;left:0;opacity:0.6;}
+    .content{
+        display:none;
+        width:400px;
+        height:500px;
+        position:fixed;
+        top:5%;
+        background:#fff;
+        z-index:3;
+        left:50%;
+        margin-left:-250px;
+        TEXT-ALIGN: center;
+        padding-left:15px;
+        padding-right: 15px;
+    }
+    table {
+        border: 1px solid lightgray;
+        width:95%;
+        border-collapse:collapse;
+        border-spacing:0;
+        empty-cells:hide;
+        word-break:break-all;
+        word-wrap:break-word;
+    }
+    table tr td {
+        height:30px;
+    }
+
+    p{
+        padding-top:10px;
+    }
+</style>
+
+<div class="alert alert-danger alert-dismissible fade in" role="alert"
+     ng-show="errorMsg!=null||errorMsg!=undefined">
+    <button type="button" class="close" ng-click="errorMsg=null"
+            aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p>{{errorMsg}}</p>
+</div>
+<div class="alert alert-success alert-dismissible fade in" role="alert"
+     ng-show="successMsg">
+    <button type="button" class="close" ng-click="successMsg=''"
+            aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p>{{successMsg}}</p>
+</div>
+
+<h4 class="seat-manage-operate-title" style="margin-bottom: 10px">采购单详情</h4>
+
+<div class="seat-manage-operate-container">
+    <div class="seat-manage-operate-button form-inline">
+        <button class="btn btn-success btn-sm" ng-click="cancel()">返回</button>
+    </div>
+</div>
+
+<div class="tab-content">
+    <!-- 采购入库单 -->
+    <div role="tabpanel" class="tab-pane active">
+        <div class="col-sm-12" style="margin-top: 10px;">
+            <form class="form-horizontal" novalidate id="myform" name="myform">
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">编号</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input type="text" class="form-control" ng-disabled="true" ng-model="selectPurchaseOrder.code"/>
+                    </div>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">采购日期</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input class="form-control" type="text"
+                               onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                               ng-model="selectPurchaseOrder.purchaseDate" name="purchaseDate"
+                               id="purchaseDate" ng-disabled="true"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">门店</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <select class="form-control" required ng-model="selectPurchaseOrder.storeId" ng-disabled="true">
+                            <option ng-repeat="store in storeList" value="{{store.storeId}}"
+                                    ng-selected="store.storeId == selectPurchaseOrder.storeId">{{store.storeName}}</option>
+                        </select>
+                    </div>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">供应商</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <select class="form-control" required ng-model="selectPurchaseOrder.supplierId" ng-disabled="true">
+                            <option ng-repeat="supplier in supplierList" value="{{supplier.supplierId}}"
+                                    ng-selected="selectPurchaseOrder.supplierId == supplier.supplierId">
+                                {{supplier.supplierName}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">业务员</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <select class="form-control" ng-model="selectPurchaseOrder.businessmanId" ng-disabled="true">
+                            <option ng-repeat="adminUser in adminUserList" value="{{adminUser.adminUserId}}"
+                                    ng-selected="adminUser.adminUserId==selectPurchaseOrder.businessmanId">{{adminUser.adminUserDetailModel.realname}}</option>
+                        </select>
+                    </div>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">数量</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input type="text" class="form-control" ng-model="selectPurchaseOrder.totalQuantity" ng-disabled="true"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">应付金额</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input type="text" class="form-control" ng-model="selectPurchaseOrder.totalAmount" ng-disabled="true"/>
+                    </div>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">备注</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <textarea rows="5" ng-model="selectPurchaseOrder.remark" style="width:100%" ng-disabled="true"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12">
+            <div class="oz-form-fields"  style="width:100%;padding-top: 5px">
+                <!-- 采购单明细信息数据 -->
+                <fieldset id="purchaseOrderItems">
+                    <legend>
+                        <h4>采购单明细</h4>
+                    </legend>
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>名称</td>
+                            <td>商品类型</td>
+                            <td>球镜</td>
+                            <td>柱镜</td>
+                            <td>度数</td>
+                            <td>采购价格</td>
+                            <td>采购数量</td>
+                            <td>小计</td>
+                            <td>备注</td>
+                        </tr>
+                        <tr ng-repeat="item in purchaseOrderItemList">
+                            <td>{{item.materiel.name}}</td>
+                            <td>{{item.materiel.typeName}}</td>
+                            <td>{{item.sphere}}</td>
+                            <td>{{item.cylinder}}</td>
+                            <td>{{item.axial}}</td>
+                            <td>{{item.purchasePrice}}</td>
+                            <td>{{item.purchaseQuantity}}</td>
+                            <td>{{item.purchasePrice * item.purchaseQuantity}}</td>
+                            <td>{{item.remark}}</td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>

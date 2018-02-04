@@ -13,7 +13,10 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
 	}).when("/editAdminUser/:adminUserId",{
 		templateUrl : "app/business_operation/controllers/adminUser/EditAdminUser.html",
 		controller : "editAdminUserController"
-	}).when("/gotoModifyPwd/:cellPhoneNumber",{
+	}).when("/adminUserDetail/:adminUserId",{
+        templateUrl : "app/business_operation/controllers/adminUser/adminUserDetail.html",
+        controller : "adminUserDetailController"
+    }).when("/gotoModifyPwd/:cellPhoneNumber",{
 		templateUrl : "app/business_operation/controllers/adminUser/ModifyPwd.html",
 		controller : "editAdminUserController"
 	}).when("/storeManage", {
@@ -52,6 +55,9 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/editMateriel/:id", {
         templateUrl : "app/business_operation/controllers/materiel/editMateriel.html",
         controller : "editMaterielController"
+    }).when("/materielDetail/:id", {
+        templateUrl : "app/business_operation/controllers/materiel/materielDetail.html",
+        controller : "materielDetailController"
     }).when("/goodsTypeManage", {
         templateUrl : "app/business_operation/controllers/dictionary/goodsType/goodsTypeList.html",
         controller : "goodsTypeManageController"
@@ -70,6 +76,15 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/editGoodsColor/:colorId", {
         templateUrl : "app/business_operation/controllers/dictionary/goodsColor/editGoodsColor.html",
         controller : "editGoodsColorController"
+    }).when("/goodsBrandManage", {
+        templateUrl : "app/business_operation/controllers/dictionary/goodsBrand/goodsBrandList.html",
+        controller : "goodsBrandManageController"
+    }).when("/addGoodsBrand", {
+        templateUrl : "app/business_operation/controllers/dictionary/goodsBrand/newGoodsBrand.html",
+        controller : "addGoodsBrandController"
+    }).when("/editGoodsBrand/:brandId", {
+        templateUrl : "app/business_operation/controllers/dictionary/goodsBrand/editGoodsBrand.html",
+        controller : "editGoodsBrandController"
     }).when("/dictionaryManage/:dictType", {
         templateUrl : "app/business_operation/controllers/dictionary/dictList.html",
         controller : "dictManageController"
@@ -88,6 +103,9 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/editPurchaseOrder/:id", {
         templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/editPurchaseOrder.html",
         controller : "editPurchaseOrderController"
+    }).when("/purchaseOrderDetail/:id", {
+        templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/purchaseOrderDetail.html",
+        controller : "purchaseOrderDetailController"
     }).when("/addPurchaseOrder",{
         templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/newPurchaseOrder.html",
         controller : "addPurchaseOrderController"
@@ -109,6 +127,9 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/editInvntVerification/:id", {
         templateUrl : "app/business_operation/controllers/inventory/inventoryVerification/editInventoryVerification.html",
         controller : "editInventoryVerificationController"
+    }).when("/invntVerificationDetail/:id", {
+        templateUrl : "app/business_operation/controllers/inventory/inventoryVerification/inventoryVerificationDetail.html",
+        controller : "inventoryVerificationDetailController"
     }).when("/customerManage", {
         templateUrl : "app/business_operation/controllers/customer/customerList.html",
         controller : "customerManageController"
@@ -130,6 +151,9 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/editTransferOrder/:id", {
         templateUrl : "app/business_operation/controllers/inventory/transfer/editTransfer.html",
         controller : "editTransferOrderController"
+    }).when("/transferOrderDetail/:id", {
+        templateUrl : "app/business_operation/controllers/inventory/transfer/transferOrderDetail.html",
+        controller : "transferOrderDetailController"
     }).when("/salesOrderManage", {
         templateUrl : "app/business_operation/controllers/sales/sale/salesOrderList.html",
         controller : "salesOrderManageController"
@@ -139,6 +163,12 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/editSalesOrder/:id", {
         templateUrl : "app/business_operation/controllers/sales/sale/editSalesOrder.html",
         controller : "editSalesOrderController"
+    }).when("/salesOrderDetail/:id", {
+        templateUrl : "app/business_operation/controllers/sales/sale/salesOrderDetail.html",
+        controller : "salesOrderDetailController"
+    }).when("/orderRefund/:id", {
+        templateUrl : "app/business_operation/controllers/sales/sale/orderRefund.html",
+        controller : "orderRefundController"
     }).when("/addRefundOrder", {
         templateUrl : "app/business_operation/controllers/sales/refund/newRefundOrder.html",
         controller : "addRefundOrderController"
@@ -148,6 +178,9 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/editRefundOrder/:id", {
         templateUrl : "app/business_operation/controllers/sales/refund/editRefundOrder.html",
         controller : "editRefundOrderController"
+    }).when("/refundOrderDetail/:id", {
+        templateUrl : "app/business_operation/controllers/sales/refund/refundOrderDetail.html",
+        controller : "refundOrderDetailController"
     }).when("/saleStatisticsManage", {
         templateUrl : "app/business_operation/controllers/statistics/sale/saleStatistics.html",
         controller : "saleStatisticsController"
@@ -506,6 +539,32 @@ businessOperationApp.factory("dictionaryService", function($http) {
         },
         fetchDictionaryByType : function (dictType, successCallback, errorCallback) {
             $http.get("/luda_glasses/rest/dictionary/fetchByType/" + dictType).success(successCallback).error(errorCallback);
+        },
+        fetchGoodsBrandList : function(successCallback, errorCallback){
+            $http.get("/luda_glasses/rest/dictionary/goodsBrand/list").success(successCallback).error(errorCallback);
+        },
+        saveGoodsBrand : function (goodsBrand, successCallback, errorCallback) {
+            $http({
+                method : "POST",
+                url : "/luda_glasses/rest/dictionary/goodsBrand/saveGoodsBrand",
+                data : goodsBrand
+            }).success(successCallback).error(errorCallback);
+        },
+        getGoodsBrandById : function (brandId, successCallback, errorCallback) {
+            $http.get("/luda_glasses/rest/dictionary/goodsBrand/getById/" + brandId).success(successCallback).error(errorCallback);
+        },
+        updateGoodsBrand : function (goodsBrand, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/dictionary/goodsBrand/updateGoodsBrand",
+                data:goodsBrand
+            }).success(successCallback).error(errorCallback);
+        },
+        removeGoodsBrand : function (brandId, successCallback, errorCallback) {
+            $http({
+                method : "POST",
+                url : "/luda_glasses/rest/dictionary/goodsBrand/removeGoodsBrand/" + brandId
+            }).success(successCallback).error(errorCallback);
         }
     }
 });
@@ -691,6 +750,12 @@ businessOperationApp.factory("salesService", function($http) {
             $http({
                 method:"POST",
                 url:"/luda_glasses/rest/sales/removeSalesOrder/" + id
+            }).success(successCallback).error(errorCallback);
+        },
+        orderRefund : function (id, successCallback, errorCallback) {
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/sales/orderRefund/" + id
             }).success(successCallback).error(errorCallback);
         }
     }

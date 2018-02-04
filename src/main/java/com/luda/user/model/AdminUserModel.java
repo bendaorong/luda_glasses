@@ -1,6 +1,7 @@
 package com.luda.user.model;
 
 import com.luda.comm.po.Constants;
+import com.luda.store.model.StoreModel;
 
 import java.io.Serializable;
 
@@ -47,9 +48,21 @@ public class AdminUserModel implements Serializable{
      */
     private AdminUserDetailModel adminUserDetailModel;
     /**
+     * 门店
+     */
+    private StoreModel storeModel;
+    /**
      * 激活
      */
     private int activeFlag;
+
+    public StoreModel getStoreModel() {
+        return storeModel;
+    }
+
+    public void setStoreModel(StoreModel storeModel) {
+        this.storeModel = storeModel;
+    }
 
     public int getAdminUserId() {
         return adminUserId;

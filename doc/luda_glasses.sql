@@ -39,8 +39,8 @@ create table admin_user_detail
    create_datetime      datetime                       null,
    update_datetime      datetime                       null,
    position             varchar(32)                   null,
-   onboard_date         date                           null,
-   dimission_date       date                           null,
+   onboard_date         varchar(16)                   null,
+   dimission_date       varchar(16)                   null,
    PRIMARY KEY (admin_user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -272,6 +272,9 @@ create table goods_brand
    delete_flag          tinyint(1)                      default 0,
    PRIMARY KEY (brand_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO goods_brand (brand_name)
+VALUES ('Pulais/普莱斯'), ('ESSILOR/依视路'), ("Levi's/李维斯"), ('暴龙'), ('海昌'), ('康师傅'), ('康视顿'), ('明月'), ('卫康');
 
 
 /*==============================================================*/
@@ -509,3 +512,10 @@ create table sales_order_item (
   remark    varchar(256) comment '备注',
   PRIMARY KEY (id)
 )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/**
+ * 2018-02-02
+ */
+
+ALTER TABLE luda_glasses.`sales_order` ADD COLUMN related_order_id INT(11) DEFAULT 0 COMMENT '相关订单，销售单该字段对应退货单id,退货单该字段对应销售单id';

@@ -78,6 +78,80 @@
         $scope.addRefundOrder = function (id) {
             $location.path("/addRefundOrder/" + id);
         }
+    }).controller("refundOrderDetailController", function($location,$scope,$filter,inventoryService,materielService,salesService,storeService,adminUserService,customerService,$routeParams) {
+        setActiveSubPage($scope);
+        $scope.roleCode = sessionStorage.getItem("roleCode");
+        $scope.currentTab = 0;
+
+        $scope.selectedSalesOrder = {};   // 退货单
+
+        $scope.storeList = []; //门店
+        $scope.adminUserList = []; //业务员
+        $scope.materielList = []; //商品
+        $scope.customerList = []; //客户
+
+        // 查询销售单
+        salesService.getSalesOrderWithItemsById($routeParams.id, function (data) {
+            $scope.selectedSalesOrder = data.data;
+        }, function (data) {
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取退货单失败：' + data.errorMsg
+            });
+        });
+
+        // 查询客户
+        customerService.fetchCustomerList(function (data) {
+            $scope.customerList = data;
+        }, function (data) {
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取客户列表错误' + data.errorMsg
+            });
+        });
+
+        // 查询商品
+        materielService.fetchMaterielList(function(data){
+            $scope.materielList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品错误' + data.errorMsg
+            });
+        });
+
+        // 查询门店
+        storeService.fetchStoreList(function(data){
+            $scope.storeList = data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取门店失败:' + data.errorMsg
+            });
+        });
+
+        // 查询业务员
+        adminUserService.fetchUserListByStore(function(data){
+            $scope.adminUserList  =  data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取业务员失败:' + data.errorMsg
+            });
+        });
+
+        $scope.cancel = function(){
+            history.back();
+        }
+
+        $scope.setCurrentTab = function(currentTab) {
+            $scope.currentTab = currentTab;
+        }
     }).controller("addRefundOrderController", function($location,$scope,$filter,materielService,inventoryService,salesService,storeService,adminUserService,customerService) {
         setActiveSubPage($scope);
         $scope.roleCode = sessionStorage.getItem("roleCode");

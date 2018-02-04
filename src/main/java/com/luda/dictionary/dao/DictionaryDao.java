@@ -1,10 +1,7 @@
 package com.luda.dictionary.dao;
 
 import com.luda.comm.po.ResultHandle;
-import com.luda.dictionary.model.DictionaryModel;
-import com.luda.dictionary.model.GoodsColor;
-import com.luda.dictionary.model.GoodsKind;
-import com.luda.dictionary.model.GoodsType;
+import com.luda.dictionary.model.*;
 
 import java.util.List;
 
@@ -44,4 +41,15 @@ public interface DictionaryDao {
     int updateDictionary(DictionaryModel dictionaryModel);
 
     int removeDictionary(int dictId);
+
+
+    List<GoodsBrand> fetchGoodsBrandList();
+
+    int saveGoodsBrand(GoodsBrand goodsBrand);
+
+    GoodsBrand getGoodsBrandById(int brandId);
+
+    int updateGoodsBrand(GoodsBrand goodsBrand);
+
+    int removeGoodsBrand(int brandId);
 }

@@ -1,9 +1,9 @@
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
         <div class="seat-manage-operate-container">
-            <h4 class="seat-manage-operate-title">库存盘点单</h4>
+            <h4 class="seat-manage-operate-title">品牌管理</h4>
             <div class="seat-manage-operate-button form-inline">
-                <a type="button" class="btn btn-success btn-sm" href="#addInvntVerification"> 新增</a>
+                <a type="button" class="btn btn-success btn-sm" href="#addGoodsBrand"> 新增</a>
                 <input class="form-control" ng-model="filterText" ng-change="filter()"
                        placeHolder="{{'BUSINESS_OPERATION_PRODUCT_SEARCH'|translate}}">
                 <button type="button" class="btn btn-sm btn-primary" ng-click="refresh()">
@@ -14,21 +14,17 @@
         <hr>
 
         <table ng-table="tableParams" class="table table-bordered">
-            <tr ng-repeat="order in $data|filter:filterText">
-                <td data-title="'编号'" sortable="'code'">
-                    <a href="#/invntVerificationDetail/{{order.id}}">{{order.code}}</a>
-                </td>
-                <td data-title="'盘点日期'" sortable="'verifDate'">{{order.verifDate}}</td>
-                <td data-title="'门店'" sortable="'code'">{{order.storeName}}</td>
-                <td data-title="'业务员'" sortable="'code'">{{order.businessmanName}}</td>
+            <tr ng-repeat="goodsBrand in $data|filter:filterText">
+                <td data-title="'名称'" sortable="'brandName'">{{goodsBrand.brandName}}</td>
+
                 <td data-title="'操作'">
                     <button type="button" class="btn btn-sm btn-primary"
-                            ng-click="gotoEdit(order.id)">编辑</button>
+                            ng-click="gotoEdit(goodsBrand.brandId)">编辑</button>
+
                     <button type="button" class="btn btn-sm btn-primary"
-                            ng-click="removeInvntVerification(order.id)">删除</button>
+                            ng-click="removeGoodsBrand(goodsBrand.brandId)">删除</button>
                 </td>
             </tr>
         </table>
     </div>
-
 </div>

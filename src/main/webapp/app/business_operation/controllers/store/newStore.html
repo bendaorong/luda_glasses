@@ -38,24 +38,21 @@
         <form id="myform" name="myform" class="form-horizontal" novalidate>
             <fieldset id="basicInfo">
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">名称</label>
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label"><span class="red">*</span>名称</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="newStore.storeName"/>
+                        <input type="text" class="form-control" required ng-model="newStore.storeName"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">联系人</label>
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label"><span class="red">*</span>联系人</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="newStore.contactPerson" />
+                        <input type="text" class="form-control" required ng-model="newStore.contactPerson" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">联系电话</label>
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label"><span class="red">*</span>联系电话</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="newStore.contactPhone" />
+                        <input type="text" class="form-control" required ng-model="newStore.contactPhone" />
                     </div>
                 </div>
                 <!--
@@ -68,24 +65,21 @@
                 </div>
                 -->
                 <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">地址</label>
+                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label"><span class="red">*</span>地址</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="newStore.storeAddress" />
+                        <input type="text" class="form-control" required ng-model="newStore.storeAddress" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">总店</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="checkbox" ng-model="newStore.headOfficeFlag"
-                               ng-true-value="Y" ng-false-value="N" />
+                        <input type="checkbox" ng-model="newStore.headOfficeFlag" ng-true-value="Y" ng-false-value="N" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">备注</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="text" class="form-control" required
-                               ng-model="newStore.remark" />
+                        <textarea rows="5" ng-model="newStore.remark" style="width:100%"></textarea>
                     </div>
                 </div>
         </form>

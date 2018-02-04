@@ -12,6 +12,7 @@
         <result property="storeId" column="store_id"/>
         <result property="activeFlag" column="active_flag"/>
         <association property="adminRoleModel" column="role_id" select="getRoleById"/>
+        <association property="storeModel" column="store_id" select="com.luda.store.dao.StoreDao.getById"/>
     </resultMap>
 
     <resultMap id="adminRoleModelMap" type="com.luda.user.model.AdminRoleModel">

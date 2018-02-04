@@ -15,15 +15,19 @@
 
 		<table ng-table="tableParams" class="table table-bordered">
 			<tr ng-repeat="adminUser in $data|filter:filterText">
-				<td data-title="'编号'" sortable="'adminCode'">{{adminUser.adminCode}}</td>
-				<td data-title="'用户'" sortable="'adminCode'">{{adminUser.adminName}}</td>
-				<td data-title="'姓名'" sortable="'adminUserName'">{{adminUser.adminUserDetailModel.realname}}</td>
+				<td data-title="'工号'" sortable="'staffid'">
+					<a href="#/adminUserDetail/{{adminUser.adminUserId}}">{{adminUser.staffid}}</a>
+				</td>
+				<td data-title="'用户'" sortable="'adminName'">{{adminUser.adminName}}</td>
+				<td data-title="'姓名'" sortable="'adminUserDetailModel.realname'">{{adminUser.adminUserDetailModel.realname}}</td>
+				<td data-title="'门店'" sortable="'storeModel.storeName'">{{adminUser.storeModel.storeName}}</td>
+				<!--
 				<td data-title="'性别'" sortable="'adminUserName'">
 					<div ng-switch="adminUser.adminUserDetailModel.gender">
 						<div ng-switch-when="M">男</div>
 						<div ng-switch-when="F">女</div>
 					</div>
-				</td>
+				</td>-->
 				<td data-title="'手机号码'" sortable="'mobileNumber'">{{adminUser.mobileNumber}}</td>
 				<!--<td data-title="'地址'" sortable="'address'">{{adminUser.adminUserDetailModel.address}}</td>-->
 				<!--<td data-title="'籍贯'" sortable="'nativePlace'">{{adminUser.adminUserDetailModel.nativePlace}}</td>-->

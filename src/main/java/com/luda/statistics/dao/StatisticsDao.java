@@ -17,4 +17,6 @@ public interface StatisticsDao {
     List<PurchaseStatisticsByMateriel> purchaseStatisticsByMateriel(StatisticsCondition statisticsCondition);
 
     List<PurchaseStatisticsBySupplier> purchaseStatisticsBySupplier(StatisticsCondition statisticsCondition);
+
+    List<SaleStatisticsChartByMaterielType> saleStatisticsByMaterielType(StatisticsCondition statisticsCondition);
 }

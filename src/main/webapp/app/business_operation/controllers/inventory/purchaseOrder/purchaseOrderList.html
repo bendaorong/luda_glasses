@@ -15,7 +15,9 @@
 
         <table ng-table="tableParams" class="table table-bordered">
             <tr ng-repeat="order in $data|filter:filterText">
-                <td data-title="'编号'" sortable="'code'">{{order.code}}</td>
+                <td data-title="'编号'" sortable="'code'">
+                    <a href="#/purchaseOrderDetail/{{order.purchaseOrderId}}">{{order.code}}</a>
+                </td>
                 <td data-title="'采购日期'" sortable="'purchaseDate'">{{order.purchaseDate}}</td>
                 <td data-title="'门店'" sortable="'code'">{{order.storeName}}</td>
                 <td data-title="'供应商'" sortable="'code'">{{order.supplierName}}</td>
