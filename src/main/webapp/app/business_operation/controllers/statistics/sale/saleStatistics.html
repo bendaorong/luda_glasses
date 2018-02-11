@@ -14,10 +14,10 @@
                 <tr>
                     <td>起止时间</td>
                     <td>
-                        <input type="text" placeholder="请输入开始日期" onClick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d', readOnly:true})"
+                        <input type="text" placeholder="请输入开始日期" onClick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d', readOnly:true, isShowClear:false})"
                                ng-model="statisticsCondition.beginDate" id="beginDate" />
                         -
-                        <input type="text" placeholder="请输入结束日期" onClick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d', readOnly:true})"
+                        <input type="text" placeholder="请输入结束日期" onClick="WdatePicker({dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d', readOnly:true, isShowClear:false})"
                                ng-model="statisticsCondition.endDate" id="endDate" />
                     </td>
                 </tr>

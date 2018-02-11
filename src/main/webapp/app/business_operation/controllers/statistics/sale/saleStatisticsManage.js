@@ -18,10 +18,10 @@
         // 默认查询一个月内的销售数据
         $scope.statisticsCondition.beginDate = $filter('date')(addDate(new Date(), -30), "yyyy-MM-dd");
         $scope.statisticsCondition.endDate = $filter('date')(new Date(), "yyyy-MM-dd");
+        $scope.statisticsCondition.dimension = 1;
 
         // 按商品统计
         function saleStatisticsByMateriel(){
-            console.log(JSON.stringify($scope.statisticsCondition));
             statisticsService.saleStatisticsByMateriel($scope.statisticsCondition, function (data) {
                 $scope.saleStatisticsByMaterielList = data.data;
                 var totalQuantity = 0;
@@ -36,12 +36,13 @@
 
             });
         }
-        saleStatisticsByMateriel();
+        //saleStatisticsByMateriel();
 
         // 按商品-过滤查询
         $scope.queryByMateriel = function () {
             var beginDate = $("#beginDate").val();
-            var endDate = $("#endDate").val();
+            var endDate = $("#endDate").val()
+            var dimension = $scope.statisticsCondition.dimension;
             if(beginDate != null && endDate != null){
                 if(beginDate > endDate){
                     BootstrapDialog.show({
@@ -51,22 +52,25 @@
                     });
                     return false;
                 }
-                $scope.statisticsCondition.beginDate = beginDate;
-                $scope.statisticsCondition.endDate = endDate;
+                //$scope.statisticsCondition.beginDate = beginDate;
+                //$scope.statisticsCondition.endDate = endDate;
             }
-            saleStatisticsByMateriel();
+            //saleStatisticsByMateriel();
+            var srcurl = "/luda_glasses/rest/statistics/sale/chart/"+dimension+"/"+beginDate+"/"+endDate;
+            console.log("srcurl:"+srcurl);
+            $("#chartImage").attr("src", srcurl);
         }
 
         // 查询商品类型
-        dictionaryService.fetchGoodsTypeList(function(data){
-            $scope.goodsTypeList = data.data;
-        },function(data){
-            BootstrapDialog.show({
-                type : BootstrapDialog.TYPE_DANGER,
-                title : '警告',
-                message : '获取商品类型失败:' + data.errorMsg
-            });
-        });
+        // dictionaryService.fetchGoodsTypeList(function(data){
+        //     $scope.goodsTypeList = data.data;
+        // },function(data){
+        //     BootstrapDialog.show({
+        //         type : BootstrapDialog.TYPE_DANGER,
+        //         title : '警告',
+        //         message : '获取商品类型失败:' + data.errorMsg
+        //     });
+        // });
 
         /**
          * ------------------------------------------------------------------------------------------------
@@ -99,7 +103,7 @@
 
             });
         }
-        saleStatisticsByAdminUser();
+        //saleStatisticsByAdminUser();
 
         // 按用户-过滤查询
         $scope.queryByUser = function () {
@@ -152,7 +156,7 @@
 
             });
         }
-        saleStatisticsByStore();
+        //saleStatisticsByStore();
 
         // 按门店-过滤查询
         $scope.queryByStore = function () {
