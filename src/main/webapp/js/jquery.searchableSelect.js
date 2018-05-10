@@ -7,7 +7,7 @@
   // a case insensitive jQuery :contains selector
   $.expr[":"].searchableSelectContains = $.expr.createPseudo(function(arg) {
     return function( elem ) {
-      return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+      return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;;
     };
   });
 
@@ -122,14 +122,14 @@
     },
 
     filter: function(){
-      var text = this.input.val();
-      this.items.find('.searchable-select-item').addClass('searchable-select-hide');
-      this.items.find('.searchable-select-item:searchableSelectContains('+text+')').removeClass('searchable-select-hide');
-      if(this.currentSelectedItem.hasClass('searchable-select-hide') && this.items.find('.searchable-select-item:not(.searchable-select-hide)').length > 0){
-        this.hoverFirstNotHideItem();
-      }
+        var text = this.input.val();
+        this.items.find('.searchable-select-item').addClass('searchable-select-hide');
+        this.items.find('.searchable-select-item:searchableSelectContains('+text+')').removeClass('searchable-select-hide');
+        if(this.currentSelectedItem.hasClass('searchable-select-hide') && this.items.find('.searchable-select-item:not(.searchable-select-hide)').length > 0){
+            this.hoverFirstNotHideItem();
+        }
 
-      this.setPriviousAndNextVisibility();
+        this.setPriviousAndNextVisibility();
     },
 
     hoverFirstNotHideItem: function(){

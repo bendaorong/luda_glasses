@@ -20,6 +20,54 @@ public class CommonQueryBean {
      * 业务员
      */
     private Integer businessManId;
+    /**
+     * 商品id
+     */
+    private Integer materielId;
+    /**
+     * 球镜
+     */
+    private Double sphere;
+    /**
+     * 柱镜
+     */
+    private Double cylinder;
+    /**
+     * startIndex
+     */
+    private int startIndex;
+
+    public Double getSphere() {
+        return sphere;
+    }
+
+    public void setSphere(Double sphere) {
+        this.sphere = sphere;
+    }
+
+    public Double getCylinder() {
+        return cylinder;
+    }
+
+    public void setCylinder(Double cylinder) {
+        this.cylinder = cylinder;
+    }
+
+    public Integer getMaterielId() {
+        return materielId;
+    }
+
+    public void setMaterielId(Integer materielId) {
+        this.materielId = materielId;
+    }
+
+    public int getStartIndex() {
+        return startIndex;
+    }
+
+    public void setStartIndex(int startIndex) {
+        this.startIndex = startIndex;
+    }
 
     public Integer getOrderId() {
         return orderId;

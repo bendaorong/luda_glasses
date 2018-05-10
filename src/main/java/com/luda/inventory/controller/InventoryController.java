@@ -9,6 +9,7 @@ import com.luda.user.model.AdminUserModel;
 import com.luda.util.CommonUtils;
 import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONNull;
 import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,40 @@ public class InventoryController extends BaseController{
     @Autowired
     private InventoryService inventoryService;
 
+
+    /**
+     * 查询商品库存totalCount
+     */
+    @RequestMapping(value = "/mard/totalCount")
+    @ResponseBody
+    public String totalCount(@RequestBody String conditions, HttpSession httpSession){
+        String result = "";
+        try {
+            CommonQueryBean queryBean = new CommonQueryBean();
+
+            JSONObject obj = JSONObject.fromObject(conditions);
+            if(obj.get("materielId") != null && !(obj.get("materielId") instanceof JSONNull)){
+                queryBean.setMaterielId(obj.getInt("materielId"));
+            }
+            if(obj.get("sphere") != null && !(obj.get("sphere") instanceof JSONNull)){
+                queryBean.setSphere(obj.getDouble("sphere"));
+            }
+            if(obj.get("cylinder") != null && !(obj.get("cylinder") instanceof JSONNull)){
+                queryBean.setCylinder(obj.getDouble("cylinder"));
+            }
+
+            if(!isSuperManage(httpSession)){
+                queryBean.setStoreId(getStoreId(httpSession));
+            }
+            int count = inventoryService.getMardTotalCount(queryBean);
+            result = getSuccessResult(count);
+        }catch (Exception e){
+            log.error("fetch mard list error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
     /**
      * 查询商品库存
      */
@@ -47,6 +83,48 @@ public class InventoryController extends BaseController{
                 queryBean.setStoreId(getStoreId(httpSession));
             }
             List<MardVo> mardVoList = inventoryService.fetchMardVoList(queryBean);
+            String data = CommonUtils.convertBeanCollectionToJsonArray(mardVoList, null).toString();
+            result = getSuccessResult(data);
+        }catch (Exception e){
+            log.error("fetch mard list error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 查询商品库存
+     */
+    @RequestMapping("/mard/listPage")
+    @ResponseBody
+    public String fetchMardListPage(@RequestBody String conditions, HttpSession httpSession){
+        String result = "";
+        try {
+            CommonQueryBean queryBean = new CommonQueryBean();
+            if(!isSuperManage(httpSession)){
+                queryBean.setStoreId(getStoreId(httpSession));
+            }
+
+            JSONObject obj = JSONObject.fromObject(conditions);
+            if(obj.get("materielId") != null && !(obj.get("materielId") instanceof JSONNull)){
+                queryBean.setMaterielId(obj.getInt("materielId"));
+            }
+            if(obj.get("sphere") != null && !(obj.get("sphere") instanceof JSONNull)){
+                queryBean.setSphere(obj.getDouble("sphere"));
+            }
+            if(obj.get("cylinder") != null && !(obj.get("cylinder") instanceof JSONNull)){
+                queryBean.setCylinder(obj.getDouble("cylinder"));
+            }
+            if(obj.get("storeId") != null && !(obj.get("storeId") instanceof JSONNull)){
+                queryBean.setStoreId(obj.getInt("storeId"));
+            }
+
+            int pageNo = obj.getInt("pageNo");
+            queryBean.setStartIndex(getStartIndex(pageNo, 10));
+            if(!isSuperManage(httpSession)){
+                queryBean.setStoreId(getStoreId(httpSession));
+            }
+            List<MardVo> mardVoList = inventoryService.fetchMardVoListPage(queryBean);
             String data = CommonUtils.convertBeanCollectionToJsonArray(mardVoList, null).toString();
             result = getSuccessResult(data);
         }catch (Exception e){
@@ -111,11 +189,52 @@ public class InventoryController extends BaseController{
     public String getPurchaseOrderById(@PathVariable int id){
         String result = "";
         try {
-            PurchaseOrder purchaseOrder = inventoryService.getPurchaseOrderById(id);
+            PurchaseOrder purchaseOrder = inventoryService.getPurchaseOrderWithoutItemsById(id);
             String data = CommonUtils.convertBeanToJson(purchaseOrder, null).toString();
             result = getSuccessResult(data);
         }catch (Exception e){
             log.error("getPurchaseOrderById error, id:" + id, e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 查询采购单明细记录数
+     */
+    @RequestMapping("/purchaseOrder/item/count/{purchaseOrderId}")
+    @ResponseBody
+    public String getPurchaseOrderItemCount(@PathVariable int purchaseOrderId){
+        String result;
+        try {
+            int count = inventoryService.getPurchaseOrderItemCount(purchaseOrderId);
+            result = getSuccessResult(count);
+        }catch (Exception e){
+            log.error("getPurchaseOrderItemCount error, id:" + purchaseOrderId, e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 查询采购单明细记录数
+     */
+    @RequestMapping("/purchaseOrder/item/listPage")
+    @ResponseBody
+    public String listPurchaseOrderItemPage(@RequestBody String conditions){
+        String result;
+        try {
+            JSONObject obj = JSONObject.fromObject(conditions);
+
+            CommonQueryBean queryBean = new CommonQueryBean();
+            queryBean.setOrderId(obj.getInt("purchaseOrderId"));
+            queryBean.setStartIndex(getStartIndex(obj.getInt("pageNo"), 10));
+
+            List<PurchaseOrderItem> items = inventoryService.fetchPurchaseOrderItemListPage(queryBean);
+            String data = CommonUtils.convertBeanCollectionToJsonArray(items, null).toString();
+            result = getSuccessResult(data);
+        }catch (Exception e){
+            log.error("listPurchaseOrderItemPage error, conditions:" + conditions, e);
             result = getFailResult("系统异常");
         }
         return result;
@@ -153,7 +272,13 @@ public class InventoryController extends BaseController{
             purchaseOrder.setUpdateUserId(adminUserModel.getAdminUserId());
 
             // 保存采购单和采购明细
-            ResultHandle resultHandle = inventoryService.savePurchaseOrder(purchaseOrder);
+            ResultHandle resultHandle;
+            if(purchaseOrder.isBatchOrder()){
+                resultHandle = inventoryService.saveBatchPurchaseOrder(purchaseOrder);
+            }else {
+                resultHandle = inventoryService.savePurchaseOrder(purchaseOrder);
+            }
+
             if(resultHandle.isSuccess()){
                 result = getSuccessResult();
             }else {

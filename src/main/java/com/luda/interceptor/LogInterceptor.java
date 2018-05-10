@@ -29,7 +29,6 @@ public class LogInterceptor implements HandlerInterceptor
             throws Exception
     {
         this.systime.set(Long.valueOf(System.currentTimeMillis()));
-
         return true;
     }
 }

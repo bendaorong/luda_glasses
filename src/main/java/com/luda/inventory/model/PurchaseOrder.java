@@ -71,6 +71,20 @@ public class PurchaseOrder implements Serializable {
      */
     private List<PurchaseOrderItem> purchaseOrderItemList;
 
+    /**
+     * 是否批量采购
+     * Y/N
+     */
+    private String isBatch;
+
+    public String getIsBatch() {
+        return isBatch;
+    }
+
+    public void setIsBatch(String isBatch) {
+        this.isBatch = isBatch;
+    }
+
     public int getPurchaseOrderId() {
         return purchaseOrderId;
     }
@@ -238,5 +252,13 @@ public class PurchaseOrder implements Serializable {
                 ", orderType='" + orderType + '\'' +
                 ", purchaseOrderItemList=" + purchaseOrderItemList +
                 '}';
+    }
+
+    /**
+     * 是否为批量采购单
+     * @return
+     */
+    public boolean isBatchOrder() {
+        return "Y".equals(isBatch);
     }
 }

@@ -2,30 +2,51 @@
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
         <div class="seat-manage-operate-container">
             <h4 class="seat-manage-operate-title">商品库存</h4>
-            <div class="seat-manage-operate-button form-inline">
-                <input class="form-control" ng-model="filterText" ng-change="filter()"
-                       placeHolder="{{'BUSINESS_OPERATION_PRODUCT_SEARCH'|translate}}">
-                <button type="button" class="btn btn-sm btn-primary" ng-click="refresh()">
-                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-                </button>
+            <div style="margin-top: 20px;">
+                <form class="form-horizontal" novalidate id="queryMaterielForm" name="queryMaterielForm">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">商品</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <select id="materiel" class="form-control"  ng-model="filterCondition.materielId">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">球镜</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input type="number" class="form-control" ng-model="filterCondition.sphere"/>
+                        </div>
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">柱镜</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input type="number" class="form-control" ng-model="filterCondition.cylinder"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"></label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <button ng-click="queryMateriel()">查询</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
         <hr>
 
-        <table ng-table="tableParams" class="table table-bordered">
-            <tr ng-repeat="mard in $data|filter:filterText">
+        <table ng-table="mardTable" class="table table-bordered">
+            <tr ng-repeat="mard in mardList">
                 <td data-title="'门店'" sortable="'storeName'">{{mard.storeName}}</td>
                 <td data-title="'商品名称'" sortable="'name'">{{mard.materiel.name}}</td>
-         <!--       <td data-title="'商品编号'" sortable="'code'">{{mard.materiel.code}}</td>
-                <td data-title="'条码'" sortable="'barcode'">{{mard.materiel.barcode}}</td>-->
+                <!--       <td data-title="'商品编号'" sortable="'code'">{{mard.materiel.code}}</td>
+                       <td data-title="'条码'" sortable="'barcode'">{{mard.materiel.barcode}}</td>-->
                 <td data-title="'商品类型'" sortable="'typeName'">{{mard.materiel.typeName}}</td>
-                <td data-title="'球镜'" sortable="'sphere'">{{mard.sphere}}</td>
-                <td data-title="'柱镜'" sortable="'cylinder'">{{mard.cylinder}}</td>
-                <td data-title="'度数'" sortable="'axial'">{{mard.axial}}</td>
+                <td data-title="'球镜'" sortable="'sphere'">{{mard.sphere | number:2}}</td>
+                <td data-title="'柱镜'" sortable="'cylinder'">{{mard.cylinder | number:2}}</td>
+                <td data-title="'度数'" sortable="'axial'">{{mard.axial | number:2}}</td>
                 <!--<td data-title="'规格型号'" sortable="'typeName'">{{mard.materiel.specification}}</td>-->
                 <!--<td data-title="'品牌'" sortable="'brand'">{{mard.materiel.brand}}</td>-->
                 <!--<td data-title="'售价'" sortable="'sellPrice'">{{mard.materiel.sellPrice}}</td>-->
-        <!--        <td data-title="'批发价'" sortable="'tradePrice'">{{mard.materiel.tradePrice}}</td>-->
+                <!--        <td data-title="'批发价'" sortable="'tradePrice'">{{mard.materiel.tradePrice}}</td>-->
                 <td data-title="'库存数量'" sortable="'costPrice'">{{mard.currentInventory}}</td>
                 <td data-title="'单位'" sortable="'brand'">{{mard.materiel.unit}}</td>
                 <td data-title="'下限'" sortable="'costPrice'">{{mard.materiel.minInventory}}</td>
@@ -33,5 +54,4 @@
             </tr>
         </table>
     </div>
-
 </div>

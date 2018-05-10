@@ -118,9 +118,9 @@
                         <tr ng-repeat="item in selectInvntVerification.invtVerifItemList">
                             <td>{{item.materiel.name}}</td>
                             <td>{{item.materiel.typeName}}</td>
-                            <td>{{item.sphere}}</td>
-                            <td>{{item.cylinder}}</td>
-                            <td>{{item.axial}}</td>
+                            <td>{{item.sphere | number:2}}</td>
+                            <td>{{item.cylinder | number:2}}</td>
+                            <td>{{item.axial | number:2}}</td>
                             <td>
                                 <div ng-switch="item.type">
                                     <div ng-switch-when="01">盘盈</div>

@@ -5,8 +5,8 @@
     .bg{display:none;position:fixed;width:100%;height:100%;background:lightgray;z-index:2;top:0;left:0;opacity:0.6;}
     .content{
         display:none;
-        width:400px;
-        height:500px;
+        width:500px;
+        height:600px;
         position:fixed;
         top:5%;
         background:#fff;
@@ -167,12 +167,12 @@
                     <tr ng-repeat="item in purchaseOrderItemList">
                         <td>{{item.materiel.name}}</td>
                         <td>{{item.materiel.typeName}}</td>
-                        <td>{{item.sphere}}</td>
-                        <td>{{item.cylinder}}</td>
-                        <td>{{item.axial}}</td>
-                        <td>{{item.purchasePrice}}</td>
+                        <td>{{item.sphere | number:2}}</td>
+                        <td>{{item.cylinder | number:2}}</td>
+                        <td>{{item.axial | number:2}}</td>
+                        <td>{{item.purchasePrice | number:2}}</td>
                         <td>{{item.purchaseQuantity}}</td>
-                        <td>{{item.purchasePrice * item.purchaseQuantity}}</td>
+                        <td>{{(item.purchasePrice * item.purchaseQuantity) | number:2}}</td>
                         <td>{{item.remark}}</td>
                         <td><button ng-click="delItem($index)">删除</button></td>
                     </tr>

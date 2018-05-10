@@ -206,6 +206,23 @@
         </foreach>
     </update>
 
+    <select id="getMardTotalCount" resultType="int">
+        select count(*) from mard
+        where 1=1
+        <if test="storeId != null">
+            and store_id = #{storeId}
+        </if>
+        <if test="materielId != null">
+            and materiel_id = #{materielId}
+        </if>
+        <if test="sphere != null">
+            and sphere = #{sphere}
+        </if>
+        <if test="cylinder != null">
+            and cylinder = #{cylinder}
+        </if>
+    </select>
+
     <select id="lockMard" resultMap="mardMap">
         select * from mard
         where
@@ -260,14 +277,37 @@
     </select>
 
     <select id="fetchMardVoList" parameterType="com.luda.inventory.model.CommonQueryBean" resultMap="mardVoMap">
-        select a.*, b.store_name
-        from mard as a
-        left join store b
-        on a.store_id = b.store_id
-        where 1=1
-        <if test="storeId != null">
-            and a.store_id = #{storeId}
-        </if>
+        select b.*, c.store_name from (
+            select * from mard as a
+            where 1=1
+            <if test="storeId != null">
+                and a.store_id = #{storeId}
+            </if>
+        ) b
+        left join store c
+        on b.store_id = c.store_id
+    </select>
+
+    <select id="fetchMardVoListPage" parameterType="com.luda.inventory.model.CommonQueryBean" resultMap="mardVoMap">
+        select b.*, c.store_name from (
+            select * from mard as a
+            where 1=1
+            <if test="storeId != null">
+                and a.store_id = #{storeId}
+            </if>
+            <if test="materielId != null">
+                and a.materiel_id = #{materielId}
+            </if>
+            <if test="sphere != null">
+                and a.sphere = #{sphere}
+            </if>
+            <if test="cylinder != null">
+                and a.cylinder = #{cylinder}
+            </if>
+            limit #{startIndex}, 10
+        ) b
+        left join store c
+        on b.store_id = c.store_id
     </select>
 
     <select id="fetchPurchaseOrderVoList" parameterType="com.luda.inventory.model.CommonQueryBean"
@@ -298,6 +338,16 @@
 
     <select id="getPurchaseOrderById" resultMap="purchaseOrderMap">
         select * from purchase_order where purchase_order_id = #{id} and delete_flag = 0
+    </select>
+
+    <select id="getPurchaseOrderItemCount" resultType="int">
+        select count(*) from purchase_order_item where purchase_order_id = #{purchaseOrderId}
+    </select>
+
+    <select id="fetchPurchaseOrderItemListPage" resultMap="purchaseOrderItemMap">
+        select * from purchase_order_item
+        where purchase_order_id = #{orderId}
+        limit #{startIndex}, 10
     </select>
 
     <select id="fetchPurchaseOrderItemList" resultMap="purchaseOrderItemMap">

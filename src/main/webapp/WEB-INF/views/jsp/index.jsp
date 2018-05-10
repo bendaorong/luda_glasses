@@ -97,6 +97,7 @@
 	<!-- 库存管理 -->
 	<script src="app/business_operation/controllers/inventory/mard/mardManage.js"></script>
 	<script src="app/business_operation/controllers/inventory/purchaseOrder/purchaseOrderManage.js"></script>
+	<script src="app/business_operation/controllers/inventory/purchaseOrder/batch/batchPurchaseOrderManage.js"></script>
 	<script src="app/business_operation/controllers/inventory/purchaseOrder/refund/purchaseRefundOrderManage.js"></script>
 	<script src="app/business_operation/controllers/inventory/inventoryVerification/inventoryVerificationManage.js"></script>
 	<script src="app/business_operation/controllers/inventory/transfer/transferManage.js"></script>

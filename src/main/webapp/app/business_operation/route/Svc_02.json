@@ -30,6 +30,10 @@
     "name" : "采购单",
     "page" : "#addPurchaseOrder"
   },{
+    "id" : "200500",
+    "name" : "批量采购单",
+    "page" : "#addBatchPurchaseOrder"
+  },{
     "id" : "200200",
     "name" : "采购单查询",
     "page" : "#purchaseOrderManage"

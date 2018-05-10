@@ -67,6 +67,11 @@ public interface InventoryService {
     PurchaseOrder getPurchaseOrderById(int id);
 
     /**
+     * 查询采购单(不带采购明细)
+     */
+    PurchaseOrder getPurchaseOrderWithoutItemsById(int id);
+
+    /**
      * 删除采购单
      * @param id
      * @return
@@ -197,4 +202,19 @@ public interface InventoryService {
      * @return
      */
     ResultHandle<TransferOrder> removeTransferOrder(int id);
+
+    /**
+     * 保存批量采购单
+     * @param purchaseOrder
+     * @return
+     */
+    ResultHandle saveBatchPurchaseOrder(PurchaseOrder purchaseOrder);
+
+    int getMardTotalCount(CommonQueryBean queryBean);
+
+    List<MardVo> fetchMardVoListPage(CommonQueryBean queryBean);
+
+    int getPurchaseOrderItemCount(int purchaseOrderId);
+
+    List<PurchaseOrderItem> fetchPurchaseOrderItemListPage(CommonQueryBean queryBean);
 }

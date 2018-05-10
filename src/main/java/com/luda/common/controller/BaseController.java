@@ -82,4 +82,8 @@ public class BaseController {
     public int getStoreId(HttpSession session){
         return getLoginUser(session).getStoreId();
     }
+
+    public int getStartIndex(int pageNo, int pageSize){
+        return (pageNo - 1) * pageSize;
+    }
 }

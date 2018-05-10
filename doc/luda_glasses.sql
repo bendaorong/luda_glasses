@@ -519,3 +519,15 @@ create table sales_order_item (
  */
 
 ALTER TABLE luda_glasses.`sales_order` ADD COLUMN related_order_id INT(11) DEFAULT 0 COMMENT '相关订单，销售单该字段对应退货单id,退货单该字段对应销售单id';
+
+/**
+ * 2018-05-05
+ * 增加批量采购功能
+ */
+ALTER  TABLE luda_glasses.purchase_order ADD COLUMN is_batch char(1) DEFAULT 'N' comment '批量采购 Y:是 N:否';
+
+UPDATE goods_kind SET kind_name = '镜片资料' WHERE kind_id = 1;
+UPDATE goods_kind SET kind_name = '隐形资料' WHERE kind_id = 2;
+UPDATE goods_kind SET kind_name = '镜架资料' WHERE kind_id = 3;
+UPDATE goods_kind SET kind_name = '护理产品资料' WHERE kind_id = 4;
+INSERT INTO goods_kind (kind_id, kind_name, delete_flag) VALUES (5, '太阳镜资料', 0), (6, '老花镜资料', 0), (7, '其他商品资料', 0);

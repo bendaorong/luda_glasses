@@ -106,7 +106,7 @@ public class SalesController extends BaseController{
             }
         }catch (Exception e){
             log.error("save sales order error", e);
-            result = getFailResult("系统异常");
+            result = getFailResult(e.getMessage());
         }
         return result;
     }

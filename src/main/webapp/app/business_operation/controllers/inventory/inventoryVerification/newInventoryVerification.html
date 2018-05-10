@@ -32,6 +32,21 @@
     p{
         padding-top:10px;
     }
+
+    fieldset
+    {
+        border: 1px solid #61B5CF;
+        margin-top: 16px;
+        padding: 8px;
+    }
+
+    legend
+    {
+        font: bold 12px Arial, Helvetica, sans-serif;
+        color: #00008B;
+        background-color: #FFFFFF;
+        border-bottom : 0px solid #e5e5e5
+    }
 </style>
 
 <div class="alert alert-danger alert-dismissible fade in" role="alert"
@@ -118,31 +133,104 @@
 
     <!-- 库存盘点明细 -->
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===1">
-        <div class="seat-manage-operate-container">
-            <!--<h3 class="seat-manage-operate-title">采购入库明细</h3>-->
-            <div class="seat-manage-operate-button form-inline">
-                <div style="text-align: center;">
-                    <button class="btn btn-success btn-sm" ng-click="newInvntVerificationItem()">添加盘点明细</button>
-                </div>
-            </div>
-        </div>
+        <!--<div class="seat-manage-operate-container">-->
+            <!--&lt;!&ndash;<h3 class="seat-manage-operate-title">采购入库明细</h3>&ndash;&gt;-->
+            <!--<div class="seat-manage-operate-button form-inline">-->
+                <!--<div style="text-align: center;">-->
+                    <!--<button class="btn btn-success btn-sm" ng-click="newInvntVerificationItem()">添加盘点明细</button>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
         <div class="col-sm-12">
             <div class="oz-form-fields"  style="width:100%;padding-top: 5px">
-                <!-- 采购单明细信息数据 -->
-                <table class="table table-bordered" style="margin-top: 10px;" id="itemContainer">
+                <fieldset id="veriItems">
+                    <legend>
+                        盘点清单
+                    </legend>
+                    <!-- 盘点明细 -->
+                    <table class="table table-bordered" style="margin-top: 10px;" id="itemContainer">
+                        <tr>
+                            <td>商品名称</td>
+                            <td>商品类型</td>
+                            <td>球镜</td>
+                            <td>柱镜</td>
+                            <td>度数</td>
+                            <td>盘点类型</td>
+                            <td>数量</td>
+                            <td>操作</td>
+                        </tr>
+                        <tr ng-repeat="item in newInvntVerification.invtVerifItemList">
+                            <td>{{item.materiel.name}}</td>
+                            <td>{{item.materiel.typeName}}</td>
+                            <td>{{item.sphere | number:2}}</td>
+                            <td>{{item.cylinder | number:2}}</td>
+                            <td>{{item.axial | number:2}}</td>
+                            <td>
+                                <div ng-switch="item.type">
+                                    <div ng-switch-when="01">盘盈</div>
+                                    <div ng-switch-when="02">盘亏</div>
+                                </div>
+                            </td>
+                            <td>{{item.quantity}}</td>
+                            <td><button ng-click="delItem_($index)">删除</button></td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="col-sm-12" style="margin-top: 10px;">
+            <fieldset id="queryMaterielFieldset">
+                <legend>
+                    选择商品
+                </legend>
+                <form class="form-horizontal" novalidate id="queryMaterielForm" name="queryMaterielForm">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">商品</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <select id="materiel" class="form-control"  ng-model="filterCondition.materielId">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">球镜</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input type="number" class="form-control" ng-model="filterCondition.sphere"/>
+                        </div>
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">柱镜</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input type="number" class="form-control" ng-model="filterCondition.cylinder"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"></label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <button ng-click="queryMateriel()">查询</button>
+                        </div>
+                    </div>
+                </form>
+
+                <table ng-table="mardTable" class="table table-bordered">
+                    <tr ng-repeat="mard in mardList">
+                        <td data-title="'商品名称'">{{mard.materiel.name}}</td>
+                        <!--<td data-title="'商品类型'" sortable="'typeName'">{{mard.materiel.typeName}}</td>-->
+                        <td data-title="'球镜'">{{mard.sphere | number:2}}</td>
+                        <td data-title="'柱镜'">{{mard.cylinder | number:2}}</td>
+                        <td data-title="'度数'">{{mard.axial | number:2}}</td>
+                        <td data-title="'库存数量'">{{mard.currentInventory}}</td>
+                        <td data-title="'售价'">{{mard.materiel.sellPrice | number:2}}</td>
+                        <td data-title="'操作'">
+                            <button type="button" class="btn btn-sm btn-primary" ng-click="verificate(mard.id)" >盘点</button>
+                        </td>
+                    </tr>
                     <tr>
-                        <td>商品</td>
-                        <td>名称</td>
-                        <td>颜色</td>
-                        <td>条码</td>
-                        <td>数量</td>
-                        <td>盘点类型</td>
-                        <td>商品类型</td>
-                        <td>规格型号</td>
-                        <td>备注</td>
+                        <td colspan="7" ng-show="$data.length == 0">
+                            <span style="color:red">没有库存</span>
+                        </td>
                     </tr>
                 </table>
-            </div>
+            </fieldset>
         </div>
     </div>
 </div>
@@ -151,18 +239,11 @@
 <div class="content">
     <h3>盘点明细</h3>
     <table class="table table-bordered" style="margin-top: 10px;">
-        <tr>
-            <td>商品</td>
-            <td>
-                <select class="form-control" id="materiel" ng-model="invntVerificationItem.mardId">
-                    <option value=""></option>
-                </select>
-            </td>
-        </tr>
-        <tr><td>名称</td><td><input type="text" ng-model="selectedMard.materiel.name" ng-readonly="true"/></td></tr>
-        <tr><td>颜色</td><td><input type="text" ng-model="selectedMard.materiel.color" ng-readonly="true"/></td></tr>
-        <tr><td>条码</td><td><input type="text" ng-model="selectedMard.materiel.barcode" ng-readonly="true"/></td></tr>
-        <tr><td>数量</td><td><input type="text" ng-model="invntVerificationItem.quantity" /></td></tr>
+        <tr><td>商品名称</td><td>{{selectedMard.materiel.name}}</td></tr>
+        <tr><td>商品类型</td><td>{{selectedMard.materiel.typeName}}</td></tr>
+        <tr><td>球镜</td><td>{{selectedMard.sphere | number:2}}</td></tr>
+        <tr><td>柱镜</td><td>{{selectedMard.cylinder | number:2}}</td></tr>
+        <tr><td>度数</td><td>{{selectedMard.axial | number:2}}</td></tr>
         <tr>
             <td>盘点类型</td>
             <td>
@@ -173,9 +254,8 @@
                 </select>
             </td>
         </tr>
-        <tr>
-            <td>备注</td><td><input type="text" ng-model="invntVerificationItem.remark"/></td>
-        </tr>
+        <tr><td>数量</td><td><input type="text" ng-model="invntVerificationItem.quantity" /></td></tr>
+        <tr><td>备注</td><td><input type="text" ng-model="invntVerificationItem.remark"/></td></tr>
     </table>
     <p>
         <button ng-click="addItem()">添加</button>

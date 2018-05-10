@@ -128,28 +128,17 @@
                     <legend>
                         <h4>采购单明细</h4>
                     </legend>
-                    <table class="table table-bordered">
-                        <tr>
-                            <td>名称</td>
-                            <td>商品类型</td>
-                            <td>球镜</td>
-                            <td>柱镜</td>
-                            <td>度数</td>
-                            <td>采购价格</td>
-                            <td>采购数量</td>
-                            <td>小计</td>
-                            <td>备注</td>
-                        </tr>
+                    <table ng-table="itemTable" class="table table-bordered">
                         <tr ng-repeat="item in purchaseOrderItemList">
-                            <td>{{item.materiel.name}}</td>
-                            <td>{{item.materiel.typeName}}</td>
-                            <td>{{item.sphere}}</td>
-                            <td>{{item.cylinder}}</td>
-                            <td>{{item.axial}}</td>
-                            <td>{{item.purchasePrice}}</td>
-                            <td>{{item.purchaseQuantity}}</td>
-                            <td>{{item.purchasePrice * item.purchaseQuantity}}</td>
-                            <td>{{item.remark}}</td>
+                            <td data-title="'名称'">{{item.materiel.name}}</td>
+                            <td data-title="'商品类型'">{{item.materiel.typeName}}</td>
+                            <td data-title="'球镜'">{{item.sphere | number:2}}</td>
+                            <td data-title="'柱镜'">{{item.cylinder | number:2}}</td>
+                            <td data-title="'度数'">{{item.axial | number:2}}</td>
+                            <td data-title="'采购价格'">{{item.purchasePrice | number:2}}</td>
+                            <td data-title="'采购数量'">{{item.purchaseQuantity}}</td>
+                            <td data-title="'小计'">{{(item.purchasePrice * item.purchaseQuantity) | number:2}}</td>
+                            <td data-title="'备注'">{{item.remark}}</td>
                         </tr>
                     </table>
                 </fieldset>

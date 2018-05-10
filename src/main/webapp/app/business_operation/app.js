@@ -109,6 +109,9 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/addPurchaseOrder",{
         templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/newPurchaseOrder.html",
         controller : "addPurchaseOrderController"
+    }).when("/addBatchPurchaseOrder", {
+        templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/batch/newBatchPurchaseOrder.html",
+        controller : "addBatchPurchaseOrderController"
     }).when("/purchaseRefundOrderManage", {
         templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/refund/purchaseRefundOrderList.html",
         controller : "purchaseRefundOrderManageController"
@@ -574,6 +577,20 @@ businessOperationApp.factory("dictionaryService", function($http) {
  */
 businessOperationApp.factory("inventoryService", function($http) {
     return {
+        getMardTotalCount : function(conditions, successCallback, errorCallback){
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/mard/totalCount",
+                data:conditions
+            }).success(successCallback).error(errorCallback);
+        },
+        fetchMardVoListPage : function(conditions, successCallback, errorCallback){
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/mard/listPage",
+                data:conditions
+            }).success(successCallback).error(errorCallback);
+        },
         fetchMardVoList : function(successCallback, errorCallback){
             $http.get("/luda_glasses/rest/inventory/mard/list").success(successCallback).error(errorCallback);
         },
@@ -583,6 +600,16 @@ businessOperationApp.factory("inventoryService", function($http) {
         },
         getPurchaseOrderById : function (id, successCallback, errorCallback) {
             $http.get("/luda_glasses/rest/inventory/purchaseOrder/getById/" + id).success(successCallback).error(errorCallback);
+        },
+        getPurchaseOrderItemsCount : function(purchaseOrderId, successCallback, errorCallback){
+            $http.get("/luda_glasses/rest/inventory/purchaseOrder/item/count/" + purchaseOrderId).success(successCallback).error(errorCallback);
+        },
+        listPurchaseOrderItemsPage : function(conditions, successCallback, errorCallback){
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/purchaseOrder/item/listPage",
+                data:conditions
+            }).success(successCallback).error(errorCallback);
         },
         savePurchaseOrder : function (purchaseOrder, successCallback, errorCallback) {
             $http({

@@ -133,9 +133,9 @@
                         <tr ng-repeat="item in selectTransferOrder.transferOrderItems">
                             <td>{{item.materiel.name}}</td>
                             <td>{{item.materiel.typeName}}</td>
-                            <td>{{item.sphere}}</td>
-                            <td>{{item.cylinder}}</td>
-                            <td>{{item.axial}}</td>
+                            <td>{{item.sphere | number:2}}</td>
+                            <td>{{item.cylinder | number:2}}</td>
+                            <td>{{item.axial | number:2}}</td>
                             <td>{{item.quantity}}</td>
                             <td>{{item.remark}}</td>
                         </tr>

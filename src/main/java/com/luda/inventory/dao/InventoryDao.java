@@ -119,4 +119,12 @@ public interface InventoryDao {
     int removeTransferOrder(int id);
 
     int updatePurchaseOrderTotalQuantityAndTotalAmount(PurchaseOrder purchaseOrder);
+
+    int getMardTotalCount(CommonQueryBean queryBean);
+
+    List<MardVo> fetchMardVoListPage(CommonQueryBean queryBean);
+
+    int getPurchaseOrderItemCount(int purchaseOrderId);
+
+    List<PurchaseOrderItem> fetchPurchaseOrderItemListPage(CommonQueryBean queryBean);
 }
