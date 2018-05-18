@@ -18,7 +18,6 @@
                     $scope.tableParams = new NgTableParams({}, {
                         dataset : $scope.purchaseOrderList
                     });
-                    console.log("size:"+$scope.purchaseOrderList.length);
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,
@@ -153,7 +152,7 @@
             // 过滤出当前选中供应商的商品
             angular.forEach($scope.materielList, function (each) {
                 if(each.supplierId == $scope.newPurchaseOrder.supplierId){
-                    if(each.typeId == 7){ //批量采购只能采购镜片商品
+                    if(each.kindId == 1){ //批量采购只能采购镜片商品
                         $scope.usedMaterielList.push(each);
                     }
                 }
@@ -349,7 +348,7 @@
         // 根据商品类型控制球镜柱镜度数字段的显示和隐藏
         $scope.switchHideAndShow = function(typeId){
             // 老花眼镜
-            if(typeId == 4){
+            if(typeId == 6){
                 $scope.sphereDisplay = false;
                 $scope.cylinderDisplay = false;
                 $scope.axialDisplay = true;
@@ -357,7 +356,7 @@
                 $("#axial").val(1.00);
             }
             // 隐形眼镜
-            else if(typeId == 3){
+            else if(typeId == 2){
                 $scope.sphereDisplay = false;
                 $scope.cylinderDisplay = false;
                 $scope.axialDisplay = true;
@@ -365,7 +364,7 @@
                 $("#axial").val(0);
             }
             // 镜片
-            else if(typeId == 7){
+            else if(typeId == 1){
                 $scope.sphereDisplay = true;
                 $scope.cylinderDisplay = true;
                 $scope.axialDisplay = false;

@@ -196,16 +196,16 @@
                     </tr>
                     <tr>
                         <td>{{record.optometryDate}}</td>
-                        <td>{{record.rightSphere}}</td>
-                        <td>{{record.leftSphere}}</td>
-                        <td>{{record.rightCylinder}}</td>
-                        <td>{{record.leftCylinder}}</td>
-                        <td>{{record.rightAxial}}</td>
-                        <td>{{record.leftAxial}}</td>
-                        <td>{{record.rightUncorrectedVisualAcuity}}</td>
-                        <td>{{record.leftUncorrectedVisualAcuity}}</td>
-                        <td>{{record.rightCorrectedVisualAcuity}}</td>
-                        <td>{{record.leftCorrectedVisualAcuity}}</td>
+                        <td>{{record.rightSphere | number:2}}</td>
+                        <td>{{record.leftSphere | number:2}}</td>
+                        <td>{{record.rightCylinder | number:2}}</td>
+                        <td>{{record.leftCylinder | number:2}}</td>
+                        <td>{{record.rightAxial | number:2}}</td>
+                        <td>{{record.leftAxial | number:2}}</td>
+                        <td>{{record.rightUncorrectedVisualAcuity | number:2}}</td>
+                        <td>{{record.leftUncorrectedVisualAcuity | number:2}}</td>
+                        <td>{{record.rightCorrectedVisualAcuity | number:2}}</td>
+                        <td>{{record.leftCorrectedVisualAcuity | number:2}}</td>
                         <td>{{record.businessManName}}</td>
                     </tr>
                 </table>
@@ -223,7 +223,7 @@
                             <td>商品类型</td>
                             <td>球镜</td>
                             <td>柱镜</td>
-                            <td>轴向</td>
+                            <td>度数</td>
                             <td>数量</td>
                             <td>单价</td>
                             <td>小计</td>
@@ -237,8 +237,8 @@
                             <td>{{item.cylinder | number:2}}</td>
                             <td>{{item.axial | number:2}}</td>
                             <td>{{item.quantity}}</td>
-                            <td>{{item.sellPrice}}</td>
-                            <td>{{item.quantity * item.sellPrice}}</td>
+                            <td>{{item.sellPrice | number:2}}</td>
+                            <td>{{(item.quantity * item.sellPrice) | number:2}}</td>
                             <td>{{item.remark}}</td>
                             <td><button ng-click="delItem($index)" ng-show="selectedSalesOrder.relatedOrderId === 0">删除</button></td>
                         </tr>

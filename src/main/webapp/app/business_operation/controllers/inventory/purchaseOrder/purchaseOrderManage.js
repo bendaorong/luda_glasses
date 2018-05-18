@@ -193,7 +193,7 @@
                         if($scope.materielList[i].id == materielId){
                             $scope.selectedMateriel = $scope.materielList[i];
                             $scope.purchaseOrderItem.materielId = materielId;
-                            $scope.switchHideAndShow($scope.materielList[i].typeId);
+                            $scope.switchHideAndShow($scope.materielList[i].kindId);
                             break;
                         }
                     }
@@ -210,9 +210,9 @@
         }
 
         // 根据商品类型控制球镜柱镜度数字段的显示和隐藏
-        $scope.switchHideAndShow = function(typeId){
+        $scope.switchHideAndShow = function(kindId){
             // 老花眼镜
-            if(typeId == 4){
+            if(kindId == 6){
                 $scope.sphereDisplay = false;
                 $scope.cylinderDisplay = false;
                 $scope.axialDisplay = true;
@@ -220,7 +220,7 @@
                 $("#axial").val(1.00);
             }
             // 隐形眼镜
-            else if(typeId == 3){
+            else if(kindId == 2){
                 $scope.sphereDisplay = false;
                 $scope.cylinderDisplay = false;
                 $scope.axialDisplay = true;
@@ -228,12 +228,12 @@
                 $("#axial").val(0);
             }
             // 镜片
-            else if(typeId == 7){
+            else if(kindId == 1){
                 $scope.sphereDisplay = true;
                 $scope.cylinderDisplay = true;
                 $scope.axialDisplay = false;
             }
-            // 镜架、护理产品、太阳镜
+            // 镜架、护理产品、太阳镜、其他
             else {
                 $scope.sphereDisplay = false;
                 $scope.cylinderDisplay = false;
@@ -598,7 +598,7 @@
         // 根据商品类型控制球镜柱镜度数字段的显示和隐藏
         $scope.switchHideAndShow = function(typeId){
             // 老花眼镜
-            if(typeId == 4){
+            if(typeId == 6){
                 $scope.sphereDisplay = false;
                 $scope.cylinderDisplay = false;
                 $scope.axialDisplay = true;
@@ -606,7 +606,7 @@
                 $("#axial").val(1.00);
             }
             // 隐形眼镜
-            else if(typeId == 3){
+            else if(typeId == 2){
                 $scope.sphereDisplay = false;
                 $scope.cylinderDisplay = false;
                 $scope.axialDisplay = true;
@@ -614,7 +614,7 @@
                 $("#axial").val(0);
             }
             // 镜片
-            else if(typeId == 7){
+            else if(typeId == 1){
                 $scope.sphereDisplay = true;
                 $scope.cylinderDisplay = true;
                 $scope.axialDisplay = false;
@@ -677,7 +677,7 @@
                         if($scope.materielList[i].id == materielId){
                             $scope.selectedMateriel = $scope.materielList[i];
                             $scope.purchaseOrderItem.materielId = materielId;
-                            $scope.switchHideAndShow($scope.materielList[i].typeId);
+                            $scope.switchHideAndShow($scope.materielList[i].kindId);
                             break;
                         }
                     }

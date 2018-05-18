@@ -135,7 +135,7 @@
                         <td>商品类型</td>
                         <td>球镜</td>
                         <td>柱镜</td>
-                        <td>轴向</td>
+                        <td>度数</td>
                         <td>数量</td>
                         <td>单价</td>
                         <td>小计</td>
@@ -144,12 +144,12 @@
                     <tr ng-repeat="item in selectedSalesOrder.salesOrderItems">
                         <td>{{item.materiel.name}}</td>
                         <td>{{item.materiel.typeName}}</td>
-                        <td>{{item.sphere}}</td>
-                        <td>{{item.cylinder}}</td>
-                        <td>{{item.axial}}</td>
+                        <td>{{item.sphere | number:2}}</td>
+                        <td>{{item.cylinder | number:2}}</td>
+                        <td>{{item.axial | number:2}}</td>
                         <td>{{item.quantity}}</td>
-                        <td>{{item.sellPrice}}</td>
-                        <td>{{item.quantity * item.sellPrice}}</td>
+                        <td>{{item.sellPrice | number:2}}</td>
+                        <td>{{(item.quantity * item.sellPrice) | number:2}}</td>
                         <td>{{item.remark}}</td>
                     </tr>
                 </table>

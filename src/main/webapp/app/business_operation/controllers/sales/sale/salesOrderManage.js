@@ -17,7 +17,6 @@
                     $scope.tableParams = new NgTableParams({}, {
                         dataset : $scope.salesOrderList
                     });
-                    console.log("size:"+$scope.salesOrderList.length);
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,
@@ -304,6 +303,7 @@
         $scope.goodsTypeList = [];
 
         $scope.filterCondition = {};
+        $scope.filterCondition.storeId = $scope.storeId;
 
         // 查询商品
         materielService.fetchMaterielList(function(data){
@@ -674,6 +674,7 @@
     }).controller("editSalesOrderController", function($location,$scope,$filter,inventoryService,materielService,salesService,storeService,adminUserService,customerService,$routeParams,NgTableParams) {
         setActiveSubPage($scope);
         $scope.roleCode = sessionStorage.getItem("roleCode");
+        $scope.storeId = sessionStorage.getItem("storeId");
         $scope.currentTab = 0;
 
         $scope.selectedSalesOrder = {};   // 销售单
@@ -692,6 +693,7 @@
         $scope.salesOrderItem.sellPrice = 0;
 
         $scope.filterCondition = {};
+        $scope.filterCondition.storeId = $scope.storeId;
 
         // 查询销售单
         salesService.getSalesOrderWithItemsById($routeParams.id, function (data) {

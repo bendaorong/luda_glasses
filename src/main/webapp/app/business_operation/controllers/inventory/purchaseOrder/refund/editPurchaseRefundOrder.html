@@ -33,6 +33,21 @@
     p{
         padding-top:10px;
     }
+
+    fieldset
+    {
+        border: 1px solid #61B5CF;
+        margin-top: 16px;
+        padding: 8px;
+    }
+
+    legend
+    {
+        font: bold 12px Arial, Helvetica, sans-serif;
+        color: #00008B;
+        background-color: #FFFFFF;
+        border-bottom : 0px solid #e5e5e5
+    }
 </style>
 
 <div class="alert alert-danger alert-dismissible fade in" role="alert"
@@ -147,42 +162,35 @@
 
     <!-- 采购退货单明细 -->
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===1">
-        <div class="seat-manage-operate-container">
-            <div class="seat-manage-operate-button form-inline">
-                <div style="text-align: center;">
-                    <button class="btn btn-success btn-sm" ng-click="newPurchaseOrderItem_()">添加明细</button>
-                </div>
-            </div>
-        </div>
+        <!--<div class="seat-manage-operate-container">-->
+            <!--<div class="seat-manage-operate-button form-inline">-->
+                <!--<div style="text-align: center;">-->
+                    <!--<button class="btn btn-success btn-sm" ng-click="newPurchaseOrderItem_()">添加明细</button>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
         <div class="col-sm-12">
             <div class="oz-form-fields"  style="width:100%;padding-top: 5px">
-                <!-- 采购退货单明细 -->
-                <table class="table table-bordered" style="margin-top: 10px;" id="itemContainer">
-                    <tr>
-                        <td>名称</td>
-                        <td>商品类型</td>
-                        <td>球镜</td>
-                        <td>柱镜</td>
-                        <td>轴向</td>
-                        <td>价格</td>
-                        <td>数量</td>
-                        <td>小计</td>
-                        <td>备注</td>
-                        <td>操作</td>
-                    </tr>
-                    <tr ng-repeat="item in selectPurchaseOrder.purchaseOrderItemList">
-                        <td>{{item.materiel.name}}</td>
-                        <td>{{item.materiel.typeName}}</td>
-                        <td>{{item.sphere}}</td>
-                        <td>{{item.cylinder}}</td>
-                        <td>{{item.axial}}</td>
-                        <td>{{item.purchasePrice}}</td>
-                        <td>{{item.purchaseQuantity}}</td>
-                        <td>{{item.purchasePrice * item.purchaseQuantity}}</td>
-                        <td>{{item.remark}}</td>
-                        <td><button ng-click="delItem($index)">删除</button></td>
-                    </tr>
-                </table>
+                <fieldset id="itemsTable">
+                    <legend>
+                        退货清单
+                    </legend>
+                    <!-- 采购退货单明细 -->
+                    <table ng-table="itemTable" class="table table-bordered">
+                        <tr ng-repeat="item in purchaseOrderItemList">
+                            <td data-title="'名称'">{{item.materiel.name}}</td>
+                            <td data-title="'商品类型'">{{item.materiel.typeName}}</td>
+                            <td data-title="'球镜'">{{item.sphere | number:2}}</td>
+                            <td data-title="'柱镜'">{{item.cylinder | number:2}}</td>
+                            <td data-title="'度数'">{{item.axial | number:2}}</td>
+                            <td data-title="'退货价格'">{{item.purchasePrice | number:2}}</td>
+                            <td data-title="'退货数量'">{{item.purchaseQuantity}}</td>
+                            <td data-title="'小计'">{{(item.purchasePrice * item.purchaseQuantity) | number:2}}</td>
+                            <td data-title="'备注'">{{item.remark}}</td>
+                            <td data-title="'操作'"><button ng-click="delItem_($index)">删除</button></td>
+                        </tr>
+                    </table>
+                </fieldset>
             </div>
         </div>
     </div>

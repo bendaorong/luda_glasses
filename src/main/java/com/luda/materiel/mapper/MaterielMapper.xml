@@ -28,13 +28,17 @@
         <result property="createTime" column="create_time"/>
         <result property="updateUserId" column="update_user_id"/>
         <result property="updateTime" column="update_time"/>
+        <result property="kindId" column="kind_id"/>
+        <result property="kindName" column="kind_name"/>
     </resultMap>
 
     <select id="fetchMaterielList" resultMap="materielMap">
-        select m.*, t.type_name, s.supplier_name
+        select m.*, t.type_name, s.supplier_name, k.kind_id, k.kind_name
         from materiel m
         left join goods_type t
         on m.type_id = t.type_id
+        left join goods_kind k
+        on t.kind_id = k.kind_id
         left join supplier s
         on m.supplier_id = s.supplier_id
         where m.delete_flag = 0

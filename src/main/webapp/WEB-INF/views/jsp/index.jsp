@@ -46,10 +46,10 @@
 								<li>门店:<strong>${sessionScope.sessionInfo.storeModel.storeName}</strong></li>
 								<li><a href="logout">安全退出</a></li>
 							</ul></li>
-						<li><p class="navbar-text">
-								<a class="navbar-link" href="#">通知中心<span
-									class="badge">42</span></a>
-							</p></li>
+						<%--<li><p class="navbar-text">--%>
+								<%--<a class="navbar-link" href="#">通知中心<span--%>
+									<%--class="badge">42</span></a>--%>
+							<%--</p></li>--%>
 					</ul>
 				</div>
 			</div>
