@@ -44,11 +44,11 @@
 
 				<td data-title="'操作'">
 					<button type="button" class="btn btn-sm btn-primary"
-							ng-click="gotoEdit(adminUser.adminUserId)">编辑</button>
+							ng-click="gotoEdit(adminUser.adminUserId)" ng-disabled="adminUser.adminRoleModel.roleCode === '00'">编辑</button>
 					<button type="button" class="btn btn-sm btn-primary"
-							ng-click="resetAdminUserPwd(adminUser.adminUserId)">重设密码</button>
+							ng-click="resetAdminUserPwd(adminUser.adminUserId)" ng-disabled="adminUser.adminRoleModel.roleCode === '00'">重设密码</button>
 					<button type="button" class="btn btn-sm btn-primary"
-							ng-click="removeAdminUser(adminUser.adminUserId)">删除</button>
+							ng-click="removeAdminUser(adminUser.adminUserId)" ng-disabled="adminUser.adminRoleModel.roleCode === '00'">删除</button>
 				</td>
 			</tr>
 		</table>

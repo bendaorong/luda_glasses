@@ -198,7 +198,6 @@
                 $scope.salesOrders = new NgTableParams({}, {
                     dataset : $scope.salesOrderList
                 });
-                //console.log("size:"+$scope.salesOrderList.length);
             }, function (data) {
 
             });
@@ -220,7 +219,6 @@
                 $scope.optometryRecords = new NgTableParams({}, {
                     dataset : $scope.optometryRecordList
                 });
-                console.log("optometryRecordList size:"+$scope.optometryRecordList.length);
             }, function (data) {
 
             });

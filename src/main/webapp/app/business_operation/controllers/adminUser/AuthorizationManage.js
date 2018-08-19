@@ -24,14 +24,12 @@
 				$scope.tableParams = new NgTableParams({}, {
 					dataset : $scope.adminUserList
 				});
-				console.log("size:"+$scope.adminUserList.length);
 			},function(data){
 				BootstrapDialog.show({
 					type : BootstrapDialog.TYPE_DANGER,
 					title : '警告',
 					message : '获取员工错误' + data.errorMsg
 				});
-
 			});
 		}
 

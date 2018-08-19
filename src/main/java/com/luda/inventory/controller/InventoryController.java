@@ -46,10 +46,14 @@ public class InventoryController extends BaseController{
         String result = "";
         try {
             CommonQueryBean queryBean = new CommonQueryBean();
-
             JSONObject obj = JSONObject.fromObject(conditions);
             if(obj.get("materielId") != null && !(obj.get("materielId") instanceof JSONNull)){
                 queryBean.setMaterielId(obj.getInt("materielId"));
+            }
+            if(obj.get("storeId") != null
+                    && !(obj.get("storeId") instanceof JSONNull)
+                    && obj.getInt("storeId") != 0){
+                queryBean.setStoreId(obj.getInt("storeId"));
             }
             if(obj.get("sphere") != null && !(obj.get("sphere") instanceof JSONNull)){
                 queryBean.setSphere(obj.getDouble("sphere"));
@@ -57,9 +61,8 @@ public class InventoryController extends BaseController{
             if(obj.get("cylinder") != null && !(obj.get("cylinder") instanceof JSONNull)){
                 queryBean.setCylinder(obj.getDouble("cylinder"));
             }
-
-            if(!isSuperManage(httpSession)){
-                queryBean.setStoreId(getStoreId(httpSession));
+            if(obj.get("axial") != null && !(obj.get("axial") instanceof JSONNull)){
+                queryBean.setAxial(obj.getDouble("axial"));
             }
             int count = inventoryService.getMardTotalCount(queryBean);
             result = getSuccessResult(count);
@@ -101,13 +104,14 @@ public class InventoryController extends BaseController{
         String result = "";
         try {
             CommonQueryBean queryBean = new CommonQueryBean();
-            if(!isSuperManage(httpSession)){
-                queryBean.setStoreId(getStoreId(httpSession));
-            }
-
             JSONObject obj = JSONObject.fromObject(conditions);
             if(obj.get("materielId") != null && !(obj.get("materielId") instanceof JSONNull)){
                 queryBean.setMaterielId(obj.getInt("materielId"));
+            }
+            if(obj.get("storeId") != null
+                    && !(obj.get("storeId") instanceof JSONNull)
+                    && obj.getInt("storeId") != 0){
+                queryBean.setStoreId(obj.getInt("storeId"));
             }
             if(obj.get("sphere") != null && !(obj.get("sphere") instanceof JSONNull)){
                 queryBean.setSphere(obj.getDouble("sphere"));
@@ -115,15 +119,12 @@ public class InventoryController extends BaseController{
             if(obj.get("cylinder") != null && !(obj.get("cylinder") instanceof JSONNull)){
                 queryBean.setCylinder(obj.getDouble("cylinder"));
             }
-            if(obj.get("storeId") != null && !(obj.get("storeId") instanceof JSONNull)){
-                queryBean.setStoreId(obj.getInt("storeId"));
+            if(obj.get("axial") != null && !(obj.get("axial") instanceof JSONNull)){
+                queryBean.setAxial(obj.getDouble("axial"));
             }
 
             int pageNo = obj.getInt("pageNo");
             queryBean.setStartIndex(getStartIndex(pageNo, 10));
-            if(!isSuperManage(httpSession)){
-                queryBean.setStoreId(getStoreId(httpSession));
-            }
             List<MardVo> mardVoList = inventoryService.fetchMardVoListPage(queryBean);
             String data = CommonUtils.convertBeanCollectionToJsonArray(mardVoList, null).toString();
             result = getSuccessResult(data);
@@ -166,10 +167,10 @@ public class InventoryController extends BaseController{
         try {
             CommonQueryBean queryBean = new CommonQueryBean();
             queryBean.setOrderType(orderType);
-            // 非总经理则加上门店过滤查询
-            if(!isSuperManage(httpSession)){
-                queryBean.setStoreId(getStoreId(httpSession));
-            }
+//            // 非总经理则加上门店过滤查询
+//            if(!isSuperManage(httpSession)){
+//                queryBean.setStoreId(getStoreId(httpSession));
+//            }
 
             List<PurchaseOrderVo> purchaseOrderVoList = inventoryService.fetchPurchaseOrderVoList(queryBean);
             String data = CommonUtils.convertBeanCollectionToJsonArray(purchaseOrderVoList, null).toString();
@@ -272,12 +273,7 @@ public class InventoryController extends BaseController{
             purchaseOrder.setUpdateUserId(adminUserModel.getAdminUserId());
 
             // 保存采购单和采购明细
-            ResultHandle resultHandle;
-            if(purchaseOrder.isBatchOrder()){
-                resultHandle = inventoryService.saveBatchPurchaseOrder(purchaseOrder);
-            }else {
-                resultHandle = inventoryService.savePurchaseOrder(purchaseOrder);
-            }
+            ResultHandle resultHandle = inventoryService.savePurchaseOrder(purchaseOrder);
 
             if(resultHandle.isSuccess()){
                 result = getSuccessResult();

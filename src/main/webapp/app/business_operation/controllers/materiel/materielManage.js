@@ -17,7 +17,6 @@
                     $scope.tableParams = new NgTableParams({}, {
                         dataset : $scope.materielList
                     });
-                    console.log("size:"+$scope.materielList.length);
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,
@@ -71,8 +70,12 @@
         $scope.newMateriel = {};
         // 商品类型
         $scope.goodsTypeList = [];
-        // 商品品牌
-        $scope.goodsBrandList = [];
+        // 过滤商品类型
+        $scope.usedGoodsTypeList = [];
+        // 商品种类
+        $scope.goodsKindList = [];
+        // // 商品品牌
+        // $scope.goodsBrandList = [];
         // 商品单位
         $scope.goodsUnitList = [];
         // 供应商
@@ -92,6 +95,7 @@
         // 查询商品类型
         dictionaryService.fetchGoodsTypeList(function(data){
             $scope.goodsTypeList = data.data;
+            $scope.usedGoodsTypeList = data.data;
         },function(data){
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
@@ -100,16 +104,27 @@
             });
         });
 
-        // 查询商品品牌
-        dictionaryService.fetchGoodsBrandList(function(data){
-            $scope.goodsBrandList = data.data;
-        },function(data){
+        // 查询商品种类
+        dictionaryService.fetchGoodsKindList(function (data) {
+            $scope.goodsKindList = data.data;
+        }, function (data) {
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
                 title : '警告',
-                message : '获取商品品牌失败:' + data.errorMsg
+                message : '获取商品类型错误' + data.errorMsg
             });
         });
+
+        // // 查询商品品牌
+        // dictionaryService.fetchGoodsBrandList(function(data){
+        //     $scope.goodsBrandList = data.data;
+        // },function(data){
+        //     BootstrapDialog.show({
+        //         type : BootstrapDialog.TYPE_DANGER,
+        //         title : '警告',
+        //         message : '获取商品品牌失败:' + data.errorMsg
+        //     });
+        // });
 
         // 查询商品单位
         dictionaryService.fetchDictionaryByType("GOODS_UNIT", function(data){
@@ -121,6 +136,22 @@
                 message : '获取商品单位失败:' + data.errorMsg
             });
         });
+
+        // 选择商品种类
+        $scope.selectGoodsKind = function(){
+            $scope.usedGoodsTypeList = [];
+            var kindId = $scope.newMateriel.kindId;
+            if(kindId != 0){
+                angular.forEach($scope.goodsTypeList, function (each) {
+                    if(each.kindId == kindId){
+                        console.log("kindId:" +each.kindId + "goodsType:"+each.typeName);
+                        $scope.usedGoodsTypeList.push(each);
+                    }
+                });
+            }else {
+                $scope.usedGoodsTypeList = $scope.goodsTypeList;
+            }
+        }
 
         //保存商品信息
         $scope.saveMateriel = function(){

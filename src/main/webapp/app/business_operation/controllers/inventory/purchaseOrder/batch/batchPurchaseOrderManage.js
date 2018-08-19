@@ -79,7 +79,6 @@
         $scope.storeId = sessionStorage.getItem("storeId");
 
         $scope.newPurchaseOrder = {};//采购单
-        $scope.newPurchaseOrder.isBatch = "Y";
         $scope.newPurchaseOrder.storeId = $scope.storeId;
         $scope.newPurchaseOrder.businessmanId = $scope.adminUserId;
         $scope.newPurchaseOrder.totalQuantity = 0;
@@ -97,6 +96,9 @@
 
         $scope.selectedMateriel = {}; //选择的商品
         $scope.purchaseOrderItem = {}; //采购单明细
+
+        $scope.showSphereAndCylinder = false; //显示球镜柱镜
+        $scope.showAxial = false; //显示度数
 
         // 查询商品
         materielService.fetchMaterielList(function(data){
@@ -152,7 +154,8 @@
             // 过滤出当前选中供应商的商品
             angular.forEach($scope.materielList, function (each) {
                 if(each.supplierId == $scope.newPurchaseOrder.supplierId){
-                    if(each.kindId == 1){ //批量采购只能采购镜片商品
+                    //批量采购可采购镜片、隐形眼镜和老花镜
+                    if(each.kindId == 1 || each.kindId == 2 || each.kindId == 6){
                         $scope.usedMaterielList.push(each);
                     }
                 }
@@ -172,13 +175,27 @@
                         if($scope.materielList[i].id == materielId){
                             $scope.selectedMateriel = $scope.materielList[i];
                             $scope.purchaseOrderItem.materielId = materielId;
+                            // 根据选择商品的商品类型，控制采购明细。
+                            // 镜片时，采购明细显示球镜和柱镜
+                            // 老花镜和隐形眼镜时，显示度数
+                            var kindId = $scope.selectedMateriel.kindId;
+                            if(kindId == 1){
+                                $scope.showSphereAndCylinder = true;
+                                $scope.showAxial = false;
+                            }else if(kindId == 2 || kindId == 6){
+                                $scope.showSphereAndCylinder = false;
+                                $scope.showAxial = true;
+                            }
                             break;
                         }
                     }
                 }else {
                     $scope.selectedMateriel = {};
                     $scope.purchaseOrderItem.materielId = null;
+                    $scope.showSphereAndCylinder = false;
+                    $scope.showAxial = false;
                 }
+                $scope.purchaseOrderItemList = [];
                 $scope.purchaseOrderItem.sphere = 0;
                 $scope.purchaseOrderItem.cylinder = 0;
                 $scope.purchaseOrderItem.axial = 0;
@@ -186,13 +203,35 @@
             });
         }
 
+
+
         // 保存采购单
         $scope.savePurchaseOrder = function () {
-            $scope.purchaseOrderItemList.push($scope.purchaseOrderItem);
+            if($scope.purchaseOrderItemList.length == 0){
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '警告',
+                    message : '请添加采购单明细'
+                });
+                return false;
+            }
+            $scope.newPurchaseOrder.purchaseOrderItemList = $scope.purchaseOrderItemList;
 
             $("#saveBtn").attr("disabled", true);
             $("#saveBtn").text("处理中...");
             $("#cancelBtn").attr("disabled", true);
+
+            var totalQuantity = 0;
+            var totalAmount = 0;
+            angular.forEach($scope.purchaseOrderItemList, function (each) {
+                each.materielId = $scope.purchaseOrderItem.materielId;
+                each.purchasePrice = $scope.purchaseOrderItem.purchasePrice;
+
+                totalQuantity += each.purchaseQuantity;
+                totalAmount += each.purchasePrice * each.purchaseQuantity;
+            });
+            $scope.newPurchaseOrder.totalQuantity = totalQuantity;
+            $scope.newPurchaseOrder.totalAmount = totalAmount;
 
             // 采购日期
             $scope.newPurchaseOrder.purchaseDate = $("#purchaseDate").val();
@@ -218,6 +257,18 @@
                     message : data.errorMsg
                 });
             });
+        }
+
+        $scope.delItem = function(index){
+            $scope.purchaseOrderItemList.splice(index, 1);
+        }
+
+        $scope.addItem = function(){
+            var item = {};
+            item.sphere = 0;
+            item.cylinder = 0;
+            item.purchaseQuantity = 1;
+            $scope.purchaseOrderItemList.push(item);
         }
 
         $scope.cancel = function(){

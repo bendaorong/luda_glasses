@@ -15,7 +15,9 @@
 
         <table ng-table="tableParams" class="table table-bordered">
             <tr ng-repeat="order in $data|filter:filterText">
-                <td data-title="'编号'" sortable="'code'">{{order.code}}</td>
+                <td data-title="'编号'" sortable="'code'">
+                    <a href="#/purchaseRefundOrderDetail/{{order.purchaseOrderId}}">{{order.code}}</a>
+                </td>
                 <td data-title="'退货日期'" sortable="'purchaseDate'">{{order.purchaseDate}}</td>
                 <td data-title="'门店'" sortable="'code'">{{order.storeName}}</td>
                 <td data-title="'供应商'" sortable="'code'">{{order.supplierName}}</td>
@@ -24,9 +26,9 @@
                 <td data-title="'退货金额'" sortable="'code'">{{order.totalAmount}}</td>
                 <td data-title="'操作'">
                     <button type="button" class="btn btn-sm btn-primary"
-                            ng-click="gotoEdit(order.purchaseOrderId)">编辑</button>
+                            ng-click="gotoEdit(order.purchaseOrderId)" ng-show="roleCode==='00'">编辑</button>
                     <button type="button" class="btn btn-sm btn-primary"
-                            ng-click="removePurchaseOrder(order.purchaseOrderId)">删除</button>
+                            ng-click="removePurchaseOrder(order.purchaseOrderId)" ng-show="roleCode==='00'">删除</button>
                 </td>
             </tr>
         </table>

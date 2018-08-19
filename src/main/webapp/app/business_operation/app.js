@@ -115,6 +115,9 @@ businessOperationApp.config(['$routeProvider', function($routeProvider) {
     }).when("/purchaseRefundOrderManage", {
         templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/refund/purchaseRefundOrderList.html",
         controller : "purchaseRefundOrderManageController"
+    }).when("/purchaseRefundOrderDetail/:id", {
+        templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/refund/purchaseRefundOrderDetail.html",
+        controller : "purchaseRefundOrderDetailController"
     }).when("/editPurchaseRefundOrder/:id", {
         templateUrl : "app/business_operation/controllers/inventory/purchaseOrder/refund/editPurchaseRefundOrder.html",
         controller : "editPurchaseRefundOrderController"

@@ -17,7 +17,6 @@
     <resultMap id="optometryRecordMap" type="com.luda.customer.model.OptometryRecord">
         <id property="id" column="id"/>
         <result property="customerId" column="customer_id"/>
-        <result property="businessManId" column="businessman_id"/>
         <result property="optometryDate" column="optometry_date"/>
         <result property="rightSphere" column="r_sphere"/>
         <result property="leftSphere" column="l_sphere"/>
@@ -35,6 +34,7 @@
         <result property="updateUserId" column="update_user_id"/>
         <result property="updateTime" column="update_time"/>
         <result property="businessManName" column="real_name"/>
+        <result property="optometrist" column="optometrist"/>
     </resultMap>
 
     <select id="fetchCustomerList" resultMap="customerMapper">
@@ -103,7 +103,7 @@
         insert into optometry_record
         (
             customer_id,
-            businessman_id,
+            optometrist,
             optometry_date,
             r_sphere,
             l_sphere,
@@ -124,7 +124,7 @@
         values
         (
             #{customerId},
-            #{businessManId},
+            #{optometrist},
             #{optometryDate},
             #{rightSphere},
             #{leftSphere},
@@ -145,12 +145,8 @@
     </insert>
 
     <select id="fetchOptometryRecordsByCustomerId" resultMap="optometryRecordMap">
-        select a.*, b.real_name from (
-            select * from optometry_record
-            where customer_id = #{customerId} and delete_flag = 0
-        ) a
-        left join admin_user_detail b
-        on a.businessman_id = b.admin_user_id
-        order by a.id desc
+        select * from optometry_record
+        where customer_id = #{customerId} and delete_flag = 0
+        order by id desc
     </select>
 </mapper>

@@ -221,6 +221,9 @@
         <if test="cylinder != null">
             and cylinder = #{cylinder}
         </if>
+        <if test="axial != null">
+            and axial = #{axial}
+        </if>
     </select>
 
     <select id="lockMard" resultMap="mardMap">
@@ -303,6 +306,9 @@
             </if>
             <if test="cylinder != null">
                 and a.cylinder = #{cylinder}
+            </if>
+            <if test="axial != null">
+                and a.axial = #{axial}
             </if>
             limit #{startIndex}, 10
         ) b

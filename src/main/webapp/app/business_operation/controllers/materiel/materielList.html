@@ -3,7 +3,7 @@
         <div class="seat-manage-operate-container">
             <h4 class="seat-manage-operate-title">商品管理</h4>
             <div class="seat-manage-operate-button form-inline">
-                <a type="button" class="btn btn-success btn-sm" href="#addMateriel"> 新增</a>
+                <a type="button" class="btn btn-success btn-sm" href="#addMateriel" ng-show="roleCode==='00'"> 新增</a>
                 <input class="form-control" ng-model="filterText" ng-change="filter()"
                        placeHolder="{{'BUSINESS_OPERATION_PRODUCT_SEARCH'|translate}}">
                 <button type="button" class="btn btn-sm btn-primary" ng-click="refresh()">
@@ -32,9 +32,9 @@
                 </td>-->
                 <td data-title="'操作'">
                     <button type="button" class="btn btn-sm btn-primary"
-                            ng-click="gotoEdit(materiel.id)">编辑</button>
+                            ng-click="gotoEdit(materiel.id)" ng-show="roleCode==='00'">编辑</button>
                     <button type="button" class="btn btn-sm btn-primary"
-                            ng-click="removeMateriel(materiel.id)">删除</button>
+                            ng-click="removeMateriel(materiel.id)" ng-show="roleCode==='000'">删除</button>
                 </td>
             </tr>
         </table>

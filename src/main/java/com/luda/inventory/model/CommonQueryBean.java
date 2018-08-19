@@ -33,6 +33,10 @@ public class CommonQueryBean {
      */
     private Double cylinder;
     /**
+     * 度数
+     */
+    private Double axial;
+    /**
      * startIndex
      */
     private int startIndex;
@@ -101,6 +105,14 @@ public class CommonQueryBean {
         this.businessManId = businessManId;
     }
 
+    public Double getAxial() {
+        return axial;
+    }
+
+    public void setAxial(Double axial) {
+        this.axial = axial;
+    }
+
     @Override
     public String toString() {
         return "CommonQueryBean{" +
@@ -108,6 +120,11 @@ public class CommonQueryBean {
                 ", orderType='" + orderType + '\'' +
                 ", storeId=" + storeId +
                 ", businessManId=" + businessManId +
+                ", materielId=" + materielId +
+                ", sphere=" + sphere +
+                ", cylinder=" + cylinder +
+                ", axial=" + axial +
+                ", startIndex=" + startIndex +
                 '}';
     }
 }

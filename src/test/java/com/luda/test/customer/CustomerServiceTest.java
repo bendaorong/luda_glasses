@@ -51,7 +51,6 @@ public class CustomerServiceTest extends SpringSimpleJunit{
     public void testSaveOptometryRecord(){
         OptometryRecord optometryRecord = new OptometryRecord();
         optometryRecord.setCustomerId(1);
-        optometryRecord.setBusinessManId(1);
         optometryRecord.setOptometryDate(new Date());
         optometryRecord.setRightSphere(1.5);
         optometryRecord.setLeftSphere(1.5);

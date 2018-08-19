@@ -66,9 +66,9 @@
     <li role="presentation" ng-class="{'active': currentTab===0}"><a
             href="javascript(0)" ng-click="currentTab=0" role="tab"
             data-toggle="tab">采购入库单</a></li>
-    <!--<li role="presentation" ng-class="{'active': currentTab===1}"><a-->
-            <!--href="javascript(0)" role="tab" ng-click="currentTab=1"-->
-            <!--data-toggle="tab">采购入库明细</a></li>-->
+    <li role="presentation" ng-class="{'active': currentTab===1}"><a
+            href="javascript(0)" role="tab" ng-click="currentTab=1"
+            data-toggle="tab">采购入库明细</a></li>
 </ul>
 
 <div class="tab-content">
@@ -106,7 +106,7 @@
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label"><span class="red">*</span>商品</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <select class="form-control" id="materiel" ng-model="purchaseOrderItem.materielId">
+                        <select class="form-control" id="materiel" ng-model="purchaseOrderItem.materielId" required>
                             <option value=""></option>
                         </select>
                     </div>
@@ -115,13 +115,7 @@
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label"><span class="red">*</span>采购价格</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="number" min="0" ng-model="purchaseOrderItem.purchasePrice" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label"><span class="red">*</span>采购数量</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <input type="number" step="1" ng-model="purchaseOrderItem.purchaseQuantity" min="1"/>
+                        <input type="number" min="0" ng-model="purchaseOrderItem.purchasePrice" required/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -159,92 +153,46 @@
         </div>
     </div>
 
-    <!--&lt;!&ndash; 采购单明细 &ndash;&gt;-->
-    <!--<div role="tabpanel" class="tab-pane active" ng-show="currentTab===1">-->
-        <!--<div class="seat-manage-operate-container">-->
-            <!--&lt;!&ndash;<h3 class="seat-manage-operate-title">采购入库明细</h3>&ndash;&gt;-->
-            <!--<div class="seat-manage-operate-button form-inline">-->
-                <!--<div style="text-align: center;">-->
-                    <!--<button class="btn btn-success btn-sm" ng-click="newPurchaseOrderItem()">添加采购单明细</button>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-sm-12">-->
-            <!--<div class="oz-form-fields"  style="width:100%;padding-top: 5px">-->
-                <!--&lt;!&ndash; 采购单明细信息数据 &ndash;&gt;-->
-                <!--<table class="table table-bordered" style="margin-top: 10px;" id="itemContainer">-->
-                    <!--<tr>-->
-                        <!--<td>名称</td>-->
-                        <!--<td>商品类型</td>-->
-                        <!--<td>球镜</td>-->
-                        <!--<td>柱镜</td>-->
-                        <!--<td>度数</td>-->
-                        <!--<td>采购价格</td>-->
-                        <!--<td>采购数量</td>-->
-                        <!--<td>小计</td>-->
-                        <!--<td>备注</td>-->
-                        <!--<td>操作</td>-->
-                    <!--</tr>-->
-                    <!--<tr ng-repeat="item in purchaseOrderItemList">-->
-                        <!--<td>{{item.materiel.name}}</td>-->
-                        <!--<td>{{item.materiel.typeName}}</td>-->
-                        <!--<td>{{item.sphere}}</td>-->
-                        <!--<td>{{item.cylinder}}</td>-->
-                        <!--<td>{{item.axial}}</td>-->
-                        <!--<td>{{item.purchasePrice}}</td>-->
-                        <!--<td>{{item.purchaseQuantity}}</td>-->
-                        <!--<td>{{item.purchasePrice * item.purchaseQuantity}}</td>-->
-                        <!--<td>{{item.remark}}</td>-->
-                        <!--<td><button ng-click="delItem($index)">删除</button></td>-->
-                    <!--</tr>-->
-                <!--</table>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
+    <!-- 采购单明细 -->
+    <div role="tabpanel" class="tab-pane active" ng-show="currentTab===1">
+        <div class="seat-manage-operate-container">
+            <div class="seat-manage-operate-button form-inline">
+                <div style="text-align: center;">
+                    <button class="btn btn-success btn-sm" ng-click="addItem()" ng-disabled="!purchaseOrderItem.materielId">添加</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="oz-form-fields" style="width:100%;padding-top: 5px">
+                <!-- 采购单明细信息数据 -->
+                <table ng-table="itemTable" class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th ng-show="showSphereAndCylinder">球镜</th>
+                        <th ng-show="showSphereAndCylinder">柱镜</th>
+                        <th ng-show="showAxial">度数</th>
+                        <th>采购数量</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in purchaseOrderItemList">
+                            <td data-title="'球镜'" ng-show="showSphereAndCylinder"><input type="number" ng-model="item.sphere" step="0.25" min="-12", max="12"/></td>
+                            <td data-title="'柱镜'" ng-show="showSphereAndCylinder"><input type="number" ng-model="item.cylinder" step="0.25" min="-4" max="4"/></td>
+                            <td data-title="'度数'" ng-show="showAxial"><input type="number" ng-model="item.axial" step="50" min="50" max="500"/></td>
+                            <td data-title="'采购数量'"><input type="number" ng-model="item.purchaseQuantity" step="1" min="1"/></td>
+                            <td data-title="'操作'"><button ng-click="delItem($index)">删除</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="seat-manage-operate-container" ng-show="purchaseOrderItemList.length > 10">
+            <div class="seat-manage-operate-button form-inline">
+                <div style="text-align: center;">
+                    <button class="btn btn-success btn-sm" ng-click="addItem()">添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<!--<div class="bg"></div>-->
-<!--<div class="content">-->
-    <!--<h3>采购单明细</h3>-->
-    <!--<table class="table table-bordered" style="margin-top: 10px;">-->
-        <!--<tr>-->
-            <!--<td>商品</td>-->
-            <!--<td>-->
-                <!--<select class="form-control" id="materiel" ng-model="purchaseOrderItem.materielId">-->
-                    <!--<option value=""></option>-->
-                <!--</select>-->
-            <!--</td>-->
-        <!--</tr>-->
-        <!--<tr>-->
-            <!--<td>商品类型</td>-->
-            <!--<td>-->
-                <!--<select class="form-control" style="width:200px;" ng-model="selectGoodsTypeId" ng-change="selectGoodsType()">-->
-                    <!--<option value="0">全部</option>-->
-                    <!--<option ng-repeat="goodsType in goodsTypeList" value="{{goodsType.typeId}}">{{goodsType.typeName}}</option>-->
-                <!--</select>-->
-            <!--</td>-->
-        <!--</tr>-->
-        <!--&lt;!&ndash;-->
-        <!--<tr><td>名称</td><td><input type="text" ng-model="selectedMateriel.name" ng-readonly="true"/></td></tr>-->
-        <!--<tr><td>条码</td><td><input type="text" ng-model="selectedMateriel.barcode" ng-readonly="true"/></td></tr>-->
-        <!--&ndash;&gt;-->
-        <!--<tr ng-show="sphereDisplay"><td>球镜</td><td><input id="sphere" type="number" currency-format="number"  step="0.25" ng-model="purchaseOrderItem.sphere" /></td></tr>-->
-        <!--<tr ng-show="cylinderDisplay"><td>柱镜</td><td><input id="cylinder" type="number" currency-format="number"  step="0.25" ng-model="purchaseOrderItem.cylinder" /></td></tr>-->
-        <!--<tr ng-show="axialDisplay"><td>度数</td><td><input id="axial" type="number" currency-format="number"  step="0.25" ng-model="purchaseOrderItem.axial" /></td></tr>-->
-        <!--<tr><td>采购价格</td><td><input type="number" min="0" ng-model="purchaseOrderItem.purchasePrice" /></td></tr>-->
-        <!--<tr>-->
-            <!--<td>采购数量</td>-->
-            <!--<td><input type="number" step="1" ng-model="purchaseOrderItem.purchaseQuantity" min="1"/></td>-->
-        <!--</tr>-->
-        <!--<tr><td>小计</td><td>{{purchaseOrderItem.purchasePrice * purchaseOrderItem.purchaseQuantity}}</td></tr>-->
-        <!--<tr>-->
-            <!--<td>备注</td><td><input type="text" ng-model="purchaseOrderItem.remark"/></td>-->
-        <!--</tr>-->
-    <!--</table>-->
-    <!--<p>-->
-        <!--<button ng-click="addItem()">添加</button>-->
-        <!--<button ng-click="closeBtn()">关闭</button>-->
-    <!--</p>-->
-<!--</div>-->
-
-<script type="text/javascript" charset="utf-8" src="My97DatePicker/WdatePicker.js"></script>

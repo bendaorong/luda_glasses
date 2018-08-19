@@ -6,21 +6,9 @@
     "name" : "商品",
     "page" : "#materielManage"
   }, {
-    "id" : "100400",
-    "name" : "供应商",
-    "page" : "#supplierManage"
-  }, {
-    "id" : "100500",
-    "name" : "商品类型",
-    "page" : "#goodsTypeManage"
-  }, {
     "id" : "100600",
     "name" : "客户管理",
     "page" : "#customerManage"
-  }, {
-    "id" : "100700",
-    "name" : "品牌管理",
-    "page" : "#goodsBrandManage"
   }]
 }, {
   "id" : "200",
@@ -38,15 +26,11 @@
     "name" : "采购单查询",
     "page" : "#purchaseOrderManage"
   },{
-    "id" : "200300",
-    "name" : "退货单",
-    "page" : "#addPurchaseRefundOrder"
-  },{
     "id" : "200400",
     "name" : "退货单查询",
     "page" : "#purchaseRefundOrderManage"
   }]
-},{
+}, {
   "id" : "300",
   "name" : "销售管理",
   "subpages" : [{
@@ -73,17 +57,5 @@
     "id" : "400300",
     "name" : "库存调拨",
     "page" : "#transferOrderManage"
-  }]
-},{
-  "id" : "500",
-  "name" : "统计报表",
-  "subpages" : [{
-    "id" : "500100",
-    "name" : "销售报表",
-    "page" : "#saleStatisticsManage"
-  }, {
-    "id" : "500200",
-    "name" : "采购报表",
-    "page" : "#purchaseStatisticsManage"
   }]
 }]

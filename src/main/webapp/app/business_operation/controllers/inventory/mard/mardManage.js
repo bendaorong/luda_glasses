@@ -1,14 +1,26 @@
 (function() {
-    angular.module("businessOperationApp").controller("mardManageController", function($scope, NgTableParams, inventoryService, materielService) {
+    angular.module("businessOperationApp").controller("mardManageController", function($scope, NgTableParams, inventoryService, materielService, storeService) {
         setActiveSubPage($scope);
         $scope.roleCode = sessionStorage.getItem("roleCode");
         $scope.currentTab = 0;
         $scope.mardList = [];
+        $scope.storeList = [];
         $scope.filterCondition = {};
 
         $scope.setCurrentTab = function(currentTab) {
             $scope.currentTab = currentTab;
         }
+
+        // 查询门店
+        storeService.fetchStoreList(function(data){
+            $scope.storeList = data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取门店失败:' + data.errorMsg
+            });
+        });
 
         // 查询商品
         materielService.fetchMaterielList(function(data){
@@ -19,8 +31,10 @@
             $scope.materielSearchableSelect = $("#materiel").searchableSelect(function (materielId) {
                 if(angular.isDefined(materielId) && materielId != null && materielId != ''){
                     $scope.filterCondition.materielId = materielId;
-                    $scope.$apply();
+                }else {
+                    $scope.filterCondition.materielId = null;
                 }
+                $scope.$apply();
             });
         },function(data){
             BootstrapDialog.show({
@@ -41,6 +55,7 @@
                         total: data.data,
                         getData: function ($defer, params) {
                             $scope.filterCondition.pageNo = params.page();
+                            console.log("pageNo:" + params.page());
                             getMardList($defer);
                         }
                     });
@@ -53,6 +68,7 @@
 
         // 显示商品库存列表
         function getMardList($defer) {
+            console.log("getMardList:" + JSON.stringify($scope.filterCondition));
             inventoryService.fetchMardVoListPage($scope.filterCondition, function(data){
                 if(data.success){
                     $scope.mardList = data.data;

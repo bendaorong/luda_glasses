@@ -181,32 +181,28 @@
                 </legend>
                 <table class="table table-bordered">
                     <tr>
-                        <td>验光日期</td>
-                        <td>右球镜</td>
-                        <td>左球镜</td>
-                        <td>右柱镜</td>
-                        <td>左柱镜</td>
-                        <td>右轴向</td>
-                        <td>左轴向</td>
-                        <td>右裸视</td>
-                        <td>左裸视</td>
-                        <td>右矫正</td>
-                        <td>左矫正</td>
-                        <td>验光员</td>
+                        <th></th>
+                        <th>球镜</th>
+                        <th>柱镜</th>
+                        <th>度数</th>
+                        <th>矫正</th>
+                        <th>裸视</th>
                     </tr>
                     <tr>
-                        <td>{{record.optometryDate}}</td>
+                        <td><b>右</b></td>
                         <td>{{record.rightSphere | number:2}}</td>
-                        <td>{{record.leftSphere | number:2}}</td>
                         <td>{{record.rightCylinder | number:2}}</td>
-                        <td>{{record.leftCylinder | number:2}}</td>
                         <td>{{record.rightAxial | number:2}}</td>
-                        <td>{{record.leftAxial | number:2}}</td>
-                        <td>{{record.rightUncorrectedVisualAcuity | number:2}}</td>
-                        <td>{{record.leftUncorrectedVisualAcuity | number:2}}</td>
                         <td>{{record.rightCorrectedVisualAcuity | number:2}}</td>
+                        <td>{{record.rightUncorrectedVisualAcuity | number:2}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>左</b></td>
+                        <td>{{record.leftSphere | number:2}}</td>
+                        <td>{{record.leftCylinder | number:2}}</td>
+                        <td>{{record.leftAxial | number:2}}</td>
                         <td>{{record.leftCorrectedVisualAcuity | number:2}}</td>
-                        <td>{{record.businessManName}}</td>
+                        <td>{{record.leftUncorrectedVisualAcuity | number:2}}</td>
                     </tr>
                 </table>
             </fieldset>
@@ -219,16 +215,16 @@
                     </legend>
                     <table class="table table-bordered" id="itemContainer">
                         <tr>
-                            <td>商品名称</td>
-                            <td>商品类型</td>
-                            <td>球镜</td>
-                            <td>柱镜</td>
-                            <td>度数</td>
-                            <td>数量</td>
-                            <td>单价</td>
-                            <td>小计</td>
-                            <td>备注</td>
-                            <td>操作</td>
+                            <th>商品名称</th>
+                            <th>商品类型</th>
+                            <th>球镜</th>
+                            <th>柱镜</th>
+                            <th>度数</th>
+                            <th>数量</th>
+                            <th>单价</th>
+                            <th>小计</th>
+                            <th>备注</th>
+                            <th>操作</th>
                         </tr>
                         <tr ng-repeat="item in selectedSalesOrder.salesOrderItems">
                             <td>{{item.materiel.name}}</td>

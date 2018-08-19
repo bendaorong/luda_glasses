@@ -18,9 +18,7 @@ personalLoginApp.controller('loginController', [ '$scope', '$location', 'languag
 			sessionStorage.setItem("roleCode",data.adminRoleModel.roleCode);
             sessionStorage.setItem("storeId",data.storeId);
             sessionStorage.setItem("adminUserId",data.adminUserId);
-			console.log(sessionStorage.getItem("roleCode"));
 		}).error(function(data) {
-			console.log(data);
 			$scope.isLoading = false;
 			$scope.errorMsg = data.errorMsg;
 		}).then(function() {

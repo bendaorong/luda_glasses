@@ -207,6 +207,6 @@
     <select id="getAdminRoleList" resultType="com.luda.user.model.AdminRoleModel">
         select role_id as roleId, role_code as roleCode, role_name as roleName
         from admin_role
-        where role_code != '00'
+        where delete_flag = 0
     </select>
 </mapper>

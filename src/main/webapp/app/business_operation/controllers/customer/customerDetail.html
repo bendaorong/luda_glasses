@@ -158,7 +158,9 @@
             <div class="oz-form-fields"  style="width:100%;padding-top: 5px">
                 <table ng-table="salesOrders" class="table table-bordered">
                     <tr ng-repeat="salesOrder in $data|filter:filterSalesOrderText">
-                        <td data-title="'销售单号'" sortable="'code'">{{salesOrder.code}}</td>
+                        <td data-title="'销售单号'" sortable="'code'">
+                            <a ng-href="#/salesOrderDetail/{{salesOrder.id}}">{{salesOrder.code}}</a>
+                        </td>
                         <td data-title="'销售日期'" sortable="'saleDate'">{{salesOrder.saleDate}}</td>
                         <td data-title="'取货日期'" sortable="'pickUpDate'">{{salesOrder.pickUpDate}}</td>
                         <td data-title="'总数量'" sortable="'totalQuantity'">{{salesOrder.totalQuantity}}</td>
@@ -196,17 +198,12 @@
                 <table ng-table="optometryRecords" class="table table-bordered">
                     <tr ng-repeat="record in $data|filter:filterOptometryRecordText">
                         <td data-title="'验光日期'" sortable="'optometryDate'">{{record.optometryDate}}</td>
-                        <td data-title="'右球镜'" sortable="'rightSphere'">{{record.rightSphere}}</td>
-                        <td data-title="'左球镜'" sortable="'leftSphere'">{{record.leftSphere}}</td>
-                        <td data-title="'右柱镜'" sortable="'rightCylinder'">{{record.rightCylinder}}</td>
-                        <td data-title="'左柱镜'" sortable="'leftCylinder'">{{record.leftCylinder}}</td>
-                        <td data-title="'右轴向'" sortable="'rightAxial'">{{record.rightAxial}}</td>
-                        <td data-title="'左轴向'" sortable="'leftAxial'">{{record.leftAxial}}</td>
-                        <td data-title="'右裸视'" sortable="'rightUncorrectedVisualAcuity'">{{record.rightUncorrectedVisualAcuity}}</td>
-                        <td data-title="'左裸视'" sortable="'leftUncorrectedVisualAcuity'">{{record.leftUncorrectedVisualAcuity}}</td>
-                        <td data-title="'右矫正'" sortable="'rightCorrectedVisualAcuity'">{{record.rightCorrectedVisualAcuity}}</td>
-                        <td data-title="'左矫正'" sortable="'leftCorrectedVisualAcuity'">{{record.leftCorrectedVisualAcuity}}</td>
-                        <td data-title="'验光员'" sortable="'businessManId'">{{record.businessManName}}</td>
+                        <td data-title="'右/左球镜'" sortable="'rightSphere'">{{record.rightSphere | number:2}} / {{record.leftSphere | number:2}}</td>
+                        <td data-title="'右/左柱镜'" sortable="'rightCylinder'">{{record.rightCylinder | number:2}} / {{record.leftCylinder | number:2}}</td>
+                        <td data-title="'右/左度数'" sortable="'rightAxial'">{{record.rightAxial | number:2}} / {{record.leftAxial | number:2}}</td>
+                        <td data-title="'右/左裸视'" sortable="'rightUncorrectedVisualAcuity'">{{record.rightUncorrectedVisualAcuity | number:2}} / {{record.leftUncorrectedVisualAcuity | number:2}}</td>
+                        <td data-title="'右/左矫正'" sortable="'rightCorrectedVisualAcuity'">{{record.rightCorrectedVisualAcuity | number:2}} / {{record.leftCorrectedVisualAcuity | number:2}}</td>
+                        <td data-title="'验光师'" sortable="'optometrist'">{{record.optometrist}}</td>
                     </tr>
                 </table>
             </div>

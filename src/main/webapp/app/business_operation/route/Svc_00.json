@@ -25,10 +25,6 @@
 		"id" : "100600",
 		"name" : "客户管理",
 		"page" : "#customerManage"
-	}, {
-		"id" : "100700",
-		"name" : "品牌管理",
-		"page" : "#goodsBrandManage"
 	}]
 }, {
 	"id" : "200",

@@ -6,17 +6,21 @@
     "name" : "商品",
     "page" : "#materielManage"
   }, {
-    "id" : "100500",
-    "name" : "商品类型",
-    "page" : "#goodsTypeManage"
-  }, {
     "id" : "100600",
     "name" : "客户管理",
     "page" : "#customerManage"
-  }, {
-    "id" : "100700",
-    "name" : "品牌管理",
-    "page" : "#goodsBrandManage"
+  }]
+}, {
+  "id" : "200",
+  "name" : "采购管理",
+  "subpages" : [{
+    "id" : "200200",
+    "name" : "采购单查询",
+    "page" : "#purchaseOrderManage"
+  },{
+    "id" : "200400",
+    "name" : "退货单查询",
+    "page" : "#purchaseRefundOrderManage"
   }]
 }, {
   "id" : "300",

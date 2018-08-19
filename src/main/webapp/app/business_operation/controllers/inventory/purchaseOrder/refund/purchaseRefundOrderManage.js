@@ -49,7 +49,7 @@
 
         // 删除采购单
         $scope.removePurchaseOrder = function (id) {
-            if(confirm("删除采购单将同时扣减采购商品的库存，确定删除吗？")){
+            if(confirm("删除采购退货单将同时扣减采购商品的库存，确定删除吗？")){
                 inventoryService.removePurchaseOrder(id, function (data) {
                     if(data.success){
                         // BootstrapDialog.show({
@@ -637,8 +637,8 @@
         }
 
         // 删除明细
-        $scope.delItem = function (index) {
-            var item = $scope.selectPurchaseOrder.purchaseOrderItemList[index];
+        $scope.delItem_ = function (index) {
+            var item = $scope.purchaseOrderItemList[index];
             if(confirm("确定删除该条明细吗？")){
                 inventoryService.removePurchaseOrderItem(item.itemId, function (data) {
                     if(data.success){
@@ -648,7 +648,7 @@
                             message : '明细删除成功'
                         });
                         // 将明细从列表删除
-                        $scope.selectPurchaseOrder.purchaseOrderItemList.splice(index, 1);
+                        $scope.purchaseOrderItemList.splice(index, 1);
                         // 采购单总数量
                         $scope.selectPurchaseOrder.totalQuantity -= item.purchaseQuantity;
                         // 采购单总金额
@@ -669,6 +669,106 @@
                 });
             }
         }
+
+        $scope.cancel = function(){
+            history.back();
+        }
+    }).controller("purchaseRefundOrderDetailController",function($location,$scope,$filter,materielService,inventoryService,storeService,supplierService,adminUserService,$routeParams,NgTableParams){
+        $scope.selectPurchaseOrder={};
+        $scope.purchaseOrderItemList = [];
+        $scope.storeList = [];
+        $scope.supplierList = [];
+        $scope.adminUserList = [];
+        $scope.materielList = [];
+
+        // 查询采购退货单
+        inventoryService.getPurchaseOrderById($routeParams.id, function(data){
+            $scope.selectPurchaseOrder = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '错误',
+                message : data.errorMsg
+            });
+        });
+
+        // 查询采购退货明细(分页)
+        inventoryService.getPurchaseOrderItemsCount($routeParams.id, function(data){
+            if(data.success){
+                $scope.itemTable = new NgTableParams({
+                    page: 1,
+                    count: 10
+                },{
+                    total: data.data,
+                    getData: function ($defer, params) {
+                        getPurchaseOrderItemsList($defer, params.page());
+                    }
+                });
+            }
+        }, function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '错误',
+                message : data.errorMsg
+            });
+        });
+
+        function getPurchaseOrderItemsList($defer, pageNo){
+            inventoryService.listPurchaseOrderItemsPage({
+                "purchaseOrderId" : $routeParams.id,
+                "pageNo" : pageNo
+            }, function(data){
+                if(data.success){
+                    $scope.purchaseOrderItemList = data.data;
+                    $defer.resolve($scope.purchaseOrderItemList);
+                }else {
+                    BootstrapDialog.show({
+                        type : BootstrapDialog.TYPE_DANGER,
+                        title : '失败',
+                        message : '获取采购退货单明细失败' + data.errorMsg
+                    });
+                }
+            },function(data){
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '警告',
+                    message : '获取采购退货单明细错误' + data.errorMsg
+                });
+            });
+        }
+
+        // 查询门店
+        storeService.fetchStoreList(function(data){
+            $scope.storeList = data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取门店失败:' + data.errorMsg
+            });
+        });
+
+        // 查询供应商
+        supplierService.fetchSupplierList(function (data) {
+            $scope.supplierList = data.data;
+        },function (data) {
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取供应商失败:' + data.errorMsg
+            });
+        });
+
+        // 查询业务员
+        adminUserService.fetchUserListByStore(function(data){
+            $scope.adminUserList  =  data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取业务员失败:' + data.errorMsg
+            });
+        });
 
         $scope.cancel = function(){
             history.back();

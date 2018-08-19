@@ -203,13 +203,6 @@ public interface InventoryService {
      */
     ResultHandle<TransferOrder> removeTransferOrder(int id);
 
-    /**
-     * 保存批量采购单
-     * @param purchaseOrder
-     * @return
-     */
-    ResultHandle saveBatchPurchaseOrder(PurchaseOrder purchaseOrder);
-
     int getMardTotalCount(CommonQueryBean queryBean);
 
     List<MardVo> fetchMardVoListPage(CommonQueryBean queryBean);

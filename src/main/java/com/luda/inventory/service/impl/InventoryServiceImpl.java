@@ -839,55 +839,6 @@ public class InventoryServiceImpl implements InventoryService{
         return resultHandle;
     }
 
-    @Override
-    public ResultHandle saveBatchPurchaseOrder(PurchaseOrder purchaseOrder) {
-        ResultHandle<PurchaseOrder> resultHandle = new ResultHandle<>();
-
-        // 生成批量采购信息
-        buildBatchPurchaseOrder(purchaseOrder);
-        // 验证采购单
-        String errorMsg = checkPurchaseOrder(purchaseOrder, true);
-        if(StringUtils.isNotEmpty(errorMsg)){
-            resultHandle.setMsg(errorMsg);
-            return resultHandle;
-        }
-        // 初始化采购单
-        initPurchaseOrder(purchaseOrder);
-        // 保存采购单
-        inventoryDao.savePurchaseOrder(purchaseOrder);
-        // 保存采购单明细
-        initPurchaseOrderItem(purchaseOrder);
-        inventoryDao.insertPurchaseOrderItemBatch(purchaseOrder.getPurchaseOrderItemList());
-
-        // 更新商品库存,增加库存
-        ExecutorService executorService = Executors.newFixedThreadPool(5);
-        try {
-            final int storeId = purchaseOrder.getStoreId();
-            for(final PurchaseOrderItem item : purchaseOrder.getPurchaseOrderItemList()){
-                executorService.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        Mard mard = getMard(item.getMaterielId(), storeId, item.getSphere(), item.getCylinder(), item.getAxial());
-                        // 采购
-                        if(mard == null){
-                            saveMard(item.getMaterielId(), storeId, item.getPurchaseQuantity(), item.getSphere(), item.getCylinder(), item.getAxial());
-                        }else {
-                            updateMardById(mard.getId(), item.getPurchaseQuantity());
-                        }
-                    }
-                });
-            }
-        } finally {
-            executorService.shutdown();
-        }
-
-        try {
-            while (!executorService.awaitTermination(1, TimeUnit.SECONDS));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return resultHandle;
-    }
 
     @Override
     public int getMardTotalCount(CommonQueryBean queryBean) {
@@ -907,39 +858,5 @@ public class InventoryServiceImpl implements InventoryService{
     @Override
     public List<PurchaseOrderItem> fetchPurchaseOrderItemListPage(CommonQueryBean queryBean) {
         return inventoryDao.fetchPurchaseOrderItemListPage(queryBean);
-    }
-
-    /**
-     * 生成批量采购单数据
-     * 批量采购镜片商品规则
-     * 1.相同采购单价
-     * 2.相同采购数量
-     * 3.柱镜[-4.00, 4.00] 球镜[-12.00, 12.00]，按步长0.25逐个产生采购明细
-     * @param purchaseOrder
-     */
-    private void buildBatchPurchaseOrder(PurchaseOrder purchaseOrder) {
-        List<PurchaseOrderItem> items = new ArrayList<>();
-        PurchaseOrderItem template = purchaseOrder.getPurchaseOrderItemList().get(0);
-
-        int totalQuantity = 0;
-        BigDecimal totalAmount = new BigDecimal(0);
-        for( double cylinder=-4; cylinder<=4; cylinder+=0.25){
-            for(double sphere=-12; sphere<=12; sphere+=0.25){
-                PurchaseOrderItem item = new PurchaseOrderItem();
-                item.setMaterielId(template.getMaterielId());
-                item.setSphere(sphere);
-                item.setCylinder(cylinder);
-                item.setPurchasePrice(template.getPurchasePrice());
-                item.setPurchaseQuantity(template.getPurchaseQuantity());
-                items.add(item);
-
-                totalQuantity += item.getPurchaseQuantity();
-                totalAmount = totalAmount.add(item.getPurchasePrice().multiply(new BigDecimal(item.getPurchaseQuantity())));
-            }
-        }
-
-        purchaseOrder.setPurchaseOrderItemList(items);
-        purchaseOrder.setTotalQuantity(totalQuantity);
-        purchaseOrder.setTotalAmount(totalAmount);
     }
 }

@@ -44,7 +44,7 @@ public class PurchaseOrderItem implements Serializable {
      */
     private double cylinder;
     /**
-     * 轴向
+     * 度数
      */
     private double axial;
     /**

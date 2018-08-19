@@ -128,7 +128,6 @@ public class CustomerServiceImpl implements CustomerService{
     public ResultHandle<OptometryRecord> saveOptometryRecord(OptometryRecord optometryRecord) {
         ResultHandle<OptometryRecord> resultHandle = new ResultHandle<>();
         optometryRecord.setOptometryDate(new Date());
-        optometryRecord.setBusinessManId(optometryRecord.getCreateUserId());
         int result = customerDao.saveOptometryRecord(optometryRecord);
         if(result > 0){
             resultHandle.setReturnContent(optometryRecord);

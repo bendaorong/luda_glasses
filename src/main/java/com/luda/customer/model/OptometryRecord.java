@@ -14,9 +14,9 @@ public class OptometryRecord implements Serializable {
      */
     private int customerId;
     /**
-     * 验光员
+     * 验光师
      */
-    private int businessManId;
+    private String optometrist;
     /**
      * 验光日期
      */
@@ -83,11 +83,6 @@ public class OptometryRecord implements Serializable {
      */
     private Date updateTime;
 
-    /**
-     * 验光员名称
-     */
-    private String businessManName;
-
     public int getId() {
         return id;
     }
@@ -102,14 +97,6 @@ public class OptometryRecord implements Serializable {
 
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
-    }
-
-    public int getBusinessManId() {
-        return businessManId;
-    }
-
-    public void setBusinessManId(int businessManId) {
-        this.businessManId = businessManId;
     }
 
     public Date getOptometryDate() {
@@ -240,12 +227,12 @@ public class OptometryRecord implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public String getBusinessManName() {
-        return businessManName;
+    public String getOptometrist() {
+        return optometrist;
     }
 
-    public void setBusinessManName(String businessManName) {
-        this.businessManName = businessManName;
+    public void setOptometrist(String optometrist) {
+        this.optometrist = optometrist;
     }
 
     @Override
@@ -253,7 +240,7 @@ public class OptometryRecord implements Serializable {
         return "OptometryRecord{" +
                 "id=" + id +
                 ", customerId=" + customerId +
-                ", businessManId=" + businessManId +
+                ", optometrist='" + optometrist + '\'' +
                 ", optometryDate=" + optometryDate +
                 ", rightSphere=" + rightSphere +
                 ", leftSphere=" + leftSphere +
@@ -270,7 +257,6 @@ public class OptometryRecord implements Serializable {
                 ", createTime=" + createTime +
                 ", updateUserId=" + updateUserId +
                 ", updateTime=" + updateTime +
-                ", businessManName='" + businessManName + '\'' +
                 '}';
     }
 }

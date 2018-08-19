@@ -531,3 +531,15 @@ UPDATE goods_kind SET kind_name = '隐形资料' WHERE kind_id = 2;
 UPDATE goods_kind SET kind_name = '镜架资料' WHERE kind_id = 3;
 UPDATE goods_kind SET kind_name = '护理产品资料' WHERE kind_id = 4;
 INSERT INTO goods_kind (kind_id, kind_name, delete_flag) VALUES (5, '太阳镜资料', 0), (6, '老花镜资料', 0), (7, '其他商品资料', 0);
+
+/**
+ * 2018-08-18
+ */
+ALTER TABLE luda_glasses.`optometry_record` ADD COLUMN optometrist VARCHAR(64);
+ALTER TABLE luda_glasses.`optometry_record` DROP COLUMN businessman_id;
+
+ALTER TABLE luda_glasses.`admin_role` ADD delete_flag TINYINT(1) DEFAULT 0;
+update luda_glasses.`admin_role` set delete_flag = 1 where role_code in ('01', '03');
+
+update luda_glasses.admin_user set role_id = 5;
+update luda_glasses.admin_user set role_id = 1 where admin_name = 'admin';

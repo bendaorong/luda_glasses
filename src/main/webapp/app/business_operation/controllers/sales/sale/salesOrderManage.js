@@ -298,6 +298,7 @@
         $scope.selectedMard = {};
 
         $scope.record = {}; //最新验光记录
+        $scope.bakRecord = {};
 
         // 商品类型
         $scope.goodsTypeList = [];
@@ -350,8 +351,10 @@
                     customerService.fetchOptometryRecordsByCustomerId(customerId, function (data) {
                         if(data.data.length > 0){
                             $scope.record = data.data[0];
+                            $scope.bakRecord = angular.copy(data.data[0]);
                         }else {
                             $scope.record = {};
+                            $scope.bakRecord = {};
                         }
                     }, function (data) {});
                     $scope.$apply();
@@ -634,6 +637,7 @@
             $scope.newSalesOrder.pickUpDate = $("#pickUpDate").val();
             $scope.newSalesOrder.orderType = "01"; //销售单
 
+            // 保存销售单
             salesService.saveSalesOrder($scope.newSalesOrder, function (data) {
                 if(data.success){
                     BootstrapDialog.show({
@@ -656,6 +660,28 @@
                     message : data.errorMsg
                 });
             });
+
+            // 保存验光记录
+            var isSame = $scope.bakRecord.rightSphere == $scope.record.rightSphere
+                && $scope.bakRecord.rightCylinder == $scope.record.rightCylinder
+                && $scope.bakRecord.rightAxial == $scope.record.rightAxial
+                    && $scope.bakRecord.rightCorrectedVisualAcuity == $scope.record.rightCorrectedVisualAcuity
+                    && $scope.bakRecord.rightUncorrectedVisualAcuity == $scope.record.rightUncorrectedVisualAcuity
+                    && $scope.bakRecord.leftSphere == $scope.record.leftSphere
+                    && $scope.bakRecord.leftCylinder == $scope.record.leftCylinder
+                    && $scope.bakRecord.leftAxial == $scope.record.leftAxial
+                    && $scope.bakRecord.leftCorrectedVisualAcuity == $scope.record.leftCorrectedVisualAcuity
+                    && $scope.bakRecord.leftUncorrectedVisualAcuity == $scope.record.leftUncorrectedVisualAcuity
+                    && $scope.bakRecord.optometrist == $scope.record.optometrist;
+
+            if(!isSame){
+                $scope.record.customerId = $scope.newSalesOrder.customerId;
+                customerService.saveOptometryRecord($scope.record, function (data) {
+
+                }, function (data) {
+
+                });
+            }
         }
 
         $scope.cancel = function(){
