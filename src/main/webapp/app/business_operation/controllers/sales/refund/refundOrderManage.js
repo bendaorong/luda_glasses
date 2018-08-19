@@ -17,7 +17,6 @@
                     $scope.tableParams = new NgTableParams({}, {
                         dataset : $scope.salesOrderList
                     });
-                    console.log("size:"+$scope.salesOrderList.length);
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,
@@ -598,7 +597,6 @@
             // 销售日期
             $scope.selectedSalesOrder.saleDate = $("#saleDate").val();
             $scope.selectedSalesOrder.pickUpDate = $("#pickUpDate").val();
-            console.log("selectedSalesOrder:" + JSON.stringify($scope.selectedSalesOrder));
 
             salesService.updateSalesOrder($scope.selectedSalesOrder, function (data) {
                 if(data.success){

@@ -18,7 +18,6 @@
                     $scope.tableParams = new NgTableParams({}, {
                         dataset : $scope.purchaseOrderList
                     });
-                    console.log("size:"+$scope.purchaseOrderList.length);
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,
@@ -610,7 +609,6 @@
         $scope.updatePurchaseOrder = function () {
             // 采购日期
             $scope.selectPurchaseOrder.purchaseDate = $("#purchaseDate").val();
-            //console.log("selectPurchaseOrder:" + JSON.stringify($scope.selectPurchaseOrder));
 
             inventoryService.updatePurchaseOrder($scope.selectPurchaseOrder, function (data) {
                 if(data.success){

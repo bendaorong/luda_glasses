@@ -21,7 +21,6 @@
 
         // 按商品统计
         function purchaseStatisticsByMateriel(){
-            console.log(JSON.stringify($scope.statisticsCondition));
             statisticsService.purchaseStatisticsByMateriel($scope.statisticsCondition, function (data) {
                 $scope.purchaseStatisticsByMaterielList = data.data;
                 var totalQuantity = 0;
@@ -84,7 +83,6 @@
         $scope.statisticsCondition_1.endDate = $filter('date')(new Date(), "yyyy-MM-dd");
 
         function purchaseStatisticsBySupplier(){
-            console.log(JSON.stringify($scope.statisticsCondition_1));
             statisticsService.purchaseStatisticsBySupplier($scope.statisticsCondition_1, function (data) {
                 $scope.purchaseStatisticsBySupplierList = data.data;
                 var totalQuantity = 0;

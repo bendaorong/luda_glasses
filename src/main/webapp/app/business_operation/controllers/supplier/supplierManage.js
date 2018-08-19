@@ -17,7 +17,6 @@
                     $scope.tableParams = new NgTableParams({}, {
                         dataset : $scope.supplierList
                     });
-                    console.log("size:"+$scope.supplierList.length);
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,
@@ -81,7 +80,6 @@
         // 启用供应商
         $scope.enableSupplier = function (supplierId) {
             supplierService.enableSupplier(supplierId, function (data) {
-                console.log(data);
                 if(data.success){
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_SUCCESS,
@@ -237,7 +235,6 @@
                     $scope.tableParams = new NgTableParams({}, {
                         dataset : $scope.supplierContactList
                     });
-                    console.log("size:"+$scope.supplierContactList.length);
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,

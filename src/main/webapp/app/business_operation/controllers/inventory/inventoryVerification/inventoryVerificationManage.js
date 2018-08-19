@@ -17,7 +17,6 @@
                     $scope.tableParams = new NgTableParams({}, {
                         dataset : $scope.invntVerifList
                     });
-                    console.log("size:"+$scope.invntVerifList.length);
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,

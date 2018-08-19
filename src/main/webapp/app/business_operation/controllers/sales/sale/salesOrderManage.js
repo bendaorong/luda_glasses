@@ -426,8 +426,6 @@
         // 显示客户列表
         function getCustomerList($defer) {
             customerService.fetchCustomerListPage($scope.customerCondition, function(data){
-                console.log("fetchCustomerListPage condition:" + JSON.stringify($scope.customerCondition)
-                    + " result:" + JSON.stringify(data));
                 if(data.success){
                     if(data.data.length == 0){
                         // 查询不到客户，则提示新增客户
@@ -1022,7 +1020,6 @@
             // 销售日期
             $scope.selectedSalesOrder.saleDate = $("#saleDate").val();
             $scope.selectedSalesOrder.pickUpDate = $("#pickUpDate").val();
-            console.log("selectedSalesOrder:" + JSON.stringify($scope.selectedSalesOrder));
 
             salesService.updateSalesOrder($scope.selectedSalesOrder, function (data) {
                 if(data.success){
@@ -1157,7 +1154,6 @@
                     }
                 }
             });
-            console.log(JSON.stringify(refundOrderItems));
             $scope.newRefundOrder.refundOrderItems = refundOrderItems;
 
             if(refundOrderItems.length == 0){

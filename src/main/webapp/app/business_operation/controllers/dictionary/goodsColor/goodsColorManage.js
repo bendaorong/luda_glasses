@@ -20,7 +20,6 @@
                 $scope.tableParams = new NgTableParams({}, {
                     dataset : $scope.goodsColorList
                 });
-                console.log("size:"+$scope.goodsColorList.length);
             },function(data){
                 BootstrapDialog.show({
                     type : BootstrapDialog.TYPE_DANGER,

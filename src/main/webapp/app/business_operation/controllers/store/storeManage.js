@@ -24,7 +24,6 @@
                 $scope.tableParams = new NgTableParams({}, {
                     dataset : $scope.storeList
                 });
-                console.log("size:"+$scope.storeList.length);
             },function(data){
                 BootstrapDialog.show({
                     type : BootstrapDialog.TYPE_DANGER,

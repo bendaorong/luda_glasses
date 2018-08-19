@@ -57,7 +57,6 @@
             }
             //saleStatisticsByMateriel();
             var srcurl = "/luda_glasses/rest/statistics/sale/chart/"+dimension+"/"+beginDate+"/"+endDate;
-            console.log("srcurl:"+srcurl);
             $("#chartImage").attr("src", srcurl);
         }
 
@@ -88,7 +87,6 @@
         $scope.statisticsCondition_1.endDate = $filter('date')(new Date(), "yyyy-MM-dd");
 
         function saleStatisticsByAdminUser(){
-            console.log(JSON.stringify($scope.statisticsCondition_1));
             statisticsService.saleStatisticsByAdminUser($scope.statisticsCondition_1, function (data) {
                 $scope.saleStatisticsByAdminUserList = data.data;
                 var totalQuantity = 0;
@@ -141,7 +139,6 @@
         $scope.statisticsCondition_2.endDate = $filter('date')(new Date(), "yyyy-MM-dd");
 
         function saleStatisticsByStore(){
-            console.log(JSON.stringify($scope.statisticsCondition_2));
             statisticsService.saleStatisticsByStore($scope.statisticsCondition_2, function (data) {
                 $scope.saleStatisticsByStoreList = data.data;
                 var totalQuantity = 0;

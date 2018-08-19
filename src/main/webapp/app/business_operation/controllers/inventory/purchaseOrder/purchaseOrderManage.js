@@ -706,7 +706,6 @@
             item.purchaseOrderId = $scope.selectPurchaseOrder.purchaseOrderId;
             item.materielId = $scope.selectedMateriel.id;
 
-            //console.log(JSON.stringify(item));
             inventoryService.savePurchaseOrderItem(item, function (data) {
                 if(data.success){
                     BootstrapDialog.show({
@@ -747,7 +746,6 @@
         $scope.updatePurchaseOrder = function () {
             // 采购日期
             $scope.selectPurchaseOrder.purchaseDate = $("#purchaseDate").val();
-            //console.log("selectPurchaseOrder:" + JSON.stringify($scope.selectPurchaseOrder));
 
             inventoryService.updatePurchaseOrder($scope.selectPurchaseOrder, function (data) {
                 if(data.success){

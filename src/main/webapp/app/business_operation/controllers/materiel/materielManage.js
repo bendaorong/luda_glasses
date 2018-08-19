@@ -144,7 +144,6 @@
             if(kindId != 0){
                 angular.forEach($scope.goodsTypeList, function (each) {
                     if(each.kindId == kindId){
-                        console.log("kindId:" +each.kindId + "goodsType:"+each.typeName);
                         $scope.usedGoodsTypeList.push(each);
                     }
                 });

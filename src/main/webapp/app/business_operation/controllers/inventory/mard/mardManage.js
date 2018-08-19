@@ -55,7 +55,6 @@
                         total: data.data,
                         getData: function ($defer, params) {
                             $scope.filterCondition.pageNo = params.page();
-                            console.log("pageNo:" + params.page());
                             getMardList($defer);
                         }
                     });
@@ -68,7 +67,6 @@
 
         // 显示商品库存列表
         function getMardList($defer) {
-            console.log("getMardList:" + JSON.stringify($scope.filterCondition));
             inventoryService.fetchMardVoListPage($scope.filterCondition, function(data){
                 if(data.success){
                     $scope.mardList = data.data;

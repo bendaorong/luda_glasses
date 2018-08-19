@@ -17,7 +17,6 @@
                     $scope.tableParams = new NgTableParams({}, {
                         dataset : $scope.transferOrderList
                     });
-                    console.log("size:"+$scope.transferOrderList.length);
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,
@@ -253,7 +252,6 @@
             }
             // 采购日期
             $scope.newTransferOrder.transferDate = $("#transferDate").val();
-            console.log("newTransferOrder:" + JSON.stringify($scope.newTransferOrder));
 
             inventoryService.saveTransferOrder($scope.newTransferOrder, function (data) {
                 if(data.success){
