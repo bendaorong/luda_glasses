@@ -37,9 +37,31 @@
         <result property="optometrist" column="optometrist"/>
     </resultMap>
 
+    <select id="getCustomerTotalCount" resultType="int">
+        select count(*) from customer
+        where 1=1
+        <if test="name != null">
+            and name = #{name}
+        </if>
+        <if test="mobileNumber != null">
+            and mobile_num = #{mobileNumber}
+        </if>
+    </select>
+
+    <select id="fetchCustomerListPage" resultMap="customerMapper">
+        select * from customer
+        where delete_flag = 0
+        <if test="name != null">
+            and name = #{name}
+        </if>
+        <if test="mobileNumber != null">
+            and mobile_num = #{mobileNumber}
+        </if>
+        limit #{startIndex}, 10
+    </select>
+
     <select id="fetchCustomerList" resultMap="customerMapper">
         select * from customer where delete_flag = 0
-
     </select>
 
     <insert id="saveCustomer" parameterType="com.luda.customer.model.CustomerModel"

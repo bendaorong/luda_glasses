@@ -292,19 +292,23 @@
         $scope.storeList = []; //门店
         $scope.adminUserList = []; //业务员
         $scope.materielList = []; //商品
-        $scope.customerList = []; //客户
 
         $scope.mardList = []; //商品库存
-        $scope.selectedMard = {};
-
-        $scope.record = {}; //最新验光记录
-        $scope.bakRecord = {};
+        $scope.selectedMard = {}; //选择的商品库存
+        $scope.filterCondition = {};
+        $scope.filterCondition.storeId = $scope.storeId;
 
         // 商品类型
         $scope.goodsTypeList = [];
 
-        $scope.filterCondition = {};
-        $scope.filterCondition.storeId = $scope.storeId;
+        $scope.customerCondition = {};
+        $scope.customerList = []; //客户
+        $scope.selectedCustomer = {}; //选择的客户
+        $scope.newCustomer = {}; //用户创建新客户
+
+        $scope.record = {}; //最新验光记录
+        $scope.bakRecord = {};
+
 
         // 查询商品
         materielService.fetchMaterielList(function(data){
@@ -337,68 +341,34 @@
             });
         });
 
-        // 查询客户
-        $scope.customerSearchableSelect;
-        customerService.fetchCustomerList(function (data) {
-            $scope.customerList = data;
-            for(var i=0; i<data.length; i++){
-                $("#customer").append("<option value='" + data[i].id + "'>" + data[i].name + "-" + data[i].mobileNumber + "</option>");
-            }
-            $scope.customerSearchableSelect = $("#customer").searchableSelect(function (customerId) {
-                if(angular.isDefined(customerId) && customerId != null && customerId != ''){
-                    $scope.newSalesOrder.customerId = customerId;
-                    // 查询该客户验光记录
-                    customerService.fetchOptometryRecordsByCustomerId(customerId, function (data) {
-                        if(data.data.length > 0){
-                            $scope.record = data.data[0];
-                            $scope.bakRecord = angular.copy(data.data[0]);
-                        }else {
-                            $scope.record = {};
-                            $scope.bakRecord = {};
-                        }
-                    }, function (data) {});
-                    $scope.$apply();
-                }
-            });
-        }, function (data) {
-            BootstrapDialog.show({
-                type : BootstrapDialog.TYPE_DANGER,
-                title : '警告',
-                message : '获取客户列表错误' + data.errorMsg
-            });
-        });
-
-        // // 查询商品库存
-        // inventoryService.fetchMardVoList(function(data){
-        //     $scope.mardList = data.data;
-        //     if($scope.mardList.length > 0){
-        //         for(var i=0; i<$scope.mardList.length; i++){
-        //             var tempMard = $scope.mardList[i];
-        //             if(tempMard.storeId == $scope.newSalesOrder.storeId){
-        //                 $("#materiel").append("<option value='" + tempMard.id + "'>" + tempMard.materiel.name + "("+tempMard.sphere+", " + tempMard.cylinder + ", " + tempMard.axial +")" + "</option>");
-        //             }
-        //         }
+        // // 查询客户
+        // $scope.customerSearchableSelect;
+        // customerService.fetchCustomerList(function (data) {
+        //     $scope.customerList = data;
+        //     for(var i=0; i<data.length; i++){
+        //         $("#customer").append("<option value='" + data[i].id + "'>" + data[i].name + "-" + data[i].mobileNumber + "</option>");
         //     }
-        //     $("#materiel").searchableSelect(function (mardId) {
-        //         if(angular.isDefined(mardId) && mardId != null && mardId != ''){
-        //             for(var i=0; i<$scope.mardList.length; i++){
-        //                 if($scope.mardList[i].id == mardId){
-        //                     $scope.selectedMard = $scope.mardList[i];
-        //                     $scope.salesOrderItem.mardId = mardId;
-        //                     $scope.salesOrderItem.materielId = $scope.selectedMard.materielId;
-        //                     $scope.salesOrderItem.sellPrice = $scope.selectedMard.materiel.sellPrice;
-        //                     $scope.$apply();
-        //                     break;
+        //     $scope.customerSearchableSelect = $("#customer").searchableSelect(function (customerId) {
+        //         if(angular.isDefined(customerId) && customerId != null && customerId != ''){
+        //             $scope.newSalesOrder.customerId = customerId;
+        //             // 查询该客户验光记录
+        //             customerService.fetchOptometryRecordsByCustomerId(customerId, function (data) {
+        //                 if(data.data.length > 0){
+        //                     $scope.record = data.data[0];
+        //                     $scope.bakRecord = angular.copy(data.data[0]);
+        //                 }else {
+        //                     $scope.record = {};
+        //                     $scope.bakRecord = {};
         //                 }
-        //             }
-        //         }else {
+        //             }, function (data) {});
+        //             $scope.$apply();
         //         }
         //     });
-        // },function(data){
+        // }, function (data) {
         //     BootstrapDialog.show({
         //         type : BootstrapDialog.TYPE_DANGER,
         //         title : '警告',
-        //         message : '获取商品错误' + data.errorMsg
+        //         message : '获取客户列表错误' + data.errorMsg
         //     });
         // });
 
@@ -428,51 +398,139 @@
             });
         });
 
-        // // 选择门店时，重新加载门店商品
-        // $scope.selectStore = function () {
-        //     $scope.selectedMard = {}; //选择的商品
-        //     $scope.salesOrderItem = {}; //销售单明细
-        //     $scope.salesOrderItem.quantity = 0;
-        //     $scope.salesOrderItem.sellPrice = 0;
-        //     $scope.$apply();
-        //
-        //     // 初始化商品下拉框
-        //     angular.element("#materiel").find("option").remove();
-        //     $("#materiel").append("<option value=''></option>");
-        //     if($scope.mardList.length > 0){
-        //         for(var i=0; i<$scope.mardList.length; i++){
-        //             var tempMard = $scope.mardList[i];
-        //             if(tempMard.storeId == $scope.newSalesOrder.storeId){
-        //                 $("#materiel").append("<option value='" + tempMard.id + "'>" + tempMard.materiel.name + "("+tempMard.sphere+", " + tempMard.cylinder + ", " + tempMard.axial +")" + "</option>");
-        //             }
-        //         }
-        //     }
-        //
-        //     // 先删除原有商品下拉框
-        //     angular.element("#materiel").parent().find(".searchable-select").remove();
-        //     $("#materiel").searchableSelect(function (mardId) {
-        //         if(angular.isDefined(mardId) && mardId != null && mardId != ''){
-        //             for(var i=0; i<$scope.mardList.length; i++){
-        //                 if($scope.mardList[i].id == mardId){
-        //                     $scope.selectedMard = $scope.mardList[i];
-        //                     $scope.salesOrderItem.mardId = mardId;
-        //                     $scope.salesOrderItem.materielId = $scope.selectedMard.materielId;
-        //                     $scope.salesOrderItem.sellPrice = $scope.selectedMard.materiel.sellPrice;
-        //                     $scope.$apply();
-        //                     break;
-        //                 }
-        //             }
-        //         }else {
-        //         }
-        //     });
-        // }
+        // 查询客户
+        $scope.queryCustomer = function(){
+            initCustomerTable();
+        }
+
+        // init customer table
+        function initCustomerTable(){
+            customerService.getCustomerTotalCount($scope.customerCondition, function(data){
+                if(data.success){
+                    $scope.customerTable = new NgTableParams({
+                        page: 1,
+                        count: 10
+                    },{
+                        total: data.data,
+                        getData: function ($defer, params) {
+                            $scope.customerCondition.pageNo = params.page();
+                            getCustomerList($defer);
+                        }
+                    });
+                }
+            }, function(data){
+
+            });
+        }
+
+        // 显示客户列表
+        function getCustomerList($defer) {
+            customerService.fetchCustomerListPage($scope.customerCondition, function(data){
+                console.log("fetchCustomerListPage condition:" + JSON.stringify($scope.customerCondition)
+                    + " result:" + JSON.stringify(data));
+                if(data.success){
+                    if(data.data.length == 0){
+                        // 查询不到客户，则提示新增客户
+                        if(confirm("客户不存在，是否新增客户\"" + $scope.customerCondition.name + "\"")){
+                            $scope.newCustomer.name = $scope.customerCondition.name;
+                            $scope.newCustomer.mobileNumber = $scope.customerCondition.mobileNumber;
+                            createCustomer();
+                        }
+                    }else {
+                        $scope.customerList = data.data;
+                        $defer.resolve($scope.customerList);
+                        // 若查询结果为1条，则自动选择该客户
+                        if($scope.customerList.length == 1 && $scope.customerCondition.pageNo == 1){
+                            //$scope.selectedCustomer = $scope.customerList[0];
+                            $scope.chooseCustomer($scope.customerList[0].id);
+                        }
+                    }
+                }else {
+                    BootstrapDialog.show({
+                        type : BootstrapDialog.TYPE_DANGER,
+                        title : '失败',
+                        message : '获取客户失败' + data.errorMsg
+                    });
+                }
+            },function(data){
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '警告',
+                    message : '获取客户错误' + data.errorMsg
+                });
+            });
+        }
+
+        //选择客户
+        $scope.chooseCustomer = function(customerId){
+            angular.forEach($scope.customerList, function (each) {
+                if(each.id == customerId){
+                    $scope.selectedCustomer = each;
+                }
+            });
+            // 查询该客户验光记录
+            queryOptometryRecords(customerId);
+        }
+
+        //查询客户验光记录
+        function queryOptometryRecords(customerId){
+            customerService.fetchOptometryRecordsByCustomerId(customerId, function (data) {
+                if(data.data.length > 0){
+                    $scope.record = data.data[0];
+                    $scope.bakRecord = angular.copy(data.data[0]);
+                }else {
+                    $scope.record = {};
+                    $scope.bakRecord = {};
+                }
+            }, function (data) {});
+        }
+
+        //创建新客户
+        function createCustomer() {
+            $('.bg').css({'display':'block'});
+            $('.customerContent').css({'display':'block'});
+        }
+
+        $scope.addCustomer = function () {
+            if($scope.newCustomer.name == null || $scope.newCustomer.name.length == 0){
+                alert("请填写客户姓名!");
+                return false;
+            }
+
+            customerService.addCustomer($scope.newCustomer, function (data) {
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_SUCCESS,
+                    title : "成功",
+                    message : "客户保存成功!"
+                });
+                // 关闭明细弹框
+                $('.bg').css({'display':'none'});
+                $('.customerContent').css({'display':'none'});
+
+                initCustomerTable();
+                $scope.selectedCustomer = data.data;
+            }, function (data) {
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '警告',
+                    message : '客户添加失败:' + data.errorMsg
+                });
+            });
+        }
+
+        $scope.closeCustomerBtn = function () {
+            $('.bg').css({'display':'none'});
+            $('.customerContent').css({'display':'none'});
+        }
+
+
 
         // 查询销售商品
         $scope.queryMateriel = function(){
             initMardTable();
         }
 
-        // init table
+        // init customer table
         function initMardTable(){
             inventoryService.getMardTotalCount($scope.filterCondition, function(data){
                 if(data.success){
@@ -515,31 +573,6 @@
         }
 
 
-
-        $scope.customer = {}; //临时添加新客户
-        $scope.newCustomer = function () {
-            $('.bg').css({'display':'block'});
-            $('.customerContent').css({'display':'block'});
-        }
-
-        $scope.addCustomer = function () {
-            customerService.addCustomer($scope.customer, function (data) {
-                // 关闭明细弹框
-                $('.bg').css({'display':'none'});
-                $('.customerContent').css({'display':'none'});
-            }, function (data) {
-                BootstrapDialog.show({
-                    type : BootstrapDialog.TYPE_DANGER,
-                    title : '警告',
-                    message : '客户添加失败:' + data.errorMsg
-                });
-            });
-        }
-
-        $scope.closeCustomerBtn = function () {
-            $('.bg').css({'display':'none'});
-            $('.customerContent').css({'display':'none'});
-        }
 
         // 选择购买的商品，添加到购物车
         $scope.buy = function(mardId){
@@ -624,14 +657,27 @@
 
         // 保存销售单
         $scope.saveSalesOrder = function () {
+            $scope.newSalesOrder.customerId = $scope.selectedCustomer.id;
+            //验证客户
+            if($scope.newSalesOrder.customerId == null){
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '警告',
+                    message : '请选择客户!'
+                });
+                return false;
+            }
+
+            //验证销售明细
             if($scope.salesOrderItems.length == 0){
                 BootstrapDialog.show({
                     type : BootstrapDialog.TYPE_DANGER,
                     title : '警告',
-                    message : '请添加销售明细'
+                    message : '请添加销售明细!'
                 });
                 return false;
             }
+
             // 销售日期
             $scope.newSalesOrder.saleDate = $("#saleDate").val();
             $scope.newSalesOrder.pickUpDate = $("#pickUpDate").val();

@@ -6,6 +6,7 @@ import com.luda.customer.dao.CustomerDao;
 import com.luda.customer.model.CustomerModel;
 import com.luda.customer.model.OptometryRecord;
 import com.luda.customer.service.CustomerService;
+import com.luda.inventory.model.CommonQueryBean;
 import com.luda.store.dao.StoreDao;
 import com.luda.store.model.StoreModel;
 import com.luda.store.service.StoreService;
@@ -31,6 +32,16 @@ public class CustomerServiceImpl implements CustomerService{
 
 
     @Override
+    public int getCustomerTotalCount(CommonQueryBean queryBean) {
+        return customerDao.getCustomerTotalCount(queryBean);
+    }
+
+    @Override
+    public List<CustomerModel> fetchCustomerListPage(CommonQueryBean queryBean) {
+        return customerDao.fetchCustomerListPage(queryBean);
+    }
+
+    @Override
     public List<CustomerModel> fetchCustomerList() {
         return customerDao.fetchCustomerList();
     }
@@ -47,6 +58,7 @@ public class CustomerServiceImpl implements CustomerService{
 
             initAddCustomer(customerModel);
             this.customerDao.saveCustomer(customerModel);
+
             resultHandle.setReturnContent(customerModel);
         }catch (Exception e){
             resultHandle.setMsg("创建客户失败");
@@ -62,11 +74,10 @@ public class CustomerServiceImpl implements CustomerService{
             return "请填写客户姓名";
         }
         //验证手机号码
-        if(StringUtils.isEmpty(customerModel.getMobileNumber())){
-            return "请填写手机号码";
-        }
-        if(!CommonUtils.isMobileNumber(customerModel.getMobileNumber())){
-            return "手机号码不合法";
+        if(StringUtils.isNotBlank(customerModel.getMobileNumber())){
+            if(!CommonUtils.isMobileNumber(customerModel.getMobileNumber())){
+                return "手机号码不合法";
+            }
         }
         return null;
     }

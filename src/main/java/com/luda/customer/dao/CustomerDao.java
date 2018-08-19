@@ -3,6 +3,7 @@ package com.luda.customer.dao;
 import com.luda.comm.po.ResultHandle;
 import com.luda.customer.model.CustomerModel;
 import com.luda.customer.model.OptometryRecord;
+import com.luda.inventory.model.CommonQueryBean;
 import com.luda.store.model.StoreModel;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface CustomerDao {
 
     List<CustomerModel> fetchCustomerList();
 
-    void saveCustomer(CustomerModel customerModel);
+    int saveCustomer(CustomerModel customerModel);
 
     CustomerModel getById(int customerId);
 
@@ -28,4 +29,8 @@ public interface CustomerDao {
     int saveOptometryRecord(OptometryRecord optometryRecord);
 
     List<OptometryRecord> fetchOptometryRecordsByCustomerId(int customerId);
+
+    int getCustomerTotalCount(CommonQueryBean queryBean);
+
+    List<CustomerModel> fetchCustomerListPage(CommonQueryBean queryBean);
 }

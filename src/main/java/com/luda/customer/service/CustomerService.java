@@ -3,6 +3,7 @@ package com.luda.customer.service;
 import com.luda.comm.po.ResultHandle;
 import com.luda.customer.model.CustomerModel;
 import com.luda.customer.model.OptometryRecord;
+import com.luda.inventory.model.CommonQueryBean;
 import com.luda.inventory.model.PurchaseOrderItem;
 
 import javax.xml.transform.Result;
@@ -12,6 +13,20 @@ import java.util.List;
  * Created by Administrator on 2017/10/5.
  */
 public interface CustomerService {
+    /**
+     * 查询客户数量
+     * @param queryBean
+     * @return
+     */
+    int getCustomerTotalCount(CommonQueryBean queryBean);
+
+    /**
+     * 分页查询客户信息
+     * @param queryBean
+     * @return
+     */
+    List<CustomerModel> fetchCustomerListPage(CommonQueryBean queryBean);
+
     /**
      * 查询客户信息
      * @return

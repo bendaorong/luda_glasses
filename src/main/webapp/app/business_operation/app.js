@@ -796,6 +796,20 @@ businessOperationApp.factory("salesService", function($http) {
  */
 businessOperationApp.factory("customerService", function($http) {
     return {
+        getCustomerTotalCount : function(conditions, successCallback, errorCallback){
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/customer/totalCount",
+                data:conditions
+            }).success(successCallback).error(errorCallback);
+        },
+        fetchCustomerListPage : function(conditions, successCallback, errorCallback){
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/customer/listPage",
+                data:conditions
+            }).success(successCallback).error(errorCallback);
+        },
         fetchCustomerList : function(successCallback, errorCallback){
             $http.get("/luda_glasses/rest/customer/list").success(successCallback).error(errorCallback);
         },

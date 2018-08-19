@@ -92,12 +92,15 @@
 </div>
 
 <ul class="nav nav-tabs" role="tablist" ng-init="currentTab=0">
-    <li role="presentation" ng-class="{'active': currentTab===0}"><a
-            href="javascript(0)" ng-click="currentTab=0" role="tab"
-            data-toggle="tab">销售单</a></li>
-    <li role="presentation" ng-class="{'active': currentTab===1}"><a
-            href="javascript(0)" role="tab" ng-click="currentTab=1"
-            data-toggle="tab">销售单明细</a></li>
+    <li role="presentation" ng-class="{'active': currentTab===0}">
+        <a href="javascript(0)" ng-click="currentTab=0" role="tab" data-toggle="tab">销售单</a>
+    </li>
+    <li role="presentation" ng-class="{'active': currentTab===1}">
+        <a href="javascript(0)" ng-click="currentTab=1" role="tab" data-toggle="tab">客户资料</a>
+    </li>
+    <li role="presentation" ng-class="{'active': currentTab===2}">
+        <a href="javascript(0)" ng-click="currentTab=2" role="tab" data-toggle="tab">销售单明细</a>
+    </li>
 </ul>
 
 <div class="tab-content">
@@ -105,15 +108,15 @@
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
         <div class="col-sm-12" style="margin-top: 10px;">
             <form class="form-horizontal" novalidate id="myform" name="myform">
-                <div class="form-group">
-                    <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label"><span class="red">*</span>客户</label>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <select id="customer" class="form-control"  ng-model="newSalesOrder.customerId" required>
-                            <option value=""></option>
-                        </select>
-                        <!--<button class="btn btn-success btn-sm" ng-click="newCustomer()">添加新客户</button>-->
-                    </div>
-                </div>
+                <!--<div class="form-group">-->
+                    <!--<label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label"><span class="red">*</span>客户</label>-->
+                    <!--<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">-->
+                        <!--<select id="customer" class="form-control"  ng-model="newSalesOrder.customerId" required>-->
+                            <!--<option value=""></option>-->
+                        <!--</select>-->
+                        <!--&lt;!&ndash;<button class="btn btn-success btn-sm" ng-click="newCustomer()">添加新客户</button>&ndash;&gt;-->
+                    <!--</div>-->
+                <!--</div>-->
                 <div class="form-group">
                     <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label">销售日期</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
@@ -177,8 +180,66 @@
         </div>
     </div>
 
-    <!-- 销售单明细 -->
+    <!-- 客户资料 -->
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===1">
+        <div class="col-sm-12" style="margin-top: 10px;">
+            <fieldset id="queryCustomerFieldset">
+                <legend>
+                    选择客户
+                </legend>
+                <form class="form-horizontal" novalidate id="queryCustomerForm" name="queryCustomerForm">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">姓名</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input class="form-control" ng-model="customerCondition.name"/>
+                        </div>
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">手机号</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input class="form-control" ng-model="customerCondition.mobileNumber"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"></label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <button ng-click="queryCustomer()">查询</button>
+                        </div>
+                    </div>
+                </form>
+
+                <table ng-table="customerTable" class="table table-bordered">
+                    <tr ng-repeat="c in customerList">
+                        <td data-title="'姓名'">{{c.name}}</td>
+                        <td data-title="'手机号'">{{c.mobileNumber}}</td>
+                        <td data-title="'操作'">
+                            <button type="button" class="btn btn-sm btn-primary"
+                                    ng-click="chooseCustomer(c.id)">选择</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" ng-show="$data.length == 0">
+                            <span style="color:red">没有记录</span>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </div>
+        <div class="col-sm-12">
+            <fieldset id="customerInfo">
+                <legend class="legend">
+                    客户信息
+                </legend>
+                <table class="table table-bordered">
+                    <tr>
+                        <th width="100px">姓名</th>
+                        <th>手机号码</th>
+                    </tr>
+                    <tr>
+                        <td>{{selectedCustomer.name}}</td>
+                        <td>{{selectedCustomer.mobileNumber}}</td>
+                    </tr>
+                </table>
+            </fieldset>
+        </div>
         <div class="col-sm-12">
             <fieldset id="latestOptometryRecord">
                 <legend class="legend">
@@ -216,7 +277,10 @@
                 </table>
             </fieldset>
         </div>
+    </div>
 
+    <!-- 销售单明细 -->
+    <div role="tabpanel" class="tab-pane active" ng-show="currentTab===2">
         <div class="col-sm-12" style="margin-top: 10px;">
             <fieldset id="salesList">
                 <legend class="legend">
@@ -321,8 +385,8 @@
 <div class="customerContent">
     <h3>添加新客户</h3>
     <table class="table table-bordered" style="margin-top: 10px;">
-        <tr><td>姓名</td><td><input type="text" ng-model="customer.name" /></td></tr>
-        <tr><td>手机号码</td><td><input type="text" ng-model="customer.mobileNumber"/></td></tr>
+        <tr><td>姓名</td><td><input type="text" ng-model="newCustomer.name" /></td></tr>
+        <tr><td>手机号码</td><td><input type="text" ng-model="newCustomer.mobileNumber"/></td></tr>
     </table>
     <p>
         <button ng-click="addCustomer()">添加</button>

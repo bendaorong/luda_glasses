@@ -36,6 +36,16 @@ public class CommonQueryBean {
      * 度数
      */
     private Double axial;
+
+    /**
+     * 姓名
+     */
+    private String name;
+    /**
+     * 手机号码
+     */
+    private String mobileNumber;
+
     /**
      * startIndex
      */
@@ -113,6 +123,22 @@ public class CommonQueryBean {
         this.axial = axial;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
     @Override
     public String toString() {
         return "CommonQueryBean{" +
@@ -124,6 +150,8 @@ public class CommonQueryBean {
                 ", sphere=" + sphere +
                 ", cylinder=" + cylinder +
                 ", axial=" + axial +
+                ", name='" + name + '\'' +
+                ", mobileNumber='" + mobileNumber + '\'' +
                 ", startIndex=" + startIndex +
                 '}';
     }

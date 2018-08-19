@@ -5,11 +5,15 @@ import com.luda.common.controller.BaseController;
 import com.luda.customer.model.CustomerModel;
 import com.luda.customer.model.OptometryRecord;
 import com.luda.customer.service.CustomerService;
+import com.luda.inventory.model.CommonQueryBean;
+import com.luda.inventory.model.MardVo;
 import com.luda.store.model.StoreModel;
 import com.luda.customer.service.CustomerService;
 import com.luda.util.CommonUtils;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONNull;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +33,64 @@ public class CustomerController extends BaseController {
 
     @Autowired
     private CustomerService customerService;
+
+    /**
+     * 查询客户totalCount
+     */
+    @RequestMapping(value = "/totalCount")
+    @ResponseBody
+    public String totalCount(@RequestBody String conditions, HttpSession httpSession){
+        String result = "";
+        try {
+            CommonQueryBean queryBean = new CommonQueryBean();
+            JSONObject obj = JSONObject.fromObject(conditions);
+            if(obj.get("name") != null && !(obj.get("name") instanceof JSONNull)
+                    && StringUtils.isNotBlank(obj.getString("name"))){
+                queryBean.setName(obj.getString("name"));
+            }
+            if(obj.get("mobileNumber") != null && !(obj.get("mobileNumber") instanceof JSONNull)
+                    && StringUtils.isNotBlank(obj.getString("mobileNumber"))){
+                queryBean.setMobileNumber(obj.getString("mobileNumber"));
+            }
+            int count = customerService.getCustomerTotalCount(queryBean);
+            result = getSuccessResult(count);
+        }catch (Exception e){
+            log.error("fetch mard list error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+
+    /**
+     * 查询商品库存
+     */
+    @RequestMapping("/listPage")
+    @ResponseBody
+    public String fetchCustomerListPage(@RequestBody String conditions, HttpSession httpSession){
+        String result = "";
+        try {
+            CommonQueryBean queryBean = new CommonQueryBean();
+            JSONObject obj = JSONObject.fromObject(conditions);
+            if(obj.get("name") != null && !(obj.get("name") instanceof JSONNull)
+                    && StringUtils.isNotBlank(obj.getString("name"))){
+                queryBean.setName(obj.getString("name"));
+            }
+            if(obj.get("mobileNumber") != null && !(obj.get("mobileNumber") instanceof JSONNull)
+                    && StringUtils.isNotBlank(obj.getString("mobileNumber"))){
+                queryBean.setMobileNumber(obj.getString("mobileNumber"));
+            }
+            int pageNo = obj.getInt("pageNo");
+            queryBean.setStartIndex(getStartIndex(pageNo, 10));
+            List<CustomerModel> customerList = customerService.fetchCustomerListPage(queryBean);
+            JSONArray jsonArray =  CommonUtils.convertBeanCollectionToJsonArray(customerList, "yyyy-MM-dd HH:mm:ss");
+            result = getSuccessResult(jsonArray.toString());
+        }catch (Exception e){
+            log.error("fetch mard list error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
 
     /**
      * 客户列表
