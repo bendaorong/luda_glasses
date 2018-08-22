@@ -35,16 +35,17 @@
 				<!--<td data-title="'入职时间'" sortable="'onboardDate'">{{adminUser.adminUserDetailModel.onboardDate}}</td>-->
 				<!--<td data-title="'离职时间'" sortable="'dimissionDate'">{{adminUser.adminUserDetailModel.dimissionDate}}</td>-->
 				<!--<td data-title="'职位'" sortable="'position'">{{adminUser.adminUserDetailModel.position}}</td>-->
-				<td data-title="'激活'" sortable="'activeFlag'">
-					<div ng-switch="adminUser.activeFlag">
-						<div ng-switch-when="1">是</div>
-						<div ng-switch-when="0">否</div>
-					</div>
-				</td>
+				<td data-title="'角色'">{{adminUser.adminRoleModel.roleName}}</td>
+				<!--<td data-title="'激活'" sortable="'activeFlag'">-->
+					<!--<div ng-switch="adminUser.activeFlag">-->
+						<!--<div ng-switch-when="1">是</div>-->
+						<!--<div ng-switch-when="0">否</div>-->
+					<!--</div>-->
+				<!--</td>-->
 
 				<td data-title="'操作'">
 					<button type="button" class="btn btn-sm btn-primary"
-							ng-click="gotoEdit(adminUser.adminUserId)" ng-disabled="adminUser.adminRoleModel.roleCode === '00'">编辑</button>
+							ng-click="gotoEdit(adminUser.adminUserId)">编辑</button>
 					<button type="button" class="btn btn-sm btn-primary"
 							ng-click="resetAdminUserPwd(adminUser.adminUserId)" ng-disabled="adminUser.adminRoleModel.roleCode === '00'">重设密码</button>
 					<button type="button" class="btn btn-sm btn-primary"

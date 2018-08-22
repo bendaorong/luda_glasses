@@ -1,5 +1,6 @@
 package com.luda.customer.controller;
 
+import com.luda.comm.po.Constants;
 import com.luda.comm.po.ResultHandle;
 import com.luda.common.controller.BaseController;
 import com.luda.customer.model.CustomerModel;
@@ -81,7 +82,7 @@ public class CustomerController extends BaseController {
                 queryBean.setMobileNumber(obj.getString("mobileNumber"));
             }
             int pageNo = obj.getInt("pageNo");
-            queryBean.setStartIndex(getStartIndex(pageNo, 10));
+            queryBean.setStartIndex(getStartIndex(pageNo, Constants.PAGE_SIZE));
             List<CustomerModel> customerList = customerService.fetchCustomerListPage(queryBean);
             JSONArray jsonArray =  CommonUtils.convertBeanCollectionToJsonArray(customerList, "yyyy-MM-dd HH:mm:ss");
             result = getSuccessResult(jsonArray.toString());

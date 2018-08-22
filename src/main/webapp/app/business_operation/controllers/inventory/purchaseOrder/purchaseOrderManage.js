@@ -106,6 +106,8 @@
 
         $scope.goodsTypeList = [];//商品类型
         $scope.selectGoodsTypeId = 0; //选择的商品类型
+
+
         // 查询商品类型
         dictionaryService.fetchGoodsTypeList(function(data){
             $scope.goodsTypeList = data.data;

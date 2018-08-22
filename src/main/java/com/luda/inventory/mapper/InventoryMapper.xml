@@ -279,6 +279,10 @@
         select * from mard where id = #{id}
     </select>
 
+    <delete id="removeMard">
+        delete from mard where materiel_id = #{materielId}
+    </delete>
+
     <select id="fetchMardVoList" parameterType="com.luda.inventory.model.CommonQueryBean" resultMap="mardVoMap">
         select b.*, c.store_name from (
             select * from mard as a

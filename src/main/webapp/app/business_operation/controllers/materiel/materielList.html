@@ -18,8 +18,7 @@
                 <td data-title="'名称'" sortable="'name'" width="30%">
                     <a ng-href="#/materielDetail/{{materiel.id}}">{{materiel.name}}</a>
                 </td>
-                <td data-title="'类型'" sortable="'typeName'">{{materiel.typeName}}</td>
-                <td data-title="'品牌'" sortable="'brand'">{{materiel.brand}}</td>
+                <td data-title="'品牌'" sortable="'typeName'">{{materiel.typeName}}</td>
                 <td data-title="'供应商'" sortable="'supplierId'">{{materiel.supplierName}}</td>
                 <td data-title="'材质'" sortable="'texture'">{{materiel.texture}}</td>
                 <td data-title="'售价'" sortable="'sellPrice'">{{materiel.sellPrice}}</td>
@@ -34,7 +33,7 @@
                     <button type="button" class="btn btn-sm btn-primary"
                             ng-click="gotoEdit(materiel.id)" ng-show="roleCode==='00'">编辑</button>
                     <button type="button" class="btn btn-sm btn-primary"
-                            ng-click="removeMateriel(materiel.id)" ng-show="roleCode==='000'">删除</button>
+                            ng-click="removeMateriel(materiel.id)" ng-show="roleCode==='00'">删除</button>
                 </td>
             </tr>
         </table>

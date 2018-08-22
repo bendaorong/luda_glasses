@@ -77,6 +77,7 @@
         setActiveSubPage($scope, "addBatchPurchaseOrder");
         $scope.adminUserId = sessionStorage.getItem("adminUserId");
         $scope.storeId = sessionStorage.getItem("storeId");
+        $scope.roleCode = sessionStorage.getItem("roleCode");
 
         $scope.newPurchaseOrder = {};//采购单
         $scope.newPurchaseOrder.storeId = $scope.storeId;
@@ -113,11 +114,15 @@
 
         // 查询门店
         storeService.fetchStoreList(function(data){
-            angular.forEach(data, function (each) {
-                if(each.storeId == $scope.storeId){
-                    $scope.storeList.push(each);
-                }
-            });
+            if($scope.roleCode == '00'){
+                $scope.storeList = data;
+            }else {
+                angular.forEach(data, function (each) {
+                    if(each.storeId == $scope.storeId){
+                        $scope.storeList.push(each);
+                    }
+                });
+            }
         },function(data){
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,

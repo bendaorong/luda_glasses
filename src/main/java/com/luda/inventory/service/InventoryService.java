@@ -176,6 +176,13 @@ public interface InventoryService {
     Mard getMardById(int mardId);
 
     /**
+     * 删除商品库存
+     * @param materielId 商品ID
+     * @return
+     */
+    int removeMard(int materielId);
+
+    /**
      * 删除调拨单明细
      * @param itemId
      * @return
@@ -210,4 +217,6 @@ public interface InventoryService {
     int getPurchaseOrderItemCount(int purchaseOrderId);
 
     List<PurchaseOrderItem> fetchPurchaseOrderItemListPage(CommonQueryBean queryBean);
+
+
 }

@@ -102,11 +102,13 @@
     </insert>
 
     <select id="getById" resultMap="materielMap">
-        select m.*, t.type_name
-        from materiel m
+        select a.*, t.type_name, k.kind_id, k.kind_name from (
+            select * from materiel where id = #{id}
+        ) a
         left join goods_type t
-        on m.type_id = t.type_id
-        where m.id = #{id} and m.delete_flag = 0
+        on a.type_id = t.type_id
+        left join goods_kind k
+        on t.kind_id = k.kind_id
     </select>
 
     <update id="updateMateriel" parameterType="com.luda.materiel.model.MaterielModel">

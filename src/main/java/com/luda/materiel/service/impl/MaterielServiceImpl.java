@@ -1,6 +1,7 @@
 package com.luda.materiel.service.impl;
 
 import com.luda.comm.po.ResultHandle;
+import com.luda.inventory.service.InventoryService;
 import com.luda.materiel.dao.MaterielDao;
 import com.luda.materiel.model.MaterielModel;
 import com.luda.materiel.service.MaterielService;
@@ -21,6 +22,8 @@ public class MaterielServiceImpl implements MaterielService{
 
     @Autowired
     private MaterielDao materielDao;
+    @Autowired
+    private InventoryService inventoryService;
 
     @Override
     public List<MaterielModel> fetchMaterielList() {
@@ -142,6 +145,8 @@ public class MaterielServiceImpl implements MaterielService{
         int result = materielDao.removeMateriel(id);
         if(result <= 0){
             resultHandle.setMsg("商品删除失败");
+        }else {
+            inventoryService.removeMard(id);
         }
         return resultHandle;
     }

@@ -1,5 +1,6 @@
 package com.luda.inventory.controller;
 
+import com.luda.comm.po.Constants;
 import com.luda.comm.po.ResultHandle;
 import com.luda.common.controller.BaseController;
 import com.luda.inventory.exception.InventoryException;
@@ -124,7 +125,7 @@ public class InventoryController extends BaseController{
             }
 
             int pageNo = obj.getInt("pageNo");
-            queryBean.setStartIndex(getStartIndex(pageNo, 10));
+            queryBean.setStartIndex(getStartIndex(pageNo, Constants.PAGE_SIZE));
             List<MardVo> mardVoList = inventoryService.fetchMardVoListPage(queryBean);
             String data = CommonUtils.convertBeanCollectionToJsonArray(mardVoList, null).toString();
             result = getSuccessResult(data);
@@ -229,7 +230,7 @@ public class InventoryController extends BaseController{
 
             CommonQueryBean queryBean = new CommonQueryBean();
             queryBean.setOrderId(obj.getInt("purchaseOrderId"));
-            queryBean.setStartIndex(getStartIndex(obj.getInt("pageNo"), 10));
+            queryBean.setStartIndex(getStartIndex(obj.getInt("pageNo"), Constants.PAGE_SIZE));
 
             List<PurchaseOrderItem> items = inventoryService.fetchPurchaseOrderItemListPage(queryBean);
             String data = CommonUtils.convertBeanCollectionToJsonArray(items, null).toString();

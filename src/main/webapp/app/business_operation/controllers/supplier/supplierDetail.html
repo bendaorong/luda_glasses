@@ -37,13 +37,33 @@
             <fieldset id="basicInfo">
                 <legend><h5><b>基础信息</b></h5></legend>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">编号</label>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>供应商名称</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <input type="text" class="form-control" ng-model="selectSupplier.supplierCode" ng-readonly="true"/>
+                        <input type="text" class="form-control" ng-model="selectSupplier.supplierName" required ng-readonly="true"/>
                     </div>
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">名称</label>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>公司名称</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <input type="text" class="form-control" ng-model="selectSupplier.supplierName" ng-readonly="true"/>
+                        <input type="text" class="form-control" ng-model="selectSupplier.companyName" required ng-readonly="true"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>负责人</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input type="text" class="form-control" required ng-model="selectSupplier.contactPerson" ng-readonly="true"/>
+                    </div>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>联系电话</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input type="text" class="form-control" ng-model="selectSupplier.contactPhone" required ng-readonly="true"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>工商税务登记证号</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input type="text" class="form-control" required ng-model="selectSupplier.regTaxNo" ng-readonly="true"/>
+                    </div>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">传真</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <input type="text" class="form-control" ng-model="selectSupplier.fax" ng-readonly="true"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -51,29 +71,19 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="text" class="form-control" ng-model="selectSupplier.bank" ng-readonly="true"/>
                     </div>
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">银行</label>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">银行账号</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <input type="text" class="form-control" ng-model="selectSupplier.bankAccount" ng-readonly="true"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">工商税务登记证号</label>
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">地址</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <input type="text" class="form-control" ng-model="selectSupplier.regTaxNo" ng-readonly="true"/>
-                    </div>
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">负责人</label>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <input type="text" class="form-control" ng-model="selectSupplier.contactPerson" ng-readonly="true"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">电话号码</label>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <input type="text" class="form-control" ng-model="selectSupplier.contactPhone" ng-readonly="true"/>
+                        <input type="text" class="form-control" ng-model="selectSupplier.address" ng-readonly="true"/>
                     </div>
                     <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">备注</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <input type="text" class="form-control" ng-model="selectSupplier.remark" ng-readonly="true"/>
+                        <textarea rows="5" ng-model="selectSupplier.remark" style="width:100%" ng-readonly="true"></textarea>
                     </div>
                 </div>
             </fieldset>

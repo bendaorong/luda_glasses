@@ -23,6 +23,7 @@ public class BaseController {
     public String returnErrorResult(HttpServletResponse httpServletResponse, String errorMsg){
         httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         JSONObject result = new JSONObject();
+        result.put("success", false);
         result.put("errorMsg", errorMsg);
         return result.toString();
     }
@@ -84,6 +85,6 @@ public class BaseController {
     }
 
     public int getStartIndex(int pageNo, int pageSize){
-        return (pageNo - 1) * pageSize;
+        return pageNo < 1 ? 1 : ((pageNo - 1) * pageSize);
     }
 }

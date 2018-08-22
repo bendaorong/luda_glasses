@@ -289,6 +289,11 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
+    public int removeMard(int materielId) {
+        return inventoryDao.removeMard(materielId);
+    }
+
+    @Override
     public List<PurchaseOrderVo> fetchPurchaseOrderVoList(CommonQueryBean queryBean) {
         return inventoryDao.fetchPurchaseOrderVoList(queryBean);
     }

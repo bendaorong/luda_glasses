@@ -110,6 +110,8 @@ public interface InventoryDao {
 
     Mard getMardById(int id);
 
+    int removeMard(int materielId);
+
     TransferOrderItem getTransferOrderItemById(int itemId);
 
     int removeTransferOrderItem(int itemId);

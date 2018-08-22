@@ -42,7 +42,7 @@
 					</div>
 					<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><span class="red">*</span>角色</label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-						<select class="form-control" required ng-model="selectAdminUser.roleId">
+						<select class="form-control" required ng-model="selectAdminUser.roleId" ng-disabled="selectAdminUser.adminRoleModel.roleCode==='00'">
 							<option ng-repeat="role in roleList" value="{{role.roleId}}"
 									ng-selected="selectAdminUser.roleId==role.roleId">
 								{{role.roleName}}

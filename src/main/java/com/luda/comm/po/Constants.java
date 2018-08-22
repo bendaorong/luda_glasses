@@ -38,8 +38,12 @@ public class Constants {
     /**
      * 角色
      */
-    public static final String ROLE_SUPERMANAGER = "01"; //总经理
-    public static final String ROLE_MANAGER = "02"; //经理
-    public static final String ROLE_OPTOMETRIST = "03"; //验光师
-    public static final String ROLE_SALES = "04"; //业务员
+    public static final String ROLE_SUPERMANAGER = "00"; //超管
+    public static final String ROLE_MANAGER = "03"; //经理
+    public static final String ROLE_SALES = "05"; //业务员
+
+    /**
+     * 分页-每页显示记录数
+     */
+    public static final int PAGE_SIZE = 10;
 }
