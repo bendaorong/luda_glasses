@@ -36,4 +36,6 @@ public interface SupplierDao {
     int updateSupplierContact(SupplierContactModel supplierContactModel);
 
     int removeContact(int contactId);
+
+    List<SupplierModel> fetchUseableSupplierList();
 }

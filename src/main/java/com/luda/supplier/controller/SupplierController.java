@@ -45,6 +45,26 @@ public class SupplierController extends BaseController{
     }
 
     /**
+     * 查询可用供应商列表
+     */
+    @RequestMapping("/listUseable")
+    @ResponseBody
+    public String fetchUseableSupplierList(){
+        String result;
+        try {
+            List<SupplierModel> supplierList = supplierService.fetchUseableSupplierList();
+            JSONArray arr = CommonUtils.convertBeanCollectionToJsonArray(supplierList, "yyyy-MM-dd HH:mm:ss");
+            result = getSuccessResult(arr);
+        }catch (Exception e){
+            result = getFailResult("系统异常");
+            log.error("fetch supplier list error", e);
+        }
+        return result;
+    }
+
+
+
+    /**
      * 创建供应商
      */
     @RequestMapping("/addSupplier")

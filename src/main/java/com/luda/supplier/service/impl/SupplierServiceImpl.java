@@ -287,4 +287,9 @@ public class SupplierServiceImpl implements SupplierService {
         }
         return resultHandle;
     }
+
+    @Override
+    public List<SupplierModel> fetchUseableSupplierList() {
+        return supplierDao.fetchUseableSupplierList();
+    }
 }

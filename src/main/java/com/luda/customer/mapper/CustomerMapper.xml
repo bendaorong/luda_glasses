@@ -39,11 +39,11 @@
 
     <select id="getCustomerTotalCount" resultType="int">
         select count(*) from customer
-        where 1=1
-        <if test="name != null">
-            and name = #{name}
+        where delete_flag = 0
+        <if test="name != null and name != ''">
+            and name like CONCAT(CONCAT('%',#{name},'%'))
         </if>
-        <if test="mobileNumber != null">
+        <if test="mobileNumber != null and mobileNumber != ''">
             and mobile_num = #{mobileNumber}
         </if>
     </select>
@@ -51,10 +51,10 @@
     <select id="fetchCustomerListPage" resultMap="customerMapper">
         select * from customer
         where delete_flag = 0
-        <if test="name != null">
-            and name = #{name}
+        <if test="name != null and name != ''">
+            and name like CONCAT(CONCAT('%',#{name},'%'))
         </if>
-        <if test="mobileNumber != null">
+        <if test="mobileNumber != null and mobileNumber != ''">
             and mobile_num = #{mobileNumber}
         </if>
         limit #{startIndex}, 10

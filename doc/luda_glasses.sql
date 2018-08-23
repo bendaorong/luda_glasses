@@ -543,3 +543,9 @@ update luda_glasses.`admin_role` set delete_flag = 1 where role_code in ('01', '
 
 update luda_glasses.admin_user set role_id = 5;
 update luda_glasses.admin_user set role_id = 1 where admin_name = 'admin';
+
+/**
+ * 2018-08-23
+ */
+ALTER TABLE luda_glasses.optometry_record ADD COLUMN _IPD double(6,2) comment '瞳距';
+ALTER TABLE luda_glasses.optometry_record ADD COLUMN _ADD double(6,2) comment 'ADD';

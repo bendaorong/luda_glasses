@@ -95,6 +95,7 @@
         $scope.currentTab = 0;
 
         $scope.selectedSalesOrder = {};   // 销售单
+        $scope.customer = {};
 
         $scope.storeList = []; //门店
         $scope.adminUserList = []; //业务员
@@ -104,6 +105,7 @@
         // 查询销售单
         salesService.getSalesOrderWithItemsById($routeParams.id, function (data) {
             $scope.selectedSalesOrder = data.data;
+            getCustomer($scope.selectedSalesOrder.customerId);
         }, function (data) {
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
@@ -111,6 +113,19 @@
                 message : '获取销售单失败：' + data.errorMsg
             });
         });
+
+        // 查询客户资料
+        function getCustomer(customerId){
+            customerService.getById(customerId, function(data){
+                $scope.customer = data;
+            },function(data){
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '错误',
+                    message : data.errorMsg
+                });
+            });
+        }
 
         // 查询客户
         customerService.fetchCustomerList(function (data) {

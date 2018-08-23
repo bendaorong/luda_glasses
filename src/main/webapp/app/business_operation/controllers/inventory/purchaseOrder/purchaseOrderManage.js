@@ -150,7 +150,7 @@
         });
 
         // 查询供应商
-        supplierService.fetchSupplierList(function (data) {
+        supplierService.fetchUseableSupplierList(function (data) {
             $scope.supplierList = data.data;
         },function (data) {
             BootstrapDialog.show({
@@ -252,6 +252,8 @@
         // 选择商品类型
         $scope.selectGoodsType = function () {
             $scope.usedMaterielList = [];
+            $scope.switchHideAndShow(0);
+
             // 过滤出当前选中供应商的商品
             angular.forEach($scope.materielList, function (each) {
                 if($scope.selectGoodsTypeId > 0){
@@ -280,7 +282,7 @@
                         if($scope.materielList[i].id == materielId){
                             $scope.selectedMateriel = $scope.materielList[i];
                             $scope.purchaseOrderItem.materielId = materielId;
-                            $scope.switchHideAndShow($scope.selectedMateriel.typeId);
+                            $scope.switchHideAndShow($scope.selectedMateriel.kindId);
                             break;
                         }
                     }
@@ -482,7 +484,7 @@
                             if($scope.materielList[i].id == materielId){
                                 $scope.selectedMateriel = $scope.materielList[i];
                                 $scope.purchaseOrderItem.materielId = materielId;
-                                $scope.switchHideAndShow($scope.materielList[i].typeId);
+                                $scope.switchHideAndShow($scope.selectedMateriel.kindId);
                                 break;
                             }
                         }
@@ -523,7 +525,7 @@
         });
 
         // 查询供应商
-        supplierService.fetchSupplierList(function (data) {
+        supplierService.fetchUseableSupplierList(function (data) {
             $scope.supplierList = data.data;
         },function (data) {
             BootstrapDialog.show({
@@ -685,7 +687,7 @@
                         if($scope.materielList[i].id == materielId){
                             $scope.selectedMateriel = $scope.materielList[i];
                             $scope.purchaseOrderItem.materielId = materielId;
-                            $scope.switchHideAndShow($scope.materielList[i].kindId);
+                            $scope.switchHideAndShow($scope.selectedMateriel.kindId);
                             break;
                         }
                     }
@@ -886,7 +888,7 @@
         });
 
         // 查询供应商
-        supplierService.fetchSupplierList(function (data) {
+        supplierService.fetchUseableSupplierList(function (data) {
             $scope.supplierList = data.data;
         },function (data) {
             BootstrapDialog.show({

@@ -132,7 +132,7 @@
         });
 
         // 查询供应商
-        supplierService.fetchSupplierList(function (data) {
+        supplierService.fetchUseableSupplierList(function (data) {
             $scope.supplierList = data.data;
         },function (data) {
             BootstrapDialog.show({
@@ -367,7 +367,7 @@
         });
 
         // 查询供应商
-        supplierService.fetchSupplierList(function (data) {
+        supplierService.fetchUseableSupplierList(function (data) {
             $scope.supplierList = data.data;
         },function (data) {
             BootstrapDialog.show({
@@ -640,7 +640,7 @@
         });
 
         // 查询供应商
-        supplierService.fetchSupplierList(function (data) {
+        supplierService.fetchUseableSupplierList(function (data) {
             $scope.supplierList = data.data;
         },function (data) {
             BootstrapDialog.show({

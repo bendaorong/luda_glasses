@@ -85,4 +85,10 @@ public interface SupplierService {
      * @return
      */
     ResultHandle<SupplierModel> removeContact(int contactId);
+
+    /**
+     * 查询可用的供应商
+     * @return
+     */
+    List<SupplierModel> fetchUseableSupplierList();
 }

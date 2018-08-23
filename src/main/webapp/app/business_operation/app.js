@@ -381,6 +381,9 @@ businessOperationApp.factory("supplierService", function($http) {
         fetchSupplierList : function(successCallback, errorCallback){
             $http.get("/luda_glasses/rest/supplier/list").success(successCallback).error(errorCallback);
         },
+        fetchUseableSupplierList : function(successCallback, errorCallback){
+            $http.get("/luda_glasses/rest/supplier/listUseable").success(successCallback).error(errorCallback);
+        },
         addSupplier : function(supplier, successCallback, errorCallback){
             $http({
                 method:"POST",
