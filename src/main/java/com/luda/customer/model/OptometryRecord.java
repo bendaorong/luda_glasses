@@ -63,6 +63,14 @@ public class OptometryRecord implements Serializable {
      */
     private double leftCorrectedVisualAcuity;
     /**
+     * 瞳距
+     */
+    private double ipd;
+    /**
+     * ADD
+     */
+    private double add;
+    /**
      * 备注
      */
     private int remark;
@@ -235,6 +243,22 @@ public class OptometryRecord implements Serializable {
         this.optometrist = optometrist;
     }
 
+    public double getIpd() {
+        return ipd;
+    }
+
+    public void setIpd(double ipd) {
+        this.ipd = ipd;
+    }
+
+    public double getAdd() {
+        return add;
+    }
+
+    public void setAdd(double add) {
+        this.add = add;
+    }
+
     @Override
     public String toString() {
         return "OptometryRecord{" +
@@ -252,6 +276,8 @@ public class OptometryRecord implements Serializable {
                 ", leftUncorrectedVisualAcuity=" + leftUncorrectedVisualAcuity +
                 ", rightCorrectedVisualAcuity=" + rightCorrectedVisualAcuity +
                 ", leftCorrectedVisualAcuity=" + leftCorrectedVisualAcuity +
+                ", ipd=" + ipd +
+                ", add=" + add +
                 ", remark=" + remark +
                 ", createUserId=" + createUserId +
                 ", createTime=" + createTime +

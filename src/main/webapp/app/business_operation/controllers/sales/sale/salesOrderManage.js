@@ -731,7 +731,9 @@
                     && $scope.bakRecord.leftAxial == $scope.record.leftAxial
                     && $scope.bakRecord.leftCorrectedVisualAcuity == $scope.record.leftCorrectedVisualAcuity
                     && $scope.bakRecord.leftUncorrectedVisualAcuity == $scope.record.leftUncorrectedVisualAcuity
-                    && $scope.bakRecord.optometrist == $scope.record.optometrist;
+                    && $scope.bakRecord.optometrist == $scope.record.optometrist
+                    && $scope.bakRecord.ipd == $scope.record.ipd
+                    && $scope.bakRecord.add == $scope.record.add;
 
             if(!isSame){
                 $scope.record.customerId = $scope.newSalesOrder.customerId;

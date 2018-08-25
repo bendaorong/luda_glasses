@@ -21,8 +21,8 @@
     .bg{display:none;position:fixed;width:100%;height:100%;background:lightgray;z-index:2;top:0;left:0;opacity:0.6;}
     .content{
         display:none;
-        width:700px;
-        height:580px;
+        width:800px;
+        height:500px;
         position:fixed;
         top:5%;
         bottom:5%;
@@ -33,6 +33,10 @@
         TEXT-ALIGN: center;
         padding-left:15px;
         padding-right:15px;
+    }
+
+    .content input {
+        width:80px;
     }
 </style>
 
@@ -200,9 +204,11 @@
                         <td data-title="'验光日期'" sortable="'optometryDate'">{{record.optometryDate}}</td>
                         <td data-title="'右/左球镜'" sortable="'rightSphere'">{{record.rightSphere | number:2}} /{{record.leftSphere | number:2}}</td>
                         <td data-title="'右/左柱镜'" sortable="'rightCylinder'">{{record.rightCylinder | number:2}}/{{record.leftCylinder | number:2}}</td>
-                        <td data-title="'右/左度数'" sortable="'rightAxial'">{{record.rightAxial | number:2}}/{{record.leftAxial | number:2}}</td>
+                        <td data-title="'右/左轴向'" sortable="'rightAxial'">{{record.rightAxial | number:2}}/{{record.leftAxial | number:2}}</td>
                         <td data-title="'右/左裸视'" sortable="'rightUncorrectedVisualAcuity'">{{record.rightUncorrectedVisualAcuity | number:2}}/{{record.leftUncorrectedVisualAcuity | number:2}}</td>
                         <td data-title="'右/左矫正'" sortable="'rightCorrectedVisualAcuity'">{{record.rightCorrectedVisualAcuity | number:2}}/{{record.leftCorrectedVisualAcuity | number:2}}</td>
+                        <td data-title="'瞳距'" sortable="'optometrist'">{{record.ipd | number:2}}</td>
+                        <td data-title="'ADD'" sortable="'optometrist'">{{record.add | number:2}}</td>
                         <td data-title="'验光师'" sortable="'optometrist'">{{record.optometrist}}</td>
                     </tr>
                 </table>
@@ -218,44 +224,42 @@
     <h3>添加验光记录</h3>
     <table class="table table-bordered" style="margin-top: 10px;">
         <tr>
-            <td>右球镜</td>
+            <th></th>
+            <th>球镜</th>
+            <th>柱镜</th>
+            <th>轴向</th>
+            <th>矫正</th>
+            <th>裸视</th>
+            <th>瞳距</th>
+            <th>ADD</th>
+        </tr>
+        <tr>
+            <td><b>右</b></td>
             <td><input type="number" step="0.1" ng-model="optometryRecord.rightSphere" /></td>
-            <td>左球镜</td>
-            <td><input type="number" step="0.1" ng-model="optometryRecord.leftSphere" /></td>
-        </tr>
-        <tr>
-            <td>右柱镜</td>
             <td><input type="number" step="0.1" ng-model="optometryRecord.rightCylinder" /></td>
-            <td>左柱镜</td>
-            <td><input type="number" step="0.1" ng-model="optometryRecord.leftCylinder" /></td>
-        </tr>
-        <tr>
-            <td>右轴向</td>
             <td><input type="number" step="0.1" ng-model="optometryRecord.rightAxial" /></td>
-            <td>左轴向</td>
-            <td><input type="number" step="0.1" ng-model="optometryRecord.leftAxial" /></td>
-        </tr>
-        <tr>
-            <td>右裸视</td>
-            <td><input type="number" step="0.1" ng-model="optometryRecord.rightUncorrectedVisualAcuity" /></td>
-            <td>左裸视</td>
-            <td><input type="number" step="0.1" ng-model="optometryRecord.leftUncorrectedVisualAcuity" /></td>
-        </tr>
-        <tr>
-            <td>右矫正</td>
             <td><input type="number" step="0.1" ng-model="optometryRecord.rightCorrectedVisualAcuity" /></td>
-            <td>左矫正</td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.rightUncorrectedVisualAcuity" /></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.ipd" /></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.add" /></td>
+        </tr>
+        <tr>
+            <td><b>左</b></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.leftSphere" /></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.leftCylinder" /></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.leftAxial" /></td>
             <td><input type="number" step="0.1" ng-model="optometryRecord.leftCorrectedVisualAcuity" /></td>
+            <td><input type="number" step="0.1" ng-model="optometryRecord.leftUncorrectedVisualAcuity" /></td>
+            <td></td>
+            <td></td>
         </tr>
         <tr>
-            <td>验光师</td>
-            <td colspan="3">
-                <input ng-model="optometryRecord.optometrist" />
-            </td>
+            <td><b>验光师</b></td>
+            <td colspan="7"><input ng-model="optometryRecord.optometrist" style="width: 120px"/></td>
         </tr>
         <tr>
-            <td>备注</td>
-            <td colspan="3">
+            <td><b>备注</b></td>
+            <td colspan="7">
                 <textarea rows="5" ng-model="optometryRecord.remark" style="width:100%"></textarea>
             </td>
         </tr>

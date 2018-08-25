@@ -35,6 +35,8 @@
         <result property="updateTime" column="update_time"/>
         <result property="businessManName" column="real_name"/>
         <result property="optometrist" column="optometrist"/>
+        <result property="ipd" column="_IPD"/>
+        <result property="add" column="_ADD"/>
     </resultMap>
 
     <select id="getCustomerTotalCount" resultType="int">
@@ -137,6 +139,8 @@
             l_uncorrected_visual_acuity,
             r_corrected_visual_acuity,
             l_corrected_visual_acuity,
+            _IPD,
+            _ADD,
             remark,
             create_user_id,
             create_time,
@@ -158,6 +162,8 @@
             #{leftUncorrectedVisualAcuity},
             #{rightCorrectedVisualAcuity},
             #{leftCorrectedVisualAcuity},
+            #{ipd},
+            #{add},
             #{remark},
             #{createUserId},
             now(),

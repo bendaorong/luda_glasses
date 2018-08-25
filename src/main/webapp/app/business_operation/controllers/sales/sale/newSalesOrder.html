@@ -63,6 +63,9 @@
         background-color: #FFFFFF;
         border-bottom : 0px solid #e5e5e5
     }
+    .latestOptometryRecord input{
+        width:90px;
+    }
 </style>
 
 <div class="alert alert-danger alert-dismissible fade in" role="alert"
@@ -240,7 +243,7 @@
                 </table>
             </fieldset>
         </div>
-        <div class="col-sm-12">
+        <div class="col-sm-12 latestOptometryRecord">
             <fieldset id="latestOptometryRecord">
                 <legend class="legend">
                     最近验光记录
@@ -250,29 +253,35 @@
                         <th></th>
                         <th>球镜</th>
                         <th>柱镜</th>
-                        <th>度数</th>
+                        <th>轴向</th>
                         <th>矫正</th>
                         <th>裸视</th>
+                        <th>瞳距</th>
+                        <th>ADD</th>
                     </tr>
                     <tr>
                         <td><b>右</b></td>
-                        <td><input ng-model="record.rightSphere" style="width:100px"/></td>
-                        <td><input ng-model="record.rightCylinder" style="width:100px"/></td>
-                        <td><input ng-model="record.rightAxial" style="width:100px"/></td>
-                        <td><input ng-model="record.rightCorrectedVisualAcuity" style="width:100px"/></td>
-                        <td><input ng-model="record.rightUncorrectedVisualAcuity" style="width:100px"/></td>
+                        <td><input ng-model="record.rightSphere" /></td>
+                        <td><input ng-model="record.rightCylinder" /></td>
+                        <td><input ng-model="record.rightAxial" /></td>
+                        <td><input ng-model="record.rightCorrectedVisualAcuity" /></td>
+                        <td><input ng-model="record.rightUncorrectedVisualAcuity" /></td>
+                        <td><input ng-model="record.ipd" /></td>
+                        <td><input ng-model="record.add" /></td>
                     </tr>
                     <tr>
                         <td><b>左</b></td>
-                        <td><input ng-model="record.leftSphere" style="width:100px"/></td>
-                        <td><input ng-model="record.leftCylinder" style="width:100px"/></td>
-                        <td><input ng-model="record.leftAxial" style="width:100px"/></td>
-                        <td><input ng-model="record.leftCorrectedVisualAcuity" style="width:100px"/></td>
-                        <td><input ng-model="record.leftUncorrectedVisualAcuity" style="width:100px"/></td>
+                        <td><input ng-model="record.leftSphere" /></td>
+                        <td><input ng-model="record.leftCylinder" /></td>
+                        <td><input ng-model="record.leftAxial" /></td>
+                        <td><input ng-model="record.leftCorrectedVisualAcuity" /></td>
+                        <td><input ng-model="record.leftUncorrectedVisualAcuity" /></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td><b>验光师</b></td>
-                        <td colspan="5"><input ng-model="record.optometrist" style="width: 120px"/></td>
+                        <td colspan="7"><input ng-model="record.optometrist" style="width: 120px"/></td>
                     </tr>
                 </table>
             </fieldset>
