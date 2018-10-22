@@ -26,6 +26,10 @@
     "name" : "采购单查询",
     "page" : "#purchaseOrderManage"
   },{
+    "id" : "200300",
+    "name" : "退货单",
+    "page" : "#addPurchaseRefundOrder"
+  },{
     "id" : "200400",
     "name" : "退货单查询",
     "page" : "#purchaseRefundOrderManage"
