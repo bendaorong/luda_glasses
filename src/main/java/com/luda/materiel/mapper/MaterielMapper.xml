@@ -32,6 +32,38 @@
         <result property="kindName" column="kind_name"/>
     </resultMap>
 
+    <select id="getMaterielTotalCount" resultType="int">
+        select count(*) from materiel
+        where delete_flag = 0
+        <if test="typeId != null">
+            and type_id = #{typeId}
+        </if>
+        <if test="name != null and name != ''">
+            and name like CONCAT(CONCAT('%',#{name},'%'))
+        </if>
+    </select>
+
+    <select id="fetchMaterielListPage" resultMap="materielMap">
+        select m.*, t.type_name, s.supplier_name, k.kind_id, k.kind_name
+        from (
+            select * from materiel
+            where delete_flag = 0
+            <if test="typeId != null">
+                and type_id = #{typeId}
+            </if>
+            <if test="name != null and name != ''">
+                and name like CONCAT(CONCAT('%',#{name},'%'))
+            </if>
+        ) m
+        left join goods_type t
+        on m.type_id = t.type_id
+        left join goods_kind k
+        on t.kind_id = k.kind_id
+        left join supplier s
+        on m.supplier_id = s.supplier_id
+        order by m.id desc
+    </select>
+
     <select id="fetchMaterielList" resultMap="materielMap">
         select m.*, t.type_name, s.supplier_name, k.kind_id, k.kind_name
         from materiel m

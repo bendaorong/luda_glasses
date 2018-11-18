@@ -57,6 +57,7 @@
             }
             //saleStatisticsByMateriel();
             var srcurl = "/luda_glasses/rest/statistics/sale/chart/"+dimension+"/"+beginDate+"/"+endDate;
+            srcurl = srcurl + "?t=" + new Date().getTime();
             $("#chartImage").attr("src", srcurl);
         }
 

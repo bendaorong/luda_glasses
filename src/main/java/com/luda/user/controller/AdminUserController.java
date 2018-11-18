@@ -7,6 +7,7 @@ import com.luda.user.exception.AdminUserException;
 import com.luda.user.model.AdminRoleModel;
 import com.luda.user.model.AdminUserDetailModel;
 import com.luda.user.model.AdminUserModel;
+import com.luda.user.model.UpdatePasswordModel;
 import com.luda.user.service.AdminUserService;
 import com.luda.util.CommonUtils;
 import net.sf.json.JSONArray;
@@ -184,6 +185,31 @@ public class AdminUserController extends BaseController{
             }
         }catch (Exception e){
             log.error("reset pwd error, adminUserId:" + adminUserId, e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 修改密码
+     * @param updatePasswordModel
+     * @return
+     */
+    @RequestMapping(value = "/modifyPwd", method = RequestMethod.POST)
+    @ResponseBody
+    public String modifyPwd(@RequestBody UpdatePasswordModel updatePasswordModel, HttpSession httpSession){
+        String result = "";
+        AdminUserModel adminUser = getLoginUser(httpSession);
+        try {
+            updatePasswordModel.setAdminUserId(adminUser.getAdminUserId());
+            ResultHandle<String> resultHandle = adminUserService.updatePwd(updatePasswordModel);
+            if(resultHandle.isSuccess()){
+                result = getSuccessResult();
+            }else {
+                result = getFailResult(resultHandle.getMsg());
+            }
+        }catch (Exception e){
+            log.error("update pwd error, adminUserId:" + adminUser.getAdminUserId(), e);
             result = getFailResult("系统异常");
         }
         return result;

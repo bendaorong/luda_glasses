@@ -325,8 +325,7 @@ businessOperationApp.factory("adminUserService", function($http) {
 				url:"/luda_glasses/rest/adminUser/modifyPwd",
 				data:{
 					oldPassword:adminUser.oldPassword,
-					newPassword:adminUser.newPassword,
-					cellPhoneNumber:adminUser.cellPhoneNumber
+					newPassword:adminUser.newPassword
 				}
 			}).success(successCallback).error(errorCallback);
 		},
@@ -454,6 +453,20 @@ businessOperationApp.factory("supplierService", function($http) {
  */
 businessOperationApp.factory("materielService", function($http) {
     return {
+        getMaterielTotalCount : function(conditions, successCallback, errorCallback){
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/materiel/totalCount",
+                data:conditions
+            }).success(successCallback).error(errorCallback);
+        },
+        fetchMaterielListPage : function(conditions, successCallback, errorCallback){
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/materiel/listPage",
+                data:conditions
+            }).success(successCallback).error(errorCallback);
+        },
         fetchMaterielList : function(successCallback, errorCallback){
             $http.get("/luda_glasses/rest/materiel/list").success(successCallback).error(errorCallback);
         },

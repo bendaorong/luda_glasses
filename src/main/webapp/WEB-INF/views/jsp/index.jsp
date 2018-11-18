@@ -44,7 +44,7 @@
 								<li>手机号:<strong>${sessionScope.sessionInfo.mobileNumber}</strong></li>
 								<li>角色:<strong>${sessionScope.sessionInfo.adminRoleModel.roleName}</strong></li>
 								<li>门店:<strong>${sessionScope.sessionInfo.storeModel.storeName}</strong></li>
-								<%--<li><a href="">修改密码</a></li>--%>
+								<li><a href="/luda_glasses/index#/gotoModifyPwd/${sessionScope.sessionInfo.mobileNumber}">修改密码</a></li>
 								<li><a href="logout">安全退出</a></li>
 							</ul></li>
 						<%--<li><p class="navbar-text">--%>

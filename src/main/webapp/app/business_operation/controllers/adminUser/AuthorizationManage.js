@@ -161,6 +161,7 @@
 	}).controller("editAdminUserController",function($location,$scope,$filter,adminUserService,storeService,$routeParams){
 		$scope.roleCode = sessionStorage.getItem("roleCode");
 		$scope.selectAdminUser={};
+		$scope.adminUser={};
         $scope.roleList = [];
         $scope.storeList = [];
         //初始化门店下拉框
@@ -239,13 +240,30 @@
 		}
 
 		$scope.modifyAdminUserPwd = function(){
-			adminUserService.modifyAdminUserPwd($scope.selectAdminUser,function(data){
-				BootstrapDialog.show({
-					type : BootstrapDialog.TYPE_SUCCESS,
-					title : '消息',
-					message : '密码修改成功'
-				});
-				$location.path("/AuthorizationManage");
+		    if($scope.adminUser.newPassword != $scope.adminUser.newPasswordConfirm){
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '错误',
+                    message : '新密码与确认新密码不一致!'
+                });
+                return;
+            }
+
+			adminUserService.modifyAdminUserPwd($scope.adminUser, function(data){
+			    if(data.success){
+                    BootstrapDialog.show({
+                        type : BootstrapDialog.TYPE_SUCCESS,
+                        title : '消息',
+                        message : '密码修改成功'
+                    });
+                    $location.path("index");
+                }else {
+                    BootstrapDialog.show({
+                        type : BootstrapDialog.TYPE_DANGER,
+                        title : '错误',
+                        message : data.errorMsg
+                    });
+                }
 			},function(data){
 				BootstrapDialog.show({
 					type : BootstrapDialog.TYPE_DANGER,

@@ -1,6 +1,7 @@
 package com.luda.materiel.service.impl;
 
 import com.luda.comm.po.ResultHandle;
+import com.luda.inventory.model.MaterielQueryBean;
 import com.luda.inventory.service.InventoryService;
 import com.luda.materiel.dao.MaterielDao;
 import com.luda.materiel.model.MaterielModel;
@@ -149,5 +150,15 @@ public class MaterielServiceImpl implements MaterielService{
             inventoryService.removeMard(id);
         }
         return resultHandle;
+    }
+
+    @Override
+    public int getMaterielTotalCount(MaterielQueryBean queryBean) {
+        return materielDao.getMaterielTotalCount(queryBean);
+    }
+
+    @Override
+    public List<MaterielModel> fetchMaterielListPage(MaterielQueryBean queryBean) {
+        return materielDao.fetchMaterielListPage(queryBean);
     }
 }

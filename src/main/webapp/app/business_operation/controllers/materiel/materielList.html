@@ -2,19 +2,37 @@
     <div role="tabpanel" class="tab-pane active" ng-show="currentTab===0">
         <div class="seat-manage-operate-container">
             <h4 class="seat-manage-operate-title">商品管理</h4>
-            <div class="seat-manage-operate-button form-inline">
-                <a type="button" class="btn btn-success btn-sm" href="#addMateriel" ng-show="roleCode==='00'"> 新增</a>
-                <input class="form-control" ng-model="filterText" ng-change="filter()"
-                       placeHolder="{{'BUSINESS_OPERATION_PRODUCT_SEARCH'|translate}}">
-                <button type="button" class="btn btn-sm btn-primary" ng-click="refresh()">
-                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-                </button>
+            <div style="margin-top: 20px;">
+                <form class="form-horizontal" novalidate id="queryMaterielForm" name="queryMaterielForm">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">品牌</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <select class="form-control" required ng-model="filterCondition.typeId">
+                                <option value="0">全部</option>
+                                <option ng-repeat="goodsType in goodsTypeList" value="{{goodsType.typeId}}">{{goodsType.typeName}}</option>
+                            </select>
+                        </div>
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">名称</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input class="form-control" ng-model="filterCondition.name"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"></label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <button ng-click="queryMateriel()">查询</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </div>
+            <div class="seat-manage-operate-button form-inline" style="margin-top: 10px;margin-bottom: 10px;">
+                <a type="button" class="btn btn-success btn-sm" href="#addMateriel" ng-show="roleCode==='00'"> 新增</a>
+            </div>
+            </div>
         <hr>
 
-        <table ng-table="tableParams" class="table table-bordered">
-            <tr ng-repeat="materiel in $data|filter:filterText">
+        <table ng-table="materielTable" class="table table-bordered">
+            <tr ng-repeat="materiel in materielList">
                 <td data-title="'名称'" sortable="'name'" width="30%">
                     <a ng-href="#/materielDetail/{{materiel.id}}">{{materiel.name}}</a>
                 </td>

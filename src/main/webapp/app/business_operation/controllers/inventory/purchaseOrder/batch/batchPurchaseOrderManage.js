@@ -221,6 +221,7 @@
                 return false;
             }
             $scope.newPurchaseOrder.purchaseOrderItemList = $scope.purchaseOrderItemList;
+            console.log(JSON.stringify($scope.purchaseOrderItemList));
 
             $("#saveBtn").attr("disabled", true);
             $("#saveBtn").text("处理中...");

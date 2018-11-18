@@ -1,26 +1,60 @@
 (function() {
-    angular.module("businessOperationApp").controller("materielManageController", function($scope, NgTableParams, $filter, $location, materielService) {
+    angular.module("businessOperationApp").controller("materielManageController", function($scope, NgTableParams, $filter, $location, materielService, dictionaryService) {
         setActiveSubPage($scope);
         $scope.roleCode = sessionStorage.getItem("roleCode");
         $scope.currentTab = 0;
         $scope.materielList = [];
+        // 商品类型
+        $scope.goodsTypeList = [];
+        $scope.filterCondition = {};
 
         $scope.setCurrentTab = function(currentTab) {
             $scope.currentTab = currentTab;
         }
 
-        // 显示商品列表
-        function initMaterielList() {
-            materielService.fetchMaterielList(function(data){
+        // 查询商品类型
+        dictionaryService.fetchGoodsTypeList(function(data){
+            $scope.goodsTypeList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品类型失败:' + data.errorMsg
+            });
+        });
+
+
+        // init table
+        function initMaterielTable(){
+            materielService.getMaterielTotalCount($scope.filterCondition, function(data){
+                if(data.success){
+                    $scope.materielTable = new NgTableParams({
+                        page: 1,
+                        count: 10
+                    },{
+                        total: data.data,
+                        getData: function ($defer, params) {
+                            $scope.filterCondition.pageNo = params.page();
+                            getMaterielList($defer);
+                        }
+                    });
+                }
+            }, function(data){
+
+            });
+        }
+        initMaterielTable();
+
+        // 显示商品库存列表
+        function getMaterielList($defer) {
+            materielService.fetchMaterielListPage($scope.filterCondition, function(data){
                 if(data.success){
                     $scope.materielList = data.data;
-                    $scope.tableParams = new NgTableParams({}, {
-                        dataset : $scope.materielList
-                    });
+                    $defer.resolve($scope.materielList);
                 }else {
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,
-                        title : '错误',
+                        title : '失败',
                         message : '获取商品失败' + data.errorMsg
                     });
                 }
@@ -32,7 +66,13 @@
                 });
             });
         }
-        initMaterielList();
+
+        // 查询销售商品
+        $scope.queryMateriel = function(){
+            initMaterielTable();
+        }
+
+
 
         $scope.refresh = function() {
             $scope.$emit("loadingStart");
@@ -111,7 +151,7 @@
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
                 title : '警告',
-                message : '获取商品类型错误' + data.errorMsg
+                message : '获取商品种类错误' + data.errorMsg
             });
         });
 

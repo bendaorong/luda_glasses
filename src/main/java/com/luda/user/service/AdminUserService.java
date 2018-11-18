@@ -5,6 +5,7 @@ import com.luda.inventory.model.CommonQueryBean;
 import com.luda.user.model.AdminRoleModel;
 import com.luda.user.model.AdminUserDetailModel;
 import com.luda.user.model.AdminUserModel;
+import com.luda.user.model.UpdatePasswordModel;
 
 import java.util.List;
 
@@ -71,4 +72,11 @@ public interface AdminUserService {
      * 获取角色列表
      */
     List<AdminRoleModel> getAdminRoleList();
+
+    /**
+     * 修改密码
+     * @param updatePasswordModel
+     * @return
+     */
+    ResultHandle<String> updatePwd(UpdatePasswordModel updatePasswordModel);
 }

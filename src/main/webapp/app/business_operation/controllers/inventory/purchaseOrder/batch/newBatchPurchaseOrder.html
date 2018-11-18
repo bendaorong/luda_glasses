@@ -177,9 +177,9 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="item in purchaseOrderItemList">
-                            <td data-title="'球镜'" ng-show="showSphereAndCylinder"><input type="number" ng-model="item.sphere" step="0.25" min="-12", max="12"/></td>
-                            <td data-title="'柱镜'" ng-show="showSphereAndCylinder"><input type="number" ng-model="item.cylinder" step="0.25" min="-4" max="4"/></td>
-                            <td data-title="'度数'" ng-show="showAxial"><input type="number" ng-model="item.axial" step="50" min="50" max="500"/></td>
+                            <td data-title="'球镜'" ng-show="showSphereAndCylinder"><input type="number" ng-model="item.sphere" step="0.25" /></td>
+                            <td data-title="'柱镜'" ng-show="showSphereAndCylinder"><input type="number" ng-model="item.cylinder" step="0.25" /></td>
+                            <td data-title="'度数'" ng-show="showAxial"><input type="number" ng-model="item.axial" step="50" /></td>
                             <td data-title="'采购数量'"><input type="number" ng-model="item.purchaseQuantity" step="1" min="1"/></td>
                             <td data-title="'操作'"><button ng-click="delItem($index)">删除</button></td>
                         </tr>

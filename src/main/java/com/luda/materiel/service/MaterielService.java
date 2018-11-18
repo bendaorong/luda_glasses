@@ -1,6 +1,7 @@
 package com.luda.materiel.service;
 
 import com.luda.comm.po.ResultHandle;
+import com.luda.inventory.model.MaterielQueryBean;
 import com.luda.materiel.model.MaterielModel;
 
 import java.util.List;
@@ -39,4 +40,18 @@ public interface MaterielService {
      * @param id 商品id
      */
     ResultHandle<MaterielModel> removeMateriel(int id);
+
+    /**
+     * 查询商品数量
+     * @param queryBean
+     * @return
+     */
+    int getMaterielTotalCount(MaterielQueryBean queryBean);
+
+    /**
+     * 分页查询商品
+     * @param queryBean
+     * @return
+     */
+    List<MaterielModel> fetchMaterielListPage(MaterielQueryBean queryBean);
 }

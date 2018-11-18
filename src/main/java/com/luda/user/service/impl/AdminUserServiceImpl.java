@@ -7,6 +7,7 @@ import com.luda.user.dao.AdminUserDao;
 import com.luda.user.model.AdminRoleModel;
 import com.luda.user.model.AdminUserDetailModel;
 import com.luda.user.model.AdminUserModel;
+import com.luda.user.model.UpdatePasswordModel;
 import com.luda.user.service.AdminUserService;
 import com.luda.util.CommonUtils;
 import com.luda.util.MD5;
@@ -214,6 +215,42 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     public List<AdminRoleModel> getAdminRoleList() {
         return adminUserDao.getAdminRoleList();
+    }
+
+    @Override
+    public ResultHandle<String> updatePwd(UpdatePasswordModel updatePasswordModel) {
+        ResultHandle<String> resultHandle = new ResultHandle<>();
+
+        if(StringUtils.isBlank(updatePasswordModel.getOldPassword())){
+            resultHandle.setMsg("请填写旧密码");
+            return resultHandle;
+        }
+        if(StringUtils.isBlank(updatePasswordModel.getNewPassword())){
+            resultHandle.setMsg("请填写新密码");
+            return resultHandle;
+        }
+
+        AdminUserModel adminUserModel = getWithDetailById(updatePasswordModel.getAdminUserId());
+        if(adminUserModel == null){
+            resultHandle.setMsg("该用户不存在");
+            return resultHandle;
+        }
+
+        String oldPwdMd5 = MD5.getMD5(updatePasswordModel.getOldPassword());
+        if(!oldPwdMd5.equals(adminUserModel.getLoginPassword())){
+            resultHandle.setMsg("旧密码不正确");
+            return resultHandle;
+        }
+
+        String newPwdMd5 = MD5.getMD5(updatePasswordModel.getNewPassword());
+        int result = adminUserDao.updatePwd(adminUserModel.getAdminUserId(), newPwdMd5);
+        if(result <= 0){
+            resultHandle.setMsg("修改密码失败");
+        }
+
+        // 返回新密码
+        resultHandle.setReturnContent(updatePasswordModel.getNewPassword());
+        return resultHandle;
     }
 
     /**
