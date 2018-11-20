@@ -5,26 +5,30 @@
             <div style="margin-top: 20px;">
                 <form class="form-horizontal" novalidate id="queryMaterielForm" name="queryMaterielForm">
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">商品</label>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                            <select id="materiel" class="form-control"  ng-model="filterCondition.materielId">
-                                <option value=""></option>
-                            </select>
-                        </div>
                         <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">门店</label>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                             <select class="form-control"  ng-model="filterCondition.storeId" required>
-                                <option value="0">全部</option>
+                                <option value="">全部</option>
                                 <option ng-repeat="store in storeList" value="{{store.storeId}}">
                                     {{store.storeName}}
                                 </option>
                             </select>
                         </div>
-                    </div>
-                    <div class="form-group">
                         <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">球镜</label>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                             <input type="number" class="form-control" ng-model="filterCondition.sphere"/>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">品牌</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <select class="form-control"  ng-model="filterCondition.typeId" required>
+                                <option value="">全部</option>
+                                <option ng-repeat="goodsType in goodsTypeList" value="{{goodsType.typeId}}">
+                                    {{goodsType.typeName}}
+                                </option>
+                            </select>
                         </div>
                         <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">柱镜</label>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -32,6 +36,12 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">商品</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <select id="materiel" class="form-control"  ng-model="filterCondition.materielId">
+                                <option value=""></option>
+                            </select>
+                        </div>
                         <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">度数</label>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                             <input type="number" class="form-control" ng-model="filterCondition.axial"/>
@@ -54,7 +64,7 @@
                 <td data-title="'商品名称'" sortable="'name'">{{mard.materiel.name}}</td>
                 <!--       <td data-title="'商品编号'" sortable="'code'">{{mard.materiel.code}}</td>
                        <td data-title="'条码'" sortable="'barcode'">{{mard.materiel.barcode}}</td>-->
-                <td data-title="'商品类型'" sortable="'typeName'">{{mard.materiel.typeName}}</td>
+                <td data-title="'商品品牌'" sortable="'typeName'">{{mard.materiel.typeName}}</td>
                 <td data-title="'球镜'" sortable="'sphere'">{{mard.sphere | number:2}}</td>
                 <td data-title="'柱镜'" sortable="'cylinder'">{{mard.cylinder | number:2}}</td>
                 <td data-title="'度数'" sortable="'axial'">{{mard.axial | number:2}}</td>

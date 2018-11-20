@@ -549,3 +549,9 @@ update luda_glasses.admin_user set role_id = 1 where admin_name = 'admin';
  */
 ALTER TABLE luda_glasses.optometry_record ADD COLUMN _IPD double(6,2) comment '瞳距';
 ALTER TABLE luda_glasses.optometry_record ADD COLUMN _ADD double(6,2) comment 'ADD';
+
+/**
+ * 2018-11-20
+ */
+ALTER TABLE mard ADD COLUMN type_id INT(11) COMMENT '商品品牌';
+UPDATE mard d SET d.type_id = (SELECT m.type_id FROM materiel m WHERE m.id = d.`materiel_id`);

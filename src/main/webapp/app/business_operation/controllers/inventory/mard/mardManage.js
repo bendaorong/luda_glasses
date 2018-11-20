@@ -1,10 +1,11 @@
 (function() {
-    angular.module("businessOperationApp").controller("mardManageController", function($scope, NgTableParams, inventoryService, materielService, storeService) {
+    angular.module("businessOperationApp").controller("mardManageController", function($scope, NgTableParams, inventoryService, materielService, storeService, dictionaryService) {
         setActiveSubPage($scope);
         $scope.roleCode = sessionStorage.getItem("roleCode");
         $scope.currentTab = 0;
         $scope.mardList = [];
         $scope.storeList = [];
+        $scope.goodsTypeList = [];
         $scope.filterCondition = {};
 
         $scope.setCurrentTab = function(currentTab) {
@@ -19,6 +20,17 @@
                 type : BootstrapDialog.TYPE_DANGER,
                 title : '警告',
                 message : '获取门店失败:' + data.errorMsg
+            });
+        });
+
+        // 查询商品类型
+        dictionaryService.fetchGoodsTypeList(function(data){
+            $scope.goodsTypeList = data.data;
+        },function(data){
+            BootstrapDialog.show({
+                type : BootstrapDialog.TYPE_DANGER,
+                title : '警告',
+                message : '获取商品类型失败:' + data.errorMsg
             });
         });
 

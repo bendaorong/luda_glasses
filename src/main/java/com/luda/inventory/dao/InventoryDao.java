@@ -122,9 +122,9 @@ public interface InventoryDao {
 
     int updatePurchaseOrderTotalQuantityAndTotalAmount(PurchaseOrder purchaseOrder);
 
-    int getMardTotalCount(CommonQueryBean queryBean);
+    int getMardTotalCount(MardQueryBean queryBean);
 
-    List<MardVo> fetchMardVoListPage(CommonQueryBean queryBean);
+    List<MardVo> fetchMardVoListPage(MardQueryBean queryBean);
 
     int getPurchaseOrderItemCount(int purchaseOrderId);
 

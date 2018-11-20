@@ -6,6 +6,8 @@ import com.luda.inventory.dao.InventoryDao;
 import com.luda.inventory.exception.InventoryException;
 import com.luda.inventory.model.*;
 import com.luda.inventory.service.InventoryService;
+import com.luda.materiel.model.MaterielModel;
+import com.luda.materiel.service.MaterielService;
 import com.luda.util.CodeBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -35,6 +37,8 @@ public class InventoryServiceImpl implements InventoryService{
 
     @Autowired
     private InventoryDao inventoryDao;
+    @Autowired
+    private MaterielService materielService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -210,6 +214,8 @@ public class InventoryServiceImpl implements InventoryService{
         mard.setSphere(sphere);
         mard.setCylinder(cylinder);
         mard.setAxial(axial);
+        MaterielModel materielModel = materielService.getById(materielId);
+        mard.setTypeId(materielModel.getTypeId());
         return inventoryDao.saveMard(mard);
     }
 
@@ -846,12 +852,12 @@ public class InventoryServiceImpl implements InventoryService{
 
 
     @Override
-    public int getMardTotalCount(CommonQueryBean queryBean) {
+    public int getMardTotalCount(MardQueryBean queryBean) {
         return inventoryDao.getMardTotalCount(queryBean);
     }
 
     @Override
-    public List<MardVo> fetchMardVoListPage(CommonQueryBean queryBean) {
+    public List<MardVo> fetchMardVoListPage(MardQueryBean queryBean) {
         return inventoryDao.fetchMardVoListPage(queryBean);
     }
 

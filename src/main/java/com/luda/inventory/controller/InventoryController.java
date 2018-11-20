@@ -43,28 +43,9 @@ public class InventoryController extends BaseController{
      */
     @RequestMapping(value = "/mard/totalCount")
     @ResponseBody
-    public String totalCount(@RequestBody String conditions, HttpSession httpSession){
+    public String totalCount(@RequestBody MardQueryBean queryBean){
         String result = "";
         try {
-            CommonQueryBean queryBean = new CommonQueryBean();
-            JSONObject obj = JSONObject.fromObject(conditions);
-            if(obj.get("materielId") != null && !(obj.get("materielId") instanceof JSONNull)){
-                queryBean.setMaterielId(obj.getInt("materielId"));
-            }
-            if(obj.get("storeId") != null
-                    && !(obj.get("storeId") instanceof JSONNull)
-                    && obj.getInt("storeId") != 0){
-                queryBean.setStoreId(obj.getInt("storeId"));
-            }
-            if(obj.get("sphere") != null && !(obj.get("sphere") instanceof JSONNull)){
-                queryBean.setSphere(obj.getDouble("sphere"));
-            }
-            if(obj.get("cylinder") != null && !(obj.get("cylinder") instanceof JSONNull)){
-                queryBean.setCylinder(obj.getDouble("cylinder"));
-            }
-            if(obj.get("axial") != null && !(obj.get("axial") instanceof JSONNull)){
-                queryBean.setAxial(obj.getDouble("axial"));
-            }
             int count = inventoryService.getMardTotalCount(queryBean);
             result = getSuccessResult(count);
         }catch (Exception e){
@@ -101,31 +82,10 @@ public class InventoryController extends BaseController{
      */
     @RequestMapping("/mard/listPage")
     @ResponseBody
-    public String fetchMardListPage(@RequestBody String conditions, HttpSession httpSession){
+    public String fetchMardListPage(@RequestBody MardQueryBean queryBean, HttpSession httpSession){
         String result = "";
         try {
-            CommonQueryBean queryBean = new CommonQueryBean();
-            JSONObject obj = JSONObject.fromObject(conditions);
-            if(obj.get("materielId") != null && !(obj.get("materielId") instanceof JSONNull)){
-                queryBean.setMaterielId(obj.getInt("materielId"));
-            }
-            if(obj.get("storeId") != null
-                    && !(obj.get("storeId") instanceof JSONNull)
-                    && obj.getInt("storeId") != 0){
-                queryBean.setStoreId(obj.getInt("storeId"));
-            }
-            if(obj.get("sphere") != null && !(obj.get("sphere") instanceof JSONNull)){
-                queryBean.setSphere(obj.getDouble("sphere"));
-            }
-            if(obj.get("cylinder") != null && !(obj.get("cylinder") instanceof JSONNull)){
-                queryBean.setCylinder(obj.getDouble("cylinder"));
-            }
-            if(obj.get("axial") != null && !(obj.get("axial") instanceof JSONNull)){
-                queryBean.setAxial(obj.getDouble("axial"));
-            }
-
-            int pageNo = obj.getInt("pageNo");
-            queryBean.setStartIndex(getStartIndex(pageNo, Constants.PAGE_SIZE));
+            queryBean.setStartIndex(getStartIndex(queryBean.getPageNo(), Constants.PAGE_SIZE));
             List<MardVo> mardVoList = inventoryService.fetchMardVoListPage(queryBean);
             String data = CommonUtils.convertBeanCollectionToJsonArray(mardVoList, null).toString();
             result = getSuccessResult(data);

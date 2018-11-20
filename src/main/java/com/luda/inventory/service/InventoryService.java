@@ -210,9 +210,9 @@ public interface InventoryService {
      */
     ResultHandle<TransferOrder> removeTransferOrder(int id);
 
-    int getMardTotalCount(CommonQueryBean queryBean);
+    int getMardTotalCount(MardQueryBean queryBean);
 
-    List<MardVo> fetchMardVoListPage(CommonQueryBean queryBean);
+    List<MardVo> fetchMardVoListPage(MardQueryBean queryBean);
 
     int getPurchaseOrderItemCount(int purchaseOrderId);
 

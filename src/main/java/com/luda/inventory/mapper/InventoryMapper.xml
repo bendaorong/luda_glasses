@@ -4,6 +4,7 @@
     <resultMap id="mardMap" type="com.luda.inventory.model.Mard">
         <id property="id" column="id"/>
         <result property="materielId" column="materiel_id"/>
+        <result property="typeId" column="type_id"/>
         <result property="storeId" column="store_id"/>
         <result property="sphere" column="sphere"/>
         <result property="cylinder" column="cylinder"/>
@@ -209,11 +210,14 @@
     <select id="getMardTotalCount" resultType="int">
         select count(*) from mard
         where 1=1
-        <if test="storeId != null">
-            and store_id = #{storeId}
-        </if>
         <if test="materielId != null">
             and materiel_id = #{materielId}
+        </if>
+        <if test="typeId != null">
+            and type_id = #{typeId}
+        </if>
+        <if test="storeId != null">
+            and store_id = #{storeId}
         </if>
         <if test="sphere != null">
             and sphere = #{sphere}
@@ -248,6 +252,7 @@
         insert into mard
         (
             materiel_id,
+            type_id,
             store_id,
             sphere,
             cylinder,
@@ -259,6 +264,7 @@
         values
         (
             #{materielId},
+            #{typeId},
             #{storeId},
             #{sphere},
             #{cylinder},
@@ -299,11 +305,14 @@
         select b.*, c.store_name from (
             select * from mard as a
             where 1=1
-            <if test="storeId != null">
-                and a.store_id = #{storeId}
-            </if>
             <if test="materielId != null">
                 and a.materiel_id = #{materielId}
+            </if>
+            <if test="typeId != null">
+                and a.type_id = #{typeId}
+            </if>
+            <if test="storeId != null">
+                and a.store_id = #{storeId}
             </if>
             <if test="sphere != null">
                 and a.sphere = #{sphere}

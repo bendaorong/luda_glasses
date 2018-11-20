@@ -19,6 +19,10 @@ public class Mard {
      */
     private int materielId;
     /**
+     * 商品品牌
+     */
+    private int typeId;
+    /**
      * 球镜
      */
     private double sphere;
@@ -49,6 +53,14 @@ public class Mard {
         this.materielId = materielId;
         this.storeId = storeId;
         this.currentInventory = currentInventory;
+    }
+
+    public int getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
     }
 
     public int getId() {
