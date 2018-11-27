@@ -7,6 +7,7 @@
         $scope.storeList = [];
         $scope.goodsTypeList = [];
         $scope.filterCondition = {};
+        $scope.totalInventorys = 0;
 
         $scope.setCurrentTab = function(currentTab) {
             $scope.currentTab = currentTab;
@@ -26,6 +27,17 @@
         // 查询商品类型
         dictionaryService.fetchGoodsTypeList(function(data){
             $scope.goodsTypeList = data.data;
+            for(var i=0; i<$scope.goodsTypeList.length; i++){
+                $("#goodsType").append("<option value='" + $scope.goodsTypeList[i].typeId + "'>" + $scope.goodsTypeList[i].typeName + "</option>");
+            }
+            $scope.goodsTypeSearchableSelect = $("#goodsType").searchableSelect(function (typeId) {
+                if(angular.isDefined(typeId) && typeId != null && typeId != ''){
+                    $scope.filterCondition.typeId = typeId;
+                }else {
+                    $scope.filterCondition.typeId = null;
+                }
+                $scope.$apply();
+            });
         },function(data){
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,
@@ -58,6 +70,7 @@
 
         // init table
         function initMardTable(){
+            getTotalInventorys();
             inventoryService.getMardTotalCount($scope.filterCondition, function(data){
                 if(data.success){
                     $scope.mardTable = new NgTableParams({
@@ -76,6 +89,27 @@
             });
         }
         initMardTable();
+
+        //查询库存总计
+        function getTotalInventorys(){
+            inventoryService.getTotalInventorys($scope.filterCondition, function(data){
+                if(data.success){
+                    $scope.totalInventorys = data.data;
+                }else {
+                    BootstrapDialog.show({
+                        type : BootstrapDialog.TYPE_DANGER,
+                        title : '失败',
+                        message : '获取库存总计失败' + data.errorMsg
+                    });
+                }
+            },function(data){
+                BootstrapDialog.show({
+                    type : BootstrapDialog.TYPE_DANGER,
+                    title : '警告',
+                    message : '获取库存总计错误' + data.errorMsg
+                });
+            });
+        }
 
         // 显示商品库存列表
         function getMardList($defer) {

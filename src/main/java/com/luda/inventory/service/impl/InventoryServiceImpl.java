@@ -870,4 +870,9 @@ public class InventoryServiceImpl implements InventoryService{
     public List<PurchaseOrderItem> fetchPurchaseOrderItemListPage(CommonQueryBean queryBean) {
         return inventoryDao.fetchPurchaseOrderItemListPage(queryBean);
     }
+
+    @Override
+    public int getTotalInventorys(MardQueryBean queryBean) {
+        return inventoryDao.getTotalInventorys(queryBean);
+    }
 }

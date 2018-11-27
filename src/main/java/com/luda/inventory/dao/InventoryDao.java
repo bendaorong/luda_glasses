@@ -1,6 +1,5 @@
 package com.luda.inventory.dao;
 
-import com.luda.comm.po.ResultHandle;
 import com.luda.inventory.model.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -129,4 +128,6 @@ public interface InventoryDao {
     int getPurchaseOrderItemCount(int purchaseOrderId);
 
     List<PurchaseOrderItem> fetchPurchaseOrderItemListPage(CommonQueryBean queryBean);
+
+    int getTotalInventorys(MardQueryBean queryBean);
 }

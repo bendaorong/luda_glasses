@@ -7,9 +7,8 @@
                     <div class="form-group">
                         <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">品牌</label>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                            <select class="form-control" required ng-model="filterCondition.typeId">
-                                <option value="0">全部</option>
-                                <option ng-repeat="goodsType in goodsTypeList" value="{{goodsType.typeId}}">{{goodsType.typeName}}</option>
+                            <select id="goodsType" class="form-control"  ng-model="filterCondition.typeId">
+                                <option value=""></option>
                             </select>
                         </div>
                         <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">名称</label>

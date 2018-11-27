@@ -329,6 +329,29 @@
         on b.store_id = c.store_id
     </select>
 
+    <select id="getTotalInventorys" resultType="int">
+        select IFNULL(SUM(IFNULL(cur_inventory,0)),0) from mard
+        where 1=1
+        <if test="materielId != null">
+            and materiel_id = #{materielId}
+        </if>
+        <if test="typeId != null">
+            and type_id = #{typeId}
+        </if>
+        <if test="storeId != null">
+            and store_id = #{storeId}
+        </if>
+        <if test="sphere != null">
+            and sphere = #{sphere}
+        </if>
+        <if test="cylinder != null">
+            and cylinder = #{cylinder}
+        </if>
+        <if test="axial != null">
+            and axial = #{axial}
+        </if>
+    </select>
+
     <select id="fetchPurchaseOrderVoList" parameterType="com.luda.inventory.model.CommonQueryBean"
             resultMap="purchaseOrderVoMap">
         select po.*, s.store_name, sp.supplier_name, u.real_name

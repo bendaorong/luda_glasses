@@ -15,6 +15,17 @@
         // 查询商品类型
         dictionaryService.fetchGoodsTypeList(function(data){
             $scope.goodsTypeList = data.data;
+            for(var i=0; i<$scope.goodsTypeList.length; i++){
+                $("#goodsType").append("<option value='" + $scope.goodsTypeList[i].typeId + "'>" + $scope.goodsTypeList[i].typeName + "</option>");
+            }
+            $scope.goodsTypeSearchableSelect = $("#goodsType").searchableSelect(function (typeId) {
+                if(angular.isDefined(typeId) && typeId != null && typeId != ''){
+                    $scope.filterCondition.typeId = typeId;
+                }else {
+                    $scope.filterCondition.typeId = null;
+                }
+                $scope.$apply();
+            });
         },function(data){
             BootstrapDialog.show({
                 type : BootstrapDialog.TYPE_DANGER,

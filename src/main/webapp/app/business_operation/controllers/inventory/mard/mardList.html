@@ -23,11 +23,8 @@
                     <div class="form-group">
                         <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">品牌</label>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                            <select class="form-control"  ng-model="filterCondition.typeId" required>
-                                <option value="">全部</option>
-                                <option ng-repeat="goodsType in goodsTypeList" value="{{goodsType.typeId}}">
-                                    {{goodsType.typeName}}
-                                </option>
+                            <select id="goodsType" class="form-control"  ng-model="filterCondition.typeId">
+                                <option value=""></option>
                             </select>
                         </div>
                         <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">柱镜</label>
@@ -57,7 +54,7 @@
             </div>
         </div>
         <hr>
-
+        <span style="color:red">库存总计:{{totalInventorys}}</span>
         <table ng-table="mardTable" class="table table-bordered">
             <tr ng-repeat="mard in mardList" ng-class="{'red' : (mard.currentInventory===0)}">
                 <td data-title="'门店'" sortable="'storeName'">{{mard.storeName}}</td>

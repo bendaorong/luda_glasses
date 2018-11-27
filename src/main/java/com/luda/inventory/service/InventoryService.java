@@ -218,5 +218,10 @@ public interface InventoryService {
 
     List<PurchaseOrderItem> fetchPurchaseOrderItemListPage(CommonQueryBean queryBean);
 
-
+    /**
+     * 获取总库存数
+     * @param queryBean
+     * @return
+     */
+    int getTotalInventorys(MardQueryBean queryBean);
 }

@@ -82,7 +82,7 @@ public class InventoryController extends BaseController{
      */
     @RequestMapping("/mard/listPage")
     @ResponseBody
-    public String fetchMardListPage(@RequestBody MardQueryBean queryBean, HttpSession httpSession){
+    public String fetchMardListPage(@RequestBody MardQueryBean queryBean){
         String result = "";
         try {
             queryBean.setStartIndex(getStartIndex(queryBean.getPageNo(), Constants.PAGE_SIZE));
@@ -91,6 +91,25 @@ public class InventoryController extends BaseController{
             result = getSuccessResult(data);
         }catch (Exception e){
             log.error("fetch mard list error", e);
+            result = getFailResult("系统异常");
+        }
+        return result;
+    }
+
+    /**
+     * 查询库存总计
+     * @param queryBean
+     * @return
+     */
+    @RequestMapping("/mard/totalInventorys")
+    @ResponseBody
+    public String totalInventorys(@RequestBody MardQueryBean queryBean){
+        String result = "";
+        try {
+            int totalInventorys = inventoryService.getTotalInventorys(queryBean);
+            result = getSuccessResult(totalInventorys);
+        }catch (Exception e){
+            log.error("get totalInventorys error", e);
             result = getFailResult("系统异常");
         }
         return result;

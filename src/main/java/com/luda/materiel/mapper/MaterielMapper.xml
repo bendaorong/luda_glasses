@@ -54,6 +54,7 @@
             <if test="name != null and name != ''">
                 and name like CONCAT(CONCAT('%',#{name},'%'))
             </if>
+            limit #{startIndex}, 10
         ) m
         left join goods_type t
         on m.type_id = t.type_id

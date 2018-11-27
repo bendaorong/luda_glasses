@@ -610,6 +610,13 @@ businessOperationApp.factory("inventoryService", function($http) {
                 data:conditions
             }).success(successCallback).error(errorCallback);
         },
+        getTotalInventorys : function(conditions, successCallback, errorCallback){
+            $http({
+                method:"POST",
+                url:"/luda_glasses/rest/inventory/mard/totalInventorys",
+                data:conditions
+            }).success(successCallback).error(errorCallback);
+        },
         fetchMardVoList : function(successCallback, errorCallback){
             $http.get("/luda_glasses/rest/inventory/mard/list").success(successCallback).error(errorCallback);
         },
