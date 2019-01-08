@@ -85,12 +85,6 @@
 
 
 
-        $scope.refresh = function() {
-            $scope.$emit("loadingStart");
-            initMaterielList();
-            $scope.$emit("loadingEnd");
-        }
-
         $scope.gotoEdit = function(id) {
             $location.path("/editMateriel/" + id);
         }
@@ -100,7 +94,12 @@
             if(confirm("删除商品将同时删除该商品的库存，确认删除吗？")){
                 materielService.removeMateriel(id, function(data){
                     if(data.success){
-                        $scope.refresh();
+                        BootstrapDialog.show({
+                            type : BootstrapDialog.TYPE_SUCCESS,
+                            title : '成功',
+                            message : '商品删除成功'
+                        });
+                        initMaterielTable();
                     }else {
                         BootstrapDialog.show({
                             type : BootstrapDialog.TYPE_DANGER,

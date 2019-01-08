@@ -3,35 +3,60 @@
         setActiveSubPage($scope);
         $scope.roleCode = sessionStorage.getItem("roleCode");
         $scope.currentTab = 0;
-        $scope.materielList = [];
+        $scope.filterCondition = {};
 
         $scope.setCurrentTab = function(currentTab) {
             $scope.currentTab = currentTab;
         }
 
-        // 显示客户列表
-        function initCustomerList() {
-            customerService.fetchCustomerList(function(data){
-                $scope.customerList  =  data;
-                $scope.tableParams = new NgTableParams({}, {
-                    dataset : $scope.customerList
-                });
+        // init table
+        function initCustomerTable(){
+            customerService.getCustomerTotalCount($scope.filterCondition, function(data){
+                if(data.success){
+                    $scope.customerTable = new NgTableParams({
+                        page: 1,
+                        count: 10
+                    },{
+                        total: data.data,
+                        getData: function ($defer, params) {
+                            $scope.filterCondition.pageNo = params.page();
+                            getCustomerList($defer);
+                        }
+                    });
+                }
+            }, function(data){
+
+            });
+        }
+        initCustomerTable();
+
+        // 查询客户
+        function getCustomerList($defer) {
+            customerService.fetchCustomerListPage($scope.filterCondition, function(data){
+                if(data.success){
+                    $scope.customerList = data.data;
+                    $defer.resolve($scope.customerList);
+                }else {
+                    BootstrapDialog.show({
+                        type : BootstrapDialog.TYPE_DANGER,
+                        title : '失败',
+                        message : '获取客户失败:' + data.errorMsg
+                    });
+                }
             },function(data){
                 BootstrapDialog.show({
                     type : BootstrapDialog.TYPE_DANGER,
                     title : '警告',
-                    message : '获取客户列表错误' + data.errorMsg
+                    message : '获取客户失败:' + data.errorMsg
                 });
             });
         }
 
-        initCustomerList();
-
-        $scope.refresh = function() {
-            $scope.$emit("loadingStart");
-            initCustomerList();
-            $scope.$emit("loadingEnd");
+        // 查询客户
+        $scope.queryCustomer = function(){
+            initCustomerTable();
         }
+
 
         //用户详情
         $scope.customerDetail = function (customerId) {
@@ -46,12 +71,12 @@
         $scope.removeCustomer = function(customerId){
             if(confirm("确认删除客户吗？")){
                 customerService.removeCustomer(customerId, function(data){
-                    // BootstrapDialog.show({
-                    //     type : BootstrapDialog.TYPE_SUCCESS,
-                    //     title : '消息',
-                    //     message : '删除成功'
-                    // });
-                    $scope.refresh();
+                    BootstrapDialog.show({
+                        type : BootstrapDialog.TYPE_SUCCESS,
+                        title : '成功',
+                        message : '客户删除成功'
+                    });
+                    initCustomerTable();
                 },function(data){
                     BootstrapDialog.show({
                         type : BootstrapDialog.TYPE_DANGER,

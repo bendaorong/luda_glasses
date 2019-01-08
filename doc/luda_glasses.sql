@@ -555,3 +555,7 @@ ALTER TABLE luda_glasses.optometry_record ADD COLUMN _ADD double(6,2) comment 'A
  */
 ALTER TABLE mard ADD COLUMN type_id INT(11) COMMENT '商品品牌';
 UPDATE mard d SET d.type_id = (SELECT m.type_id FROM materiel m WHERE m.id = d.`materiel_id`);
+
+/** 2019-01-07 */
+ALTER TABLE customer DROP INDEX idx_mobile_number;
+ALTER TABLE customer ADD INDEX idx_mobile_number(mobile_num);
