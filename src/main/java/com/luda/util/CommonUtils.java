@@ -397,6 +397,6 @@ public class CommonUtils {
 	 * 测试feature-20200420
 	 */
 	public static boolean testFeature20200420(){
-		return true;
+		return false;
 	}
 }
