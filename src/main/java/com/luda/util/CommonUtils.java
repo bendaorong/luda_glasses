@@ -384,4 +384,12 @@ public class CommonUtils {
 	public static boolean isPostcode(String postcode){
 		return matchString("[1-9]\\d{5}(?!\\d)", postcode);
 	}
+
+	/**
+	 * 测试方法1
+	 * @return
+	 */
+	public static boolean test1(){
+		return true;
+	}
 }
